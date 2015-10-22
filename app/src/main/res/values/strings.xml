@@ -3,4 +3,5 @@
     <string name="title_image">Title Image</string>
     <string name="title_btn_download">Download Image</string>
     <string name="text_hint_edt_search">Enter search image text</string>
+    <string name="title_btn_search">Search</string>
 </resources>

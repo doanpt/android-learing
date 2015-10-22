@@ -3,16 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="@dimen/padding">
 
     <LinearLayout
         android:id="@+id/ll_search"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="@dimen/height_ll_search">
 
         <EditText
             android:id="@+id/tv_content_search"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_height_0dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/btnSearch"
             android:layout_weight="3"
@@ -20,11 +20,11 @@
 
         <Button
             android:id="@+id/btn_search"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_height_0dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_weight="1"
-            android:text="Search"></Button>
+            android:text="@string/title_btn_search"></Button>
 
     </LinearLayout>
 
@@ -33,6 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/ll_search"
-        android:layout_marginTop="10dip"></ListView>
+        android:layout_marginTop="@dimen/margin_lv"></ListView>
 
 </RelativeLayout>
