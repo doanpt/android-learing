@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * Created by doantrung on 10/26/15.
  */
 public class ImageConnection {
-
     public ArrayList<Object> getImageListFromJsonObj(JSONObject object) {
         ArrayList<Object> arrImage = new ArrayList<>();
         try {
@@ -28,7 +27,6 @@ public class ImageConnection {
     public ArrayList<Object> getImageList(JSONArray resultArray) {
         ArrayList<Object> listImages = new ArrayList<Object>();
         ItemImage itemImage;
-
         try {
             for (int i = 0; i < resultArray.length(); i++) {
                 JSONObject obj;
@@ -45,5 +43,4 @@ public class ImageConnection {
         }
         return null;
     }
-
 }

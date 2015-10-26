@@ -9,9 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
 import com.dvt.adapters.ListViewImageAdapter;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,6 +32,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ArrayList<Object> arrImage;
     private Activity activity;
     private ImageConnection imageConnection;
+    private ServiceConnect serviceConnect;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +46,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnSearch = (Button) findViewById(R.id.btn_search);
         lvImage = (ListView) findViewById(R.id.lv_image);
         btnSearch.setOnClickListener(this);
-        imageConnection=new ImageConnection();
+        imageConnection = new ImageConnection();
+        serviceConnect = new ServiceConnect();
         activity = this;
     }
 
@@ -75,21 +81,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected Void doInBackground(Void... params) {
-            URL url;
+            String link = "https://ajax.googleapis.com/ajax/services/search/images?" + "v=1.0&q=" + contentSearch + "&rsz=8";
             try {
-                url = new URL("https://ajax.googleapis.com/ajax/services/search/images?" + "v=1.0&q=" + contentSearch + "&rsz=8");
-                URLConnection connection = url.openConnection();
-                String line;
-                StringBuilder builder = new StringBuilder();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line);
-                }
-                json = new JSONObject(builder.toString());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                json = new JSONObject(serviceConnect.getConnect(link));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -102,7 +96,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
-            arrImage=imageConnection.getImageListFromJsonObj(json);
+            arrImage = imageConnection.getImageListFromJsonObj(json);
             SetListViewAdapter(arrImage);
         }
     }
