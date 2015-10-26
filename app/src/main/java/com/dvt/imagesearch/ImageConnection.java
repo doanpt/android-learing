@@ -29,11 +29,8 @@ public class ImageConnection {
         ItemImage itemImage;
         try {
             for (int i = 0; i < resultArray.length(); i++) {
-                JSONObject obj;
-                obj = resultArray.getJSONObject(i);
-                itemImage = new ItemImage();
-                itemImage.setTitleImage(obj.getString("title"));
-                itemImage.setThumbUrl(obj.getString("tbUrl"));
+                JSONObject obj = resultArray.getJSONObject(i);
+                itemImage = new ItemImage(obj);
                 listImages.add(itemImage);
             }
             return listImages;
