@@ -46,7 +46,6 @@ public class ListViewImageAdapter extends BaseAdapter {
     public static class ViewHolder {
         public ImageView imgViewImage;
         public TextView txtViewTitle;
-
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -55,19 +54,15 @@ public class ListViewImageAdapter extends BaseAdapter {
         if (convertView == null) {
             view = inflater.inflate(R.layout.layout_item_listview, null);
             holder = new ViewHolder();
-
             holder.imgViewImage = (ImageView) view.findViewById(R.id.iv_item_image);
             holder.txtViewTitle = (TextView) view.findViewById(R.id.tv_item_title);
-
             view.setTag(holder);
         } else
             holder = (ViewHolder) view.getTag();
-
         ItemImage imageBean = (ItemImage) listImages.get(position);
         holder.imgViewImage.setTag(imageBean.getThumbUrl());
         imageLoader.DisplayImage(imageBean.getThumbUrl(), activity, holder.imgViewImage);
         holder.txtViewTitle.setText(Html.fromHtml(imageBean.getTitleImage()));
-
         return view;
     }
 }

@@ -9,14 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
-import com.dvt.adapters.ItemImage;
 import com.dvt.adapters.ListViewImageAdapter;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,7 +28,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ListViewImageAdapter adapter;
     private ArrayList<Object> arrImage;
     private Activity activity;
-
+    private ImageConnection imageConnection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnSearch = (Button) findViewById(R.id.btn_search);
         lvImage = (ListView) findViewById(R.id.lv_image);
         btnSearch.setOnClickListener(this);
+        imageConnection=new ImageConnection();
         activity = this;
     }
 
@@ -73,15 +69,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected void onPreExecute() {
-            // TODO Auto-generated method stub
             super.onPreExecute();
             dialog = ProgressDialog.show(MainActivity.this, "", "Please wait...");
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-
             URL url;
             try {
                 url = new URL("https://ajax.googleapis.com/ajax/services/search/images?" + "v=1.0&q=" + contentSearch + "&rsz=8");
@@ -94,13 +87,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 json = new JSONObject(builder.toString());
             } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (JSONException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             return null;
@@ -108,46 +98,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(Void result) {
-            // TODO Auto-generated method stub
             super.onPostExecute(result);
-
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
-            try {
-                JSONObject responseObject = json.getJSONObject("responseData");
-                JSONArray resultArray = responseObject.getJSONArray("results");
-                arrImage = getImageList(resultArray);
-                SetListViewAdapter(arrImage);
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
+            arrImage=imageConnection.getImageListFromJsonObj(json);
+            SetListViewAdapter(arrImage);
         }
-    }
-
-    public ArrayList<Object> getImageList(JSONArray resultArray) {
-        ArrayList<Object> listImages = new ArrayList<Object>();
-        ItemImage itemImage;
-
-        try {
-            for (int i = 0; i < resultArray.length(); i++) {
-                JSONObject obj;
-                obj = resultArray.getJSONObject(i);
-                itemImage = new ItemImage();
-
-                itemImage.setTitleImage(obj.getString("title"));
-                itemImage.setThumbUrl(obj.getString("tbUrl"));
-                listImages.add(itemImage);
-            }
-            return listImages;
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     public void SetListViewAdapter(ArrayList<Object> images) {
