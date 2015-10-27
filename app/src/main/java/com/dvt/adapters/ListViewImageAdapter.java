@@ -2,7 +2,9 @@ package com.dvt.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +12,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dvt.imagesearch.DetailActivity;
 import com.dvt.imagesearch.ImageLoader;
+import com.dvt.imagesearch.MainActivity;
 import com.dvt.imagesearch.R;
 
 import java.util.ArrayList;

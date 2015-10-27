@@ -2,10 +2,12 @@ package com.dvt.imagesearch;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -15,15 +17,11 @@ import com.dvt.adapters.ListViewImageAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity implements View.OnClickListener {
+    public static final String KEY_ARRAY_IMAGE = "key_array_image";
+    public static final String KEY_POSITION = "key_position";
     private String contentSearch = "";
     private EditText edtSearch;
     private Button btnSearch;
@@ -49,6 +47,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
         imageConnection = new ImageConnection();
         serviceConnect = new ServiceConnect();
         activity = this;
+        lvImage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                showDetailImage(position);
+            }
+        });
+    }
+
+    private void showDetailImage(int position) {
+        Intent intentDetail = new Intent(MainActivity.this, DetailActivity.class);
+        intentDetail.putExtra(KEY_ARRAY_IMAGE, arrImage);
+        intentDetail.putExtra(KEY_POSITION, position + "");
+        startActivity(intentDetail);
     }
 
     @Override
@@ -106,5 +117,4 @@ public class MainActivity extends Activity implements View.OnClickListener {
         lvImage.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
 }
