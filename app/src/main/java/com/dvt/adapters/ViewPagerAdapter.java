@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.dvt.imagesearch.ImageLoader;
 import com.dvt.imagesearch.R;
+import com.dvt.imagesearch.TouchImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class ViewPagerAdapter extends PagerAdapter implements Serializable {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = mLayoutInflate.inflate(R.layout.layout_item_detail_image, container, false);
-        ImageView ivDetail = (ImageView) view.findViewById(R.id.iv_detail_image);
+        TouchImageView ivDetail = (TouchImageView) view.findViewById(R.id.iv_detail_image);
         ivDetail.setTag(arrPage.get(position).getLinkImageFull());
         imageLoader.DisplayImage(arrPage.get(position).getLinkImageFull(), activity, ivDetail);
         container.addView(view);
