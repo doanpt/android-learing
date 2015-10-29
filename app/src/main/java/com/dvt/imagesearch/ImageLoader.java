@@ -22,10 +22,9 @@ import android.widget.ImageView;
  * Created by doantrung on 10/22/15.
  */
 public class ImageLoader {
-
     private HashMap<String, Bitmap> cache = new HashMap<String, Bitmap>();
     private File cacheDir;
-    final int stub_id = R.mipmap.ic_launcher;
+    final int stub_id = R.drawable.image_icon;
     Context context;
     PhotosQueue photosQueue = new PhotosQueue();
     PhotosLoader photoLoaderThread = new PhotosLoader();
@@ -183,7 +182,6 @@ public class ImageLoader {
 
     public void clearCache() {
         cache.clear();
-
         File[] files = cacheDir.listFiles();
         for (File f : files)
             f.delete();
