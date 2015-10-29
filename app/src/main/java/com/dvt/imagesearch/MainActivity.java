@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.dvt.adapters.ItemImage;
 import com.dvt.adapters.ListViewImageAdapter;
 
 import org.json.JSONException;
@@ -31,7 +32,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Activity activity;
     private ImageConnection imageConnection;
     private ServiceConnect serviceConnect;
-
+    private DownloadDialog downloadDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,11 +47,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnSearch.setOnClickListener(this);
         imageConnection = new ImageConnection();
         serviceConnect = new ServiceConnect();
+        downloadDialog=new DownloadDialog(this);
         activity = this;
         lvImage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 showDetailImage(position);
+            }
+        });
+        lvImage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ItemImage itemImage = (ItemImage) arrImage.get(position);
+                downloadDialog.setLinkDownload(itemImage.getLinkImageFull());
+                downloadDialog.setContext(MainActivity.this);
+                downloadDialog.show();
+                return true;
             }
         });
     }
