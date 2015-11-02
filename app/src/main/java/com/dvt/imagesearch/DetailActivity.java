@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+
 import com.dvt.adapters.ItemImage;
 import com.dvt.adapters.ViewPagerAdapter;
+
 import java.util.ArrayList;
 
 /**
