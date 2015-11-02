@@ -4,13 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/layout_actionbar"
+    <TextView
+        android:id="@+id/tv_local_search"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_actionbar"></include>
+        android:layout_height="@dimen/size_actionbar"
+        android:background="@color/color_actionbar"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding"
+        android:text="@string/title_tv_local_search"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/size_tv_app_name" />
 
     <LinearLayout
-        android:id="@+id/ll_search"
+        android:id="@+id/ll_search_local"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_ll_search"
         android:layout_marginTop="@dimen/margin_lv"
@@ -18,14 +24,14 @@
         android:paddingRight="@dimen/padding">
 
         <EditText
-            android:id="@+id/edt_content_search"
+            android:id="@+id/edt_content_search_local"
             android:layout_width="@dimen/width_height_0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:hint="@string/text_hint_edt_search"></EditText>
 
         <Button
-            android:id="@+id/btn_search"
+            android:id="@+id/btn_search_local"
             android:layout_width="@dimen/width_height_0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -34,7 +40,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/lv_image"
+        android:id="@+id/lv_image_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_lv"

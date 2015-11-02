@@ -17,8 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".LocalSearchActivity"></activity>
+        <activity android:name=".DetailImageLocalActivity"></activity>
     </application>
 
 </manifest>
