@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by doantrung on 11/2/15.
  */
-public class ItemImageLocal implements Serializable{
+public class ItemImageLocal implements Serializable {
     private String imageName;
     private String imagePath;
 
@@ -21,15 +21,7 @@ public class ItemImageLocal implements Serializable{
         return imageName;
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
     public String getImagePath() {
         return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
     }
 }
