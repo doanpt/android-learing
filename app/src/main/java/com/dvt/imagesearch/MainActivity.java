@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.dvt.adapters.ItemImage;
@@ -24,6 +25,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public static final String KEY_ARRAY_IMAGE = "key_array_image";
     public static final String KEY_POSITION = "key_position";
     private String contentSearch = "";
+    private ImageView ivLocalSearch;
     private EditText edtSearch;
     private Button btnSearch;
     private ListView lvImage;
@@ -41,6 +43,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
+        ivLocalSearch= (ImageView) findViewById(R.id.iv_search_local);
+        ivLocalSearch.setOnClickListener(this);
         edtSearch = (EditText) findViewById(R.id.edt_content_search);
         btnSearch = (Button) findViewById(R.id.btn_search);
         lvImage = (ListView) findViewById(R.id.lv_image);
@@ -81,9 +85,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_search:
                 searchImage();
                 break;
+            case R.id.iv_search_local:
+                localSearch();
+                break;
             default:
                 break;
         }
+    }
+
+    private void localSearch() {
+        Intent intentLocal=new Intent(MainActivity.this,LocalSearchActivity.class);
+        startActivity(intentLocal);
     }
 
     private void searchImage() {

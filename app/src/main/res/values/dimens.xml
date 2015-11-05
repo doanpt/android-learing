@@ -4,10 +4,13 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_size_title">20sp</dimen>
     <dimen name="width_height_0dp">0dp</dimen>
-    <dimen name="padding">10dp</dimen>
+    <dimen name="padding">5dp</dimen>
     <dimen name="height_ll_search">60dp</dimen>
     <dimen name="margin_lv">10dip</dimen>
     <dimen name="height_dialog_download">50dp</dimen>
     <dimen name="width_dialog_download">200dp</dimen>
     <dimen name="size_image_item">150dp</dimen>
+    <dimen name="size_actionbar">60dp</dimen>
+    <dimen name="size_tv_app_name">28sp</dimen>
+    <dimen name="size_iv_search_local">30dp</dimen>
 </resources>

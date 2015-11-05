@@ -49,7 +49,7 @@ public class ImageLoader {
         }
     }
 
-    private void queuePhoto(String url, Activity activity, ImageView imageView) {
+    public void queuePhoto(String url, Activity activity, ImageView imageView) {
         photosQueue.Clean(imageView);
         PhotoToLoad p = new PhotoToLoad(url, imageView);
         synchronized (photosQueue.photosToLoad) {
@@ -81,6 +81,26 @@ public class ImageLoader {
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public void DisplayImageFromPath(String path, Activity activity, ImageView imageView) {
+        if (cache.containsKey(path))
+            imageView.setImageBitmap(cache.get(path));
+        else {
+            imageView.setImageBitmap(getBitmapFromPathFile(path));
+        }
+    }
+
+    private Bitmap getBitmapFromPathFile(String path) {
+        String filename = String.valueOf(path.hashCode());
+        File f = new File(cacheDir, filename);
+        Bitmap b = decodeFile(f);
+        if (b != null)
+            return b;
+        else {
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            return bitmap;
         }
     }
 

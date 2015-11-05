@@ -5,4 +5,6 @@
     <string name="text_hint_edt_search">Enter search image text</string>
     <string name="title_btn_search">Search</string>
     <string name="cache_dirname">GoogleImgApp_Cache</string>
+    <string name="title_tv_app_name">Image search</string>
+    <string name="title_tv_local_search">Local Search</string>
 </resources>
