@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.dvt.adapters.ItemImageLocal;
 import com.dvt.adapters.ListViewLocalAdapter;
@@ -43,16 +44,21 @@ public class LocalSearchActivity extends Activity implements View.OnClickListene
         btnLocalSearch = (Button) findViewById(R.id.btn_search_local);
         btnLocalSearch.setOnClickListener(this);
         lvImageLocal = (ListView) findViewById(R.id.lv_image_local);
-        arrImage = getAllImageLocal();
-        adapter = new ListViewLocalAdapter(activity, arrImage);
         arrImageResultSearch = new ArrayList<>();
-        lvImageLocal.setAdapter(adapter);
-        lvImageLocal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showDetailImage(position);
-            }
-        });
+        arrImage = new ArrayList<>();
+        if (getAllImageLocal() == null) {
+
+        } else {
+            arrImage = getAllImageLocal();
+            adapter = new ListViewLocalAdapter(activity, arrImage);
+            lvImageLocal.setAdapter(adapter);
+            lvImageLocal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    showDetailImage(position);
+                }
+            });
+        }
     }
 
     private void showDetailImage(int position) {
@@ -66,10 +72,20 @@ public class LocalSearchActivity extends Activity implements View.OnClickListene
         ArrayList<ItemImageLocal> listImage = new ArrayList<>();
         String path = Environment.getExternalStoragePublicDirectory(DownloadDialog.MY_FOLDER).toString();
         File file = new File(path);
-        File listFile[] = file.listFiles();
-        int length = listFile.length;
-        for (int i = 0; i < length; i++) {
-            listImage.add(i, new ItemImageLocal(listFile[i].getName(), listFile[i].getPath()));
+        if (file.exists()) {
+            File listFile[] = file.listFiles();
+            if (listFile.length == 0) {
+                arrImage=new ArrayList<>();
+                return arrImage;
+            }
+            int length = listFile.length;
+            for (int i = 0; i < length; i++) {
+                listImage.add(i, new ItemImageLocal(listFile[i].getName(), listFile[i].getPath()));
+            }
+        } else {
+            file.mkdir();
+            arrImage=new ArrayList<>();
+            return arrImage;
         }
         return listImage;
     }
@@ -92,19 +108,23 @@ public class LocalSearchActivity extends Activity implements View.OnClickListene
         } else {
             String key = edtContentSearchLocal.getText().toString();
             key = key.replaceAll("[^a-zA-Z]+", "").trim();
-            int size = arrImage.size();
-            String imageName = "";
-            for (int i = 0; i < size; i++) {
-                imageName = arrImage.get(i).getImageName().replaceAll("[^a-zA-Z]+", "").trim();
-                if (imageName.indexOf(key) != -1) {
-                    arrImageResultSearch.add(arrImage.get(i));
+            if (arrImage.size() > 0) {
+                int size = arrImage.size();
+                String imageName = "";
+                for (int i = 0; i < size; i++) {
+                    imageName = arrImage.get(i).getImageName().replaceAll("[^a-zA-Z]+", "").trim();
+                    if (imageName.indexOf(key) != -1) {
+                        arrImageResultSearch.add(arrImage.get(i));
+                    }
                 }
-            }
-            if (arrImageResultSearch.size() > 0) {
-                arrImage = arrImageResultSearch;
-                displayListImage(arrImageResultSearch);
-            } else {
-                displayListImage(arrImage);
+                if (arrImageResultSearch.size() > 0) {
+                    arrImage = arrImageResultSearch;
+                    displayListImage(arrImageResultSearch);
+                } else {
+                    displayListImage(arrImage);
+                }
+            }else{
+                Toast.makeText(activity, "No images to display! please download images.", Toast.LENGTH_SHORT).show();
             }
         }
     }
