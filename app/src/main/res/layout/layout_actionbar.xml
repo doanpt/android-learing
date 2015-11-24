@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_menu"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="@dimen/size_weight"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Youtube"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/size_text_name_app"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/margin_left_actionbar"
+        android:textStyle="bold"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/menu_item_video"/>
+</LinearLayout>

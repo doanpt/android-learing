@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_video_item"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_item_video">
+
+    <ImageView
+        android:id="@+id/video_thumbnail"
+        android:layout_width="@dimen/size_weight"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/margin_right_image_video"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="@dimen/size_weight"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/video_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_weight"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_name_video"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/video_description"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_weight"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:textSize="@dimen/text_size_infor_video" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/menu_item_video"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_menu_item_video"
+        android:src="@drawable/menu_item_video" />
+</LinearLayout>

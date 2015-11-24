@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">YoutubeSearch</string>
+    <string name="content_text_hint">Please enter your keyword</string>
+    <string name="title_btn_search">Search</string>
 </resources>
