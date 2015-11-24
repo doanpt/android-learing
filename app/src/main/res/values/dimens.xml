@@ -2,4 +2,16 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="size_weight">0dp</dimen>
+    <dimen name="margin_layout_search">5dp</dimen>
+    <dimen name="padding_item_video">10dp</dimen>
+    <dimen name="height_video_item">130dp</dimen>
+    <dimen name="margin_right_image_video">10dp</dimen>
+    <dimen name="text_size_name_video">20sp</dimen>
+    <dimen name="text_size_infor_video">15sp</dimen>
+    <dimen name="size_menu_item_video">35dp</dimen>
+    <dimen name="size_text_app_name">20dp</dimen>
+    <dimen name="size_text_name_app">30sp</dimen>
+    <dimen name="margin_left_actionbar">15dp</dimen>
+    <dimen name="height_actionbar">60dp</dimen>
 </resources>
