@@ -1,12 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <include
+        layout="@layout/layout_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_actionbar" />
+
+    <LinearLayout
+        android:id="@+id/ll_search"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
-</RelativeLayout>
+        android:layout_gravity="right"
+        android:layout_marginLeft="@dimen/margin_layout_search"
+        android:layout_marginRight="@dimen/margin_layout_search"
+        android:layout_marginTop="@dimen/margin_layout_search"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edt_content_search"
+            android:layout_width="@dimen/size_weight"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="@string/content_text_hint" />
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="@dimen/size_weight"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/title_btn_search" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
