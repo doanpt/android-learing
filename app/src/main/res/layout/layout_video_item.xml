@@ -33,6 +33,7 @@
             android:layout_height="@dimen/size_weight"
             android:layout_weight="1"
             android:gravity="bottom"
+            android:singleLine="true"
             android:textSize="@dimen/text_size_infor_video" />
     </LinearLayout>
 
