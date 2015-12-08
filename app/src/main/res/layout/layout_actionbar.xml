@@ -8,7 +8,7 @@
         android:layout_width="@dimen/size_weight"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="Youtube"
+        android:text="@string/title_youtube"
         android:textColor="@android:color/white"
         android:textSize="@dimen/size_text_name_app"
         android:gravity="center_vertical"
@@ -16,6 +16,7 @@
         android:textStyle="bold"/>
     <ImageView
         android:layout_width="wrap_content"
+        android:id="@+id/iv_menu"
         android:layout_height="match_parent"
         android:src="@drawable/menu_item_video"/>
 </LinearLayout>

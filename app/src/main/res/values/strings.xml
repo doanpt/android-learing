@@ -2,4 +2,11 @@
     <string name="app_name">YoutubeSearch</string>
     <string name="content_text_hint">Please enter your keyword</string>
     <string name="title_btn_search">Search</string>
+    <string name="title_name">Youtube</string>
+    <string name="title_playlist">Title:</string>
+    <string name="author_playlist">Author:</string>
+    <string name="date_playlist">Date:</string>
+    <string name="video_count_playlist">Video:</string>
+    <string name="title_list_playlist">List Playlist</string>
+    <string name="title_youtube">Youtube</string>
 </resources>
