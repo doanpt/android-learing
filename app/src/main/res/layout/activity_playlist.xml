@@ -5,13 +5,20 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/layout_actionbar"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_actionbar" />
+        android:layout_height="@dimen/height_actionbar"
+        android:background="@color/background_menu"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_item_video"
+        android:text="@string/title_list_playlist"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/size_text_name_app"
+        android:textStyle="bold" />
 
-    <ListView
-        android:id="@+id/lv_playlist"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_playlist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
 </LinearLayout>

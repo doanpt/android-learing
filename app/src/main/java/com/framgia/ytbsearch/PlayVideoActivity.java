@@ -10,10 +10,8 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 /**
  * Created by doantrung on 11/19/15.
- * //
  */
 public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
-
     private YouTubePlayerView playerView;
 
     @Override
@@ -34,7 +32,7 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player,
                                         boolean restored) {
         if (!restored) {
-            player.cueVideo(getIntent().getStringExtra(MainActivity.ID_VIDEO));
+                   player.cueVideo(getIntent().getStringExtra(MainActivity.ID_VIDEO));
         }
     }
 }

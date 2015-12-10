@@ -3,19 +3,17 @@ package com.framgia.ytbsearch;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,6 +28,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private static final int REQUEST_CODE_FROM_SEARCH_PERMISSIONS = 3;
     public static final String ID_VIDEO = "id_video";
     public static final String KEY_DEVELOP = "AIzaSyD1kdTvRqw1OndpiuC7_HS4T4aSk81FrIA";
+    private static final String TAG = "MainActivity";
     private Utils utils;
     private EditText edtSearchInput;
     private ListView lvVideosFound;
@@ -37,6 +36,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Handler handler;
     private SearchAdapter searchAdapter;
     private ArrayList<VideoItem> searchResults;
+    private ImageView ivMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +53,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnSearch = (Button) findViewById(R.id.btn_search);
         btnSearch.setOnClickListener(this);
         utils=new Utils();
+        ivMenu= (ImageView) findViewById(R.id.iv_menu);
+        ivMenu.setOnClickListener(this);
     }
-
 
     @TargetApi(Build.VERSION_CODES.M)
     private void checkYourPermissions() {
@@ -138,6 +139,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_search:
                 searchOnYoutube();
                 break;
+            case R.id.iv_menu:
+                startActivityPlayList();
+                break;
         }
+    }
+
+    private void startActivityPlayList() {
+        Intent intentPlayList=new Intent(this,PlayListActivity.class);
+        startActivity(intentPlayList);
     }
 }
