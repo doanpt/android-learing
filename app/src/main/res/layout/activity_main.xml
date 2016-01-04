@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/layout_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_actionbar"></include>
+
+    <LinearLayout
+        android:id="@+id/ll_search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_ll_search"
+        android:layout_marginTop="@dimen/margin_lv"
+        android:paddingLeft="@dimen/padding"
+        android:paddingRight="@dimen/padding">
+
+        <EditText
+            android:id="@+id/edt_content_search"
+            android:layout_width="@dimen/width_height_0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:hint="@string/text_hint_edt_search"></EditText>
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="@dimen/width_height_0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/title_btn_search"></Button>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_lv"
+        android:paddingLeft="@dimen/padding"
+        android:paddingRight="@dimen/padding"></ListView>
+
+</LinearLayout>
