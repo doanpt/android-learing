@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_1"
+            android:checked="true"
+            android:icon="@drawable/abc_ic_clear_mtrl_alpha"
+            android:title="Kết quả học tập" />
+        <item
+            android:id="@+id/navigation_item_2"
+            android:icon="@drawable/ic_action_add"
+            android:title="Kết quả thi" />
+        <item
+            android:id="@+id/navigation_item_3"
+            android:icon="@drawable/ic_action_add"
+            android:title="Điểm tích lũy" />
+        <item
+            android:id="@+id/navigation_item_4"
+            android:icon="@drawable/ic_action_add"
+            android:title="Lịch thi" />
+    </group>
+    <item
+        android:id="@+id/navigation_item_5"
+        android:icon="@drawable/ic_action_add"
+        android:title="Thông tin nhà phát triển" />
+    <item
+        android:id="@+id/navigation_item_6"
+        android:icon="@drawable/ic_action_add"
+        android:title="Xem sinh viên khác" />
+
+</menu>
