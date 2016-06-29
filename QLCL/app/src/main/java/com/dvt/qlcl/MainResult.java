@@ -1,7 +1,6 @@
 package com.dvt.qlcl;
 
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,18 +10,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvt.fragment.ExamResultFragment;
@@ -31,8 +25,6 @@ import com.dvt.fragment.InformationDeveloperFragment;
 import com.dvt.fragment.LearingResultFragment;
 import com.dvt.util.CommonMethod;
 import com.dvt.util.CommonValue;
-
-import android.support.v7.widget.SearchView;
 
 /**
  * Created by DoanPT1 on 6/23/2016.
@@ -43,9 +35,6 @@ public class MainResult extends AppCompatActivity {
     NavigationView mNavigationView;
     FrameLayout mContentFrame;
     private String code;
-    private MenuItem mSearchAction;
-    private boolean isSearchOpened = false;
-    private EditText edtSeach;
     Bundle bundle = new Bundle();
 
     @Override
@@ -70,24 +59,21 @@ public class MainResult extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        // Retrieve the SearchView and plug it into SearchManager
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Log.e("onQueryTextChange", "called");
                 return false;
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Toast.makeText(MainResult.this, "Search" + query, Toast.LENGTH_SHORT).show();
+                //TODO
                 return false;
             }
-
         });
         return true;
     }
@@ -98,23 +84,10 @@ public class MainResult extends AppCompatActivity {
         switch (id) {
             case R.id.action_reload:
                 Toast.makeText(MainResult.this, "Reload", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_search:
-                Intent intent = getIntent();
-                if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-                    String query = intent.getStringExtra(SearchManager.QUERY);
-                    //doMySearch(query);
-                    Toast.makeText(MainResult.this, "Search", Toast.LENGTH_SHORT).show();
-                }
+                //TODO
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private void doSearch() {
-        //progress after enter text
     }
 
     private void initView() {
@@ -145,12 +118,9 @@ public class MainResult extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_item_3:
-//                        St learingResultFragment=new LearingResultFragment();
-//                        learingResultFragment.setArguments(bundle);
-//                        replaceFragment(learingResultFragment);
                         StudentReport studentReport = new StudentReport();
                         replaceFragment(studentReport);
-                        getSupportActionBar().setTitle("Kết quả thi");
+                        getSupportActionBar().setTitle("Điểm tích lũy");
                         Toast.makeText(MainResult.this, "Điểm tích lũy", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawers();
                         return true;
@@ -186,15 +156,12 @@ public class MainResult extends AppCompatActivity {
     public void startFragment(Fragment fragment) {
         String backStateName = fragment.getClass().getName();
         String fragmentTag = backStateName;
-
         FragmentManager manager = getSupportFragmentManager();
         boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
-
         if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null) { //fragment not in back stack, create it.
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.nav_contentframe, fragment, fragmentTag);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            //ft.addToBackStack(backStateName);
             ft.commit();
         }
     }
@@ -210,7 +177,6 @@ public class MainResult extends AppCompatActivity {
                 }
             });
         }
-
     }
 
     private void setUpToolbar() {
@@ -219,5 +185,4 @@ public class MainResult extends AppCompatActivity {
             setSupportActionBar(mToolbar);
         }
     }
-
 }

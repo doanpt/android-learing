@@ -1,8 +1,6 @@
 package com.dvt.qlcl;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -11,23 +9,13 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.dvt.fragment.ExamResultFragment;
-import com.dvt.fragment.ExamScheduleFragment;
-import com.dvt.fragment.InformationDeveloperFragment;
-import com.dvt.fragment.LearingResultFragment;
 import com.dvt.item.ExamResultForReportItem;
 import com.dvt.jsoup.HtmlParse;
 import com.dvt.util.CommonMethod;
@@ -38,9 +26,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -77,13 +62,6 @@ public class StudentReport extends Fragment {
         return myFragmentView;
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_student_report);
-//
-//    }
-
     private class LearningResultForReportTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -111,7 +89,6 @@ public class StudentReport extends Fragment {
             } else {
                 for (int i = 0; i < size; i++) {
                     if (i == size - 1) {
-
                     } else {
                         ExamResultForReportItem examResultItem = examResultItems.get(i);
                         if (examResultItem.getPoint2().equals("**")) {
@@ -142,39 +119,29 @@ public class StudentReport extends Fragment {
                         }
                     }
                 }
-                for(int i=0;i<examResultItems.size();i++){
-                    Log.d("Item",examResultItems.get(i).getName()+"--"+examResultItems.get(i).getInchi()+"--"+examResultItems.get(i).getPoint2());
-                }
-                Log.d("SizeF",examResultItems.size()+"--");
                 int a = 0, b = 0, c = 0, d = 0, f = 0;
                 int tinchi = 0, tinchia = 0, tinchib = 0, tinchic = 0, tinchid = 0, tinchif = 0;
                 for (ExamResultForReportItem item : examResultItems) {
                     if (item.getPoint2().equals("A")) {
                         a++;
-                        Log.d("TCA", item.getName() + "-" + item.getPoint1() + "-" + item.getPoint2() + "-" + item.getInchi());
                         tinchia += Integer.parseInt(item.getInchi());
                         tinchi += Integer.parseInt(item.getInchi());
                     } else if (item.getPoint2().equals("B")) {
                         b++;
-                        Log.d("TCB", item.getName() + "-" + item.getPoint1() + "-" + item.getPoint2() + "-" + item.getInchi());
                         tinchib += Integer.parseInt(item.getInchi());
                         tinchi += Integer.parseInt(item.getInchi());
                     } else if (item.getPoint2().equals("C")) {
                         c++;
-                        Log.d("TCC", item.getName() + "-" + item.getPoint1() + "-" + item.getPoint2() + "-" + item.getInchi());
                         tinchic += Integer.parseInt(item.getInchi());
                         tinchi += Integer.parseInt(item.getInchi());
                     } else if (item.getPoint2().equals("D")) {
                         d++;
-                        Log.d("TCD", item.getName() + "-" + item.getPoint1() + "-" + item.getPoint2() + "-" + item.getInchi());
                         tinchid += Integer.parseInt(item.getInchi());
                         tinchi += Integer.parseInt(item.getInchi());
                     } else if (item.getPoint2().equals("I")) {
-                        Log.d("TCI", item.getName() + "-" + item.getPoint1() + "-" + item.getPoint2() + "-" + item.getInchi());
                         continue;
 
                     } else {
-                        Log.d("TCF", item.getName() + "-" + item.getPoint1() + "-" + item.getPoint2() + "-" + item.getInchi());
                         f++;
                     }
                 }
@@ -214,7 +181,6 @@ public class StudentReport extends Fragment {
                     dem++;
                 }
                 Float DTB = (float) (tinchia * 4 + tinchib * 3 + tinchic * 2 + tinchid * 1) / tinchi;
-                Log.d("ABC",tinchia+"--"+tinchib+"--"+tinchic+"--"+tinchid+"--"+tinchi);
                 String DTBText = df.format(DTB);
                 PieDataSet dataset = new PieDataSet(entries, "# Type Point");
                 PieData data = new PieData(labels, dataset);
