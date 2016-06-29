@@ -23,6 +23,7 @@ import com.dvt.fragment.ExamResultFragment;
 import com.dvt.fragment.ExamScheduleFragment;
 import com.dvt.fragment.InformationDeveloperFragment;
 import com.dvt.fragment.LearingResultFragment;
+import com.dvt.fragment.StudentReportFragment;
 import com.dvt.util.CommonMethod;
 import com.dvt.util.CommonValue;
 
@@ -118,7 +119,7 @@ public class MainResult extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_item_3:
-                        StudentReport studentReport = new StudentReport();
+                        StudentReportFragment studentReport = new StudentReportFragment();
                         replaceFragment(studentReport);
                         getSupportActionBar().setTitle("Điểm tích lũy");
                         Toast.makeText(MainResult.this, "Điểm tích lũy", Toast.LENGTH_SHORT).show();

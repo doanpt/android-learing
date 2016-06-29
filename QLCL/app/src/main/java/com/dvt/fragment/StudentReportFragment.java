@@ -1,4 +1,4 @@
-package com.dvt.qlcl;
+package com.dvt.fragment;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.dvt.item.ExamResultForReportItem;
 import com.dvt.jsoup.HtmlParse;
+import com.dvt.qlcl.R;
 import com.dvt.util.CommonMethod;
 import com.dvt.util.CommonValue;
 import com.github.mikephil.charting.charts.PieChart;
@@ -33,10 +34,7 @@ import java.util.ArrayList;
  * Created by Doanp on 6/25/2016.
  */
 
-public class StudentReport extends Fragment {
-    private Toolbar mToolbar;
-    private DrawerLayout mDrawerLayout;
-    NavigationView mNavigationView;
+public class StudentReportFragment extends Fragment {
     String code;
     View myFragmentView;
     ProgressDialog mProgressDialog;
