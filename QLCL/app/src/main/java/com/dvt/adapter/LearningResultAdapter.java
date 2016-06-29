@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.dvt.item.LearningResultItem;
 import com.dvt.qlcl.R;
 
 import java.util.ArrayList;

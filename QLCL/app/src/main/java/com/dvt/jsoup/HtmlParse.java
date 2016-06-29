@@ -1,11 +1,14 @@
-package com.dvt.adapter;
+package com.dvt.jsoup;
+
+import com.dvt.item.ExamResultForReportItem;
+import com.dvt.item.ExamScheduleItem;
+import com.dvt.item.LearningResultItem;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +24,7 @@ public class HtmlParse {
     private ArrayList<LearningResultItem> arrLearnResult = new ArrayList<>();
     private ArrayList<LearningResultItem> arrExamResult = new ArrayList<>();
     private ArrayList<ExamScheduleItem> arrExamSchedule = new ArrayList<>();
-    private ArrayList<ExamResultItem> arrExamReport = new ArrayList<>();
+    private ArrayList<ExamResultForReportItem> arrExamReport = new ArrayList<>();
 
     public ArrayList<ExamScheduleItem> getArrExamSchedule() {
         return arrExamSchedule;
@@ -47,8 +50,8 @@ public class HtmlParse {
         learningResultURL += code;
         Document document = null;
         try {
-            document = Jsoup.connect(learningResultURL).get();
-//            document=Jsoup.parse(file);
+ //           document = Jsoup.connect(learningResultURL).get();
+            document=Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -59,7 +62,7 @@ public class HtmlParse {
                     arrLearnResult.add(getAllTDElementsLearing(trElements.get(i)));
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -68,8 +71,8 @@ public class HtmlParse {
         examResultURL += code;
         Document document = null;
         try {
-            document = Jsoup.connect(examResultURL).get();
-//             document = Jsoup.parse(file);
+ //           document = Jsoup.connect(examResultURL).get();
+          document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -80,7 +83,7 @@ public class HtmlParse {
                     arrExamResult.add(getAllTDElementsExam(trElements.get(i)));
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -89,8 +92,8 @@ public class HtmlParse {
         examSchuduleURL += code;
         Document document = null;
         try {
-            document = Jsoup.connect(examSchuduleURL).get();
-            //  document = Jsoup.parse(file);
+            //document = Jsoup.connect(examSchuduleURL).get();
+              document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -101,16 +104,16 @@ public class HtmlParse {
                     arrExamSchedule.add(getAllTDElementsExamSchedule(trElements.get(i)));
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<ExamResultItem> getArrExamReport() {
+    public ArrayList<ExamResultForReportItem> getArrExamReport() {
         return arrExamReport;
     }
 
-    public void setArrExamReport(ArrayList<ExamResultItem> arrExamReport) {
+    public void setArrExamReport(ArrayList<ExamResultForReportItem> arrExamReport) {
         this.arrExamReport = arrExamReport;
     }
 
@@ -182,8 +185,8 @@ public class HtmlParse {
         examResultURL += code;
         Document document = null;
         try {
-            document = Jsoup.connect(examResultURL).get();
-//        document = Jsoup.parse(file);
+//            document = Jsoup.connect(examResultURL).get();
+        document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -191,24 +194,24 @@ public class HtmlParse {
                 if (i < 1 || i == maxSize - 1) {
                     continue;
                 } else {
-                    ExamResultItem examResultItem = getAllTDElementsExamReport(trElements.get(i));
+                    ExamResultForReportItem examResultItem = getAllTDElementsExamReport(trElements.get(i));
                     arrExamReport.add(examResultItem);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private ExamResultItem getAllTDElementsExamReport(Element element) {
+    private ExamResultForReportItem getAllTDElementsExamReport(Element element) {
         Elements tdElements = element.getElementsByTag("td");
-        ExamResultItem examResultItem;
+        ExamResultForReportItem examResultItem;
         try {
             String name = tdElements.get(2).text();
             String tinchi = tdElements.get(3).text();
             String tdPoint3 = tdElements.get(7).text();
             String tdPointPGA = tdElements.get(8).text();
-            examResultItem = new ExamResultItem(name, tdPoint3, tdPointPGA, tinchi);
+            examResultItem = new ExamResultForReportItem(name, tdPoint3, tdPointPGA, tinchi);
         } catch (Exception e) {
             return null;
         }

@@ -1,14 +1,14 @@
-package com.dvt.adapter;
+package com.dvt.item;
 
 /**
  * Created by Android on 12/14/2015.
  */
-public class ExamResultItem {
+public class ExamResultForReportItem {
     private String name;
     private String point1;
     private String point2;
     private String inchi;
-    public ExamResultItem(String name,String point1, String point2,String inchi) {
+    public ExamResultForReportItem(String name, String point1, String point2, String inchi) {
         this.inchi=inchi;
         this.name=name;
         this.point1 = point1;
@@ -25,15 +25,15 @@ public class ExamResultItem {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ExamResultItem){
-            ExamResultItem temp = (ExamResultItem) o;
+        if (o instanceof ExamResultForReportItem){
+            ExamResultForReportItem temp = (ExamResultForReportItem) o;
             if (this.getName().equals(temp.getName()))
                 return true;
         }
         return false;
     }
 
-    public ExamResultItem() {
+    public ExamResultForReportItem() {
     }
 
     public String getName() {

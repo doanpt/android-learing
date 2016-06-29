@@ -1,13 +1,11 @@
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="robots" content="noodp,noydir"><meta id="kseo" name="description" content="Kết quả thi - Đại học công nghiệp Hà Nội - Phạm Thị Hà: Cổng thông tin điện tử - Kiểm tra đánh giá. Tra cứu kết quả học tập, quản lý thi của Trung tâm Quản lý chất lượng - Đại học Công nghiệp Hà Nội"><meta name="keywords" content="kiem tra danh gia, kiem dinh chat luong, quan ly thi trac nghiem, quan ly thi tu luan, van phong dien tu"><meta name="generator" content="vnkweb 3.0"><link href="/skin/Default.9.css?11" rel="stylesheet" type="text/css">
-    <script src="http://pagead2.googlesyndication.com/pub-config/r20160212/ca-pub-3404941426377113.js"></script><script async="" src="//www.google-analytics.com/analytics.js"></script><script id="facebook-jssdk" src="//connect.facebook.net/vi_VN/all.js#xfbml=1&amp;appId=411353505633633"></script><script src="/vnkResource/Js/jquery-1.4.4.min.js" type="text/javascript"></script>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="robots" content="noodp,noydir"><meta id="kseo" name="description" content="Kết quả thi - Đại học công nghiệp Hà Nội - Đỗ Thị Thiệp: Cổng thông tin điện tử - Kiểm tra đánh giá. Tra cứu kết quả học tập, quản lý thi của Trung tâm Quản lý chất lượng - Đại học Công nghiệp Hà Nội"><meta name="keywords" content="kiem tra danh gia, kiem dinh chat luong, quan ly thi trac nghiem, quan ly thi tu luan, van phong dien tu"><meta name="generator" content="vnkweb 3.0"><link href="/skin/Default.9.css?11" rel="stylesheet" type="text/css">
+    <script async="" src="//www.google-analytics.com/analytics.js"></script><script id="facebook-jssdk" src="//connect.facebook.net/vi_VN/all.js#xfbml=1&amp;appId=411353505633633"></script><script src="/vnkResource/Js/jquery-1.4.4.min.js" type="text/javascript"></script>
     <script src="/vnkResource/Js/ddlevelsmenu.js" type="text/javascript"></script>
 
-    <script type="text/javascript">var kroot = '/';var kvirtualroot = '/';var kverify = '283A099F33DD218E7B65FF86EB42FF51';</script>
+    <script type="text/javascript">var kroot = '/';var kvirtualroot = '/';var kverify = '16CECA608E4D1ED92AA753696F0C9D96';</script>
 <meta property="fb:page_id" content="177704892290269"><title>
-	Kết quả thi - Đại học công nghiệp Hà Nội - Phạm Thị Hà - TT-QLCL
-</title><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
-.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;_background-image:url(https://static.xx.fbcdn.net/rsrc.php/v2/yL/r/s816eWC-2sl.gif);cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent;_background-image:url(https://static.xx.fbcdn.net/rsrc.php/v2/yL/r/s816eWC-2sl.gif)}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent;_background-image:url(https://static.xx.fbcdn.net/rsrc.php/v2/yL/r/s816eWC-2sl.gif)}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:24px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:18px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v2/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v2/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}</style></head>
+	Kết quả thi - Đại học công nghiệp Hà Nội - Đỗ Thị Thiệp - TT-QLCL
+</title></head>
 <body>
     <div id="mainPage">
         <div id="t-portal">
@@ -58,7 +56,8 @@
                     </div>
                 </div>
 				<div class="fbBox faceBox">
-                    <div class="fb-like fb_iframe_widget" data-href="https://www.facebook.com/qlcl.edu.vn" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false" fb-xfbml-state="rendered" fb-iframe-plugin-query="app_id=411353505633633&amp;container_width=412&amp;href=https%3A%2F%2Fwww.facebook.com%2Fqlcl.edu.vn&amp;layout=button_count&amp;locale=vi_VN&amp;sdk=joey&amp;send=false&amp;show_faces=false&amp;width=50"><span style="vertical-align: bottom; width: 93px; height: 20px;"><iframe name="f63ad5489350fc" width="50px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="https://www.facebook.com/plugins/like.php?app_id=411353505633633&amp;channel=http%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D42%23cb%3Df3127ed96b77%26domain%3Dqlcl.edu.vn%26origin%3Dhttp%253A%252F%252Fqlcl.edu.vn%252Ff2d03b30cfd1e%26relation%3Dparent.parent&amp;container_width=412&amp;href=https%3A%2F%2Fwww.facebook.com%2Fqlcl.edu.vn&amp;layout=button_count&amp;locale=vi_VN&amp;sdk=joey&amp;send=false&amp;show_faces=false&amp;width=50" style="border: none; visibility: visible; width: 93px; height: 20px;" class=""></iframe></span></div>
+                    <div class="fb-like" data-href="https://www.facebook.com/qlcl.edu.vn" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false">
+                    </div>
                 </div>
                 <div class="login">
                     <div id="_ctl7_t_pnUser">
@@ -124,7 +123,7 @@
     </div>
     <div id="main">
         <div class="date">
-            Saturday, 25/06/2016, 16:40
+            Wednesday, 29/06/2016, 11:32
             GMT+7
         </div>
         <div class="menu-submenu">
@@ -156,11 +155,11 @@
 
         </div>
         <div id="boxContent">
-            <form name="frmMain" method="post" action="/viewstudent/ket-qua-hoc-tap.htm?code=0741260074" id="frmMain">
-<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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">
+            <form name="frmMain" method="post" action="/viewstudent/ket-qua-thi.htm?code=0741260004" id="frmMain">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUJLTc5ODczMDU4D2QWBAIBD2QWAgICDxYCHgdjb250ZW50BY0CS+G6v3QgcXXhuqMgdGhpIC0gxJDhuqFpIGjhu41jIGPDtG5nIG5naGnhu4dwIEjDoCBO4buZaSAtIMSQ4buXIFRo4buLIFRoaeG7h3A6IEPhu5VuZyB0aMO0bmcgdGluIMSRaeG7h24gdOG7rSAtIEtp4buDbSB0cmEgxJHDoW5oIGdpw6EuIFRyYSBj4bupdSBr4bq/dCBxdeG6oyBo4buNYyB04bqtcCwgcXXhuqNuIGzDvSB0aGkgY+G7p2EgVHJ1bmcgdMOibSBRdeG6o24gbMO9IGNo4bqldCBsxrDhu6NuZyAtIMSQ4bqhaSBo4buNYyBDw7RuZyBuZ2hp4buHcCBIw6AgTuG7mWlkAgcPFgIeBmFjdGlvbgUsL3ZpZXdzdHVkZW50L2tldC1xdWEtdGhpLmh0bT9jb2RlPTA3NDEyNjAwMDQWAgIBD2QWAmYPZBYCAgUPDxYCHgdWaXNpYmxlZ2QWBAIBDxYCHgtfIUl0ZW1Db3VudAIBFgJmD2QWAmYPFQQLxJDhu5cgVGjhu4sHVGhp4buHcAowNzQxMjYwMDA0DcSQSCBIVFRUIDFfSzdkAgUPFgIfAwI2FmxmD2QWAmYPFRIJa1RhYmxlUm93ATEOMTIwMTA1MDMyOTA3MTIFMTk5NTkQbmhhcC1tb24tdGluLWhvYxVOaOG6rXAgbcO0biB0aW4gaOG7jWMVTmjhuq1wIG3DtG4gdGluIGjhu41jATMDOC41AjEwAAM5LjUBQQABMQAAAGQCAQ9kFgJmDxUSDGtUYWJsZUFsdFJvdwEyDjEyMDExMjAzMDEwNzEyBTIwMDI5MGNhYy1uZ3V5ZW4tbHktY28tYmFuLWN1YS1jaHUtbmdoaWEtbWFjLWxlLW5pbi1rN0FDw6FjIG5ndXnDqm4gbMO9IGPGoSBi4bqjbiBj4bunYSBjaOG7pyBuZ2jEqWEgTcOhYyAtIEzDqiBOaW4gKEs3KUFDw6FjIG5ndXnDqm4gbMO9IGPGoSBi4bqjbiBj4bunYSBjaOG7pyBuZ2jEqWEgTcOhYyAtIEzDqiBOaW4gKEs3KQE1AzcuNAE4AAM3LjgBQgABMQAAAGQCAg9kFgJmDxUSCWtUYWJsZVJvdwEzDjEyMDExMDAzMDEwNzEyBTIwNDcwFXRvYW4tY2FvLWNhcC0xLTEwMDMwMRpUb8OhbiBjYW8gY+G6pXAgMSAoMTAwMzAxKRpUb8OhbiBjYW8gY+G6pXAgMSAoMTAwMzAxKQEzATgBMwADNC43AUQAATEAAABkAgMPZBYCZg8VEgxrVGFibGVBbHRSb3cBNA4xMjAxMTMwMzc3MDcwNQUyMDUwMBx0aWVuZy1hbmgtZGluaC1odW9uZy10b2VpYy0xJFRp4bq/bmcgQW5oIMSR4buLbmggaMaw4bubbmcgVE9FSUMgMSRUaeG6v25nIEFuaCDEkeG7i25oIGjGsOG7m25nIFRPRUlDIDEBNgM1LjgBNQADNS4zAUQAATEAAABkAgQPZBYCZg8VEglrVGFibGVSb3cBNQ4xMjAyMDUwMzQwMDcwMwUyMzgyNA10aW4tdmFuLXBob25nD1RpbiB2xINuIHBow7JuZw9UaW4gdsSDbiBwaMOybmcBMwE2ATABNgE2AUMAATIAAABkAgUPZBYCZg8VEgxrVGFibGVBbHRSb3cBNg4xMjAyMTIwMzA1MDcxMgUyMzg2NBR0dS10dW9uZy1oby1jaGktbWluaBtUxrAgdMaw4bufbmcgSOG7kyBDaMOtIE1pbmgbVMawIHTGsOG7n25nIEjhu5MgQ2jDrSBNaW5oATIBNwE2AAM2LjMBQwABMgAAAGQCBg9kFgJmDxUSCWtUYWJsZVJvdwE3DjEyMDIwNTAzMTYwNzAzBTI0MDEzEmt5LXRodWF0LWxhcC10cmluaBlL4bu5IHRodeG6rXQgbOG6rXAgdHLDrG5oGUvhu7kgdGh14bqtdCBs4bqtcCB0csOsbmgBMwE5ATADOC41AzguNwFBAAEyAAAAZAIHD2QWAmYPFRIMa1RhYmxlQWx0Um93ATgOMTIwMjEwMDMwMjA3MTAFMjQxMDEOdG9hbi1jYW8tY2FwLTIRVG/DoW4gY2FvIGPhuqVwIDIRVG/DoW4gY2FvIGPhuqVwIDIBMwE4ATYAAzYuNwFDAAEyAAAAZAIID2QWAmYPFRIJa1RhYmxlUm93ATkOMTIwMjA1MDMzNTA3MDMFMjQxMTYzdG9hbi1yb2ktcmFjLWxvZ2ljLXRvLWhvcC1kby10aGktbmdvbi1uZ3UtaGluaC10aHVjUVRvw6FuIHLhu51pIHLhuqFjICggTG9naWMsIHThu5UgaOG7o3AsIMSR4buTIHRo4buLLCBuZ8O0biBuZ+G7ryBow6xuaCB0aOG7qWMsLi4uKVFUb8OhbiBy4budaSBy4bqhYyAoIExvZ2ljLCB04buVIGjhu6NwLCDEkeG7kyB0aOG7iywgbmfDtG4gbmfhu68gaMOsbmggdGjhu6ljLC4uLikBMwE4ATMAAzQuNwFEAAEyAAAAZAIJD2QWAmYPFRIMa1RhYmxlQWx0Um93AjEwDjEyMDIwNTAzMTUwNzAzBTI0MTIzEmtpZW4tdHJ1Yy1tYXktdGluaBdLaeG6v24gdHLDumMgbcOheSB0w61uaBdLaeG6v24gdHLDumMgbcOheSB0w61uaAEzATUBMAE5AzcuNwFCAAEyAAAAZAIKD2QWAmYPFRIJa1RhYmxlUm93AjExDjEyMDIwNTAzMDUwNzAzBTI0MTI4DWNvLXNvLWR1LWxpZXUUQ8ahIHPhu58gZOG7ryBsaeG7h3UUQ8ahIHPhu58gZOG7ryBsaeG7h3UBMwE3AzkuNQADOC43AUEAATIAAABkAgsPZBYCZg8VEgxrVGFibGVBbHRSb3cCMTIOMTIwMjEzMDM3ODA3MTAFMjUwMjAcdGllbmctYW5oLWRpbmgtaHVvbmctdG9laWMtMiRUaeG6v25nIEFuaCDEkeG7i25oIGjGsOG7m25nIFRPRUlDIDIkVGnhur9uZyBBbmggxJHhu4tuaCBoxrDhu5tuZyBUT0VJQyAyATYBNgM1LjUAAzUuNwFDAAEyAAAAZAIMD2QWAmYPFRIJa1RhYmxlUm93AjEzDjEzMDExMDAzMDUwNzE2BTQzMDMwJHhhYy1zdWF0LXRob25nLWtlLWx5LXRodXlldC14YWMtc3VhdDJYw6FjIHN14bqldCB0aOG7kW5nIGvDqiAoTMO9IHRodXnhur90IHjDoWMgc3XhuqV0KTJYw6FjIHN14bqldCB0aOG7kW5nIGvDqiAoTMO9IHRodXnhur90IHjDoWMgc3XhuqV0KQEyATgCMTAAAzkuMwFBAAE0AAAAZAIND2QWAmYPFRIMa1RhYmxlQWx0Um93AjE0DjEzMDEwNTAzMjIwNzA1BTQzMDQyDW1hbmctbWF5LXRpbmgRTeG6oW5nIG3DoXkgdMOtbmgRTeG6oW5nIG3DoXkgdMOtbmgBMwE4ATcAAzcuMwFCAAE0AAAAZAIOD2QWAmYPFRIJa1RhYmxlUm93AjE1DjEzMDExMjAzMDIwNzEyBTQzODgxHGR1b25nLWxvaS1jYWNoLW1hbmctdmlldC1uYW0nxJDGsOG7nW5nIGzhu5FpIGPDoWNoIG3huqFuZyBWaeG7h3QgTmFtJ8SQxrDhu51uZyBs4buRaSBjw6FjaCBt4bqhbmcgVmnhu4d0IE5hbQEzAzcuNQMzLjUAAzQuOAFEAAE0AAAAZAIPD2QWAmYPFRIMa1RhYmxlQWx0Um93AjE2DjEzMDExMjAzMDMwNzA5BTQzOTIzEm5oYXAtbW9uLWxvZ2ljLWhvYxhOaOG6rXAgbcO0biBsw7RnaWMgaOG7jWMYTmjhuq1wIG3DtG4gbMO0Z2ljIGjhu41jATIBNQE5AAM3LjcBQgABNAAAAGQCEA9kFgJmDxUSCWtUYWJsZVJvdwIxNw4xMzAxMDUwMzE0MDcwNgU0NDY0OCRoZS1xdWFuLXRyaS1jby1zby1kdS1saWV1LXNxbC1zZXJ2ZXIzSOG7hyBxdeG6o24gdHLhu4sgY8ahIHPhu58gZOG7ryBsaeG7h3UgKFNRTCBzZXJ2ZXIpM0jhu4cgcXXhuqNuIHRy4buLIGPGoSBz4bufIGThu68gbGnhu4d1IChTUUwgc2VydmVyKQE0AzguNQM4LjUAAzguNQFBAAE0AAAAZAIRD2QWAmYPFRIMa1RhYmxlQWx0Um93AjE4DjEzMDEwNTAzMDIwNzA1BTQ0NjU1HmNhdS10cnVjLWR1LWxpZXUtdmEtZ2lhaS10aHVhdCpD4bqldSB0csO6YyBk4buvIGxp4buHdSB2w6AgZ2nhuqNpIHRodeG6rXQqQ+G6pXUgdHLDumMgZOG7ryBsaeG7h3UgdsOgIGdp4bqjaSB0aHXhuq10ATMDOC41ATMAAzQuOAFEAAE0AAAAZAISD2QWAmYPFRIJa1RhYmxlUm93AjE5DjEzMDEwNTAzMjYwNzA1BTQ0NjU3Fm5ndXllbi1seS1oZS1kaWV1LWhhbmgeTmd1ecOqbiBsw70gaOG7hyDEkWnhu4F1IGjDoG5oHk5ndXnDqm4gbMO9IGjhu4cgxJFp4buBdSBow6BuaAEzAzguNQE2AAM2LjgBQwABNAAAAGQCEw9kFgJmDxUSDGtUYWJsZUFsdFJvdwIyMA4xMzAxMTMwMzc5MDcwOQU0NDY2OBx0aWVuZy1hbmgtZGluaC1odW9uZy10b2VpYy0zJFRp4bq/bmcgQW5oIMSR4buLbmggaMaw4bubbmcgVE9FSUMgMyRUaeG6v25nIEFuaCDEkeG7i25oIGjGsOG7m25nIFRPRUlDIDMBNgM1LjQBNQADNS4xAUQAATQAAABkAhQPZBYCZg8VEglrVGFibGVSb3cCMjEOMTMwMjA1MDMzMDA3MDEFNDg5NDUbcGhhbi10aWNoLXRoaWV0LWtlLWhlLXRob25nJVBow6JuIHTDrWNoIHRoaeG6v3Qga+G6vyBo4buHIHRo4buRbmclUGjDom4gdMOtY2ggdGhp4bq/dCBr4bq/IGjhu4cgdGjhu5FuZwEzAzYuOAM3LjUAAzcuMwFCAAE1AAAAZAIVD2QWAmYPFRIMa1RhYmxlQWx0Um93AjIyDjEzMDIwNTAzMjAwNzAxBTQ5MTY4GWxhcC10cmluaC1odW9uZy1kb2ktdHVvbmclTOG6rXAgdHLDrG5oIGjGsOG7m25nIMSR4buRaSB0xrDhu6NuZyVM4bqtcCB0csOsbmggaMaw4bubbmcgxJHhu5FpIHTGsOG7o25nATMCMTADOC41AAE5AUEAATUAAABkAhYPZBYCZg8VEglrVGFibGVSb3cCMjMOMTMwMjA1MDM1NjA3MDEFNDkzMzIebGFwLXRyaW5oLXNxbC1jbGllbnQtbXMtYWNjZXNzI0zhuq1wIHRyw6xuaCBTUUwgY2xpZW50IChNUyBBY2Nlc3MpI0zhuq1wIHRyw6xuaCBTUUwgY2xpZW50IChNUyBBY2Nlc3MpATQDOC4zAjEwAAM5LjQBQQABNQAAAGQCFw9kFgJmDxUSDGtUYWJsZUFsdFJvdwIyNA4xMzAyMDUwMzY0MDcwMQU0OTg4ORZ0aGlldC1rZS1jby1zby1kdS1saWV1IVRoaeG6v3Qga+G6vyBDxqEgc+G7nyBk4buvIGxp4buHdSFUaGnhur90IGvhur8gQ8ahIHPhu58gZOG7ryBsaeG7h3UBMwE4ATkAAzguNwFBAAE1AAAAZAIYD2QWAmYPFRIJa1RhYmxlUm93AjI1DjEzMDIxMzAzODAwNzAxBTUwMDMyHHRpZW5nLWFuaC1kaW5oLWh1b25nLXRvZWljLTQkVGnhur9uZyBBbmggxJHhu4tuaCBoxrDhu5tuZyBUT0VJQyA0JFRp4bq/bmcgQW5oIMSR4buLbmggaMaw4bubbmcgVE9FSUMgNAE2AzcuMQE2AAM2LjQBQwABNQAAAGQCGQ9kFgJmDxUSDGtUYWJsZUFsdFJvdwIyNg4xMzAyMTAwMzA2MDcwNQU1MDA3MxBwaHVvbmctcGhhcC10aW5oFFBoxrDGoW5nIHBow6FwIHTDrW5oFFBoxrDGoW5nIHBow6FwIHTDrW5oATIDNi41AzYuNQADNi41AUMAATUAAABkAhoPZBYCZg8VEglrVGFibGVSb3cCMjcOMTMwMjA1MDMxMDA3MDEFNTAyMTUPZG8taG9hLW1heS10aW5oFsSQ4buTIGhv4bqhIG3DoXkgdMOtbmgWxJDhu5MgaG/huqEgbcOheSB0w61uaAEzAzcuOAE0AAM1LjMBRAABNQTEkFBLAABkAhsPZBYCZg8VEgxrVGFibGVBbHRSb3cCMjgOMTMwMjA5MDMwNjA3MjQFNjA5NjcTZ2lhby1kdWMtdGhlLWNoYXQtNBpHacOhbyBk4bulYyB0aOG7gyBjaOG6pXQgNBpHacOhbyBk4bulYyB0aOG7gyBjaOG6pXQgNAEyAAAAAAFJAAE1AAAAZAIcD2QWAmYPFRIJa1RhYmxlUm93AjI5DjE0MDEwNTAzMzcwNzA1BTUyMDYyEHRyaS10dWUtbmhhbi10YW8WVHLDrSB0deG7hyBuaMOibiB04bqhbxZUcsOtIHR14buHIG5ow6JuIHThuqFvATMDOS41ATkAAzkuMgFBAAE3AAAAZAIdD2QWAmYPFRIMa1RhYmxlQWx0Um93AjMwDjE0MDEwNTAzNzMwNzAzBTUyMTI4DHRoaWV0LWtlLXdlYhBUaGnhur90IGvhur8gd2ViEFRoaeG6v3Qga+G6vyB3ZWIBMwM4LjgCMTAAAzkuNgFBAAE3AAAAZAIeD2QWAmYPFRIJa1RhYmxlUm93AjMxDjE0MDEwOTAzMDcwNzI4BTUyMzIzE2dpYW8tZHVjLXRoZS1jaGF0LTUaR2nDoW8gZOG7pWMgdGjhu4MgY2jhuqV0IDUaR2nDoW8gZOG7pWMgdGjhu4MgY2jhuqV0IDUBMQE4ATcAAzcuMwFCAAE3AAAAZAIfD2QWAmYPFRIMa1RhYmxlQWx0Um93AjMyDjE0MDExMzAzODEwNzA5BTUzMDM4HHRpZW5nLWFuaC1kaW5oLWh1b25nLXRvZWljLTUkVGnhur9uZyBBbmggxJHhu4tuaCBoxrDhu5tuZyBUT0VJQyA1JFRp4bq/bmcgQW5oIMSR4buLbmggaMaw4bubbmcgVE9FSUMgNQE2AzcuMQM1LjUAATYBQwABNwAAAGQCIA9kFgJmDxUSCWtUYWJsZVJvdwIzMw4xNDAxMDUwMzExMDcwNQU1MzIzMxNnaWFvLWRpZW4tbmd1b2ktbWF5G0dpYW8gZGnhu4duIG5nxrDhu51pIC0gbcOheRtHaWFvIGRp4buHbiBuZ8aw4budaSAtIG3DoXkBMwM3LjgDOS41AAM4LjkBQQABNwAAAGQCIQ9kFgJmDxUSDGtUYWJsZUFsdFJvdwIzNA4xNDAxMDUwMzI3MDcwNQU1MzM3NSJuaGFwLW1vbi1jb25nLW5naGUtcGhhbi1tZW0tMDUwMzI3Lk5o4bqtcCBtw7RuIGPDtG5nIG5naOG7hyBwaOG6p24gbeG7gW0gKDA1MDMyNykuTmjhuq1wIG3DtG4gY8O0bmcgbmdo4buHIHBo4bqnbiBt4buBbSAoMDUwMzI3KQEzAzguOAE3AAM3LjYBQgABNwAAAGQCIg9kFgJmDxUSCWtUYWJsZVJvdwIzNQ4xNDAyMDUwMzMxMDcwMQU1ODEyMyJwaGFuLXRpY2gtdGhpZXQta2UtaHVvbmctZG9pLXR1b25nMVBow6JuIHTDrWNoIHRoaeG6v3Qga+G6vyBoxrDhu5tuZyDEkeG7kWkgdMaw4bujbmcxUGjDom4gdMOtY2ggdGhp4bq/dCBr4bq/IGjGsOG7m25nIMSR4buRaSB0xrDhu6NuZwE0AzYuNgE4AAM3LjUBQgABOAAAAGQCIw9kFgJmDxUSDGtUYWJsZUFsdFJvdwIzNg4xNDAyMTMwMzM5MDcwMQU1ODYxOBt0aWVuZy1hbmgtY2h1eWVuLW5nYW5oLWtobXQhVGnhur9uZyBBbmggY2h1ecOqbiBuZ8OgbmggKEtITVQpIVRp4bq/bmcgQW5oIGNodXnDqm4gbmfDoG5oIChLSE1UKQEzATYBNQADNS4zAUQAATgAAABkAiQPZBYCZg8VEglrVGFibGVSb3cCMzcOMTQwMjA1MDMyODA3MDEFNTkxMTAcbmhhcC1tb24tbHktdGh1eWV0LW5oYW4tZGFuZyZOaOG6rXAgbcO0biBsw70gdGh1eeG6v3Qgbmjhuq1uIGThuqFuZyZOaOG6rXAgbcO0biBsw70gdGh1eeG6v3Qgbmjhuq1uIGThuqFuZwEzATcBOQADOC4zAUIAATgAAABkAiUPZBYCZg8VEgxrVGFibGVBbHRSb3cCMzgOMTQwMjA1MDM0OTA3MDEFNTk1NDMWaGUtdHJvLWdpdXAtcXV5ZXQtZGluaCBI4buHIHRy4bujIGdpw7pwIHF1eeG6v3QgxJHhu4tuaCBI4buHIHRy4bujIGdpw7pwIHF1eeG6v3QgxJHhu4tuaAEzAzcuNQM4LjUAAzguMgFCAAE4AAAAZAImD2QWAmYPFRIJa1RhYmxlUm93AjM5DjE0MDIwNTAzMzMwNzAxBTU5ODQzFnF1YW4tbHktY2FjLWR1LWFuLWNudHQdUXXhuqNuIGzDvSBjw6FjIGThu7Egw6FuIENOVFQdUXXhuqNuIGzDvSBjw6FjIGThu7Egw6FuIENOVFQBMwM3LjgBOAADNy45AUIAATgAAABkAicPZBYCZg8VEgxrVGFibGVBbHRSb3cCNDAOMTQwMjA1MDMxMjA3MDEFNjAyNTQNaGUtY2h1eWVuLWdpYRBI4buHIGNodXnDqm4gZ2lhEEjhu4cgY2h1ecOqbiBnaWEBMwM4LjUBMQE2AzYuOAFDAAE4AAAAZAIoD2QWAmYPFRIJa1RhYmxlUm93AjQxDjE1MDEwNTAzNTcwNzAxBTYzMDAwLmxhcC10cmluaC11bmctZHVuZy1jby1zby1kdS1saWV1LWNsaWVudC1zZXJ2ZXI8TOG6rXAgdHLDrG5oIOG7qW5nIGThu6VuZyBjxqEgc+G7nyBk4buvIGxp4buHdSBDbGllbnQvU2VydmVyPEzhuq1wIHRyw6xuaCDhu6luZyBk4bulbmcgY8ahIHPhu58gZOG7ryBsaeG7h3UgQ2xpZW50L1NlcnZlcgE0ATgDNy41AAM3LjcBQgACMTAAAABkAikPZBYCZg8VEgxrVGFibGVBbHRSb3cCNDIOMTUwMTA1MDM0NzA3MDEFNjMwNTQXZG8tYW4tY2h1eWVuLW5nYW5oLWh0dHQdxJDhu5Mgw6FuIGNodXnDqm4gbmfDoG5oIEhUVFQdxJDhu5Mgw6FuIGNodXnDqm4gbmfDoG5oIEhUVFQBNAE5ATkAATkBQQACMTAAAABkAioPZBYCZg8VEglrVGFibGVSb3cCNDMOMTUwMTA1MDM2MTA3MDMFNjM0MzIscGhhdC10cmllbi1oZS10aG9uZy1kb2FuaC1uZ2hpZXAtZGllbi10dS1lcnA8UGjDoXQgdHJp4buDbiBo4buHIHRo4buRbmcgZG9hbmggbmdoaeG7h3AgxJFp4buHbiB04butIChFUlApPFBow6F0IHRyaeG7g24gaOG7hyB0aOG7kW5nIGRvYW5oIG5naGnhu4dwIMSRaeG7h24gdOG7rSAoRVJQKQEzATgBOAABOAFCAAIxMAAAAGQCKw9kFgJmDxUSDGtUYWJsZUFsdFJvdwI0NA4xNTAxMDUwMzA3MDcwMQU2MzQ0MRZjby1zby1kdS1saWV1LXBoYW4tdGFuH0PGoSBz4bufIGThu68gbGnhu4d1IHBow6JuIHTDoW4fQ8ahIHPhu58gZOG7ryBsaeG7h3UgcGjDom4gdMOhbgEzAjEwAjEwAAIxMAFBAAIxMAAAAGQCLA9kFgJmDxUSCWtUYWJsZVJvdwI0NQ4xNTAxMDUwMzM4MDcwMQU2MzYwOAl4dS1seS1hbmgOWOG7rSBsw70g4bqjbmgOWOG7rSBsw70g4bqjbmgBMwE4ATcAAzcuMwFCAAIxMAAAAGQCLQ9kFgJmDxUSDGtUYWJsZUFsdFJvdwI0Ng4xNTAxMDUwMzY4MDcwMQU2MzgxMxVjb25nLW5naGUtdGh1Yy10YWktYW8eQ8O0bmcgbmdo4buHIHRo4buxYyB04bqhaSDhuqNvHkPDtG5nIG5naOG7hyB0aOG7sWMgdOG6oWkg4bqjbwE0AzcuOAE3AAM3LjMBQgACMTAAAABkAi4PZBYCZg8VEglrVGFibGVSb3cCNDcOMTUwMjA1MDM1MzA3MDEFNzEzNTI+a2hvYS1sdWFuLXRvdC1uZ2hpZXAtaG9hYy1ob2MtdGhlbS0wMy1ob2MtcGhhbi1jaHV5ZW4tbW9uLWh0dHRSS2jDs2EgbHXhuq1uIHThu5F0IG5naGnhu4dwIChob+G6t2MgaOG7jWMgdGjDqm0gMDMgaOG7jWMgcGjhuqduIGNodXnDqm4gbcO0biBIVFRUKVJLaMOzYSBsdeG6rW4gdOG7kXQgbmdoaeG7h3AgKGhv4bq3YyBo4buNYyB0aMOqbSAwMyBo4buNYyBwaOG6p24gY2h1ecOqbiBtw7RuIEhUVFQpATcDOS4zAzkuMwADOS4zAUEAAjExAAAAZAIvD2QWAmYPFRIMa1RhYmxlQWx0Um93AjQ4DjE1MDIwNTAzNjYwNzAxBTcxMzU4GHRodWMtdGFwLXRvdC1uZ2hpZXAtaHR0dCJUaOG7sWMgdOG6rXAgdOG7kXQgbmdoaeG7h3AgKEhUVFQpIlRo4buxYyB04bqtcCB04buRdCBuZ2hp4buHcCAoSFRUVCkBOAE5AAABOQFBAAIxMQAAAGQCMA9kFgJmDxUSCWtUYWJsZVJvdwI0OQ4xMzAzMTAwMzAxMDcwMgU0NzI5NhV0b2FuLWNhby1jYXAtMS0xMDAzMDEaVG/DoW4gY2FvIGPhuqVwIDEgKDEwMDMwMSkaVG/DoW4gY2FvIGPhuqVwIDEgKDEwMDMwMSkBMwM4LjUBNwADNy41AUIAAjI1BMSQUEsAAGQCMQ9kFgJmDxUSDGtUYWJsZUFsdFJvdwI1MA4xMzAzMDUwMzM1MDcwMQU0NzQ0MTN0b2FuLXJvaS1yYWMtbG9naWMtdG8taG9wLWRvLXRoaS1uZ29uLW5ndS1oaW5oLXRodWNRVG/DoW4gcuG7nWkgcuG6oWMgKCBMb2dpYywgdOG7lSBo4bujcCwgxJHhu5MgdGjhu4ssIG5nw7RuIG5n4buvIGjDrG5oIHRo4bupYywuLi4pUVRvw6FuIHLhu51pIHLhuqFjICggTG9naWMsIHThu5UgaOG7o3AsIMSR4buTIHRo4buLLCBuZ8O0biBuZ+G7ryBow6xuaCB0aOG7qWMsLi4uKQEzAjEwATkAAzkuMwFBAAIyNQAAAGQCMg9kFgJmDxUSCWtUYWJsZVJvdwI1MQ4xMzA0MDUwMzAyMDcwMQU1MTY1MB5jYXUtdHJ1Yy1kdS1saWV1LXZhLWdpYWktdGh1YXQqQ+G6pXUgdHLDumMgZOG7ryBsaeG7h3UgdsOgIGdp4bqjaSB0aHXhuq10KkPhuqV1IHRyw7pjIGThu68gbGnhu4d1IHbDoCBnaeG6o2kgdGh14bqtdAEzAzguOAE4AAM4LjMBQgACMjYAAABkAjMPZBYCZg8VEgxrVGFibGVBbHRSb3cCNTIOMTMwNDEzMDM3NzA3MDMFNTE3MzMcdGllbmctYW5oLWRpbmgtaHVvbmctdG9laWMtMSRUaeG6v25nIEFuaCDEkeG7i25oIGjGsOG7m25nIFRPRUlDIDEkVGnhur9uZyBBbmggxJHhu4tuaCBoxrDhu5tuZyBUT0VJQyAxATYDNy4zAzcuNQADNy40AUIAAjI2AAAAZAI0D2QWAmYPFRIJa1RhYmxlUm93AjUzDjE0MDMwNTAzMDQwNzAxBTU2Mjc0DWNvbmctbmdoZS14bWwQQ8O0bmcgbmdo4buHIFhNTBBDw7RuZyBuZ2jhu4cgWE1MATMCMTACMTAAAjEwAUEAAjI3AAAAZAI1D2QWAmYPFRIMa1RhYmxlQWx0Um93AjU0DjEzMDQwNTAzNDEwNjAxBTUxNjc5CnRvaS11dS1ob2EOVOG7kWkgxrB1IGhvw6EOVOG7kWkgxrB1IGhvw6EBMwE4ATcAAzcuMwFCAAIyOATEkFBLAABkZB/lWsVusneIFTfrayOWmerHLLOSRF56D3dur6SxPxzV">
 
 <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="CA0B0334">
-<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAN06+DhprDevKpJsjugTQowOrGxmtMNuu70Kssvs2S34oLwsuwAFFo5q6B+ulNOSbvUVG84sswBMcKM2hgqotI4ST9ycixFwbnbx3J/i77rXA==">
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAMVHOurMD0bnqxhza5UKTBYOrGxmtMNuu70Kssvs2S34oLwsuwAFFo5q6B+ulNOSbv4jZSHxAkVMgtTirb3EggR63Hkwy3IBdocKjA502BxUw==">
 
 
 <script type="text/javascript">
@@ -186,7 +185,7 @@
                                 <div class="k-panel-body form leftLabel" style="padding: 5px;">
                                     <div class="box_tracuu">
                                         Nhập mã sinh viên:
-                                        <input name="_ctl8:inpUserCodeEx" type="text" value="0741260074" id="_ctl8_inpUserCodeEx">
+                                        <input name="_ctl8:inpUserCodeEx" type="text" value="0741260004" id="_ctl8_inpUserCodeEx">
                                         <input type="submit" name="_ctl8:butSubmit" value="Xem kết quả" id="_ctl8_butSubmit">
                                     </div>
                                 </div>
@@ -210,8 +209,8 @@
                                                                     </td>
                                                                     <td>
                                                                         <strong>
-                                                                            Phạm Thị
-                                                                            Hà</strong>
+                                                                            Đỗ Thị
+                                                                            Thiệp</strong>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -220,7 +219,7 @@
                                                                     </td>
                                                                     <td>
                                                                         <strong>
-                                                                            0741260074</strong>
+                                                                            0741260004</strong>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -298,7 +297,7 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        8
+                                                                        8.5
                                                                     </td>
                                                                     <td class="td">
                                                                         10
@@ -307,7 +306,7 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.3
+                                                                        9.5
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -343,16 +342,16 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7.6
+                                                                        7.4
                                                                     </td>
                                                                     <td class="td">
-                                                                        7
+                                                                        8
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.2
+                                                                        7.8
                                                                     </td>
                                                                     <td class="td">
                                                                         B
@@ -388,19 +387,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        8.5
+                                                                        8
                                                                     </td>
                                                                     <td class="td">
-                                                                        9
+                                                                        3
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.8
+                                                                        4.7
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        D
                                                                     </td>
                                                                     <td class="td">
 
@@ -433,19 +432,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7.8
+                                                                        5.8
                                                                     </td>
                                                                     <td class="td">
-                                                                        8
+                                                                        5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.9
+                                                                        5.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        B
+                                                                        D
                                                                     </td>
                                                                     <td class="td">
 
@@ -478,19 +477,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
-                                                                        7
+                                                                        0
                                                                     </td>
                                                                     <td class="td">
-
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
-                                                                        7
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
-                                                                        B
+                                                                        C
                                                                     </td>
                                                                     <td class="td">
 
@@ -523,19 +522,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        8
+                                                                        7
                                                                     </td>
                                                                     <td class="td">
-                                                                        4
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        5.3
+                                                                        6.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        D
+                                                                        C
                                                                     </td>
                                                                     <td class="td">
 
@@ -568,16 +567,16 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.7
+                                                                        9
                                                                     </td>
                                                                     <td class="td">
                                                                         0
                                                                     </td>
                                                                     <td class="td">
-                                                                        9
+                                                                        8.5
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.2
+                                                                        8.7
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -613,16 +612,16 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        4
+                                                                        8
                                                                     </td>
                                                                     <td class="td">
-                                                                        7
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        6
+                                                                        6.7
                                                                     </td>
                                                                     <td class="td">
                                                                         C
@@ -661,16 +660,16 @@
                                                                         8
                                                                     </td>
                                                                     <td class="td">
-                                                                        8
+                                                                        3
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8
+                                                                        4.7
                                                                     </td>
                                                                     <td class="td">
-                                                                        B
+                                                                        D
                                                                     </td>
                                                                     <td class="td">
 
@@ -703,19 +702,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7.5
+                                                                        5
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        0
                                                                     </td>
                                                                     <td class="td">
                                                                         9
                                                                     </td>
                                                                     <td class="td">
-
+                                                                        7.7
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.5
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        A
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -748,10 +747,10 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9
+                                                                        7
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.5
+                                                                        9.5
                                                                     </td>
                                                                     <td class="td">
 
@@ -793,19 +792,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        8.3
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
-                                                                        7
+                                                                        5.5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.4
+                                                                        5.7
                                                                     </td>
                                                                     <td class="td">
-                                                                        B
+                                                                        C
                                                                     </td>
                                                                     <td class="td">
 
@@ -838,19 +837,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        8.3
+                                                                        8
                                                                     </td>
                                                                     <td class="td">
-                                                                        7
+                                                                        10
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.4
+                                                                        9.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        B
+                                                                        A
                                                                     </td>
                                                                     <td class="td">
 
@@ -931,16 +930,16 @@
                                                                         7.5
                                                                     </td>
                                                                     <td class="td">
-                                                                        5.5
+                                                                        3.5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        6.2
+                                                                        4.8
                                                                     </td>
                                                                     <td class="td">
-                                                                        C
+                                                                        D
                                                                     </td>
                                                                     <td class="td">
 
@@ -960,32 +959,32 @@
                                                                         16
                                                                     </td>
                                                                     <td class="td">
-                                                                        13011303790710
+                                                                        13011203030709
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/44669/tieng-anh-dinh-huong-toeic-3.htm" title="Danh sách điểm trong lớp môn Tiếng Anh định hướng TOEIC 3">
-                                                                            Tiếng Anh định hướng TOEIC 3
+                                                                        <a href="/student/viewexamresultclass/43923/nhap-mon-logic-hoc.htm" title="Danh sách điểm trong lớp môn Nhập môn lôgic học">
+                                                                            Nhập môn lôgic học
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        6
+                                                                        2
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7
+                                                                        5
                                                                     </td>
                                                                     <td class="td">
-                                                                        6.5
+                                                                        9
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        6.7
+                                                                        7.7
                                                                     </td>
                                                                     <td class="td">
-                                                                        C
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -1005,29 +1004,29 @@
                                                                         17
                                                                     </td>
                                                                     <td class="td">
-                                                                        13010503260705
+                                                                        13010503140706
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/44657/nguyen-ly-he-dieu-hanh.htm" title="Danh sách điểm trong lớp môn Nguyên lý hệ điều hành">
-                                                                            Nguyên lý hệ điều hành
+                                                                        <a href="/student/viewexamresultclass/44648/he-quan-tri-co-so-du-lieu-sql-server.htm" title="Danh sách điểm trong lớp môn Hệ quản trị cơ sở dữ liệu (SQL server)">
+                                                                            Hệ quản trị cơ sở dữ liệu (SQL server)
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        3
+                                                                        4
                                                                     </td>
                                                                     <td class="td">
 
                                                                         8.5
                                                                     </td>
                                                                     <td class="td">
-                                                                        10
+                                                                        8.5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.5
+                                                                        8.5
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -1063,19 +1062,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9
+                                                                        8.5
                                                                     </td>
                                                                     <td class="td">
-                                                                        4
+                                                                        3
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        5.7
+                                                                        4.8
                                                                     </td>
                                                                     <td class="td">
-                                                                        C
+                                                                        D
                                                                     </td>
                                                                     <td class="td">
 
@@ -1095,32 +1094,32 @@
                                                                         19
                                                                     </td>
                                                                     <td class="td">
-                                                                        13010503140706
+                                                                        13010503260705
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/44648/he-quan-tri-co-so-du-lieu-sql-server.htm" title="Danh sách điểm trong lớp môn Hệ quản trị cơ sở dữ liệu (SQL server)">
-                                                                            Hệ quản trị cơ sở dữ liệu (SQL server)
+                                                                        <a href="/student/viewexamresultclass/44657/nguyen-ly-he-dieu-hanh.htm" title="Danh sách điểm trong lớp môn Nguyên lý hệ điều hành">
+                                                                            Nguyên lý hệ điều hành
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        4
+                                                                        3
                                                                     </td>
                                                                     <td class="td">
 
                                                                         8.5
                                                                     </td>
                                                                     <td class="td">
-                                                                        9
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.8
+                                                                        6.8
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        C
                                                                     </td>
                                                                     <td class="td">
 
@@ -1140,32 +1139,32 @@
                                                                         20
                                                                     </td>
                                                                     <td class="td">
-                                                                        13011203030709
+                                                                        13011303790709
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/43923/nhap-mon-logic-hoc.htm" title="Danh sách điểm trong lớp môn Nhập môn lôgic học">
-                                                                            Nhập môn lôgic học
+                                                                        <a href="/student/viewexamresultclass/44668/tieng-anh-dinh-huong-toeic-3.htm" title="Danh sách điểm trong lớp môn Tiếng Anh định hướng TOEIC 3">
+                                                                            Tiếng Anh định hướng TOEIC 3
                                                                         </a>
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                        2
                                                                     </td>
                                                                     <td class="td">
 
                                                                         6
                                                                     </td>
                                                                     <td class="td">
-                                                                        9
+
+                                                                        5.4
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8
+                                                                        5.1
                                                                     </td>
                                                                     <td class="td">
-                                                                        B
+                                                                        D
                                                                     </td>
                                                                     <td class="td">
 
@@ -1185,32 +1184,32 @@
                                                                         21
                                                                     </td>
                                                                     <td class="td">
-                                                                        13021003060705
+                                                                        13020503300701
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/50073/phuong-phap-tinh.htm" title="Danh sách điểm trong lớp môn Phương pháp tính">
-                                                                            Phương pháp tính
+                                                                        <a href="/student/viewexamresultclass/48945/phan-tich-thiet-ke-he-thong.htm" title="Danh sách điểm trong lớp môn Phân tích thiết kế hệ thống">
+                                                                            Phân tích thiết kế hệ thống
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        2
+                                                                        3
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.5
+                                                                        6.8
                                                                     </td>
                                                                     <td class="td">
-                                                                        8
+                                                                        7.5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.5
+                                                                        7.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -1230,32 +1229,32 @@
                                                                         22
                                                                     </td>
                                                                     <td class="td">
-                                                                        13021303800701
+                                                                        13020503200701
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/50032/tieng-anh-dinh-huong-toeic-4.htm" title="Danh sách điểm trong lớp môn Tiếng Anh định hướng TOEIC 4">
-                                                                            Tiếng Anh định hướng TOEIC 4
+                                                                        <a href="/student/viewexamresultclass/49168/lap-trinh-huong-doi-tuong.htm" title="Danh sách điểm trong lớp môn Lập trình hướng đối tượng">
+                                                                            Lập trình hướng đối tượng
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        6
+                                                                        3
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        8.3
+                                                                        10
                                                                     </td>
                                                                     <td class="td">
-                                                                        6.5
+                                                                        8.5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.1
+                                                                        9
                                                                     </td>
                                                                     <td class="td">
-                                                                        B
+                                                                        A
                                                                     </td>
                                                                     <td class="td">
 
@@ -1275,29 +1274,29 @@
                                                                         23
                                                                     </td>
                                                                     <td class="td">
-                                                                        13020503640701
+                                                                        13020503560701
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/49889/thiet-ke-co-so-du-lieu.htm" title="Danh sách điểm trong lớp môn Thiết kế Cơ sở dữ liệu">
-                                                                            Thiết kế Cơ sở dữ liệu
+                                                                        <a href="/student/viewexamresultclass/49332/lap-trinh-sql-client-ms-access.htm" title="Danh sách điểm trong lớp môn Lập trình SQL client (MS Access)">
+                                                                            Lập trình SQL client (MS Access)
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        3
+                                                                        4
                                                                     </td>
                                                                     <td class="td">
 
                                                                         8.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        9
+                                                                        10
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.8
+                                                                        9.4
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -1320,29 +1319,29 @@
                                                                         24
                                                                     </td>
                                                                     <td class="td">
-                                                                        13020503560701
+                                                                        13020503640701
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/49332/lap-trinh-sql-client-ms-access.htm" title="Danh sách điểm trong lớp môn Lập trình SQL client (MS Access)">
-                                                                            Lập trình SQL client (MS Access)
+                                                                        <a href="/student/viewexamresultclass/49889/thiet-ke-co-so-du-lieu.htm" title="Danh sách điểm trong lớp môn Thiết kế Cơ sở dữ liệu">
+                                                                            Thiết kế Cơ sở dữ liệu
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        4
+                                                                        3
                                                                     </td>
                                                                     <td class="td">
 
+                                                                        8
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        9
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                    </td>
+                                                                    <td class="td">
                                                                         8.7
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        10
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        9.6
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -1365,32 +1364,32 @@
                                                                         25
                                                                     </td>
                                                                     <td class="td">
-                                                                        13020503200701
+                                                                        13021303800701
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/49168/lap-trinh-huong-doi-tuong.htm" title="Danh sách điểm trong lớp môn Lập trình hướng đối tượng">
-                                                                            Lập trình hướng đối tượng
+                                                                        <a href="/student/viewexamresultclass/50032/tieng-anh-dinh-huong-toeic-4.htm" title="Danh sách điểm trong lớp môn Tiếng Anh định hướng TOEIC 4">
+                                                                            Tiếng Anh định hướng TOEIC 4
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        3
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.3
+                                                                        7.1
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.5
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.8
+                                                                        6.4
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        C
                                                                     </td>
                                                                     <td class="td">
 
@@ -1410,32 +1409,32 @@
                                                                         26
                                                                     </td>
                                                                     <td class="td">
-                                                                        13020503300701
+                                                                        13021003060705
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/48945/phan-tich-thiet-ke-he-thong.htm" title="Danh sách điểm trong lớp môn Phân tích thiết kế hệ thống">
-                                                                            Phân tích thiết kế hệ thống
+                                                                        <a href="/student/viewexamresultclass/50073/phuong-phap-tinh.htm" title="Danh sách điểm trong lớp môn Phương pháp tính">
+                                                                            Phương pháp tính
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        3
+                                                                        2
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7.3
+                                                                        6.5
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.5
+                                                                        6.5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.4
+                                                                        6.5
                                                                     </td>
                                                                     <td class="td">
-                                                                        B
+                                                                        C
                                                                     </td>
                                                                     <td class="td">
 
@@ -1453,6 +1452,51 @@
                                                                 <tr class="kTableRow">
                                                                     <td class="td">
                                                                         27
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        13020503100701
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="/student/viewexamresultclass/50215/do-hoa-may-tinh.htm" title="Danh sách điểm trong lớp môn Đồ hoạ máy tính">
+                                                                            Đồ hoạ máy tính
+                                                                        </a>
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                        3
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                        7.8
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        4
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        5.3
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        D
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        5
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        ĐPK
+
+
+                                                                    </td>
+                                                                </tr>
+
+                                                                <tr class="kTableAltRow">
+                                                                    <td class="td">
+                                                                        28
                                                                     </td>
                                                                     <td class="td">
                                                                         13020903060724
@@ -1495,51 +1539,6 @@
                                                                     </td>
                                                                 </tr>
 
-                                                                <tr class="kTableAltRow">
-                                                                    <td class="td">
-                                                                        28
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        13020503100701
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/student/viewexamresultclass/50215/do-hoa-may-tinh.htm" title="Danh sách điểm trong lớp môn Đồ hoạ máy tính">
-                                                                            Đồ hoạ máy tính
-                                                                        </a>
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                        3
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                        8
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        5
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        6
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        C
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        5
-                                                                    </td>
-                                                                    <td class="td">
-
-
-
-                                                                    </td>
-                                                                </tr>
-
                                                                 <tr class="kTableRow">
                                                                     <td class="td">
                                                                         29
@@ -1561,13 +1560,13 @@
                                                                         9.5
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.5
+                                                                        9
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.5
+                                                                        9.2
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -1603,7 +1602,7 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        10
+                                                                        8.8
                                                                     </td>
                                                                     <td class="td">
                                                                         10
@@ -1612,7 +1611,7 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        10
+                                                                        9.6
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -1651,13 +1650,13 @@
                                                                         8
                                                                     </td>
                                                                     <td class="td">
-                                                                        8
+                                                                        7
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8
+                                                                        7.3
                                                                     </td>
                                                                     <td class="td">
                                                                         B
@@ -1693,16 +1692,16 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7.3
+                                                                        7.1
                                                                     </td>
                                                                     <td class="td">
-                                                                        5
+                                                                        5.5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        5.8
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
                                                                         C
@@ -1738,16 +1737,16 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        8.5
+                                                                        7.8
                                                                     </td>
                                                                     <td class="td">
-                                                                        9
+                                                                        9.5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.8
+                                                                        8.9
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -1783,7 +1782,7 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.5
+                                                                        8.8
                                                                     </td>
                                                                     <td class="td">
                                                                         7
@@ -1792,7 +1791,7 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.8
+                                                                        7.6
                                                                     </td>
                                                                     <td class="td">
                                                                         B
@@ -1828,7 +1827,7 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7
+                                                                        6.6
                                                                     </td>
                                                                     <td class="td">
                                                                         8
@@ -1837,7 +1836,7 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.7
+                                                                        7.5
                                                                     </td>
                                                                     <td class="td">
                                                                         B
@@ -1873,19 +1872,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
-                                                                        7
+                                                                        5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7
+                                                                        5.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        B
+                                                                        D
                                                                     </td>
                                                                     <td class="td">
 
@@ -1918,19 +1917,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        8
+                                                                        7
                                                                     </td>
                                                                     <td class="td">
-                                                                        10
+                                                                        9
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.3
+                                                                        8.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -1963,7 +1962,7 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.5
+                                                                        7.5
                                                                     </td>
                                                                     <td class="td">
                                                                         8.5
@@ -1972,10 +1971,10 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.8
+                                                                        8.2
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -2008,19 +2007,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9
+                                                                        7.8
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.5
+                                                                        8
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.7
+                                                                        7.9
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -2053,19 +2052,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9
-                                                                    </td>
-                                                                    <td class="td">
                                                                         8.5
                                                                     </td>
                                                                     <td class="td">
-
+                                                                        1
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.7
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        6.8
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        C
                                                                     </td>
                                                                     <td class="td">
 
@@ -2085,51 +2084,6 @@
                                                                         41
                                                                     </td>
                                                                     <td class="td">
-                                                                        14020503040701
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/student/viewexamresultclass/60275/cong-nghe-xml.htm" title="Danh sách điểm trong lớp môn Công nghệ XML">
-                                                                            Công nghệ XML
-                                                                        </a>
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                        3
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                        9.5
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        9
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        9.2
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        A
-                                                                    </td>
-                                                                    <td class="td">
-
-                                                                    </td>
-                                                                    <td class="td">
-                                                                        8
-                                                                    </td>
-                                                                    <td class="td">
-
-
-
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr class="kTableAltRow">
-                                                                    <td class="td">
-                                                                        42
-                                                                    </td>
-                                                                    <td class="td">
                                                                         15010503570701
                                                                     </td>
                                                                     <td>
@@ -2143,7 +2097,52 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7.4
+                                                                        8
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        7.5
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        7.7
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        B
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        10
+                                                                    </td>
+                                                                    <td class="td">
+
+
+
+                                                                    </td>
+                                                                </tr>
+
+                                                                <tr class="kTableAltRow">
+                                                                    <td class="td">
+                                                                        42
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        15010503470701
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="/student/viewexamresultclass/63054/do-an-chuyen-nganh-httt.htm" title="Danh sách điểm trong lớp môn Đồ án chuyên ngành HTTT">
+                                                                            Đồ án chuyên ngành HTTT
+                                                                        </a>
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                        4
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                        9
                                                                     </td>
                                                                     <td class="td">
                                                                         9
@@ -2152,7 +2151,7 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.5
+                                                                        9
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -2175,29 +2174,29 @@
                                                                         43
                                                                     </td>
                                                                     <td class="td">
-                                                                        15010503470701
+                                                                        15010503610703
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/63054/do-an-chuyen-nganh-httt.htm" title="Danh sách điểm trong lớp môn Đồ án chuyên ngành HTTT">
-                                                                            Đồ án chuyên ngành HTTT
+                                                                        <a href="/student/viewexamresultclass/63432/phat-trien-he-thong-doanh-nghiep-dien-tu-erp.htm" title="Danh sách điểm trong lớp môn Phát triển hệ thống doanh nghiệp điện tử (ERP)">
+                                                                            Phát triển hệ thống doanh nghiệp điện tử (ERP)
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        4
+                                                                        3
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        7.3
+                                                                        8
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.5
+                                                                        8
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        7.3
+                                                                        8
                                                                     </td>
                                                                     <td class="td">
                                                                         B
@@ -2220,11 +2219,11 @@
                                                                         44
                                                                     </td>
                                                                     <td class="td">
-                                                                        15010503610703
+                                                                        15010503070701
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/63432/phat-trien-he-thong-doanh-nghiep-dien-tu-erp.htm" title="Danh sách điểm trong lớp môn Phát triển hệ thống doanh nghiệp điện tử (ERP)">
-                                                                            Phát triển hệ thống doanh nghiệp điện tử (ERP)
+                                                                        <a href="/student/viewexamresultclass/63441/co-so-du-lieu-phan-tan.htm" title="Danh sách điểm trong lớp môn Cơ sở dữ liệu phân tán">
+                                                                            Cơ sở dữ liệu phân tán
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
@@ -2233,16 +2232,16 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        8
+                                                                        10
                                                                     </td>
                                                                     <td class="td">
-                                                                        9
+                                                                        10
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.7
+                                                                        10
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -2265,11 +2264,11 @@
                                                                         45
                                                                     </td>
                                                                     <td class="td">
-                                                                        15010503070701
+                                                                        15010503380701
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/63441/co-so-du-lieu-phan-tan.htm" title="Danh sách điểm trong lớp môn Cơ sở dữ liệu phân tán">
-                                                                            Cơ sở dữ liệu phân tán
+                                                                        <a href="/student/viewexamresultclass/63608/xu-ly-anh.htm" title="Danh sách điểm trong lớp môn Xử lý ảnh">
+                                                                            Xử lý ảnh
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
@@ -2281,16 +2280,16 @@
                                                                         8
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.5
+                                                                        7
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        9
+                                                                        7.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -2323,19 +2322,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.5
+                                                                        7.8
                                                                     </td>
                                                                     <td class="td">
-                                                                        8
+                                                                        7
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.5
+                                                                        7.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -2368,16 +2367,16 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.7
+                                                                        9.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.7
+                                                                        9.3
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.7
+                                                                        9.3
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -2413,7 +2412,7 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.5
+                                                                        9
                                                                     </td>
                                                                     <td class="td">
 
@@ -2422,7 +2421,7 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.5
+                                                                        9
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -2445,6 +2444,96 @@
                                                                         49
                                                                     </td>
                                                                     <td class="td">
+                                                                        13031003010702
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="/student/viewexamresultclass/47296/toan-cao-cap-1-100301.htm" title="Danh sách điểm trong lớp môn Toán cao cấp 1 (100301)">
+                                                                            Toán cao cấp 1 (100301)
+                                                                        </a>
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                        3
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                        8.5
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        7
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        7.5
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        B
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        25
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        ĐPK
+
+
+                                                                    </td>
+                                                                </tr>
+
+                                                                <tr class="kTableAltRow">
+                                                                    <td class="td">
+                                                                        50
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        13030503350701
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="/student/viewexamresultclass/47441/toan-roi-rac-logic-to-hop-do-thi-ngon-ngu-hinh-thuc.htm" title="Danh sách điểm trong lớp môn Toán rời rạc ( Logic, tổ hợp, đồ thị, ngôn ngữ hình thức,...)">
+                                                                            Toán rời rạc ( Logic, tổ hợp, đồ thị, ngôn ngữ hình thức,...)
+                                                                        </a>
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                        3
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                        10
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        9
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        9.3
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        A
+                                                                    </td>
+                                                                    <td class="td">
+
+                                                                    </td>
+                                                                    <td class="td">
+                                                                        25
+                                                                    </td>
+                                                                    <td class="td">
+
+
+
+                                                                    </td>
+                                                                </tr>
+
+                                                                <tr class="kTableRow">
+                                                                    <td class="td">
+                                                                        51
+                                                                    </td>
+                                                                    <td class="td">
                                                                         13040503020701
                                                                     </td>
                                                                     <td>
@@ -2458,19 +2547,19 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.3
+                                                                        8.8
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.5
+                                                                        8
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        8.8
+                                                                        8.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -2487,35 +2576,35 @@
 
                                                                 <tr class="kTableAltRow">
                                                                     <td class="td">
-                                                                        50
+                                                                        52
                                                                     </td>
                                                                     <td class="td">
-                                                                        13040503160701
+                                                                        13041303770703
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/51663/ky-thuat-lap-trinh.htm" title="Danh sách điểm trong lớp môn Kỹ thuật lập trình">
-                                                                            Kỹ thuật lập trình
+                                                                        <a href="/student/viewexamresultclass/51733/tieng-anh-dinh-huong-toeic-1.htm" title="Danh sách điểm trong lớp môn Tiếng Anh định hướng TOEIC 1">
+                                                                            Tiếng Anh định hướng TOEIC 1
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        3
+                                                                        6
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9.3
+                                                                        7.3
                                                                     </td>
                                                                     <td class="td">
-                                                                        10
+                                                                        7.5
                                                                     </td>
                                                                     <td class="td">
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.8
+                                                                        7.4
                                                                     </td>
                                                                     <td class="td">
-                                                                        A
+                                                                        B
                                                                     </td>
                                                                     <td class="td">
 
@@ -2532,14 +2621,14 @@
 
                                                                 <tr class="kTableRow">
                                                                     <td class="td">
-                                                                        51
+                                                                        53
                                                                     </td>
                                                                     <td class="td">
-                                                                        13040503410601
+                                                                        14030503040701
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/51679/toi-uu-hoa.htm" title="Danh sách điểm trong lớp môn Tối ưu hoá">
-                                                                            Tối ưu hoá
+                                                                        <a href="/student/viewexamresultclass/56274/cong-nghe-xml.htm" title="Danh sách điểm trong lớp môn Công nghệ XML">
+                                                                            Công nghệ XML
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
@@ -2548,7 +2637,7 @@
                                                                     </td>
                                                                     <td class="td">
 
-                                                                        9
+                                                                        10
                                                                     </td>
                                                                     <td class="td">
                                                                         10
@@ -2557,7 +2646,7 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        9.7
+                                                                        10
                                                                     </td>
                                                                     <td class="td">
                                                                         A
@@ -2566,7 +2655,7 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        28
+                                                                        27
                                                                     </td>
                                                                     <td class="td">
 
@@ -2577,14 +2666,14 @@
 
                                                                 <tr class="kTableAltRow">
                                                                     <td class="td">
-                                                                        52
+                                                                        54
                                                                     </td>
                                                                     <td class="td">
-                                                                        14040503380601
+                                                                        13040503410601
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/student/viewexamresultclass/61455/xu-ly-anh.htm" title="Danh sách điểm trong lớp môn Xử lý ảnh">
-                                                                            Xử lý ảnh
+                                                                        <a href="/student/viewexamresultclass/51679/toi-uu-hoa.htm" title="Danh sách điểm trong lớp môn Tối ưu hoá">
+                                                                            Tối ưu hoá
                                                                         </a>
                                                                     </td>
                                                                     <td class="td">
@@ -2611,10 +2700,10 @@
 
                                                                     </td>
                                                                     <td class="td">
-                                                                        30
+                                                                        28
                                                                     </td>
                                                                     <td class="td">
-
+                                                                        ĐPK
 
 
                                                                     </td>
@@ -2639,7 +2728,7 @@
 												<center style="padding: 5px">
 											<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- QLCL2 -->
-<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3404941426377113" data-ad-slot="9074874985" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><ins id="aswift_0_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><iframe width="728" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;"></iframe></ins></ins></ins>
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3404941426377113" data-ad-slot="9074874985"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
@@ -2725,4 +2814,4 @@
     <li><a href="/examplanuser/tra-cuu-thong-tin.htm">Lịch thi </a></li>
     <li><a href="/examre/tra-cuu-thong-tin.htm">Kết quả học tập</a></li>
     <li><a href="/searchstexre/tra-cuu-thong-tin.htm">Kết quả thi</a></li>
-</ul><div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_http" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_http" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="http://staticxx.facebook.com/connect/xd_arbiter.php?version=42#channel=f2d03b30cfd1e&amp;origin=http%3A%2F%2Fqlcl.edu.vn" style="border: none;"></iframe><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="https://staticxx.facebook.com/connect/xd_arbiter.php?version=42#channel=f2d03b30cfd1e&amp;origin=http%3A%2F%2Fqlcl.edu.vn" style="border: none;"></iframe></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="f21a7a95280215" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" src="https://www.facebook.com/connect/ping?client_id=411353505633633&amp;domain=qlcl.edu.vn&amp;origin=1&amp;redirect_uri=http%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D42%23cb%3Df32d810dd4130f%26domain%3Dqlcl.edu.vn%26origin%3Dhttp%253A%252F%252Fqlcl.edu.vn%252Ff2d03b30cfd1e%26relation%3Dparent&amp;response_type=token%2Csigned_request%2Ccode&amp;sdk=joey" style="display: none;"></iframe></div></div></div></body></html>
+</ul></body></html>

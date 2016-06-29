@@ -24,7 +24,7 @@
         android:background="@drawable/custom_btn_view_student"
         android:textAllCaps="false"
         android:id="@+id/btn_view"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/edt_code_student"
         android:layout_alignLeft="@+id/edt_code_student"
         android:layout_alignStart="@+id/edt_code_student" />
@@ -47,6 +47,7 @@
         android:ems="10"
         android:textSize="30sp"
         android:inputType="number"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

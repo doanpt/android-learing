@@ -11,14 +11,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dvt.adapter.ExamResultAdapter;
-import com.dvt.adapter.HtmlParse;
-import com.dvt.adapter.LearningResultAdapter;
-import com.dvt.adapter.LearningResultItem;
+import com.dvt.item.LearningResultItem;
+import com.dvt.jsoup.HtmlParse;
 import com.dvt.qlcl.R;
+import com.dvt.util.CommonMethod;
+import com.dvt.util.CommonValue;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -30,41 +28,41 @@ public class ExamResultFragment extends Fragment {
     private ListView lvLearningResult;
     private ExamResultAdapter adapter;
     ProgressDialog mProgressDialog;
-    private ArrayList<LearningResultItem> arrLearningResult=new ArrayList<>();
+    private ArrayList<LearningResultItem> arrLearningResult = new ArrayList<>();
     private HtmlParse htmlParse;
     View myFragmentView;
 
     private void initView() {
-        htmlParse=new HtmlParse(getFile("diemthi.txt"));
+        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(), "diemthi.txt"));
         htmlParse.setCode(code);
         new LearningResult().execute();
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle=getArguments();
-        code=bundle.getString("Code");
-      //  initView();
-        Toast.makeText(getActivity(), "Kết quả thi"+code,Toast.LENGTH_SHORT).show();
+        Bundle bundle = getArguments();
+        code = bundle.getString(CommonValue.KEY_CODE);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         myFragmentView = inflater.inflate(R.layout.fragment_exam_result, container, false);
-        lvLearningResult= (ListView) myFragmentView.findViewById(R.id.lv_exam_result);
+        lvLearningResult = (ListView) myFragmentView.findViewById(R.id.lv_exam_result);
         initView();
         return myFragmentView;
     }
+
     private class LearningResult extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            mProgressDialog = new ProgressDialog(getActivity());
-//            mProgressDialog.setTitle("ExamResult!");
-//            mProgressDialog.setMessage("Loading...");
-//            mProgressDialog.setIndeterminate(false);
-//            mProgressDialog.show();
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setTitle("ExamResult!");
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.show();
         }
 
         @Override
@@ -75,40 +73,15 @@ public class ExamResultFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            arrLearningResult=htmlParse.getArrExamResult();
-          //  mProgressDialog.dismiss();
+            arrLearningResult = htmlParse.getArrExamResult();
+            mProgressDialog.dismiss();
+            Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
             Collections.reverse(arrLearningResult);
-            adapter=new ExamResultAdapter(getActivity(),arrLearningResult);
+            adapter = new ExamResultAdapter(getActivity(), arrLearningResult);
             lvLearningResult.setAdapter(adapter);
         }
     }
+
     public ExamResultFragment() {
     }
-    public String getFile(String filename){
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(
-                    new InputStreamReader(getActivity().getAssets().open(filename),"UTF-8"));
-
-            // do reading, usually loop until end of file reading
-            String mLine;
-            StringBuilder sb=new StringBuilder();
-            while ((mLine = reader.readLine()) != null) {
-                sb.append(mLine);
-            }
-            return sb.toString();
-        } catch (IOException e) {
-            //log the exception
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    //log the exception
-                }
-            }
-        }
-        return null;
-    }
-
 }

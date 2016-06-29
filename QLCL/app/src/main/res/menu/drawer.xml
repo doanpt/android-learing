@@ -4,28 +4,29 @@
         <item
             android:id="@+id/navigation_item_1"
             android:checked="true"
-            android:icon="@drawable/abc_ic_clear_mtrl_alpha"
+            android:icon="@drawable/ic_assignment_black_24dp"
             android:title="Kết quả học tập" />
         <item
             android:id="@+id/navigation_item_2"
-            android:icon="@drawable/ic_action_add"
+            android:icon="@drawable/ic_save_black_24dp"
             android:title="Kết quả thi" />
         <item
-            android:id="@+id/navigation_item_3"
-            android:icon="@drawable/ic_action_add"
-            android:title="Điểm tích lũy" />
-        <item
             android:id="@+id/navigation_item_4"
-            android:icon="@drawable/ic_action_add"
+            android:icon="@drawable/ic_content_paste_black_24dp"
             android:title="Lịch thi" />
+        <item
+            android:id="@+id/navigation_item_3"
+            android:icon="@drawable/ic_check_box_black_24dp"
+            android:title="Điểm tích lũy" />
+
     </group>
     <item
         android:id="@+id/navigation_item_5"
-        android:icon="@drawable/ic_action_add"
+        android:icon="@drawable/ic_android_black_24dp"
         android:title="Thông tin nhà phát triển" />
     <item
         android:id="@+id/navigation_item_6"
-        android:icon="@drawable/ic_action_add"
+        android:icon="@drawable/ic_swap_horiz_black_24dp"
         android:title="Xem sinh viên khác" />
 
 </menu>

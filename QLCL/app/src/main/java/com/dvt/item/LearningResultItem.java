@@ -1,4 +1,4 @@
-package com.dvt.adapter;
+package com.dvt.item;
 
 /**
  * Created by Android on 12/14/2015.

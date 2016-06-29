@@ -2,17 +2,36 @@ package com.dvt.qlcl;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import com.dvt.adapter.ExamResultItem;
-import com.dvt.adapter.HtmlParse;
+import com.dvt.fragment.ExamResultFragment;
+import com.dvt.fragment.ExamScheduleFragment;
+import com.dvt.fragment.InformationDeveloperFragment;
+import com.dvt.fragment.LearingResultFragment;
+import com.dvt.item.ExamResultForReportItem;
+import com.dvt.jsoup.HtmlParse;
+import com.dvt.util.CommonMethod;
+import com.dvt.util.CommonValue;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -24,60 +43,56 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+
 /**
  * Created by Doanp on 6/25/2016.
  */
 
-public class StudentReport extends Activity {
+public class StudentReport extends Fragment {
+    private Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
+    NavigationView mNavigationView;
     String code;
+    View myFragmentView;
     ProgressDialog mProgressDialog;
-    private ArrayList<ExamResultItem> examResultItems = new ArrayList<>();
+    private ArrayList<ExamResultForReportItem> examResultItems = new ArrayList<>();
     private HtmlParse htmlParse;
+    Bundle bundle=new Bundle();
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_report);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String mCode = preferences.getString(MainActivity.RESULT_CODE_STUDENT, "");
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        myFragmentView = inflater.inflate(R.layout.activity_student_report, container, false);
+        code= CommonMethod.getCode(getContext());
+        bundle.putString("Code",code);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String mCode = preferences.getString(CommonValue.RESULT_CODE_STUDENT, "");
         if(!mCode.equalsIgnoreCase(""))
         {
-            code = mCode;  /* Edit the value here*/
+            code = mCode;
         }
-        htmlParse = new HtmlParse(getFile("diemthi.txt"));
+        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(),"diemthi.txt"));
         htmlParse.setCode(code);
-        new LearningResult().execute();
+        new LearningResultForReportTask().execute();
+        return myFragmentView;
     }
 
-    public String getFile(String filename) {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(
-                    new InputStreamReader(getAssets().open(filename), "UTF-8"));
-            String mLine;
-            StringBuilder sb = new StringBuilder();
-            while ((mLine = reader.readLine()) != null) {
-                sb.append(mLine);
-            }
-            return sb.toString();
-        } catch (IOException e) {
-            //log the exception
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    //log the exception
-                }
-            }
-        }
-        return null;
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_student_report);
+//
+//    }
 
-    private class LearningResult extends AsyncTask<Void, Void, Void> {
+    private class LearningResultForReportTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            mProgressDialog = new ProgressDialog(getContext());
+            mProgressDialog.setTitle("GPA!");
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.show();
         }
 
         @Override
@@ -88,19 +103,20 @@ public class StudentReport extends Activity {
 
         @Override
         protected void onPostExecute(Void result) {
+            mProgressDialog.dismiss();
             examResultItems = htmlParse.getArrExamReport();
             int size = examResultItems.size();
             if (size == 0) {
-                Toast.makeText(StudentReport.this, "Bạn chưa nộp đủ lệ phí thi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Bạn chưa nộp đủ lệ phí thi", Toast.LENGTH_SHORT).show();
             } else {
                 for (int i = 0; i < size; i++) {
                     if (i == size - 1) {
 
                     } else {
-                        ExamResultItem examResultItem = examResultItems.get(i);
+                        ExamResultForReportItem examResultItem = examResultItems.get(i);
                         if (examResultItem.getPoint2().equals("**")) {
                             examResultItems.clear();
-                            Toast.makeText(StudentReport.this, "Bạn chưa nộp đủ lệ phí thi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Bạn chưa nộp đủ lệ phí thi", Toast.LENGTH_SHORT).show();
                             break;
                         } else if (examResultItem.getName().indexOf("Giáo dục thể chất") >= 0 || examResultItem.getPoint2().equals("I")) {
                             examResultItems.remove(examResultItem);
@@ -108,7 +124,7 @@ public class StudentReport extends Activity {
                             i--;
                         } else {
                             for (int j = i + 1; j < size; j++) {
-                                ExamResultItem item = examResultItems.get(j);
+                                ExamResultForReportItem item = examResultItems.get(j);
                                 if (examResultItem.getName().equals(item.getName())) {
                                     if (Float.parseFloat(examResultItem.getPoint1()) < Float.parseFloat(item.getPoint1())) {
                                         examResultItems.remove(examResultItem);
@@ -132,7 +148,7 @@ public class StudentReport extends Activity {
                 Log.d("SizeF",examResultItems.size()+"--");
                 int a = 0, b = 0, c = 0, d = 0, f = 0;
                 int tinchi = 0, tinchia = 0, tinchib = 0, tinchic = 0, tinchid = 0, tinchif = 0;
-                for (ExamResultItem item : examResultItems) {
+                for (ExamResultForReportItem item : examResultItems) {
                     if (item.getPoint2().equals("A")) {
                         a++;
                         Log.d("TCA", item.getName() + "-" + item.getPoint1() + "-" + item.getPoint2() + "-" + item.getInchi());
@@ -162,7 +178,7 @@ public class StudentReport extends Activity {
                         f++;
                     }
                 }
-                PieChart pieChart = (PieChart) findViewById(R.id.chart);
+                PieChart pieChart = (PieChart) myFragmentView.findViewById(R.id.chart);
                 ArrayList<Entry> entries = new ArrayList<>();
                 ArrayList<String> labels = new ArrayList<String>();
                 DecimalFormat df = new DecimalFormat("#,##");
