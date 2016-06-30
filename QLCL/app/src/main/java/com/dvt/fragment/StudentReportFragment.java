@@ -1,6 +1,7 @@
 package com.dvt.fragment;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -9,11 +10,18 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvt.item.ExamResultForReportItem;
@@ -40,27 +48,62 @@ public class StudentReportFragment extends Fragment {
     ProgressDialog mProgressDialog;
     private ArrayList<ExamResultForReportItem> examResultItems = new ArrayList<>();
     private HtmlParse htmlParse;
-    Bundle bundle=new Bundle();
+    Bundle bundle = new Bundle();
+    private  TextView mTVName,mTVCode,mTVClass;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.activity_student_report, container, false);
-        code= CommonMethod.getCode(getContext());
-        bundle.putString("Code",code);
+        code = CommonMethod.getCode(getContext());
+        bundle.putString(CommonValue.KEY_CODE, code);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String mCode = preferences.getString(CommonValue.RESULT_CODE_STUDENT, "");
-        if(!mCode.equalsIgnoreCase(""))
-        {
+        if (!mCode.equalsIgnoreCase("")) {
             code = mCode;
         }
-        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(),"diemthi.txt"));
+        mTVName= (TextView) myFragmentView.findViewById(R.id.tv_name_s);
+        mTVCode= (TextView) myFragmentView.findViewById(R.id.tv_code_s);
+        mTVClass= (TextView) myFragmentView.findViewById(R.id.tv_class_s);
+        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(), "diemthi.txt"));
         htmlParse.setCode(code);
         new LearningResultForReportTask().execute();
+        setHasOptionsMenu(true);
         return myFragmentView;
     }
 
-    private class LearningResultForReportTask extends AsyncTask<Void, Void, Void> {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main_student, menu);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(getContext().SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_reload) {
+            new LearningResultForReportTask().execute();
+        }
+        return true;
+    }
+
+    private class LearningResultForReportTask extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -72,18 +115,22 @@ public class StudentReportFragment extends Fragment {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            htmlParse.getExamReport();
-            return null;
+        protected String doInBackground(Void... params) {
+            String ttsv=htmlParse.getExamReport();
+            return ttsv;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(String result) {
             mProgressDialog.dismiss();
+            String[] ttsv=result.split("-!!");
+            mTVName.setText(ttsv[0].toString()+"");
+            mTVCode.setText(ttsv[1].toString()+"");
+            mTVClass.setText(ttsv[2].toString()+"");
             examResultItems = htmlParse.getArrExamReport();
             int size = examResultItems.size();
             if (size == 0) {
-                Toast.makeText(getContext(), "Bạn chưa nộp đủ lệ phí thi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.toast_chua_nop_le_phi), Toast.LENGTH_SHORT).show();
             } else {
                 for (int i = 0; i < size; i++) {
                     if (i == size - 1) {
@@ -91,7 +138,7 @@ public class StudentReportFragment extends Fragment {
                         ExamResultForReportItem examResultItem = examResultItems.get(i);
                         if (examResultItem.getPoint2().equals("**")) {
                             examResultItems.clear();
-                            Toast.makeText(getContext(), "Bạn chưa nộp đủ lệ phí thi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.toast_chua_nop_le_phi), Toast.LENGTH_SHORT).show();
                             break;
                         } else if (examResultItem.getName().indexOf("Giáo dục thể chất") >= 0 || examResultItem.getPoint2().equals("I")) {
                             examResultItems.remove(examResultItem);
@@ -183,7 +230,7 @@ public class StudentReportFragment extends Fragment {
                 PieDataSet dataset = new PieDataSet(entries, "# Type Point");
                 PieData data = new PieData(labels, dataset);
                 dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
-                pieChart.setDescription("Description");
+                pieChart.setDescription("Tích lũy:  "+DTBText);
                 pieChart.setData(data);
                 pieChart.setCenterText(DTBText);
                 pieChart.setCenterTextColor(Color.RED);

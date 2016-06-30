@@ -30,7 +30,7 @@
         android:layout_alignStart="@+id/edt_code_student" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/image_icon"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="83dp"
@@ -48,6 +48,6 @@
         android:textSize="30sp"
         android:inputType="number"
         android:layout_marginTop="50dp"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/image_icon"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

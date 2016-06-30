@@ -1,10 +1,17 @@
 package com.dvt.fragment;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -37,7 +44,7 @@ public class LearingResultFragment extends Fragment {
     }
 
     private void initView() {
-        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(),"kqhoctap.txt"));
+        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(), "kqhoctap.txt"));
         htmlParse.setCode(code);
         new LearningResult().execute();
     }
@@ -55,7 +62,41 @@ public class LearingResultFragment extends Fragment {
         myFragmentView = inflater.inflate(R.layout.fragment_learing_result, container, false);
         lvLearningResult = (ListView) myFragmentView.findViewById(R.id.lv_learning_result);
         initView();
+        setHasOptionsMenu(true);
         return myFragmentView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(getContext().SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(getContext(), "Search learning" + query, Toast.LENGTH_SHORT).show();
+                htmlParse.setCode(query);
+                new LearningResult().execute();
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_reload) {
+            new LearningResult().execute();
+        }
+        return true;
     }
 
     private class LearningResult extends AsyncTask<Void, Void, Void> {
@@ -79,7 +120,7 @@ public class LearingResultFragment extends Fragment {
         protected void onPostExecute(Void result) {
             arrLearningResult = htmlParse.getArrLearnResult();
             mProgressDialog.dismiss();
-            Toast.makeText(getContext(),"Cập nhật thành công",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
             Collections.reverse(arrLearningResult);
             adapter = new LearningResultAdapter(getActivity(), arrLearningResult);
             lvLearningResult.setAdapter(adapter);

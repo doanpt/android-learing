@@ -2,6 +2,7 @@ package com.dvt.qlcl;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,9 @@ import com.dvt.fragment.LearingResultFragment;
 import com.dvt.fragment.StudentReportFragment;
 import com.dvt.util.CommonMethod;
 import com.dvt.util.CommonValue;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 /**
  * Created by DoanPT1 on 6/23/2016.
@@ -37,6 +42,11 @@ public class MainResult extends AppCompatActivity {
     FrameLayout mContentFrame;
     private String code;
     Bundle bundle = new Bundle();
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,50 +55,19 @@ public class MainResult extends AppCompatActivity {
         initView();
         code = CommonMethod.getCode(MainResult.this);
         bundle.putString(CommonValue.KEY_CODE, code);
-        getSupportActionBar().setTitle("Kết quả học tập");
+        getSupportActionBar().setTitle(R.string.title_actionbar_kqht);
         LearingResultFragment learingResultFragment = new LearingResultFragment();
         learingResultFragment.setArguments(bundle);
         startFragment(learingResultFragment);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void replaceFragment(Fragment fragment) {
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.nav_contentframe, fragment);
         ft.commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(MainResult.this, "Search" + query, Toast.LENGTH_SHORT).show();
-                //TODO
-                return false;
-            }
-        });
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_reload:
-                Toast.makeText(MainResult.this, "Reload", Toast.LENGTH_SHORT).show();
-                //TODO
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void initView() {
@@ -106,45 +85,39 @@ public class MainResult extends AppCompatActivity {
                         LearingResultFragment learingResultFragment = new LearingResultFragment();
                         learingResultFragment.setArguments(bundle);
                         replaceFragment(learingResultFragment);
-                        getSupportActionBar().setTitle("Kết quả học tập");
-                        Toast.makeText(MainResult.this, "Kết quả học tập", Toast.LENGTH_SHORT).show();
+                        getSupportActionBar().setTitle(R.string.title_actionbar_kqht);
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_item_2:
                         ExamResultFragment examResultFragment = new ExamResultFragment();
                         examResultFragment.setArguments(bundle);
                         replaceFragment(examResultFragment);
-                        getSupportActionBar().setTitle("Kết quả thi");
-                        Toast.makeText(MainResult.this, "Kết quả thi", Toast.LENGTH_SHORT).show();
+                        getSupportActionBar().setTitle(R.string.title_actionbar_kqt);
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_item_3:
                         StudentReportFragment studentReport = new StudentReportFragment();
                         replaceFragment(studentReport);
-                        getSupportActionBar().setTitle("Điểm tích lũy");
-                        Toast.makeText(MainResult.this, "Điểm tích lũy", Toast.LENGTH_SHORT).show();
+                        getSupportActionBar().setTitle(R.string.title_actionbar_dtl);
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_item_4:
                         ExamScheduleFragment examScheduleFragment = new ExamScheduleFragment();
                         examScheduleFragment.setArguments(bundle);
                         replaceFragment(examScheduleFragment);
-                        getSupportActionBar().setTitle("Lịch thi");
-                        Toast.makeText(MainResult.this, "Lịch thi", Toast.LENGTH_SHORT).show();
+                        getSupportActionBar().setTitle(R.string.title_actionbar_dt);
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_item_5:
                         InformationDeveloperFragment informationDeveloperFragment = new InformationDeveloperFragment();
                         replaceFragment(informationDeveloperFragment);
-                        getSupportActionBar().setTitle("Thông tin nhà phát triển");
-                        Toast.makeText(MainResult.this, "Thông tin nhà phát triển", Toast.LENGTH_SHORT).show();
+                        getSupportActionBar().setTitle(R.string.title_actionbar_ttnpt);
                         mDrawerLayout.closeDrawers();
                         return true;
                     case R.id.navigation_item_6:
                         Intent intentBack = new Intent(MainResult.this, MainActivity.class);
                         CommonMethod.setCode(MainResult.this, "");
                         startActivity(intentBack);
-                        Toast.makeText(MainResult.this, "Xem sinh viên khác", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawers();
                         return true;
                     default:
@@ -185,5 +158,11 @@ public class MainResult extends AppCompatActivity {
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        CommonMethod.setCode(MainResult.this,"");
+        super.onBackPressed();
     }
 }

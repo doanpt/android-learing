@@ -1,5 +1,7 @@
 package com.dvt.jsoup;
 
+import android.util.Log;
+
 import com.dvt.item.ExamResultForReportItem;
 import com.dvt.item.ExamScheduleItem;
 import com.dvt.item.LearningResultItem;
@@ -48,10 +50,11 @@ public class HtmlParse {
 
     public void getResultLearning() {
         learningResultURL += code;
+        arrLearnResult.clear();
         Document document = null;
         try {
- //           document = Jsoup.connect(learningResultURL).get();
-            document=Jsoup.parse(file);
+            //         document = Jsoup.connect(learningResultURL).get();
+            document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -69,10 +72,11 @@ public class HtmlParse {
 
     public void getExamResult() {
         examResultURL += code;
+        arrExamResult.clear();
         Document document = null;
         try {
- //           document = Jsoup.connect(examResultURL).get();
-          document = Jsoup.parse(file);
+            //           document = Jsoup.connect(examResultURL).get();
+            document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -90,10 +94,11 @@ public class HtmlParse {
 
     public void getExamSchedule() {
         examSchuduleURL += code;
+        arrExamSchedule.clear();
         Document document = null;
         try {
             //document = Jsoup.connect(examSchuduleURL).get();
-              document = Jsoup.parse(file);
+            document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -181,12 +186,21 @@ public class HtmlParse {
         return learningResultItem;
     }
 
-    public void getExamReport() {
+    public String getExamReport() {
         examResultURL += code;
+        arrExamReport.clear();
+        String ttsv = "";
         Document document = null;
         try {
 //            document = Jsoup.connect(examResultURL).get();
-        document = Jsoup.parse(file);
+            document = Jsoup.parse(file);
+            Element tableName = document.getElementsByClass("kPanel").get(0);
+            Elements strongS = tableName.getElementsByTag("strong");
+            String name = strongS.get(0).text();
+            String masv = strongS.get(1).text();
+            String lop = strongS.get(2).text();
+            ttsv = name + "-!!" + masv + "-!!" + lop;
+            Log.d("TTSV", name + "-!!" + masv + "-!!" + lop);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -201,6 +215,7 @@ public class HtmlParse {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return ttsv;
     }
 
     private ExamResultForReportItem getAllTDElementsExamReport(Element element) {

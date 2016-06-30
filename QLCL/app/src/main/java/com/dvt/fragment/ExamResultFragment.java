@@ -1,10 +1,17 @@
 package com.dvt.fragment;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -35,7 +42,7 @@ public class ExamResultFragment extends Fragment {
     private void initView() {
         htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(), "diemthi.txt"));
         htmlParse.setCode(code);
-        new LearningResult().execute();
+        new ExamResult().execute();
     }
 
     @Override
@@ -51,10 +58,44 @@ public class ExamResultFragment extends Fragment {
         myFragmentView = inflater.inflate(R.layout.fragment_exam_result, container, false);
         lvLearningResult = (ListView) myFragmentView.findViewById(R.id.lv_exam_result);
         initView();
+        setHasOptionsMenu(true);
         return myFragmentView;
     }
 
-    private class LearningResult extends AsyncTask<Void, Void, Void> {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(getContext().SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(getContext(), "Search exam result" + query, Toast.LENGTH_SHORT).show();
+                htmlParse.setCode(query);
+                new ExamResult().execute();
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_reload) {
+            new ExamResult().execute();
+        }
+        return true;
+    }
+
+    private class ExamResult extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -84,4 +125,6 @@ public class ExamResultFragment extends Fragment {
 
     public ExamResultFragment() {
     }
+
+
 }
