@@ -53,7 +53,7 @@ public class HtmlParse {
         arrLearnResult.clear();
         Document document = null;
         try {
-            //         document = Jsoup.connect(learningResultURL).get();
+            //document = Jsoup.connect(learningResultURL).get();
             document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
@@ -75,7 +75,7 @@ public class HtmlParse {
         arrExamResult.clear();
         Document document = null;
         try {
-            //           document = Jsoup.connect(examResultURL).get();
+            //document = Jsoup.connect(examResultURL).get();
             document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
@@ -119,7 +119,7 @@ public class HtmlParse {
     }
 
     public void setArrExamReport(ArrayList<ExamResultForReportItem> arrExamReport) {
-        this.arrExamReport = arrExamReport;
+            this.arrExamReport = arrExamReport;
     }
 
     public ArrayList<LearningResultItem> getArrLearnResult() {
@@ -192,7 +192,7 @@ public class HtmlParse {
         String ttsv = "";
         Document document = null;
         try {
-//            document = Jsoup.connect(examResultURL).get();
+            //document = Jsoup.connect(examResultURL).get();
             document = Jsoup.parse(file);
             Element tableName = document.getElementsByClass("kPanel").get(0);
             Elements strongS = tableName.getElementsByTag("strong");
@@ -239,6 +239,26 @@ public class HtmlParse {
 
     public void setArrExamResult(ArrayList<LearningResultItem> arrExamResult) {
         this.arrExamResult = arrExamResult;
+    }
+
+    public String getInforCode() {
+        examResultURL += code;
+        String ttsv = "";
+        Document document = null;
+        try {
+            //document = Jsoup.connect(examResultURL).get();
+            document = Jsoup.parse(file);
+            Element tableName = document.getElementsByClass("kPanel").get(0);
+            Elements strongS = tableName.getElementsByTag("strong");
+            String name = strongS.get(0).text();
+            String masv = strongS.get(1).text();
+            String lop = strongS.get(2).text();
+            ttsv = name + "-!!" + masv + "-!!" + lop;
+            Log.d("TTSV", name + "-!!" + masv + "-!!" + lop);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ttsv;
     }
 }
 

@@ -236,7 +236,7 @@ public class StudentReportFragment extends Fragment {
                 pieChart.setCenterTextColor(Color.RED);
                 pieChart.setCenterTextSize(40);
                 pieChart.setCenterTextSizePixels(50);
-                pieChart.animateY(5000);
+                pieChart.animateY(3000);
                 pieChart.saveToGallery("/sd/mychart.jpg", 85); // 85 is the quality of the image
             }
         }

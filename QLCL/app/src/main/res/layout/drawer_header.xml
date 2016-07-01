@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="178dp"
-    android:background="@drawable/nav_header_bg"
+    android:background="@drawable/maxresdefault"
+    android:gravity="bottom"
     android:orientation="vertical"
     android:weightSum="1">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:background="#80000000"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/tv_name_h"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="Phạm Trung Đoan"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_masv_h"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -25,24 +34,15 @@
             android:textSize="17dp" />
 
         <TextView
-            android:id="@+id/email"
+            android:id="@+id/tv_class_h"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:text="Lớp: HTTT-K7"
-            android:textColor="#ffffff"
+            android:textColor="@android:color/white"
             android:textSize="17dp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/circleView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="90dp"
-        android:text="Phạm Trung Đoan"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="20dp" />
-</RelativeLayout>
+
+</LinearLayout>
 

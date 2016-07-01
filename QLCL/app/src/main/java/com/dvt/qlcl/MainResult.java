@@ -1,8 +1,11 @@
 package com.dvt.qlcl;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -19,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvt.fragment.ExamResultFragment;
@@ -26,11 +30,21 @@ import com.dvt.fragment.ExamScheduleFragment;
 import com.dvt.fragment.InformationDeveloperFragment;
 import com.dvt.fragment.LearingResultFragment;
 import com.dvt.fragment.StudentReportFragment;
+import com.dvt.item.ExamResultForReportItem;
+import com.dvt.jsoup.HtmlParse;
 import com.dvt.util.CommonMethod;
 import com.dvt.util.CommonValue;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 /**
  * Created by DoanPT1 on 6/23/2016.
@@ -41,17 +55,16 @@ public class MainResult extends AppCompatActivity {
     NavigationView mNavigationView;
     FrameLayout mContentFrame;
     private String code;
+    private HtmlParse htmlParse;
+    private TextView tvNameH, tvClassH, tvMaSVH;
     Bundle bundle = new Bundle();
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_result);
+        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(MainResult.this, "diemthi.txt"));
+        htmlParse.setCode(code);
         initView();
         code = CommonMethod.getCode(MainResult.this);
         bundle.putString(CommonValue.KEY_CODE, code);
@@ -59,9 +72,6 @@ public class MainResult extends AppCompatActivity {
         LearingResultFragment learingResultFragment = new LearingResultFragment();
         learingResultFragment.setArguments(bundle);
         startFragment(learingResultFragment);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void replaceFragment(Fragment fragment) {
@@ -74,6 +84,12 @@ public class MainResult extends AppCompatActivity {
         setUpToolbar();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.nav_drawer);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = mNavigationView.getHeaderView(0);
+/*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
+        tvNameH = (TextView) header.findViewById(R.id.tv_name_h);
+        tvClassH = (TextView) header.findViewById(R.id.tv_class_h);
+        tvMaSVH = (TextView) header.findViewById(R.id.tv_masv_h);
+        new GetInforTask().execute();
         setUpNavDrawer();
         mContentFrame = (FrameLayout) findViewById(R.id.nav_contentframe);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -162,7 +178,28 @@ public class MainResult extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        CommonMethod.setCode(MainResult.this,"");
+        CommonMethod.setCode(MainResult.this, "");
         super.onBackPressed();
+    }
+
+    class GetInforTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String ttsv = htmlParse.getInforCode();
+            return ttsv;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            String[] ttsv = result.split("-!!");
+            tvNameH.setText(ttsv[0].toString() + "");
+            tvMaSVH.setText("MaSV: " + ttsv[1].toString() + "");
+            tvClassH.setText("Lớp: " + ttsv[2].toString() + "");
+        }
     }
 }

@@ -25,6 +25,7 @@
         android:textAllCaps="false"
         android:id="@+id/btn_view"
         android:layout_marginTop="20dp"
+        android:visibility="invisible"
         android:layout_below="@+id/edt_code_student"
         android:layout_alignLeft="@+id/edt_code_student"
         android:layout_alignStart="@+id/edt_code_student" />
@@ -46,6 +47,7 @@
         android:background="@drawable/custom_edt_code_student"
         android:ems="10"
         android:textSize="30sp"
+        android:visibility="invisible"
         android:inputType="number"
         android:layout_marginTop="50dp"
         android:layout_below="@+id/image_icon"

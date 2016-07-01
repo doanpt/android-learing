@@ -2,6 +2,7 @@ package com.dvt.qlcl;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -18,23 +19,31 @@ public class MainActivity extends AppCompatActivity {
     private Button btnView;
     private ImageView ivIcon;
     private Animation animation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String shareCode = CommonMethod.getCode(MainActivity.this);
-        if ("".equals(shareCode))
+        if ("".equals(shareCode)) {
             initView();
-        else{
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    edtCode.setVisibility(View.VISIBLE);
+                    btnView.setVisibility(View.VISIBLE);
+                }
+            }, 3000);
+        } else {
             startResult(shareCode);
         }
     }
 
     private void initView() {
-        ivIcon= (ImageView) findViewById(R.id.image_icon);
+        ivIcon = (ImageView) findViewById(R.id.image_icon);
         edtCode = (EditText) findViewById(R.id.edt_code_student);
         btnView = (Button) findViewById(R.id.btn_view);
-        animation= AnimationUtils.loadAnimation(getApplicationContext(),
+        animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.anim_image);
         ivIcon.startAnimation(animation);
         btnView.setOnClickListener(new View.OnClickListener() {
