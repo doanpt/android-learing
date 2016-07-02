@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,7 @@ import com.dvt.qlcl.R;
 import com.dvt.util.CommonMethod;
 import com.dvt.util.CommonValue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -33,7 +35,6 @@ import java.util.Collections;
  * Created by DoanPT1 on 6/23/2016.
  */
 public class ExamResultFragment extends Fragment {
-    String code;
     private ListView lvLearningResult;
     private ExamResultAdapter adapter;
     ProgressDialog mProgressDialog;
@@ -43,15 +44,13 @@ public class ExamResultFragment extends Fragment {
 
     private void initView() {
         htmlParse = new HtmlParse();
-        htmlParse.setCode(code);
-        new ExamResult().execute();
+        new ExamResult().execute("2!nocode");
+        Log.d("LoadType","offline");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        code = bundle.getString(CommonValue.KEY_CODE);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class ExamResultFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_main_student, menu);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(getContext().SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
@@ -80,26 +79,15 @@ public class ExamResultFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                htmlParse.setCode(query);
-                new ExamResult().execute();
+                new ExamResult().execute("1!"+query);
+                Log.d("LoadType","online");
                 searchView.clearFocus();
                 return false;
             }
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_reload) {
-            String code = CommonMethod.getCode(getContext());
-            htmlParse.setCode(code);
-            new ExamResult().execute();
-        }
-        return true;
-    }
-
-    private class ExamResult extends AsyncTask<Void, Void, String> {
+    private class ExamResult extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -111,13 +99,16 @@ public class ExamResultFragment extends Fragment {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
-            String ttsv = htmlParse.getExamResult();
+        protected String doInBackground(String... params) {
+            String[] arrParam=params[0].split("!");
+            int type=Integer.parseInt(arrParam[0]);
+            String ttsv=htmlParse.getExamResult(type,arrParam[1],getContext());
             return ttsv;
         }
 
         @Override
         protected void onPostExecute(String result) {
+            mProgressDialog.dismiss();
             try {
                 String[] ttsv = result.split("-!!");
                 lvLearningResult = (ListView) myFragmentView.findViewById(R.id.lv_exam_result);
@@ -138,7 +129,6 @@ public class ExamResultFragment extends Fragment {
                 mTVClass.setText(ttsv[2].toString() + "");
                 lvLearningResult.addHeaderView(header, null, false);
                 arrLearningResult = htmlParse.getArrExamResult();
-                mProgressDialog.dismiss();
                 Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                 Collections.reverse(arrLearningResult);
                 adapter = new ExamResultAdapter(getActivity(), arrLearningResult);

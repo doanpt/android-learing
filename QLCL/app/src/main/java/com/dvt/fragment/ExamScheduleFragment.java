@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,7 @@ import com.dvt.qlcl.R;
 import com.dvt.util.CommonMethod;
 import com.dvt.util.CommonValue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -47,8 +49,6 @@ public class ExamScheduleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        code = bundle.getString(CommonValue.KEY_CODE);
     }
 
     @Override
@@ -62,14 +62,14 @@ public class ExamScheduleFragment extends Fragment {
 
     private void initView() {
         htmlParse = new HtmlParse();
-        htmlParse.setCode(code);
-        new ExamScheduleTask().execute();
+        new ExamScheduleTask().execute("2!nocode");
+        Log.d("LoadType", "offile");
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_main_student, menu);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(getContext().SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
@@ -82,26 +82,15 @@ public class ExamScheduleFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                htmlParse.setCode(query);
-                new ExamScheduleTask().execute();
+                new ExamScheduleTask().execute("1!" + query);
+                Log.d("LoadType", "online");
                 searchView.clearFocus();
                 return false;
             }
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_reload) {
-            String code = CommonMethod.getCode(getContext());
-            htmlParse.setCode(code);
-            new ExamScheduleTask().execute();
-        }
-        return true;
-    }
-
-    private class ExamScheduleTask extends AsyncTask<Void, Void, String> {
+    private class ExamScheduleTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -113,13 +102,16 @@ public class ExamScheduleFragment extends Fragment {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
-            String ttsv = htmlParse.getExamSchedule();
+        protected String doInBackground(String... params) {
+            String[] arrParam = params[0].split("!");
+            int type = Integer.parseInt(arrParam[0]);
+            String ttsv = htmlParse.getExamSchedule(type, arrParam[1], getContext());
             return ttsv;
         }
 
         @Override
         protected void onPostExecute(String result) {
+            mProgressDialog.dismiss();
             try {
                 String[] ttsv = result.split("-!!");
                 lvExamSchedule = (ListView) myFragmentView.findViewById(R.id.lv_exam_schedule);
@@ -140,7 +132,6 @@ public class ExamScheduleFragment extends Fragment {
                 mTVClass.setText(ttsv[2].toString() + "");
                 lvExamSchedule.addHeaderView(header, null, false);
                 arrExamSchedule = htmlParse.getArrExamSchedule();
-                mProgressDialog.dismiss();
                 Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                 Collections.reverse(arrExamSchedule);
                 adapter = new ExamScheduleAdapter(getActivity(), arrExamSchedule);

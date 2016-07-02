@@ -7,49 +7,73 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:text="Haui Student 1.0"
+        android:id="@+id/tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="11dp"
-        android:id="@+id/tv_version" />
+        android:text="Haui Student 1.0" />
 
     <Button
+        android:id="@+id/btn_view"
         android:layout_width="240dp"
         android:layout_height="60dp"
+        android:layout_alignLeft="@+id/edt_code_student"
+        android:layout_alignStart="@+id/edt_code_student"
+        android:layout_below="@+id/edt_code_student"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_btn_view_student"
         android:text="Xem"
+        android:textAllCaps="false"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:background="@drawable/custom_btn_view_student"
-        android:textAllCaps="false"
-        android:id="@+id/btn_view"
-        android:layout_marginTop="20dp"
-        android:visibility="invisible"
-        android:layout_below="@+id/edt_code_student"
-        android:layout_alignLeft="@+id/edt_code_student"
-        android:layout_alignStart="@+id/edt_code_student" />
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/image_icon"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="83dp"
-        android:src="@drawable/splashscreen"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="83dp"
+        android:src="@drawable/splashscreen" />
 
     <EditText
         android:id="@+id/edt_code_student"
         android:layout_width="240dp"
         android:layout_height="50dp"
-        android:gravity="center_horizontal|center_vertical"
+        android:layout_below="@+id/image_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
         android:background="@drawable/custom_edt_code_student"
         android:ems="10"
-        android:textSize="30sp"
-        android:visibility="invisible"
+        android:gravity="center_horizontal|center_vertical"
         android:inputType="number"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/image_icon"
-        android:layout_centerHorizontal="true" />
+        android:textSize="30sp"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_version"
+        android:gravity="center_horizontal"
+        android:id="@+id/ll_load"
+        android:visibility="invisible"
+        android:orientation="vertical">
+        <ProgressBar
+            android:id="@+id/ProgressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:indeterminateDrawable="@drawable/progressbg"
+            android:progress="50" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="Đang load dữ liệu cho lần đầu sử dụng." />
+    </LinearLayout>
 </RelativeLayout>

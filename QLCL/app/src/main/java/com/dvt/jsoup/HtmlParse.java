@@ -1,16 +1,20 @@
 package com.dvt.jsoup;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.dvt.item.ExamResultForReportItem;
 import com.dvt.item.ExamScheduleItem;
 import com.dvt.item.LearningResultItem;
+import com.dvt.util.CommonMethod;
+import com.dvt.util.CommonValue;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -19,10 +23,6 @@ import java.util.ArrayList;
 public class HtmlParse {
 
 
-
-
-    private String code = "";
-//    private String file = "";
     private ArrayList<LearningResultItem> arrLearnResult = new ArrayList<>();
     private ArrayList<LearningResultItem> arrExamResult = new ArrayList<>();
     private ArrayList<ExamScheduleItem> arrExamSchedule = new ArrayList<>();
@@ -40,22 +40,23 @@ public class HtmlParse {
         this.arrExamSchedule = arrExamSchedule;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public HtmlParse() {
 //        this.file = file;
     }
 
-    public String getResultLearning() {
-        String learningResultURL = "http://qlcl.edu.vn/examre/ket-qua-hoc-tap.htm?code=";
-        String ttsv="";
-        learningResultURL += code;
-        arrLearnResult.clear();
-        Document document = null;
+    public String getResultLearning(int id, String mcode, Context context) {
+        String ttsv = "";
         try {
-            document = Jsoup.connect(learningResultURL).get();
+            Document document = null;
+            if (id == 1) {
+                String learningResultURL = "http://qlcl.edu.vn/examre/ket-qua-hoc-tap.htm?code=";
+                learningResultURL += mcode;
+                document = Jsoup.connect(learningResultURL).get();
+            } else {
+                String dataExam = CommonMethod.getInstance().readFromFile(CommonValue.LEARNING_FILE, context);
+                document = Jsoup.parse(dataExam);
+            }
+            arrLearnResult.clear();
             Element tableName = document.getElementsByClass("kPanel").get(0);
             Elements strongS = tableName.getElementsByTag("strong");
             String name = strongS.get(0).text();
@@ -81,14 +82,19 @@ public class HtmlParse {
         return ttsv;
     }
 
-    public String getExamResult() {
-        String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
-        String ttsv="";
-        examResultURL += code;
-        arrExamResult.clear();
-        Document document = null;
+    public String getExamResult(int id, String mcode, Context context) {
+        String ttsv = "";
         try {
-            document = Jsoup.connect(examResultURL).get();
+            Document document = null;
+            if (id == 1) {
+                String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
+                examResultURL += mcode;
+                document = Jsoup.connect(examResultURL).get();
+            } else {
+                String dataExam = CommonMethod.getInstance().readFromFile(CommonValue.EXAM_RESULT_FILE, context);
+                document = Jsoup.parse(dataExam);
+            }
+            arrExamResult.clear();
             Element tableName = document.getElementsByClass("kPanel").get(0);
             Elements strongS = tableName.getElementsByTag("strong");
             String name = strongS.get(0).text();
@@ -112,15 +118,19 @@ public class HtmlParse {
         return ttsv;
     }
 
-    public String getExamSchedule() {
-        String examSchuduleURL = "http://qlcl.edu.vn/examplanuser/ke-hoach-thi.htm?code=";
-        String ttsv="";
-        examSchuduleURL += code;
-        arrExamSchedule.clear();
-        Document document = null;
+    public String getExamSchedule(int id, String mcode, Context context) {
+        String ttsv = "";
         try {
-            document = Jsoup.connect(examSchuduleURL).get();
-            //document = Jsoup.parse(file);
+            Document document = null;
+            if (id == 1) {
+                String examSchuduleURL = "http://qlcl.edu.vn/examplanuser/ke-hoach-thi.htm?code=";
+                examSchuduleURL += mcode;
+                document = Jsoup.connect(examSchuduleURL).get();
+            } else {
+                String dataExam = CommonMethod.getInstance().readFromFile(CommonValue.EXAM_SCHEDULE_FILE, context);
+                document = Jsoup.parse(dataExam);
+            }
+            arrExamSchedule.clear();
             Element tableName = document.getElementsByClass("kPanel").get(0);
             Elements strongS = tableName.getElementsByTag("strong");
             String name = strongS.get(0).text();
@@ -149,7 +159,7 @@ public class HtmlParse {
     }
 
     public void setArrExamReport(ArrayList<ExamResultForReportItem> arrExamReport) {
-            this.arrExamReport = arrExamReport;
+        this.arrExamReport = arrExamReport;
     }
 
     public ArrayList<LearningResultItem> getArrLearnResult() {
@@ -216,15 +226,19 @@ public class HtmlParse {
         return learningResultItem;
     }
 
-    public String getExamReport() {
-        String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
-        examResultURL += code;
-        arrExamReport.clear();
+    public String getExamReport(int id, String mcode, Context context) {
         String ttsv = "";
-        Document document = null;
         try {
-            document = Jsoup.connect(examResultURL).get();
-            //document = Jsoup.parse(file);
+            Document document = null;
+            if (id == 1) {
+                String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
+                examResultURL += mcode;
+                document = Jsoup.connect(examResultURL).get();
+            } else {
+                String dataExam = CommonMethod.getInstance().readFromFile(CommonValue.EXAM_RESULT_FILE, context);
+                document = Jsoup.parse(dataExam);
+            }
+            arrExamReport.clear();
             Element tableName = document.getElementsByClass("kPanel").get(0);
             Elements strongS = tableName.getElementsByTag("strong");
             String name = strongS.get(0).text();
@@ -272,14 +286,12 @@ public class HtmlParse {
         this.arrExamResult = arrExamResult;
     }
 
-    public String getInforCode() {
-        String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
-        examResultURL += code;
+    public String getInforCode(Context context) {
         String ttsv = "";
         Document document = null;
         try {
-            document = Jsoup.connect(examResultURL).get();
-            //document = Jsoup.parse(file);
+            String file = CommonMethod.getInstance().readFromFile(CommonValue.LEARNING_FILE, context);
+            document = Jsoup.parse(file);
             Element tableName = document.getElementsByClass("kPanel").get(0);
             Elements strongS = tableName.getElementsByTag("strong");
             String name = strongS.get(0).text();
@@ -291,6 +303,40 @@ public class HtmlParse {
             e.printStackTrace();
         }
         return ttsv;
+    }
+
+    public void getAllDataForFirstStart(Context context,String code) {
+        try {
+            getDataExamResult(context,code);
+            getDataSchedule(context,code);
+            getDataLearn(context,code);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getDataExamResult(Context context, String code) throws IOException {
+        String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
+        examResultURL += code;
+        Document documentLearn = Jsoup.connect(examResultURL).get();
+        String dataLearn = documentLearn.toString();
+        CommonMethod.getInstance().writeToFile(dataLearn, CommonValue.EXAM_RESULT_FILE, context);
+    }
+
+    public void getDataSchedule(Context context, String code) throws IOException {
+        String examSchuduleURL = "http://qlcl.edu.vn/examplanuser/ke-hoach-thi.htm?code=";
+        examSchuduleURL += code;
+        Document documentLearn = Jsoup.connect(examSchuduleURL).get();
+        String dataLearn = documentLearn.toString();
+        CommonMethod.getInstance().writeToFile(dataLearn, CommonValue.EXAM_SCHEDULE_FILE, context);
+    }
+
+    public void getDataLearn(Context context, String code) throws IOException {
+        String learningResultURL = "http://qlcl.edu.vn/examre/ket-qua-hoc-tap.htm?code=";
+        learningResultURL += code;
+        Document documentLearn = Jsoup.connect(learningResultURL).get();
+        String dataLearn = documentLearn.toString();
+        CommonMethod.getInstance().writeToFile(dataLearn, CommonValue.LEARNING_FILE, context);
     }
 }
 

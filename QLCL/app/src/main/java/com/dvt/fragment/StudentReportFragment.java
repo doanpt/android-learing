@@ -38,6 +38,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -65,12 +66,12 @@ public class StudentReportFragment extends Fragment {
         if (!mCode.equalsIgnoreCase("")) {
             code = mCode;
         }
+        setHasOptionsMenu(true);
         mTVName= (TextView) myFragmentView.findViewById(R.id.tv_name_s);
         mTVCode= (TextView) myFragmentView.findViewById(R.id.tv_code_s);
         mTVClass= (TextView) myFragmentView.findViewById(R.id.tv_class_s);
         htmlParse = new HtmlParse();
-        htmlParse.setCode(code);
-        new LearningResultForReportTask().execute();
+        new LearningResultForReportTask().execute("2!nocode");
         setHasOptionsMenu(true);
         return myFragmentView;
     }
@@ -91,24 +92,14 @@ public class StudentReportFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                htmlParse.setCode(query);
-                new LearningResultForReportTask().execute();
+                new LearningResultForReportTask().execute("1!"+query);
                 searchView.clearFocus();
                 return false;
             }
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_reload) {
-            new LearningResultForReportTask().execute();
-        }
-        return true;
-    }
-
-    private class LearningResultForReportTask extends AsyncTask<Void, Void, String> {
+    private class LearningResultForReportTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -120,8 +111,10 @@ public class StudentReportFragment extends Fragment {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
-            String ttsv=htmlParse.getExamReport();
+        protected String doInBackground(String... params) {
+            String[] arrParam=params[0].split("!");
+            int type=Integer.parseInt(arrParam[0]);
+            String ttsv=htmlParse.getExamReport(type,arrParam[1],getContext());
             return ttsv;
         }
 

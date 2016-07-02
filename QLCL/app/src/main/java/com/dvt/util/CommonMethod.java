@@ -2,15 +2,20 @@ package com.dvt.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 /**
  * Created by DoanPT1 on 6/29/2016.
@@ -28,13 +33,10 @@ public class CommonMethod {
         }
         return commonMethod;
     }
-    private String readFromFile(String filename,Context context) {
-
+    public String readFromFile(String filename,Context context) {
         String ret = "";
-
         try {
             InputStream inputStream = context.openFileInput(filename);
-
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -57,8 +59,22 @@ public class CommonMethod {
 
         return ret;
     }
-    private void writeToFile(String data,String filename,Context context) {
+    public void clearTheFile(String filename) {
+        FileWriter fwOb = null;
         try {
+            fwOb = new FileWriter(filename, false);
+            PrintWriter pwOb = new PrintWriter(fwOb, false);
+            pwOb.flush();
+            pwOb.close();
+            fwOb.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void writeToFile(String data,String filename,Context context) {
+        try {
+            clearTheFile(filename);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filename, Context.MODE_PRIVATE));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
@@ -67,30 +83,6 @@ public class CommonMethod {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
-    public String getFile(Context context, String filename) {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(
-                    new InputStreamReader(context.getAssets().open(filename), "UTF-8"));
-            String mLine;
-            StringBuilder sb = new StringBuilder();
-            while ((mLine = reader.readLine()) != null) {
-                sb.append(mLine);
-            }
-            return sb.toString();
-        } catch (IOException e) {
-            Log.d("ErrorFile", e.toString());
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                }
-            }
-        }
-        return null;
-    }
-
     public static String getCode(Context context) {
         String code = "";
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

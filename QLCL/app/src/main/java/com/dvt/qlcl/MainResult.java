@@ -18,13 +18,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dvt.adapter.ExamScheduleAdapter;
 import com.dvt.fragment.ExamResultFragment;
 import com.dvt.fragment.ExamScheduleFragment;
 import com.dvt.fragment.InformationDeveloperFragment;
@@ -45,6 +48,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by DoanPT1 on 6/23/2016.
@@ -66,7 +70,6 @@ public class MainResult extends AppCompatActivity {
         code = CommonMethod.getCode(MainResult.this);
         bundle.putString(CommonValue.KEY_CODE, code);
         htmlParse = new HtmlParse();
-        htmlParse.setCode(code);
         initView();
         getSupportActionBar().setTitle(R.string.title_actionbar_kqht);
         LearingResultFragment learingResultFragment = new LearingResultFragment();
@@ -85,7 +88,6 @@ public class MainResult extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.nav_drawer);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = mNavigationView.getHeaderView(0);
-/*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
         tvNameH = (TextView) header.findViewById(R.id.tv_name_h);
         tvClassH = (TextView) header.findViewById(R.id.tv_class_h);
         tvMaSVH = (TextView) header.findViewById(R.id.tv_masv_h);
@@ -103,44 +105,88 @@ public class MainResult extends AppCompatActivity {
                         replaceFragment(learingResultFragment);
                         getSupportActionBar().setTitle(R.string.title_actionbar_kqht);
                         mDrawerLayout.closeDrawers();
-                        return true;
+                        return false;
                     case R.id.navigation_item_2:
                         ExamResultFragment examResultFragment = new ExamResultFragment();
                         examResultFragment.setArguments(bundle);
                         replaceFragment(examResultFragment);
                         getSupportActionBar().setTitle(R.string.title_actionbar_kqt);
                         mDrawerLayout.closeDrawers();
-                        return true;
+                        return false;
                     case R.id.navigation_item_3:
                         StudentReportFragment studentReport = new StudentReportFragment();
                         replaceFragment(studentReport);
                         getSupportActionBar().setTitle(R.string.title_actionbar_dtl);
                         mDrawerLayout.closeDrawers();
-                        return true;
+                        return false;
                     case R.id.navigation_item_4:
                         ExamScheduleFragment examScheduleFragment = new ExamScheduleFragment();
                         examScheduleFragment.setArguments(bundle);
                         replaceFragment(examScheduleFragment);
                         getSupportActionBar().setTitle(R.string.title_actionbar_dt);
                         mDrawerLayout.closeDrawers();
-                        return true;
+                        return false;
                     case R.id.navigation_item_5:
                         InformationDeveloperFragment informationDeveloperFragment = new InformationDeveloperFragment();
                         replaceFragment(informationDeveloperFragment);
                         getSupportActionBar().setTitle(R.string.title_actionbar_ttnpt);
                         mDrawerLayout.closeDrawers();
-                        return true;
+                        return false;
                     case R.id.navigation_item_6:
                         Intent intentBack = new Intent(MainResult.this, MainActivity.class);
                         CommonMethod.setCode(MainResult.this, "");
                         startActivity(intentBack);
                         mDrawerLayout.closeDrawers();
-                        return true;
+                        return false;
+                    case R.id.navigation_item_7:
+                        new ExamScheduleTask().execute();
+                        mDrawerLayout.closeDrawers();
+                        return false;
                     default:
-                        return true;
+                        return false;
                 }
             }
         });
+    }
+
+    private class ExamScheduleTask extends AsyncTask<Void, Void, String> {
+        ProgressDialog mProgressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = new ProgressDialog(MainResult.this);
+            mProgressDialog.setTitle("Cập nhật DL để load Offline!");
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String stt="";
+            try {
+                String mcode = CommonMethod.getCode(MainResult.this);
+                htmlParse.getAllDataForFirstStart(MainResult.this, mcode);
+                stt="OK";
+            }catch (Exception e){
+                stt="NOT";
+            }
+            return stt;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            mProgressDialog.dismiss();
+            if(result.equals("OK")){
+                getSupportActionBar().setTitle(R.string.title_actionbar_kqht);
+                LearingResultFragment learingResultFragment = new LearingResultFragment();
+                learingResultFragment.setArguments(bundle);
+                startFragment(learingResultFragment);
+            }else{
+                Toast.makeText(MainResult.this, "Cập nhật không thành công! Làm ơn thử lại.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void startFragment(Fragment fragment) {
@@ -190,7 +236,7 @@ public class MainResult extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
-            String ttsv = htmlParse.getInforCode();
+            String ttsv = htmlParse.getInforCode(MainResult.this);
             return ttsv;
         }
 
@@ -202,7 +248,7 @@ public class MainResult extends AppCompatActivity {
                 tvMaSVH.setText("MaSV: " + ttsv[1].toString() + "");
                 tvClassH.setText("Lớp: " + ttsv[2].toString() + "");
             } catch (Exception e) {
-                Toast.makeText(MainResult.this, "Load data error!please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainResult.this, "Không load được dữ liệu! Làm ơn thử lại.", Toast.LENGTH_SHORT).show();
             }
         }
     }

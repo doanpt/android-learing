@@ -18,8 +18,12 @@
             android:id="@+id/navigation_item_3"
             android:icon="@drawable/ic_check_box_black_24dp"
             android:title="Điểm tích lũy" />
-
+        <item
+            android:id="@+id/navigation_item_7"
+            android:icon="@drawable/ic_autorenew_black_24dp"
+            android:title="Cập nhật lại dữ liệu" />
     </group>
+
     <item
         android:id="@+id/navigation_item_5"
         android:icon="@drawable/ic_android_black_24dp"

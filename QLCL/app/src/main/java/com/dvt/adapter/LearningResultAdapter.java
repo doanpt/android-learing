@@ -61,7 +61,7 @@ public class LearningResultAdapter extends BaseAdapter {
         viewHolder.tvPoint1.setText("Điểm L1:"+item.getPoint1());
         viewHolder.tvPoint2.setText("Điểm L2:"+item.getPoint2());
         viewHolder.tvPoint3.setText("Điểm L3:"+item.getPoint3());
-        viewHolder.tvPointGPA.setText("ĐTB\n "+item.getMediumScore());
+        viewHolder.tvPointGPA.setText(item.getMediumScore()+"");
         return view;
     }
     class ViewHolder{

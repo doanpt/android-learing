@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,7 @@ import com.dvt.qlcl.R;
 import com.dvt.util.CommonMethod;
 import com.dvt.util.CommonValue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -33,7 +35,6 @@ import java.util.Collections;
  * Created by DoanPT1 on 6/23/2016.
  */
 public class LearingResultFragment extends Fragment {
-    String code;
     private ListView lvLearningResult;
     private LearningResultAdapter adapter;
     ProgressDialog mProgressDialog;
@@ -47,15 +48,13 @@ public class LearingResultFragment extends Fragment {
 
     private void initView() {
         htmlParse = new HtmlParse();
-        htmlParse.setCode(code);
-        new LearningResult().execute();
+        new LearningResult().execute("2!nocode");
+        Log.d("LoadType", "offine");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        code = bundle.getString(CommonValue.KEY_CODE);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class LearingResultFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_main_student, menu);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(getContext().SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
@@ -83,26 +82,15 @@ public class LearingResultFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                htmlParse.setCode(query);
-                new LearningResult().execute();
+                new LearningResult().execute("1!" + query);
+                Log.d("LoadType", "online");
                 searchView.clearFocus();
                 return true;
             }
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_reload) {
-            String code = CommonMethod.getCode(getContext());
-            htmlParse.setCode(code);
-            new LearningResult().execute();
-        }
-        return true;
-    }
-
-    private class LearningResult extends AsyncTask<Void, Void, String> {
+    private class LearningResult extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -114,13 +102,16 @@ public class LearingResultFragment extends Fragment {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
-            String ttsv = htmlParse.getResultLearning();
+        protected String doInBackground(String... params) {
+            String[] arrParam = params[0].split("!");
+            int type = Integer.parseInt(arrParam[0]);
+            String ttsv = htmlParse.getResultLearning(type, arrParam[1], getContext());
             return ttsv;
         }
 
         @Override
         protected void onPostExecute(String result) {
+            mProgressDialog.dismiss();
             try {
                 String[] ttsv = result.split("-!!");
                 lvLearningResult = (ListView) myFragmentView.findViewById(R.id.lv_learning_result);
@@ -141,7 +132,6 @@ public class LearingResultFragment extends Fragment {
                 mTVClass.setText(ttsv[2].toString() + "");
                 lvLearningResult.addHeaderView(header, null, false);
                 arrLearningResult = htmlParse.getArrLearnResult();
-                mProgressDialog.dismiss();
                 Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                 Collections.reverse(arrLearningResult);
                 adapter = new LearningResultAdapter(getActivity(), arrLearningResult);
