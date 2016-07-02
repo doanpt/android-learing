@@ -18,11 +18,11 @@ import java.util.ArrayList;
  */
 public class HtmlParse {
 
-    private String learningResultURL = "http://qlcl.edu.vn/examre/ket-qua-hoc-tap.htm?code=";
-    private String examSchuduleURL = "http://qlcl.edu.vn/examplanuser/ke-hoach-thi.htm?code=";
-    private String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
+
+
+
     private String code = "";
-    private String file = "";
+//    private String file = "";
     private ArrayList<LearningResultItem> arrLearnResult = new ArrayList<>();
     private ArrayList<LearningResultItem> arrExamResult = new ArrayList<>();
     private ArrayList<ExamScheduleItem> arrExamSchedule = new ArrayList<>();
@@ -44,17 +44,27 @@ public class HtmlParse {
         this.code = code;
     }
 
-    public HtmlParse(String file) {
-        this.file = file;
+    public HtmlParse() {
+//        this.file = file;
     }
 
-    public void getResultLearning() {
+    public String getResultLearning() {
+        String learningResultURL = "http://qlcl.edu.vn/examre/ket-qua-hoc-tap.htm?code=";
+        String ttsv="";
         learningResultURL += code;
         arrLearnResult.clear();
         Document document = null;
         try {
-            //document = Jsoup.connect(learningResultURL).get();
-            document = Jsoup.parse(file);
+            document = Jsoup.connect(learningResultURL).get();
+            Element tableName = document.getElementsByClass("kPanel").get(0);
+            Elements strongS = tableName.getElementsByTag("strong");
+            String name = strongS.get(0).text();
+            String masv = strongS.get(1).text();
+            String lop = strongS.get(2).text();
+            ttsv = name + "-!!" + masv + "-!!" + lop;
+            Log.d("TTSV", name + "-!!" + masv + "-!!" + lop);
+
+            //document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -68,15 +78,24 @@ public class HtmlParse {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return ttsv;
     }
 
-    public void getExamResult() {
+    public String getExamResult() {
+        String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
+        String ttsv="";
         examResultURL += code;
         arrExamResult.clear();
         Document document = null;
         try {
-            //document = Jsoup.connect(examResultURL).get();
-            document = Jsoup.parse(file);
+            document = Jsoup.connect(examResultURL).get();
+            Element tableName = document.getElementsByClass("kPanel").get(0);
+            Elements strongS = tableName.getElementsByTag("strong");
+            String name = strongS.get(0).text();
+            String masv = strongS.get(1).text();
+            String lop = strongS.get(2).text();
+            ttsv = name + "-!!" + masv + "-!!" + lop;
+            //document = Jsoup.parse(file);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -90,15 +109,25 @@ public class HtmlParse {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return ttsv;
     }
 
-    public void getExamSchedule() {
+    public String getExamSchedule() {
+        String examSchuduleURL = "http://qlcl.edu.vn/examplanuser/ke-hoach-thi.htm?code=";
+        String ttsv="";
         examSchuduleURL += code;
         arrExamSchedule.clear();
         Document document = null;
         try {
-            //document = Jsoup.connect(examSchuduleURL).get();
-            document = Jsoup.parse(file);
+            document = Jsoup.connect(examSchuduleURL).get();
+            //document = Jsoup.parse(file);
+            Element tableName = document.getElementsByClass("kPanel").get(0);
+            Elements strongS = tableName.getElementsByTag("strong");
+            String name = strongS.get(0).text();
+            String masv = strongS.get(1).text();
+            String lop = strongS.get(2).text();
+            ttsv = name + "-!!" + masv + "-!!" + lop;
+            Log.d("TTSV", name + "-!!" + masv + "-!!" + lop);
             Elements tbTables = document.getElementsByClass("kTable");
             Elements trElements = tbTables.get(0).getElementsByTag("tr");
             int maxSize = trElements.size();
@@ -112,6 +141,7 @@ public class HtmlParse {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return ttsv;
     }
 
     public ArrayList<ExamResultForReportItem> getArrExamReport() {
@@ -187,13 +217,14 @@ public class HtmlParse {
     }
 
     public String getExamReport() {
+        String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
         examResultURL += code;
         arrExamReport.clear();
         String ttsv = "";
         Document document = null;
         try {
-            //document = Jsoup.connect(examResultURL).get();
-            document = Jsoup.parse(file);
+            document = Jsoup.connect(examResultURL).get();
+            //document = Jsoup.parse(file);
             Element tableName = document.getElementsByClass("kPanel").get(0);
             Elements strongS = tableName.getElementsByTag("strong");
             String name = strongS.get(0).text();
@@ -242,12 +273,13 @@ public class HtmlParse {
     }
 
     public String getInforCode() {
+        String examResultURL = "http://qlcl.edu.vn/viewstudent/ket-qua-thi.htm?code=";
         examResultURL += code;
         String ttsv = "";
         Document document = null;
         try {
-            //document = Jsoup.connect(examResultURL).get();
-            document = Jsoup.parse(file);
+            document = Jsoup.connect(examResultURL).get();
+            //document = Jsoup.parse(file);
             Element tableName = document.getElementsByClass("kPanel").get(0);
             Elements strongS = tableName.getElementsByTag("strong");
             String name = strongS.get(0).text();

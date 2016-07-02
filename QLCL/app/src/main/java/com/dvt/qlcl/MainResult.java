@@ -63,11 +63,11 @@ public class MainResult extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_result);
-        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(MainResult.this, "diemthi.txt"));
-        htmlParse.setCode(code);
-        initView();
         code = CommonMethod.getCode(MainResult.this);
         bundle.putString(CommonValue.KEY_CODE, code);
+        htmlParse = new HtmlParse();
+        htmlParse.setCode(code);
+        initView();
         getSupportActionBar().setTitle(R.string.title_actionbar_kqht);
         LearingResultFragment learingResultFragment = new LearingResultFragment();
         learingResultFragment.setArguments(bundle);
@@ -196,10 +196,14 @@ public class MainResult extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            String[] ttsv = result.split("-!!");
-            tvNameH.setText(ttsv[0].toString() + "");
-            tvMaSVH.setText("MaSV: " + ttsv[1].toString() + "");
-            tvClassH.setText("Lớp: " + ttsv[2].toString() + "");
+            try {
+                String[] ttsv = result.split("-!!");
+                tvNameH.setText(ttsv[0].toString() + "");
+                tvMaSVH.setText("MaSV: " + ttsv[1].toString() + "");
+                tvClassH.setText("Lớp: " + ttsv[2].toString() + "");
+            } catch (Exception e) {
+                Toast.makeText(MainResult.this, "Load data error!please try again", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

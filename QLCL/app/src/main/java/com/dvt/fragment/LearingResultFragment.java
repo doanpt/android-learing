@@ -14,7 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvt.adapter.LearningResultAdapter;
@@ -44,7 +46,7 @@ public class LearingResultFragment extends Fragment {
     }
 
     private void initView() {
-        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(), "kqhoctap.txt"));
+        htmlParse = new HtmlParse();
         htmlParse.setCode(code);
         new LearningResult().execute();
     }
@@ -60,7 +62,6 @@ public class LearingResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.fragment_learing_result, container, false);
-        lvLearningResult = (ListView) myFragmentView.findViewById(R.id.lv_learning_result);
         initView();
         setHasOptionsMenu(true);
         return myFragmentView;
@@ -82,9 +83,9 @@ public class LearingResultFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getContext(), "Search learning" + query, Toast.LENGTH_SHORT).show();
                 htmlParse.setCode(query);
                 new LearningResult().execute();
+                searchView.clearFocus();
                 return true;
             }
         });
@@ -94,36 +95,60 @@ public class LearingResultFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_reload) {
+            String code = CommonMethod.getCode(getContext());
+            htmlParse.setCode(code);
             new LearningResult().execute();
         }
         return true;
     }
 
-    private class LearningResult extends AsyncTask<Void, Void, Void> {
+    private class LearningResult extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setTitle("Learning Result!");
+            mProgressDialog.setTitle("Kết quả học tập!");
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setIndeterminate(false);
             mProgressDialog.show();
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            htmlParse.getResultLearning();
-            return null;
+        protected String doInBackground(Void... params) {
+            String ttsv = htmlParse.getResultLearning();
+            return ttsv;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            arrLearningResult = htmlParse.getArrLearnResult();
-            mProgressDialog.dismiss();
-            Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-            Collections.reverse(arrLearningResult);
-            adapter = new LearningResultAdapter(getActivity(), arrLearningResult);
-            lvLearningResult.setAdapter(adapter);
+        protected void onPostExecute(String result) {
+            try {
+                String[] ttsv = result.split("-!!");
+                lvLearningResult = (ListView) myFragmentView.findViewById(R.id.lv_learning_result);
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                View header = inflater.inflate(R.layout.item_header_listview, lvLearningResult, false);
+                header.setTag(this.getClass().getSimpleName() + "header");
+                if (lvLearningResult.getHeaderViewsCount() > 0) {
+                    View oldView = lvLearningResult.findViewWithTag(this.getClass().getSimpleName() + "header");
+                    if (oldView != null) {
+                        lvLearningResult.removeHeaderView(oldView);
+                    }
+                }
+                TextView mTVName = (TextView) header.findViewById(R.id.tv_name_head);
+                TextView mTVCode = (TextView) header.findViewById(R.id.tv_code_head);
+                TextView mTVClass = (TextView) header.findViewById(R.id.tv_class_head);
+                mTVName.setText(ttsv[0].toString() + "");
+                mTVCode.setText(ttsv[1].toString() + "");
+                mTVClass.setText(ttsv[2].toString() + "");
+                lvLearningResult.addHeaderView(header, null, false);
+                arrLearningResult = htmlParse.getArrLearnResult();
+                mProgressDialog.dismiss();
+                Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                Collections.reverse(arrLearningResult);
+                adapter = new LearningResultAdapter(getActivity(), arrLearningResult);
+                lvLearningResult.setAdapter(adapter);
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Load data error!please try again", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

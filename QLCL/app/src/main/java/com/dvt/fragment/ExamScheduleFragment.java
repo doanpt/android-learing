@@ -14,7 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvt.adapter.ExamScheduleAdapter;
@@ -53,14 +55,13 @@ public class ExamScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         myFragmentView = inflater.inflate(R.layout.fragment_exam_schedule, container, false);
-        lvExamSchedule = (ListView) myFragmentView.findViewById(R.id.lv_exam_schedule);
         initView();
         setHasOptionsMenu(true);
         return myFragmentView;
     }
 
     private void initView() {
-        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(), "lichthi.txt"));
+        htmlParse = new HtmlParse();
         htmlParse.setCode(code);
         new ExamScheduleTask().execute();
     }
@@ -81,10 +82,9 @@ public class ExamScheduleFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getContext(), "Search schedule" + query, Toast.LENGTH_SHORT).show();
-                //TODO
                 htmlParse.setCode(query);
                 new ExamScheduleTask().execute();
+                searchView.clearFocus();
                 return false;
             }
         });
@@ -94,36 +94,60 @@ public class ExamScheduleFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_reload) {
+            String code = CommonMethod.getCode(getContext());
+            htmlParse.setCode(code);
             new ExamScheduleTask().execute();
         }
         return true;
     }
 
-    private class ExamScheduleTask extends AsyncTask<Void, Void, Void> {
+    private class ExamScheduleTask extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setTitle("Exam Schedule!");
+            mProgressDialog.setTitle("Lịch thi!");
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setIndeterminate(false);
             mProgressDialog.show();
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            htmlParse.getExamSchedule();
-            return null;
+        protected String doInBackground(Void... params) {
+            String ttsv = htmlParse.getExamSchedule();
+            return ttsv;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            arrExamSchedule = htmlParse.getArrExamSchedule();
-            mProgressDialog.dismiss();
-            Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-            Collections.reverse(arrExamSchedule);
-            adapter = new ExamScheduleAdapter(getActivity(), arrExamSchedule);
-            lvExamSchedule.setAdapter(adapter);
+        protected void onPostExecute(String result) {
+            try {
+                String[] ttsv = result.split("-!!");
+                lvExamSchedule = (ListView) myFragmentView.findViewById(R.id.lv_exam_schedule);
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                View header = inflater.inflate(R.layout.item_header_listview, lvExamSchedule, false);
+                header.setTag(this.getClass().getSimpleName() + "header");
+                if (lvExamSchedule.getHeaderViewsCount() > 0) {
+                    View oldView = lvExamSchedule.findViewWithTag(this.getClass().getSimpleName() + "header");
+                    if (oldView != null) {
+                        lvExamSchedule.removeHeaderView(oldView);
+                    }
+                }
+                TextView mTVName = (TextView) header.findViewById(R.id.tv_name_head);
+                TextView mTVCode = (TextView) header.findViewById(R.id.tv_code_head);
+                TextView mTVClass = (TextView) header.findViewById(R.id.tv_class_head);
+                mTVName.setText(ttsv[0].toString() + "");
+                mTVCode.setText(ttsv[1].toString() + "");
+                mTVClass.setText(ttsv[2].toString() + "");
+                lvExamSchedule.addHeaderView(header, null, false);
+                arrExamSchedule = htmlParse.getArrExamSchedule();
+                mProgressDialog.dismiss();
+                Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                Collections.reverse(arrExamSchedule);
+                adapter = new ExamScheduleAdapter(getActivity(), arrExamSchedule);
+                lvExamSchedule.setAdapter(adapter);
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Load data error!please try again", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

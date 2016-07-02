@@ -14,7 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvt.adapter.ExamResultAdapter;
@@ -40,7 +42,7 @@ public class ExamResultFragment extends Fragment {
     View myFragmentView;
 
     private void initView() {
-        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(), "diemthi.txt"));
+        htmlParse = new HtmlParse();
         htmlParse.setCode(code);
         new ExamResult().execute();
     }
@@ -78,9 +80,9 @@ public class ExamResultFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getContext(), "Search exam result" + query, Toast.LENGTH_SHORT).show();
                 htmlParse.setCode(query);
                 new ExamResult().execute();
+                searchView.clearFocus();
                 return false;
             }
         });
@@ -90,36 +92,60 @@ public class ExamResultFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_reload) {
+            String code = CommonMethod.getCode(getContext());
+            htmlParse.setCode(code);
             new ExamResult().execute();
         }
         return true;
     }
 
-    private class ExamResult extends AsyncTask<Void, Void, Void> {
+    private class ExamResult extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setTitle("ExamResult!");
+            mProgressDialog.setTitle("Kết quả thi!");
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setIndeterminate(false);
             mProgressDialog.show();
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            htmlParse.getExamResult();
-            return null;
+        protected String doInBackground(Void... params) {
+            String ttsv = htmlParse.getExamResult();
+            return ttsv;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            arrLearningResult = htmlParse.getArrExamResult();
-            mProgressDialog.dismiss();
-            Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-            Collections.reverse(arrLearningResult);
-            adapter = new ExamResultAdapter(getActivity(), arrLearningResult);
-            lvLearningResult.setAdapter(adapter);
+        protected void onPostExecute(String result) {
+            try {
+                String[] ttsv = result.split("-!!");
+                lvLearningResult = (ListView) myFragmentView.findViewById(R.id.lv_exam_result);
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                View header = inflater.inflate(R.layout.item_header_listview, lvLearningResult, false);
+                header.setTag(this.getClass().getSimpleName() + "header");
+                if (lvLearningResult.getHeaderViewsCount() > 0) {
+                    View oldView = lvLearningResult.findViewWithTag(this.getClass().getSimpleName() + "header");
+                    if (oldView != null) {
+                        lvLearningResult.removeHeaderView(oldView);
+                    }
+                }
+                TextView mTVName = (TextView) header.findViewById(R.id.tv_name_head);
+                TextView mTVCode = (TextView) header.findViewById(R.id.tv_code_head);
+                TextView mTVClass = (TextView) header.findViewById(R.id.tv_class_head);
+                mTVName.setText(ttsv[0].toString() + "");
+                mTVCode.setText(ttsv[1].toString() + "");
+                mTVClass.setText(ttsv[2].toString() + "");
+                lvLearningResult.addHeaderView(header, null, false);
+                arrLearningResult = htmlParse.getArrExamResult();
+                mProgressDialog.dismiss();
+                Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                Collections.reverse(arrLearningResult);
+                adapter = new ExamResultAdapter(getActivity(), arrLearningResult);
+                lvLearningResult.setAdapter(adapter);
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Load data error!please try again", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

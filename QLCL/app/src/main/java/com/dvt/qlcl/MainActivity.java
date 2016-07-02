@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.dvt.jsoup.HtmlParse;
 import com.dvt.util.CommonMethod;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,11 +20,12 @@ public class MainActivity extends AppCompatActivity {
     private Button btnView;
     private ImageView ivIcon;
     private Animation animation;
-
+//    private HtmlParse htmlParse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        htmlParse=new HtmlParse();
         String shareCode = CommonMethod.getCode(MainActivity.this);
         if ("".equals(shareCode)) {
             initView();

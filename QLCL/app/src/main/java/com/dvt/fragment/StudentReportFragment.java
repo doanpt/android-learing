@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import com.dvt.jsoup.HtmlParse;
 import com.dvt.qlcl.R;
 import com.dvt.util.CommonMethod;
 import com.dvt.util.CommonValue;
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -65,7 +68,7 @@ public class StudentReportFragment extends Fragment {
         mTVName= (TextView) myFragmentView.findViewById(R.id.tv_name_s);
         mTVCode= (TextView) myFragmentView.findViewById(R.id.tv_code_s);
         mTVClass= (TextView) myFragmentView.findViewById(R.id.tv_class_s);
-        htmlParse = new HtmlParse(CommonMethod.getInstance().getFile(getContext(), "diemthi.txt"));
+        htmlParse = new HtmlParse();
         htmlParse.setCode(code);
         new LearningResultForReportTask().execute();
         setHasOptionsMenu(true);
@@ -88,7 +91,9 @@ public class StudentReportFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-
+                htmlParse.setCode(query);
+                new LearningResultForReportTask().execute();
+                searchView.clearFocus();
                 return false;
             }
         });
@@ -108,7 +113,7 @@ public class StudentReportFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             mProgressDialog = new ProgressDialog(getContext());
-            mProgressDialog.setTitle("GPA!");
+            mProgressDialog.setTitle("Điểm tích lũy!");
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setIndeterminate(false);
             mProgressDialog.show();
@@ -122,124 +127,132 @@ public class StudentReportFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            mProgressDialog.dismiss();
-            String[] ttsv=result.split("-!!");
-            mTVName.setText(ttsv[0].toString()+"");
-            mTVCode.setText(ttsv[1].toString()+"");
-            mTVClass.setText(ttsv[2].toString()+"");
-            examResultItems = htmlParse.getArrExamReport();
-            int size = examResultItems.size();
-            if (size == 0) {
-                Toast.makeText(getContext(), getString(R.string.toast_chua_nop_le_phi), Toast.LENGTH_SHORT).show();
-            } else {
-                for (int i = 0; i < size; i++) {
-                    if (i == size - 1) {
-                    } else {
-                        ExamResultForReportItem examResultItem = examResultItems.get(i);
-                        if (examResultItem.getPoint2().equals("**")) {
-                            examResultItems.clear();
-                            Toast.makeText(getContext(), getString(R.string.toast_chua_nop_le_phi), Toast.LENGTH_SHORT).show();
-                            break;
-                        } else if (examResultItem.getName().indexOf("Giáo dục thể chất") >= 0 || examResultItem.getPoint2().equals("I")) {
-                            examResultItems.remove(examResultItem);
-                            size = examResultItems.size();
-                            i--;
+            try {
+                mProgressDialog.dismiss();
+                String[] ttsv = result.split("-!!");
+                mTVName.setText(ttsv[0].toString() + "");
+                mTVCode.setText(ttsv[1].toString() + "");
+                mTVClass.setText(ttsv[2].toString() + "");
+                examResultItems = htmlParse.getArrExamReport();
+                int size = examResultItems.size();
+                if (size == 0) {
+                    Toast.makeText(getContext(), getString(R.string.toast_chua_nop_le_phi), Toast.LENGTH_SHORT).show();
+                } else {
+                    for (int i = 0; i < size; i++) {
+                        if (i == size - 1) {
                         } else {
-                            for (int j = i + 1; j < size; j++) {
-                                ExamResultForReportItem item = examResultItems.get(j);
-                                if (examResultItem.getName().equals(item.getName())) {
-                                    if (Float.parseFloat(examResultItem.getPoint1()) < Float.parseFloat(item.getPoint1())) {
-                                        examResultItems.remove(examResultItem);
-                                        i--;
-                                        size = examResultItems.size();
-                                        break;
-                                    } else {
-                                        examResultItems.remove(item);
-                                        i--;
-                                        size = examResultItems.size();
-                                        break;
+                            ExamResultForReportItem examResultItem = examResultItems.get(i);
+                            if (examResultItem.getPoint2().equals("**")) {
+                                examResultItems.clear();
+                                Toast.makeText(getContext(), getString(R.string.toast_chua_nop_le_phi), Toast.LENGTH_SHORT).show();
+                                break;
+                            } else if (examResultItem.getName().indexOf("Giáo dục thể chất") >= 0 || examResultItem.getPoint2().equals("I")) {
+                                examResultItems.remove(examResultItem);
+                                size = examResultItems.size();
+                                i--;
+                            } else {
+                                for (int j = i + 1; j < size; j++) {
+                                    ExamResultForReportItem item = examResultItems.get(j);
+                                    if (examResultItem.getName().equals(item.getName())) {
+                                        if (Float.parseFloat(examResultItem.getPoint1()) < Float.parseFloat(item.getPoint1())) {
+                                            examResultItems.remove(examResultItem);
+                                            i--;
+                                            size = examResultItems.size();
+                                            break;
+                                        } else {
+                                            examResultItems.remove(item);
+                                            i--;
+                                            size = examResultItems.size();
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
-                int a = 0, b = 0, c = 0, d = 0, f = 0;
-                int tinchi = 0, tinchia = 0, tinchib = 0, tinchic = 0, tinchid = 0, tinchif = 0;
-                for (ExamResultForReportItem item : examResultItems) {
-                    if (item.getPoint2().equals("A")) {
-                        a++;
-                        tinchia += Integer.parseInt(item.getInchi());
-                        tinchi += Integer.parseInt(item.getInchi());
-                    } else if (item.getPoint2().equals("B")) {
-                        b++;
-                        tinchib += Integer.parseInt(item.getInchi());
-                        tinchi += Integer.parseInt(item.getInchi());
-                    } else if (item.getPoint2().equals("C")) {
-                        c++;
-                        tinchic += Integer.parseInt(item.getInchi());
-                        tinchi += Integer.parseInt(item.getInchi());
-                    } else if (item.getPoint2().equals("D")) {
-                        d++;
-                        tinchid += Integer.parseInt(item.getInchi());
-                        tinchi += Integer.parseInt(item.getInchi());
-                    } else if (item.getPoint2().equals("I")) {
-                        continue;
+                    int a = 0, b = 0, c = 0, d = 0, f = 0;
+                    int tinchi = 0, tinchia = 0, tinchib = 0, tinchic = 0, tinchid = 0, tinchif = 0;
+                    for (ExamResultForReportItem item : examResultItems) {
+                        if (item.getPoint2().equals("A")) {
+                            a++;
+                            tinchia += Integer.parseInt(item.getInchi());
+                            tinchi += Integer.parseInt(item.getInchi());
+                        } else if (item.getPoint2().equals("B")) {
+                            b++;
+                            tinchib += Integer.parseInt(item.getInchi());
+                            tinchi += Integer.parseInt(item.getInchi());
+                        } else if (item.getPoint2().equals("C")) {
+                            c++;
+                            tinchic += Integer.parseInt(item.getInchi());
+                            tinchi += Integer.parseInt(item.getInchi());
+                        } else if (item.getPoint2().equals("D")) {
+                            d++;
+                            tinchid += Integer.parseInt(item.getInchi());
+                            tinchi += Integer.parseInt(item.getInchi());
+                        } else if (item.getPoint2().equals("I")) {
+                            continue;
 
-                    } else {
-                        f++;
+                        } else {
+                            f++;
+                        }
                     }
+                    PieChart pieChart = (PieChart) myFragmentView.findViewById(R.id.chart);
+//                    Paint p = pieChart.getPaint(Chart.PAINT_INFO);
+//                    p.setTextSize(100);
+//                    pieChart.setPaint(p, Chart.PAINT_INFO);
+                    ArrayList<Entry> entries = new ArrayList<>();
+                    ArrayList<String> labels = new ArrayList<String>();
+                    DecimalFormat df = new DecimalFormat("#,##");
+                    int dem = 0;
+                    if (a != 0) {
+                        float pTA = ((float) tinchia / tinchi) * 100;
+                        entries.add(new Entry(Float.parseFloat(df.format(pTA)), dem));
+                        labels.add("% A");
+                        dem++;
+                    }
+                    if (b != 0) {
+                        float pTB = ((float) tinchib / tinchi) * 100;
+                        entries.add(new Entry(Float.parseFloat(df.format(pTB)), dem));
+                        labels.add("% B");
+                        dem++;
+                    }
+                    if (c != 0) {
+                        float pTC = ((float) tinchic / tinchi) * 100;
+                        entries.add(new Entry(Float.parseFloat(df.format(pTC)), dem));
+                        labels.add("% C");
+                        dem++;
+                    }
+                    if (d != 0) {
+                        float pTD = ((float) tinchid / tinchi) * 100;
+                        entries.add(new Entry(Float.parseFloat(df.format(pTD)), dem));
+                        labels.add("% D");
+                        dem++;
+                    }
+                    if (f != 0) {
+                        float pTF = ((float) tinchif / tinchi) * 100;
+                        entries.add(new Entry(Float.parseFloat(df.format(pTF)), dem));
+                        labels.add("% F");
+                        dem++;
+                    }
+                    Float DTB = (float) (tinchia * 4 + tinchib * 3 + tinchic * 2 + tinchid * 1) / tinchi;
+                    String DTBText=String.format("%.2f", DTB);;
+                    PieDataSet dataset = new PieDataSet(entries, "# Type Point");
+                    PieData data = new PieData(labels, dataset);
+                    dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+                    data.setValueTextSize(13f);
+                    pieChart.setDescription("Tích lũy:  " + DTBText);
+                    pieChart.setData(data);
+                    pieChart.setCenterText(DTBText);
+                    pieChart.setCenterTextColor(Color.RED);
+                    pieChart.setCenterTextSize(50);
+                    pieChart.animateY(3000);
+                    pieChart.saveToGallery("/sd/mychart.jpg", 85); // 85 is the quality of the image
                 }
-                PieChart pieChart = (PieChart) myFragmentView.findViewById(R.id.chart);
-                ArrayList<Entry> entries = new ArrayList<>();
-                ArrayList<String> labels = new ArrayList<String>();
-                DecimalFormat df = new DecimalFormat("#,##");
-                int dem = 0;
-                if (a != 0) {
-                    float pTA = ((float) tinchia / tinchi) * 100;
-                    entries.add(new Entry(Float.parseFloat(df.format(pTA)), dem));
-                    labels.add("% A");
-                    dem++;
-                }
-                if (b != 0) {
-                    float pTB = ((float) tinchib / tinchi) * 100;
-                    entries.add(new Entry(Float.parseFloat(df.format(pTB)), dem));
-                    labels.add("% B");
-                    dem++;
-                }
-                if (c != 0) {
-                    float pTC = ((float) tinchic / tinchi) * 100;
-                    entries.add(new Entry(Float.parseFloat(df.format(pTC)), dem));
-                    labels.add("% C");
-                    dem++;
-                }
-                if (d != 0) {
-                    float pTD = ((float) tinchid / tinchi) * 100;
-                    entries.add(new Entry(Float.parseFloat(df.format(pTD)), dem));
-                    labels.add("% D");
-                    dem++;
-                }
-                if (f != 0) {
-                    float pTF = ((float) tinchif / tinchi) * 100;
-                    entries.add(new Entry(Float.parseFloat(df.format(pTF)), dem));
-                    labels.add("% F");
-                    dem++;
-                }
-                Float DTB = (float) (tinchia * 4 + tinchib * 3 + tinchic * 2 + tinchid * 1) / tinchi;
-                String DTBText = df.format(DTB);
-                PieDataSet dataset = new PieDataSet(entries, "# Type Point");
-                PieData data = new PieData(labels, dataset);
-                dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
-                pieChart.setDescription("Tích lũy:  "+DTBText);
-                pieChart.setData(data);
-                pieChart.setCenterText(DTBText);
-                pieChart.setCenterTextColor(Color.RED);
-                pieChart.setCenterTextSize(40);
-                pieChart.setCenterTextSizePixels(50);
-                pieChart.animateY(3000);
-                pieChart.saveToGallery("/sd/mychart.jpg", 85); // 85 is the quality of the image
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Load data error!please try again", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 
 }
