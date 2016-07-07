@@ -141,7 +141,7 @@ public class LearingResultFragment extends Fragment {
                 adapter = new LearningResultAdapter(getActivity(), arrLearningResult);
                 lvLearningResult.setAdapter(adapter);
             } catch (Exception e) {
-                Toast.makeText(getContext(), "Load data error!please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Load dữ liệu lỗi. Làm ơn thử lại!", Toast.LENGTH_SHORT).show();
             }
         }
     }
