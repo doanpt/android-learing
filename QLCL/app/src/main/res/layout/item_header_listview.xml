@@ -31,7 +31,7 @@
                 android:id="@+id/tv_name_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Phạm Trung Đoan"
+                android:text=""
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -40,7 +40,7 @@
                 android:id="@+id/tv_code_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MaSV: 0741260072"
+                android:text=""
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="20sp" />
 
@@ -48,7 +48,7 @@
                 android:id="@+id/tv_class_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Lớp: HTTT- K7"
+                android:text=""
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="20sp" />
         </LinearLayout>

@@ -45,7 +45,7 @@ public class ExamResultFragment extends Fragment {
     private void initView() {
         htmlParse = new HtmlParse();
         new ExamResult().execute("2!nocode");
-        Log.d("LoadType","offline");
+        Log.d("LoadType", "offline");
     }
 
     @Override
@@ -79,9 +79,12 @@ public class ExamResultFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                new ExamResult().execute("1!"+query);
-                Log.d("LoadType","online");
-                searchView.clearFocus();
+                if (CommonMethod.getInstance().isValid(query)) {
+                    new ExamResult().execute("1!" + query);
+                    searchView.clearFocus();
+                } else {
+                    Toast.makeText(getContext(), "Mã sinh viên có 10 chữ số", Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
         });
@@ -100,9 +103,9 @@ public class ExamResultFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            String[] arrParam=params[0].split("!");
-            int type=Integer.parseInt(arrParam[0]);
-            String ttsv=htmlParse.getExamResult(type,arrParam[1],getContext());
+            String[] arrParam = params[0].split("!");
+            int type = Integer.parseInt(arrParam[0]);
+            String ttsv = htmlParse.getExamResult(type, arrParam[1], getContext());
             return ttsv;
         }
 

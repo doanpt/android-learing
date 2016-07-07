@@ -92,8 +92,12 @@ public class StudentReportFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                new LearningResultForReportTask().execute("1!"+query);
-                searchView.clearFocus();
+                if (CommonMethod.getInstance().isValid(query)) {
+                    new LearningResultForReportTask().execute("1!" + query);
+                    searchView.clearFocus();
+                } else {
+                    Toast.makeText(getContext(), "Mã sinh viên có 10 chữ số", Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
         });
@@ -190,9 +194,6 @@ public class StudentReportFragment extends Fragment {
                         }
                     }
                     PieChart pieChart = (PieChart) myFragmentView.findViewById(R.id.chart);
-//                    Paint p = pieChart.getPaint(Chart.PAINT_INFO);
-//                    p.setTextSize(100);
-//                    pieChart.setPaint(p, Chart.PAINT_INFO);
                     ArrayList<Entry> entries = new ArrayList<>();
                     ArrayList<String> labels = new ArrayList<String>();
                     DecimalFormat df = new DecimalFormat("#,##");

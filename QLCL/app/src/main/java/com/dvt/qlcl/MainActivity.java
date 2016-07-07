@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         new LoadDataTask().execute(code);
                     }catch (Exception e){
-                        Toast.makeText(MainActivity.this,"Load data error. Please try again!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this,"Load dữ liệu lỗi. Làm ơn thử lại!",Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(MainActivity.this, "Mã sinh viên có 10 chữ số", Toast.LENGTH_SHORT).show();
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 code=params[0];
                 htmlParse.getAllDataForFirstStart(MainActivity.this,code);
             }catch (Exception e){
-                Toast.makeText(MainActivity.this,"Load dữ liệu không thành công. Làm ơn thử lại",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"Load dữ liệu lỗi. Làm ơn thử lại",Toast.LENGTH_SHORT).show();
             }
             return null;
         }

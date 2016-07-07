@@ -194,7 +194,7 @@ public class MainResult extends AppCompatActivity {
         String fragmentTag = backStateName;
         FragmentManager manager = getSupportFragmentManager();
         boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
-        if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null) { //fragment not in back stack, create it.
+        if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null) {
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.nav_contentframe, fragment, fragmentTag);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -245,10 +245,10 @@ public class MainResult extends AppCompatActivity {
             try {
                 String[] ttsv = result.split("-!!");
                 tvNameH.setText(ttsv[0].toString() + "");
-                tvMaSVH.setText("MaSV: " + ttsv[1].toString() + "");
+                tvMaSVH.setText("Mã SV: " + ttsv[1].toString() + "");
                 tvClassH.setText("Lớp: " + ttsv[2].toString() + "");
             } catch (Exception e) {
-                Toast.makeText(MainResult.this, "Không load được dữ liệu! Làm ơn thử lại.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainResult.this, "Load dữ liệu lỗi. Làm ơn thử lại!", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -44,7 +44,7 @@ public class ExamScheduleAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        View view=null;
+        View view = null;
         if(view==null){
             view=mInflater.inflate(R.layout.layout_exam_schedule_item,null);
             viewHolder=new ViewHolder();

@@ -82,9 +82,13 @@ public class LearingResultFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                new LearningResult().execute("1!" + query);
-                Log.d("LoadType", "online");
-                searchView.clearFocus();
+                if (CommonMethod.getInstance().isValid(query)) {
+                    new LearningResult().execute("1!" + query);
+                    Log.d("LoadType", "online");
+                    searchView.clearFocus();
+                } else {
+                    Toast.makeText(getContext(), "Mã sinh viên có 10 chữ số", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
         });
