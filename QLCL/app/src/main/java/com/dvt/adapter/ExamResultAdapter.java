@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dvt.item.ExamResultItem;
 import com.dvt.item.LearningResultItem;
 import com.dvt.qlcl.R;
 
@@ -17,11 +18,11 @@ import java.util.ArrayList;
  * Created by Android on 12/14/2015.
  */
 public class ExamResultAdapter extends BaseAdapter {
-    private ArrayList<LearningResultItem> arrayLearn;
+    private ArrayList<ExamResultItem> arrayLearn;
     private LayoutInflater mInflater;
     private Context mContext;
 
-    public ExamResultAdapter(Context context, ArrayList<LearningResultItem> arrItem) {
+    public ExamResultAdapter(Context context, ArrayList<ExamResultItem> arrItem) {
         this.mContext=context;
         this.arrayLearn=arrItem;
         this.mInflater=LayoutInflater.from(context);
@@ -58,7 +59,7 @@ public class ExamResultAdapter extends BaseAdapter {
             view.setTag(viewHolder);
         }
         viewHolder= (ViewHolder) view.getTag();
-        LearningResultItem item=arrayLearn.get(position);
+        ExamResultItem item=arrayLearn.get(position);
         viewHolder.tvName.setText(item.getSubjectName());
         viewHolder.tvPoint1.setText("Điểm TL:"+item.getPoint1());
         viewHolder.tvPoint2.setText("Điểm Thi:"+item.getPoint2());

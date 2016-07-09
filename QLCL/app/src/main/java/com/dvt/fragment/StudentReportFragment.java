@@ -53,7 +53,7 @@ public class StudentReportFragment extends Fragment {
     private ArrayList<ExamResultForReportItem> examResultItems = new ArrayList<>();
     private HtmlParse htmlParse;
     Bundle bundle = new Bundle();
-    private  TextView mTVName,mTVCode,mTVClass;
+    private TextView mTVName, mTVCode, mTVClass;
 
     @Nullable
     @Override
@@ -67,9 +67,9 @@ public class StudentReportFragment extends Fragment {
             code = mCode;
         }
         setHasOptionsMenu(true);
-        mTVName= (TextView) myFragmentView.findViewById(R.id.tv_name_s);
-        mTVCode= (TextView) myFragmentView.findViewById(R.id.tv_code_s);
-        mTVClass= (TextView) myFragmentView.findViewById(R.id.tv_class_s);
+        mTVName = (TextView) myFragmentView.findViewById(R.id.tv_name_s);
+        mTVCode = (TextView) myFragmentView.findViewById(R.id.tv_code_s);
+        mTVClass = (TextView) myFragmentView.findViewById(R.id.tv_class_s);
         htmlParse = new HtmlParse();
         new LearningResultForReportTask().execute("2!nocode");
         setHasOptionsMenu(true);
@@ -116,9 +116,9 @@ public class StudentReportFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            String[] arrParam=params[0].split("!");
-            int type=Integer.parseInt(arrParam[0]);
-            String ttsv=htmlParse.getExamReport(type,arrParam[1],getContext());
+            String[] arrParam = params[0].split("!");
+            int type = Integer.parseInt(arrParam[0]);
+            String ttsv = htmlParse.getExamReport(type, arrParam[1], getContext());
             return ttsv;
         }
 
@@ -131,8 +131,14 @@ public class StudentReportFragment extends Fragment {
                 mTVCode.setText(ttsv[1].toString() + "");
                 mTVClass.setText(ttsv[2].toString() + "");
                 examResultItems = htmlParse.getArrExamReport();
+                PieChart pieChart = (PieChart) myFragmentView.findViewById(R.id.chart);
+                ArrayList<Entry> entries = new ArrayList<>();
+                ArrayList<String> labels = new ArrayList<String>();
+                DecimalFormat df = new DecimalFormat("#,##");
+
                 int size = examResultItems.size();
                 if (size == 0) {
+                    setReportError(pieChart);
                     Toast.makeText(getContext(), getString(R.string.toast_chua_nop_le_phi), Toast.LENGTH_SHORT).show();
                 } else {
                     for (int i = 0; i < size; i++) {
@@ -141,6 +147,7 @@ public class StudentReportFragment extends Fragment {
                             ExamResultForReportItem examResultItem = examResultItems.get(i);
                             if (examResultItem.getPoint2().equals("**")) {
                                 examResultItems.clear();
+                                setReportError(pieChart);
                                 Toast.makeText(getContext(), getString(R.string.toast_chua_nop_le_phi), Toast.LENGTH_SHORT).show();
                                 break;
                             } else if (examResultItem.getName().indexOf("Giáo dục thể chất") >= 0 || examResultItem.getPoint2().equals("I")) {
@@ -167,12 +174,16 @@ public class StudentReportFragment extends Fragment {
                             }
                         }
                     }
-                    int a = 0, b = 0, c = 0, d = 0, f = 0;
-                    int tinchi = 0, tinchia = 0, tinchib = 0, tinchic = 0, tinchid = 0, tinchif = 0;
+                    int a = 0, b = 0, c = 0, d = 0, f = 0, bCong = 0, cCong = 0, dCong = 0;
+                    int tinchi = 0, tinchia = 0, tinchib = 0, tinchic = 0, tinchid = 0, tinchif = 0, tinchiBCong = 0, tinchiCCong = 0, tinchiDCong = 0;
                     for (ExamResultForReportItem item : examResultItems) {
                         if (item.getPoint2().equals("A")) {
                             a++;
                             tinchia += Integer.parseInt(item.getInchi());
+                            tinchi += Integer.parseInt(item.getInchi());
+                        } else if (item.getPoint2().equals("B+")) {
+                            bCong++;
+                            tinchiBCong += Integer.parseInt(item.getInchi());
                             tinchi += Integer.parseInt(item.getInchi());
                         } else if (item.getPoint2().equals("B")) {
                             b++;
@@ -181,6 +192,14 @@ public class StudentReportFragment extends Fragment {
                         } else if (item.getPoint2().equals("C")) {
                             c++;
                             tinchic += Integer.parseInt(item.getInchi());
+                            tinchi += Integer.parseInt(item.getInchi());
+                        } else if (item.getPoint2().equals("C+")) {
+                            cCong++;
+                            tinchiCCong += Integer.parseInt(item.getInchi());
+                            tinchi += Integer.parseInt(item.getInchi());
+                        } else if (item.getPoint2().equals("D+")) {
+                            dCong++;
+                            tinchiDCong += Integer.parseInt(item.getInchi());
                             tinchi += Integer.parseInt(item.getInchi());
                         } else if (item.getPoint2().equals("D")) {
                             d++;
@@ -193,15 +212,17 @@ public class StudentReportFragment extends Fragment {
                             f++;
                         }
                     }
-                    PieChart pieChart = (PieChart) myFragmentView.findViewById(R.id.chart);
-                    ArrayList<Entry> entries = new ArrayList<>();
-                    ArrayList<String> labels = new ArrayList<String>();
-                    DecimalFormat df = new DecimalFormat("#,##");
                     int dem = 0;
                     if (a != 0) {
                         float pTA = ((float) tinchia / tinchi) * 100;
                         entries.add(new Entry(Float.parseFloat(df.format(pTA)), dem));
                         labels.add("% A");
+                        dem++;
+                    }
+                    if (bCong != 0) {
+                        float pTBCong = ((float) tinchiBCong / tinchi) * 100;
+                        entries.add(new Entry(Float.parseFloat(df.format(pTBCong)), dem));
+                        labels.add("% B+");
                         dem++;
                     }
                     if (b != 0) {
@@ -210,10 +231,22 @@ public class StudentReportFragment extends Fragment {
                         labels.add("% B");
                         dem++;
                     }
+                    if (cCong != 0) {
+                        float pTC = ((float) tinchiCCong / tinchi) * 100;
+                        entries.add(new Entry(Float.parseFloat(df.format(pTC)), dem));
+                        labels.add("% C+");
+                        dem++;
+                    }
                     if (c != 0) {
                         float pTC = ((float) tinchic / tinchi) * 100;
                         entries.add(new Entry(Float.parseFloat(df.format(pTC)), dem));
                         labels.add("% C");
+                        dem++;
+                    }
+                    if (dCong != 0) {
+                        float pTD = ((float) tinchiDCong / tinchi) * 100;
+                        entries.add(new Entry(Float.parseFloat(df.format(pTD)), dem));
+                        labels.add("% D+");
                         dem++;
                     }
                     if (d != 0) {
@@ -228,23 +261,46 @@ public class StudentReportFragment extends Fragment {
                         labels.add("% F");
                         dem++;
                     }
-                    Float DTB = (float) (tinchia * 4 + tinchib * 3 + tinchic * 2 + tinchid * 1) / tinchi;
-                    String DTBText=String.format("%.2f", DTB);;
-                    PieDataSet dataset = new PieDataSet(entries, "# Type Point");
-                    PieData data = new PieData(labels, dataset);
-                    dataset.setColors(ColorTemplate.COLORFUL_COLORS);
-                    data.setValueTextSize(13f);
-                    pieChart.setDescription("Tích lũy:  " + DTBText);
-                    pieChart.setData(data);
-                    pieChart.setCenterText(DTBText);
-                    pieChart.setCenterTextColor(Color.RED);
-                    pieChart.setCenterTextSize(50);
-                    pieChart.animateY(3000);
-                    pieChart.saveToGallery("/sd/mychart.jpg", 85); // 85 is the quality of the image
+
+                    Float DTB = (float) (tinchia * 4 + tinchiBCong * 3.5 + tinchiCCong * 2.5 + tinchiDCong * 1.5 + tinchib * 3 + tinchic * 2 + tinchid * 1) / tinchi;
+                    String DTBText = String.format("%.2f", DTB);
+                    if(DTBText.equals("NaN")){
+                        setReportError(pieChart);
+                    }else {
+                        PieDataSet dataset = new PieDataSet(entries, "# Type Point");
+                        PieData data = new PieData(labels, dataset);
+                        dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+                        data.setValueTextSize(13f);
+
+                        pieChart.setDescription("Tích lũy:  " + DTBText);
+                        pieChart.setData(data);
+                        pieChart.setCenterText(DTBText);
+                        pieChart.setCenterTextColor(Color.RED);
+                        pieChart.setCenterTextSize(50);
+                        pieChart.animateY(3000);
+
+                        pieChart.saveToGallery("/sd/mychart.jpg", 85); // 85 is the quality of the image
+                    }
                 }
             } catch (Exception e) {
                 Toast.makeText(getContext(), "Load dữ liệu lỗi. Làm ơn thử lại!", Toast.LENGTH_SHORT).show();
             }
+        }
+
+        private void setReportError(PieChart pieChart) {
+            ArrayList<Entry> entries = new ArrayList<>();
+            ArrayList<String> labels = new ArrayList<String>();
+            PieDataSet dataset = new PieDataSet(entries, "# Type Point");
+            PieData data = new PieData(labels, dataset);
+            dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+            data.setValueTextSize(13f);
+            pieChart.setDescription("Tích lũy:  *.*");
+            pieChart.setData(data);
+            pieChart.setCenterText(getString(R.string.toast_chua_nop_le_phi));
+            pieChart.setCenterTextColor(Color.RED);
+            pieChart.setCenterTextSize(20);
+            pieChart.animateY(3000);
+            pieChart.saveToGallery("/sd/mychart.jpg", 85); // 85 is the quality of the image
         }
     }
 

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvt.adapter.ExamResultAdapter;
+import com.dvt.item.ExamResultItem;
 import com.dvt.item.LearningResultItem;
 import com.dvt.jsoup.HtmlParse;
 import com.dvt.qlcl.R;
@@ -38,13 +39,14 @@ public class ExamResultFragment extends Fragment {
     private ListView lvLearningResult;
     private ExamResultAdapter adapter;
     ProgressDialog mProgressDialog;
-    private ArrayList<LearningResultItem> arrLearningResult = new ArrayList<>();
+    private ArrayList<ExamResultItem> arrLearningResult = new ArrayList<>();
     private HtmlParse htmlParse;
     View myFragmentView;
 
     private void initView() {
         htmlParse = new HtmlParse();
-        new ExamResult().execute("2!nocode");
+        String cccc=CommonMethod.getCode(getContext());
+        new ExamResult().execute("2!"+cccc);
         Log.d("LoadType", "offline");
     }
 
@@ -132,6 +134,9 @@ public class ExamResultFragment extends Fragment {
                 mTVClass.setText(ttsv[2].toString() + "");
                 lvLearningResult.addHeaderView(header, null, false);
                 arrLearningResult = htmlParse.getArrExamResult();
+                for(int i=0;i<arrLearningResult.size();i++){
+                    Log.d("DiemThi",arrLearningResult.get(i).getSubjectName()+"-"+arrLearningResult.get(i).getPoint3()+"-"+arrLearningResult.get(i).getMediumScore());
+                }
                 Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                 Collections.reverse(arrLearningResult);
                 adapter = new ExamResultAdapter(getActivity(), arrLearningResult);

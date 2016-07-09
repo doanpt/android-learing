@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.dvt.item.ExamResultForReportItem;
+import com.dvt.item.ExamResultItem;
 import com.dvt.item.ExamScheduleItem;
 import com.dvt.item.LearningResultItem;
 import com.dvt.util.CommonMethod;
@@ -24,7 +25,7 @@ public class HtmlParse {
 
 
     private ArrayList<LearningResultItem> arrLearnResult = new ArrayList<>();
-    private ArrayList<LearningResultItem> arrExamResult = new ArrayList<>();
+    private ArrayList<ExamResultItem> arrExamResult = new ArrayList<>();
     private ArrayList<ExamScheduleItem> arrExamSchedule = new ArrayList<>();
     private ArrayList<ExamResultForReportItem> arrExamReport = new ArrayList<>();
 
@@ -109,7 +110,7 @@ public class HtmlParse {
                 if (i < 1 || i == maxSize - 1) {
                     continue;
                 } else {
-                    arrExamResult.add(getAllTDElementsExam(trElements.get(i)));
+                    arrExamResult.add(getAllTDElementsExam(trElements.get(i), mcode));
                 }
             }
         } catch (Exception e) {
@@ -205,9 +206,9 @@ public class HtmlParse {
         return examScheduleItem;
     }
 
-    private LearningResultItem getAllTDElementsExam(Element element) {
+    private ExamResultItem getAllTDElementsExam(Element element, String code) {
         Elements tdElements = element.getElementsByTag("td");
-        LearningResultItem learningResultItem;
+        ExamResultItem examResultItem;
 
         try {
             String tdName = tdElements.get(2).text();
@@ -219,11 +220,61 @@ public class HtmlParse {
             }
             String tdPoint3 = tdElements.get(7).text();
             String tdPointPGA = tdElements.get(8).text();
-            learningResultItem = new LearningResultItem(tdName, tdPoint1, tdPoint2, tdPoint3, tdPointPGA);
+            String tdSemester = tdElements.get(10).text();
+            String xCode = code.substring(0, 2);
+            if(!"".equals(tdPoint3)&& !"**".equals(tdPoint3)) {
+                double point3 = Double.parseDouble(tdPoint3);
+                if (xCode.equals("07")) {
+                    int semester = Integer.parseInt(tdSemester);
+                    if (semester >= 10) {
+                        if (semester <15 || semester >= 29) {
+                            tdPointPGA = getScoreSum(point3);
+                        }
+                    }
+                } else if (xCode.equals("08")) {
+                    int semester = Integer.parseInt(tdSemester);
+                    if (semester >= 8) {
+                        if (semester < 15 || semester >= 27) {
+                            tdPointPGA = getScoreSum(point3);
+                        }
+                    }
+                } else if (xCode.equals("09")) {
+                    int semester = Integer.parseInt(tdSemester);
+                    if (semester >= 8) {
+                        if (semester < 15 || semester >= 25) {
+                            tdPointPGA = getScoreSum(point3);
+                        }
+                    }
+                }
+            }
+            examResultItem = new ExamResultItem(tdName, tdPoint1, tdPoint2, tdPoint3, tdPointPGA, tdSemester);
         } catch (Exception e) {
             return null;
         }
-        return learningResultItem;
+        return examResultItem;
+    }
+
+    public String getScoreSum(double diem) {
+        String d;
+        if (diem < 4.0)
+            d = "F";
+        else if (diem < 4.7)
+            d = "D";
+        else if (diem < 5.5)
+            d = "D+";
+        else if (diem < 6.2) {
+            d = "C";
+        } else if (diem < 7) {
+            d = "C+";
+        } else if (diem < 7.7) {
+            d = "B";
+        } else if (diem < 8.5) {
+            d = "B+";
+        } else {
+            d = "A";
+        }
+
+        return d;
     }
 
     public String getExamReport(int id, String mcode, Context context) {
@@ -253,7 +304,7 @@ public class HtmlParse {
                 if (i < 1 || i == maxSize - 1) {
                     continue;
                 } else {
-                    ExamResultForReportItem examResultItem = getAllTDElementsExamReport(trElements.get(i));
+                    ExamResultForReportItem examResultItem = getAllTDElementsExamReport(trElements.get(i),mcode);
                     arrExamReport.add(examResultItem);
                 }
             }
@@ -263,7 +314,7 @@ public class HtmlParse {
         return ttsv;
     }
 
-    private ExamResultForReportItem getAllTDElementsExamReport(Element element) {
+    private ExamResultForReportItem getAllTDElementsExamReport(Element element,String code) {
         Elements tdElements = element.getElementsByTag("td");
         ExamResultForReportItem examResultItem;
         try {
@@ -271,6 +322,33 @@ public class HtmlParse {
             String tinchi = tdElements.get(3).text();
             String tdPoint3 = tdElements.get(7).text();
             String tdPointPGA = tdElements.get(8).text();
+            String tdSemester = tdElements.get(10).text();
+            String xCode = code.substring(0, 2);
+            if(!"".equals(tdPoint3)&& !"**".equals(tdPoint3)) {
+                double point3 = Double.parseDouble(tdPoint3);
+                if (xCode.equals("07")) {
+                    int semester = Integer.parseInt(tdSemester);
+                    if (semester >= 10) {
+                        if (semester <15 || semester >= 29) {
+                            tdPointPGA = getScoreSum(point3);
+                        }
+                    }
+                } else if (xCode.equals("08")) {
+                    int semester = Integer.parseInt(tdSemester);
+                    if (semester >= 8) {
+                        if (semester < 15 || semester >= 27) {
+                            tdPointPGA = getScoreSum(point3);
+                        }
+                    }
+                } else if (xCode.equals("09")) {
+                    int semester = Integer.parseInt(tdSemester);
+                    if (semester >= 8) {
+                        if (semester < 15 || semester >= 25) {
+                            tdPointPGA = getScoreSum(point3);
+                        }
+                    }
+                }
+            }
             examResultItem = new ExamResultForReportItem(name, tdPoint3, tdPointPGA, tinchi);
         } catch (Exception e) {
             return null;
@@ -278,11 +356,11 @@ public class HtmlParse {
         return examResultItem;
     }
 
-    public ArrayList<LearningResultItem> getArrExamResult() {
+    public ArrayList<ExamResultItem> getArrExamResult() {
         return arrExamResult;
     }
 
-    public void setArrExamResult(ArrayList<LearningResultItem> arrExamResult) {
+    public void setArrExamResult(ArrayList<ExamResultItem> arrExamResult) {
         this.arrExamResult = arrExamResult;
     }
 
@@ -305,11 +383,11 @@ public class HtmlParse {
         return ttsv;
     }
 
-    public void getAllDataForFirstStart(Context context,String code) {
+    public void getAllDataForFirstStart(Context context, String code) {
         try {
-            getDataExamResult(context,code);
-            getDataSchedule(context,code);
-            getDataLearn(context,code);
+            getDataExamResult(context, code);
+            getDataSchedule(context, code);
+            getDataLearn(context, code);
         } catch (IOException e) {
             e.printStackTrace();
         }
