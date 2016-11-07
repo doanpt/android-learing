@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/login"
+            android:title="Đăng nhập" />
+        <item
+            android:id="@+id/nav_my_music"
+            android:icon="@drawable/music_icon"
+            android:title="My Music" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/settings"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_about_us"
+            android:icon="@drawable/about_us"
+            android:title="About Us" />
+        <item
+            android:id="@+id/nav_h"
+            android:icon="@drawable/help"
+            android:title="Help" />
+    </group>
+    <item android:title="More Options">
+        <menu>
+            <item
+                android:id="@+id/nav_log_out"
+                android:icon="@drawable/logout"
+                android:title="Log out" />
+        </menu>
+    </item>
+</menu>

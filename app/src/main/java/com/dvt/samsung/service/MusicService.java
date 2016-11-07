@@ -1,15 +1,12 @@
 package com.dvt.samsung.service;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -17,11 +14,8 @@ import android.widget.RemoteViews;
 
 import com.dvt.samsung.finalapp.MainActivity;
 import com.dvt.samsung.finalapp.R;
-import com.dvt.samsung.model.Song;
 import com.dvt.samsung.utils.CommonValue;
-import com.dvt.samsung.utils.MediaController;
-
-import java.util.ArrayList;
+import com.dvt.samsung.media.MediaController;
 
 /**
  * Created by Android on 11/4/2016.
@@ -49,7 +43,6 @@ public class MusicService extends Service implements MediaController.OnPlayStart
         mediaController.setOnPlayStartedListener(this);
         if (!mediaController.isPlaying()) {
             mediaController.playOrPause(true);
-// assign the song name to songName
             runForeground("dasdas");
 //            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 //            PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
@@ -117,7 +110,7 @@ public class MusicService extends Service implements MediaController.OnPlayStart
     public void onDestroy() {
         unregisterReceiver(broadcast);
         release();
-        stopForeground(STOP_FOREGROUND_REMOVE);
+        stopForeground(true);
         super.onDestroy();
     }
 

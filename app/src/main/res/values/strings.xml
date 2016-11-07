@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MusicApp</string>
+    <string name="open_navigation">OPEN</string>
+    <string name="close_navigation">CLOSE</string>
 </resources>

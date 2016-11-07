@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="11dp"
+        android:textColor="@android:color/white"
+        android:text="Music For You 1.0" />
+    <TextView
+        android:id="@+id/tv_music_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="120dp"
+        android:textColor="@android:color/white"
+        android:layout_above="@+id/tv_version"
+
+        android:textStyle="bold"
+        android:textSize="35dp"
+        android:text="Music of Life" />
+
+    <ImageView
+        android:id="@+id/iv_splash"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/tv_music_des"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/splash" />
+
+</RelativeLayout>

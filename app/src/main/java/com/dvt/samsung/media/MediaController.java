@@ -1,4 +1,4 @@
-package com.dvt.samsung.utils;
+package com.dvt.samsung.media;
 
 import java.io.IOException;
 import java.util.ArrayList;
