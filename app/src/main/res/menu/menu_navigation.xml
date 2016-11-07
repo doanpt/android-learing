@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_login"
-            android:icon="@drawable/login"
-            android:title="Đăng nhập" />
-        <item
             android:id="@+id/nav_my_music"
             android:icon="@drawable/music_icon"
             android:title="My Music" />
@@ -24,6 +20,10 @@
     </group>
     <item android:title="More Options">
         <menu>
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/login"
+                android:title="Đăng nhập" />
             <item
                 android:id="@+id/nav_log_out"
                 android:icon="@drawable/logout"

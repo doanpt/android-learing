@@ -6,39 +6,44 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dvt.samsung.finalapp.MainFragmentActivity;
 import com.dvt.samsung.finalapp.R;
+import com.dvt.samsung.model.Song;
 import com.dvt.samsung.model.TypeItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by sev_user on 11/7/2016.
+ * Created by sev_user on 11/3/2016.
  */
 
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
-    private List<TypeItem> arrType;
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
+
+    private ArrayList<Song> arrSong;
     private Context context;
+
+    public SongAdapter(ArrayList<Song> arrSong, Context context) {
+        this.arrSong = arrSong;
+        this.context = context;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MainAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_main, parent, false));
+        return new SongAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_song_display, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final TypeItem item = arrType.get(position);
-        String name = item.getNameType();
-        String number = item.getNumber();
+        final Song item = arrSong.get(position);
+        String name = item.getName();
+        String artist = item.getArtist();
         holder.tvTitle.setText(name);
-        holder.tvNumber.setText(number);
-        holder.ivType.setImageResource(item.getId());
+        holder.tvArtist.setText(artist);
         holder.llMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,30 +51,25 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         });
-
-    }
-
-    public MainAdapter(Context context, ArrayList<TypeItem> arrType) {
-        this.arrType = arrType;
-        this.context = context;
     }
 
     @Override
     public int getItemCount() {
-        return arrType.size();
+        return arrSong.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvTitle, tvNumber;
-        private ImageView ivType;
+        private TextView tvTitle, tvArtist;
+        private ImageView ivIcon;
         private LinearLayout llMain;
 
         public ViewHolder(View view) {
             super(view);
-            tvNumber = (TextView) view.findViewById(R.id.tv_number_type);
-            tvTitle = (TextView) view.findViewById(R.id.tv_name_type);
-            ivType = (ImageView) view.findViewById(R.id.iv_icon_type);
-            llMain = (LinearLayout) view.findViewById(R.id.ll_main_type);
+            tvArtist = (TextView) view.findViewById(R.id.tv_artist_song);
+            tvTitle = (TextView) view.findViewById(R.id.tv_name_song);
+            ivIcon = (ImageView) view.findViewById(R.id.iv_icon_song);
+            llMain = (LinearLayout) view.findViewById(R.id.ll_main_song);
         }
     }
+
 }
