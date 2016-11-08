@@ -2,6 +2,8 @@ package com.dvt.samsung.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dvt.samsung.finalapp.MainFragmentActivity;
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.model.TypeItem;
+import com.dvt.samsung.utils.CommonValue;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +35,22 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final TypeItem item = arrType.get(position);
         String name = item.getNameType();
         String number = item.getNumber();
         holder.tvTitle.setText(name);
         holder.tvNumber.setText(number);
-        holder.ivType.setImageResource(item.getId());
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = 4;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_icon, opts);
+        holder.ivType.setImageBitmap(bitmap);
+//        Picasso.with(context).load(bitmap).into(holder.ivType);
         holder.llMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MainFragmentActivity.class);
+                intent.putExtra(CommonValue.KEY_MAIN_CLICK_ITEM, position);
                 context.startActivity(intent);
             }
         });

@@ -8,7 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.dvt.samsung.adapter.AlbumBaseAdapter;
+import com.dvt.samsung.finalapp.MainFragmentActivity;
 import com.dvt.samsung.finalapp.R;
 
 /**
@@ -17,14 +20,14 @@ import com.dvt.samsung.finalapp.R;
 
 public class ArtistFragment extends Fragment {
     private View view;
+    private ListView lvArtist;
+    private Context context;
 
     @SuppressLint("ValidFragment")
     public ArtistFragment(Context context) {
+        this.context = context;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         view = layoutInflater.inflate(R.layout.fragment_artist, null);
-//        this.initializeComponent();
-
-
     }
 
     public ArtistFragment() {
@@ -33,6 +36,10 @@ public class ArtistFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        lvArtist = (ListView) view.findViewById(R.id.lv_artist);
+        if (MainFragmentActivity.artists != null) {
+            lvArtist.setAdapter(new AlbumBaseAdapter(context, MainFragmentActivity.artists));
+        }
         return view;
     }
 }

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<Fragment> fragments;
 //    private String[] titles = new String[]{"Bài hát", "Album", "Nghệ sĩ", "Playlist", "Download"};
-    private String[] titles = new String[]{"Bài hát", "Album", "Nghệ sĩ", "Download"};
+    private String[] titles = new String[]{"Bài hát", "Album", "Nghệ sĩ"};
 
     public ViewPagerAdapter(Context context, FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -29,7 +29,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         fragments.add(new AlbumFragment(context));
         fragments.add(new ArtistFragment(context));
 //        fragments.add(new PlaylistFragment(context));
-        fragments.add(new DownloadFragment(context));
+//        fragments.add(new DownloadFragment(context));
     }
 
     @Override

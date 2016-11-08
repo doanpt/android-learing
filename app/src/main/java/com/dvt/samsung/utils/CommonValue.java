@@ -18,4 +18,6 @@ public class CommonValue {
     public static final String ACTION_PLAY_BACKGROUND = "ACTION_PLAY_BACK_GROUND";
     public static final String KEY_LIST_STRING = "KEY_LIST_STRING";
     public static final int NOTIFICATION_ID = 1234;
+    public static final int REQUEST_PERMISSION = 111;
+    public static final String KEY_MAIN_CLICK_ITEM = "KEY_MAIN_CLICK_ITEM";
 }

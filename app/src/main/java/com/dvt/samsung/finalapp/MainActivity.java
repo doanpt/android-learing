@@ -1,6 +1,5 @@
 package com.dvt.samsung.finalapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -11,9 +10,11 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dvt.samsung.adapter.MainAdapter;
+import com.dvt.samsung.adapter.MainBaseAdapter;
 import com.dvt.samsung.model.TypeItem;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView lvType;
     private ArrayList<TypeItem> arrType;
     private MainAdapter adapter;
+    //    private ListView lvType;
+//    private MainBaseAdapter adapter;
     private DrawerLayout drawerLayout;
     private NavigationView navigation;
     private ImageView btnMenu;
@@ -40,13 +43,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         lvType.setLayoutManager(linearLayoutManager);
+//        lvType = (ListView) findViewById(R.id.recycler_view_main);
         arrType = new ArrayList<>();
         arrType.add(new TypeItem(R.drawable.song, "Bài hát", "122"));
         arrType.add(new TypeItem(R.drawable.album, "Album", "12"));
         arrType.add(new TypeItem(R.drawable.artist, "Nghệ sĩ", "14"));
         arrType.add(new TypeItem(R.drawable.playlist, "Playlist", "11"));
         arrType.add(new TypeItem(R.drawable.download, "Download", "10"));
-        adapter = new MainAdapter(this,arrType);
+        adapter = new MainAdapter(this, arrType);
+        //adapter=new MainBaseAdapter(this,arrType);
         lvType.setAdapter(adapter);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         btnMenu.setOnClickListener(new View.OnClickListener() {

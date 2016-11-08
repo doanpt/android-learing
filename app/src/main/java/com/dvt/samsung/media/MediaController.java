@@ -31,7 +31,6 @@ public class MediaController {
 
     public MediaController(Context mContext) {
         this.mContext = mContext;
-        getAllSong();
         mPlayer = new MediaPlayer();
         mediaState = STATE_IDLE;
         indexSong = 0;
@@ -49,51 +48,7 @@ public class MediaController {
         this.indexSong = indexSong;
     }
 
-    private void getAllSong() {
-        if (listSong.size() > 0) {
-            return;
-        }
-        String projection[] = new String[]{
-                //Name
-                MediaStore.MediaColumns.TITLE,
-                //FileName
-                MediaStore.MediaColumns.DISPLAY_NAME,
-                //Path
-                MediaStore.MediaColumns.DATA,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.DURATION
-        };
-        Cursor cursor = mContext.getContentResolver()
-                .query(
-                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        projection,
-                        null,
-                        null,
-                        null
-                );
-        if (cursor == null) {
-            return;
-        }
-        cursor.moveToFirst();
-        while (cursor.isAfterLast() == false) {
-            String name = cursor.getString(cursor.getColumnIndex(
-                    MediaStore.MediaColumns.TITLE));
-            String fileName = cursor.getString(cursor.getColumnIndex(
-                    MediaStore.MediaColumns.DISPLAY_NAME));
-            String path = cursor.getString(cursor.getColumnIndex(
-                    MediaStore.MediaColumns.DATA));
-            String artist = cursor.getString(cursor.getColumnIndex(
-                    MediaStore.Audio.Media.ARTIST));
-            String album = cursor.getString(cursor.getColumnIndex(
-                    MediaStore.Audio.Media.ALBUM));
-            int duration = cursor.getInt(cursor.getColumnIndex(
-                    MediaStore.Audio.Media.DURATION));
-            listSong.add(new Song(name, fileName, path, artist, album, duration));
-            cursor.moveToNext();
-        }
-        cursor.close();
-    }
+
 
     public void playOrPause(boolean isPlayAgain) {
         if (mediaState == STATE_IDLE || mediaState == STATE_STOP || isPlayAgain) {

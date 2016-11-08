@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by sev_user on 11/3/2016.
  */
-public class Song implements Serializable{
+public class Song implements Serializable {
     private String name, fileName, path, artist, album, time;
     private long duration;
 
@@ -19,6 +19,38 @@ public class Song implements Serializable{
         this.album = album;
         this.duration = duration;
         convertDate();
+    }
+
+    public Song() {
+
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     public String getName() {

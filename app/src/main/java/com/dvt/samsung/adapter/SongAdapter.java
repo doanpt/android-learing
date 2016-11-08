@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 import com.dvt.samsung.finalapp.MainFragmentActivity;
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.model.Song;
-import com.dvt.samsung.model.TypeItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -44,6 +43,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         String artist = item.getArtist();
         holder.tvTitle.setText(name);
         holder.tvArtist.setText(artist);
+//        Picasso.with(context).load(R.drawable.music_icon).into(holder.iv);
         holder.llMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,14 +60,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvTitle, tvArtist;
-        private ImageView ivIcon;
+        private ImageView ivSong;
         private LinearLayout llMain;
 
         public ViewHolder(View view) {
             super(view);
             tvArtist = (TextView) view.findViewById(R.id.tv_artist_song);
             tvTitle = (TextView) view.findViewById(R.id.tv_name_song);
-            ivIcon = (ImageView) view.findViewById(R.id.iv_icon_song);
+//            ivSong = (ImageView) view.findViewById(R.id.iv_icon_song);
             llMain = (LinearLayout) view.findViewById(R.id.ll_main_song);
         }
     }
