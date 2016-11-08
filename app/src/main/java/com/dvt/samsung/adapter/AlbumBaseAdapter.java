@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.model.Song;
+import com.dvt.samsung.utils.OnListListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +30,9 @@ public class AlbumBaseAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private List<String> names = new ArrayList<>();
     private HashMap<String, List<Song>> albums;
+    private OnListListener listListener;
 
-    public AlbumBaseAdapter(Context context, HashMap<String, List<Song>> albums) {
+    public AlbumBaseAdapter(Context context, HashMap<String, List<Song>> albums, OnListListener listListener) {
         this.context = context;
         this.albums = albums;
         Set<String> setnames = albums.keySet();
@@ -39,6 +41,7 @@ public class AlbumBaseAdapter extends BaseAdapter {
             names.add(iterator.next());
         }
         inflater = LayoutInflater.from(context);
+        this.listListener = listListener;
     }
 
     @Override
@@ -57,7 +60,7 @@ public class AlbumBaseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
@@ -80,6 +83,7 @@ public class AlbumBaseAdapter extends BaseAdapter {
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listListener.onItemClick(albums.get(names.get(position)));
 
             }
         });

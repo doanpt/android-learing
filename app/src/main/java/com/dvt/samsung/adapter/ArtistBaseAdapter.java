@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.model.Song;
+import com.dvt.samsung.utils.OnListListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +30,9 @@ public class ArtistBaseAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private List<String> names = new ArrayList<>();
     private HashMap<String, List<Song>> artist;
+    private OnListListener listListener;
 
-    public ArtistBaseAdapter(Context context, HashMap<String, List<Song>> artist) {
+    public ArtistBaseAdapter(Context context, HashMap<String, List<Song>> artist, OnListListener listListener) {
         this.context = context;
         this.artist = artist;
         Set<String> setnames = artist.keySet();
@@ -39,6 +41,7 @@ public class ArtistBaseAdapter extends BaseAdapter {
             names.add(iterator.next());
         }
         inflater = LayoutInflater.from(context);
+        this.listListener = listListener;
     }
 
     @Override
@@ -57,7 +60,7 @@ public class ArtistBaseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
@@ -71,7 +74,7 @@ public class ArtistBaseAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         List<Song> list = artist.get(names.get(position));
-        viewHolder.tvArtist.setText(names.get(position));
+        viewHolder.tvArtist.setText(names.get(position).toString() + " ");
         viewHolder.tvNumber.setText(String.valueOf(list.size()) + " bài hát");
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inSampleSize = 4;
@@ -80,7 +83,7 @@ public class ArtistBaseAdapter extends BaseAdapter {
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                listListener.onItemClick(artist.get(names.get(position)));
             }
         });
         return convertView;

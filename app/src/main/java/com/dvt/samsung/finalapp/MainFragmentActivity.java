@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -31,7 +32,9 @@ import android.widget.Toast;
 import com.dvt.samsung.adapter.ViewPagerAdapter;
 import com.dvt.samsung.model.Song;
 import com.dvt.samsung.service.MyMusicService;
+import com.dvt.samsung.utils.CommonMethod;
 import com.dvt.samsung.utils.CommonValue;
+import com.dvt.samsung.utils.OnPlayMusic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +45,7 @@ import java.util.List;
  * Created by Android on 11/7/2016.
  */
 
-public class MainFragmentActivity extends FragmentActivity {
+public class MainFragmentActivity extends FragmentActivity implements OnPlayMusic {
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
     private TabLayout tab;
@@ -195,12 +198,6 @@ public class MainFragmentActivity extends FragmentActivity {
         for (int i = 0; i < viewPagerAdapter.getCount(); i++) {
             tab.getTabAt(i).setText(tabBackgroundIds[i]);
         }
-        tab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainFragmentActivity.this, "asdf" + v.getTag(), Toast.LENGTH_SHORT).show();
-            }
-        });
         TabLayout.Tab tabSelection = tab.getTabAt(posistonTabClick);
         tabSelection.select();
         ivBack = (ImageView) findViewById(R.id.im_back_viewpager);
@@ -212,7 +209,7 @@ public class MainFragmentActivity extends FragmentActivity {
         });
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
+    public boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
@@ -220,5 +217,30 @@ public class MainFragmentActivity extends FragmentActivity {
             }
         }
         return false;
+    }
+
+    @Override
+    public void playSong(List<Song> paths, int position) {
+        if (!isMyServiceRunning(MyMusicService.class)) {
+            Intent intent = new Intent(this, MyMusicService.class);
+            intent.putExtra(CommonValue.KEY_POSITION_SONG, position);
+            intent.putExtra(CommonValue.KEY_LIST_SONG_CICK, (ArrayList<? extends Parcelable>) paths);
+            startService(intent);
+            bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+        } else {
+            ArrayList<Song> mysongs = new ArrayList<>();
+            int i = 0;
+            for (Song song : paths) {
+                mysongs.add(song);
+            }
+            if (myMusicService != null) {
+                myMusicService.setArrSong(mysongs);
+                myMusicService.playSong(position);
+            }
+            myMusicService.setPlaying(true);
+        }
+//        ibPause.setImageResource(R.drawable.ic_pause_circle_outline);
+//        ibPlayHide.setImageResource(R.drawable.ic_pause_circle_outline);
+
     }
 }

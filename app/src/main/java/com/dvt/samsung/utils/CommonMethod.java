@@ -2,6 +2,7 @@ package com.dvt.samsung.utils;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.os.IBinder;
@@ -11,6 +12,7 @@ import com.dvt.samsung.model.Song;
 import com.dvt.samsung.service.MyMusicService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Android on 11/4/2016.

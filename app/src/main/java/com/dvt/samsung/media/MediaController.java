@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
 import com.dvt.samsung.model.Song;
+import com.dvt.samsung.utils.CommonValue;
 
 /**
  * Created by sev_user on 11/3/2016.
@@ -21,7 +23,7 @@ public class MediaController {
     private Context mContext;
     private MediaPlayer mPlayer;
     private int indexSong;
-    private OnPlayStartedListener mListener;
+    //    private OnPlayStartedListener mListener;
     public static int STATE_IDLE = -1;
     public static int STATE_PLAYING = 1;
     public static int STATE_PAUSE = 2;
@@ -48,7 +50,13 @@ public class MediaController {
         this.indexSong = indexSong;
     }
 
+    public MediaPlayer getmPlayer() {
+        return mPlayer;
+    }
 
+    public void setmPlayer(MediaPlayer mPlayer) {
+        this.mPlayer = mPlayer;
+    }
 
     public void playOrPause(boolean isPlayAgain) {
         if (mediaState == STATE_IDLE || mediaState == STATE_STOP || isPlayAgain) {
@@ -58,7 +66,11 @@ public class MediaController {
                 mPlayer.setDataSource(song.getPath());
                 mPlayer.prepare();
                 mPlayer.start();
-                mListener.onMediaStarted(song.getName(), song.getTime(), mPlayer.getDuration());
+                Intent intent = new Intent(CommonValue.ACTION_SEND_DATA);
+                intent.putExtra(CommonValue.KEY_TITLE_SONG, song.getName());
+//                intent.putExtra("artist", getArtist());
+                mContext.sendBroadcast(intent);
+//                mListener.onMediaStarted(song.getName(), song.getTime(), mPlayer.getDuration());
                 mediaState = STATE_PLAYING;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -121,11 +133,11 @@ public class MediaController {
         return -1;
     }
 
-    public void setOnPlayStartedListener(OnPlayStartedListener event) {
-        mListener = event;
-    }
-
-    public interface OnPlayStartedListener {
-        void onMediaStarted(String songName, String totalTime, int totalTimeInt);
-    }
+//    public void setOnPlayStartedListener(OnPlayStartedListener event) {
+//        mListener = event;
+//    }
+//
+//    public interface OnPlayStartedListener {
+//        void onMediaStarted(String songName, String totalTime, int totalTimeInt);
+//    }
 }
