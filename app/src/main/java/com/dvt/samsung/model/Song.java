@@ -13,14 +13,17 @@ import java.util.Date;
 public class Song implements Parcelable {
     private String name, fileName, path, artist, album, time;
     private long duration;
+//    byte[] aByte;
 
-    public Song(String name, String fileName, String path, String artist, String album, long duration) {
+    public Song(String name, String fileName, String path, String artist, String album, long duration){
+//            ,byte[] aByte) {
         this.name = name;
         this.fileName = fileName;
         this.path = path;
         this.artist = artist;
         this.album = album;
         this.duration = duration;
+//        this.aByte=aByte;
         convertDate();
     }
 
@@ -36,6 +39,7 @@ public class Song implements Parcelable {
         album = in.readString();
         time = in.readString();
         duration = in.readLong();
+//        in.readByteArray(this.getaByte());
     }
 
     public static final Creator<Song> CREATOR = new Creator<Song>() {
@@ -111,6 +115,14 @@ public class Song implements Parcelable {
         time = dateFormat.format(new Date(duration));
     }
 
+//    public byte[] getaByte() {
+//        return aByte;
+//    }
+
+//    public void setaByte(byte[] aByte) {
+//        this.aByte = aByte;
+//    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -125,5 +137,6 @@ public class Song implements Parcelable {
         dest.writeString(album);
         dest.writeString(time);
         dest.writeLong(duration);
+//        dest.writeByteArray(aByte);
     }
 }

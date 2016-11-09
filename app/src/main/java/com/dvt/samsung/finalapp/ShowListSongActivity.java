@@ -46,7 +46,7 @@ public class ShowListSongActivity extends Activity {
         adapter = new SongBaseAdapter(this, arraySong, new OnPlayMusic() {
             @Override
             public void playSong(List<Song> paths, int postion) {
-
+                //click music on album then play
             }
         });
         lvShowSong.setAdapter(adapter);
@@ -63,5 +63,10 @@ public class ShowListSongActivity extends Activity {
             title = arraySong.get(0).getArtist();
         }
         tvTitle.setText(title);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

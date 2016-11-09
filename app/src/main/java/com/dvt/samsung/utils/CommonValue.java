@@ -24,8 +24,12 @@ public class CommonValue {
     public static final String KEY_LIST_STRING = "KEY_LIST_STRING";
     public static final String KEY_POSITION_SONG = "KEY_POSITION_SONG";
     public static final String KEY_TITLE_SONG = "KEY_TITLE_SONG";
+    public static final String KEY_SEND_A_SONG = "KEY_SEND_A_SONG";
+    public static final String KEY_SEND_SIZE_OF_SONG = "KEY_SEND_SIZE_OF_SONG";
     public static final int NOTIFICATION_ID = 1234;
     public static final int REQUEST_PERMISSION = 111;
     public static final int REQUEST_CODE_NOTIFICATION = 12;
+
+
 
 }

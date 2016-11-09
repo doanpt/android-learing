@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,9 +22,11 @@ import android.widget.ListView;
 
 import com.dvt.samsung.adapter.SongBaseAdapter;
 import com.dvt.samsung.finalapp.MainFragmentActivity;
+import com.dvt.samsung.finalapp.PlaySongActivity;
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.model.Song;
 import com.dvt.samsung.service.MyMusicService;
+import com.dvt.samsung.utils.CommonValue;
 import com.dvt.samsung.utils.OnPlayMusic;
 
 import java.util.ArrayList;
@@ -67,13 +70,18 @@ public class SongFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         lvSong = (ListView) view.findViewById(R.id.lv_song);
         if (MainFragmentActivity.songs != null) {
             lvSong.setAdapter(new SongBaseAdapter(context, (ArrayList<Song>) MainFragmentActivity.songs, new OnPlayMusic() {
                 @Override
                 public void playSong(List<Song> paths, int postion) {
                     mainFragmentActivity.playSong(paths, postion);
+                    Intent intent = new Intent(getActivity(), PlaySongActivity.class);
+                    intent.putExtra(CommonValue.KEY_SEND_A_SONG,MainFragmentActivity.songs.get(postion));
+                    String sizeOfSong=postion+"/"+MainFragmentActivity.songs.size();
+                    intent.putExtra(CommonValue.KEY_SEND_SIZE_OF_SONG,sizeOfSong);
+                    startActivity(intent);
                 }
             }));
         }

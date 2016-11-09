@@ -10,7 +10,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +26,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +40,7 @@ import com.dvt.samsung.utils.CommonMethod;
 import com.dvt.samsung.utils.CommonValue;
 import com.dvt.samsung.utils.OnPlayMusic;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -135,12 +140,27 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
                 String thisArtist = musicCursor.getString(artistColumn);
                 String thisAlbum = musicCursor.getString(albumColumn);
                 String path = musicCursor.getString(pathColumn);
+//                MediaMetadataRetriever meta = new MediaMetadataRetriever();
                 Song song = new Song();
                 song.setName(thisTitle);
                 song.setArtist(thisArtist);
                 song.setPath(path);
                 song.setAlbum(thisAlbum);
-//                song.setPos(count++);
+//                meta.setDataSource(path);
+//                byte[] mByte;
+//                try {
+//
+//                    mByte = meta.getEmbeddedPicture();
+//
+//                    Log.d("bbbb",mByte.length+"------");
+//                } catch (Exception e) {
+//                    BitmapFactory.Options opts = new BitmapFactory.Options();
+//                    opts.inSampleSize = 4;
+//                    Bitmap bitmap = BitmapFactory.decodeResource(MainFragmentActivity.this.getResources(), R.drawable.music_icon, opts);
+//                    mByte = getBytesFromBitmap(bitmap);
+//                }
+////                song.setPos(count++);
+//                song.setaByte(mByte);
                 if (thisAlbum != null) {
                     if (albums.containsKey(thisAlbum)) albums.get(thisAlbum).add(song);
                     else {
@@ -172,6 +192,12 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
 
 //        viewPager = (ViewPager) findViewById(R.id.viewpager);
 //        viewPager.setAdapter(new ViewpagerAdapter(getSupportFragmentManager()));
+    }
+
+    public byte[] getBytesFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 70, stream);
+        return stream.toByteArray();
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -228,19 +254,21 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
             startService(intent);
             bindService(intent, serviceConnection, BIND_AUTO_CREATE);
         } else {
-            ArrayList<Song> mysongs = new ArrayList<>();
-            int i = 0;
+            ArrayList<Song> mySongs = new ArrayList<>();
             for (Song song : paths) {
-                mysongs.add(song);
+                mySongs.add(song);
             }
             if (myMusicService != null) {
-                myMusicService.setArrSong(mysongs);
+                myMusicService.setArrSong(mySongs);
                 myMusicService.playSong(position);
             }
             myMusicService.setPlaying(true);
         }
-//        ibPause.setImageResource(R.drawable.ic_pause_circle_outline);
-//        ibPlayHide.setImageResource(R.drawable.ic_pause_circle_outline);
+    }
 
+    @Override
+    protected void onDestroy() {
+        unbindService(serviceConnection);
+        super.onDestroy();
     }
 }

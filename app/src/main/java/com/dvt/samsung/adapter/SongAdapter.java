@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.dvt.samsung.finalapp.MainFragmentActivity;
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.model.Song;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 

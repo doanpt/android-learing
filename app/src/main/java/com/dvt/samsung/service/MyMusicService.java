@@ -37,7 +37,7 @@ public class MyMusicService extends Service {
     private NotificationCompat.Builder mBuilder;
     private boolean isPlaying;
     private int currentSongPlay;
-
+    private IntentFilter intentFilter = new IntentFilter();
 
     @Nullable
     @Override
@@ -80,10 +80,12 @@ public class MyMusicService extends Service {
                     mediaController.next();
                 }
             });
-        }
-        if (mediaController.getmPlayer().isPlaying()) mediaController.stop();
-        mediaController.setIndexSong(currentSongPlay);
-        mediaController.playOrPause(false);
+        } else {
+            if (mediaController.getmPlayer().isPlaying())
+                mediaController.stop();
+            mediaController.setIndexSong(currentSongPlay);
+            mediaController.playOrPause(true);
+            registerReceiver(broadCastMusic, intentFilter);
 //        mediaController.reset();
 //        if (LOOP == 0) player.setLooping(true);
 //        current = pos;
@@ -100,6 +102,7 @@ public class MyMusicService extends Service {
 //        } catch (IOException e) {
 //            next();
 //        }
+        }
         isPlaying = true;
         remoteViews.setImageViewResource(R.id.ibPause, R.drawable.pause);
         startForeground(123, mBuilder.build());
@@ -115,7 +118,6 @@ public class MyMusicService extends Service {
     public void onCreate() {
         super.onCreate();
         context = this;
-        IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(CommonValue.ACTION_PREVIOUS);
         intentFilter.addAction(CommonValue.ACTION_NEXT);
         intentFilter.addAction(CommonValue.ACTION_PAUSE_SONG);
@@ -139,31 +141,25 @@ public class MyMusicService extends Service {
                 case CommonValue.ACTION_SEND_DATA:
                     String title = intent.getStringExtra(CommonValue.KEY_TITLE_SONG);
                     remoteViews.setTextViewText(R.id.tvTitle, title);
-                    startForeground(123, mBuilder.build());
+                    startForeground(CommonValue.NOTIFICATION_ID, mBuilder.build());
                     break;
                 case CommonValue.ACTION_PREVIOUS:
-                    Toast.makeText(context, "PREVIOUS", Toast.LENGTH_SHORT).show();
-//                    pre();
+                    mediaController.previous();
                     break;
                 case CommonValue.ACTION_NEXT:
-                    Toast.makeText(context, "NEXT", Toast.LENGTH_SHORT).show();
-//                    next();
+                    mediaController.next();
                     break;
                 case CommonValue.ACTION_PAUSE_SONG:
-                    Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT).show();
-//                    if (player == null) return;
-//                    if (player.isPlaying()) {
-//                        player.pause();
-//                        remoteViews.setImageViewResource(R.id.ibPause, R.drawable.ic_play_circle_outline);
-//                    } else {
-//                        player.start();
-//                        remoteViews.setImageViewResource(R.id.ibPause, R.drawable.ic_pause_circle_outline);
-//                    }
-//                    isPlaying = !isPlaying;
-//                    Intent intentP = new Intent(CommonValue.ACTION_PAUSE_SONG);
-//                    intentP.putExtra(CommonValue.KEY_SEND_PAUSE, isPlaying);
-//                    sendBroadcast(intentP);
-//                    startForeground(CommonValue.NOTIFICATION_ID, mBuilder.build());
+                    if (mediaController.getmPlayer() == null) return;
+                    if (mediaController.isPlaying()) {
+                        mediaController.playOrPause(false);
+                        remoteViews.setImageViewResource(R.id.ibPause, R.drawable.play);
+                    } else {
+                        mediaController.playOrPause(false);
+                        remoteViews.setImageViewResource(R.id.ibPause, R.drawable.pause);
+                    }
+                    isPlaying = !isPlaying;
+                    startForeground(CommonValue.NOTIFICATION_ID, mBuilder.build());
                     break;
                 case CommonValue.ACTION_STOP:
                     Toast.makeText(context, "STOP", Toast.LENGTH_SHORT).show();
@@ -172,11 +168,10 @@ public class MyMusicService extends Service {
                     //stopForeground(STOP_FOREGROUND_REMOVE);
                     if (mediaController != null) {
                         mediaController.stop();
-                        mediaController = null;
                         onDestroy();
                     }
-                    stopSelf();
 
+//                    stopSelf();
                     break;
             }
         }
@@ -206,6 +201,22 @@ public class MyMusicService extends Service {
 
     public boolean isPlaying() {
         return isPlaying;
+    }
+
+    public int getCurrentSongPlay() {
+        return currentSongPlay;
+    }
+
+    public void setCurrentSongPlay(int currentSongPlay) {
+        this.currentSongPlay = currentSongPlay;
+    }
+
+    public MediaController getMediaController() {
+        return mediaController;
+    }
+
+    public void setMediaController(MediaController mediaController) {
+        this.mediaController = mediaController;
     }
 
     public void setPlaying(boolean playing) {

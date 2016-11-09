@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:text="Chelsea Dagger"
+            android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="25dp" />
 
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:text="The polite - Back pepper"
+            android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="18dp" />
 
@@ -57,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:text="1/10"
                 android:textColor="@android:color/white"
                 android:textSize="18dp" />
 
@@ -68,7 +67,6 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="2:07/3:33"
                 android:textColor="@android:color/white"
                 android:textSize="18dp" />
         </LinearLayout>
@@ -79,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#1976D2"
-        android:progress="50" />
+        android:progress="0" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -108,8 +106,8 @@
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:scaleType="centerInside"
-                android:visibility="invisible"
-                android:src="@drawable/continuous" />
+                android:src="@drawable/continuous"
+                android:visibility="invisible" />
         </FrameLayout>
 
 
@@ -187,10 +185,10 @@
                 android:id="@+id/iv_no_loop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/no_loop"
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:scaleType="centerInside"
+                android:src="@drawable/no_loop"
                 android:visibility="visible" />
 
         </FrameLayout>

@@ -35,19 +35,29 @@ public class MediaController {
         this.mContext = mContext;
         mPlayer = new MediaPlayer();
         mediaState = STATE_IDLE;
+        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                next();
+            }
+        });
         indexSong = 0;
     }
 
-    public MediaController(Context mContext, List<Song> arrSong) {
-        this.mContext = mContext;
-        this.listSong = arrSong;
-        mPlayer = new MediaPlayer();
-        mediaState = STATE_IDLE;
-        indexSong = 0;
-    }
+//    public MediaController(Context mContext, List<Song> arrSong) {
+//        this.mContext = mContext;
+//        this.listSong = arrSong;
+//        mPlayer = new MediaPlayer();
+//        mediaState = STATE_IDLE;
+//        indexSong = 0;
+//    }
 
     public void setIndexSong(int indexSong) {
         this.indexSong = indexSong;
+    }
+
+    public int getIndexSong() {
+        return indexSong;
     }
 
     public MediaPlayer getmPlayer() {

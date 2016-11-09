@@ -16,7 +16,6 @@ import com.dvt.samsung.finalapp.MainFragmentActivity;
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.model.TypeItem;
 import com.dvt.samsung.utils.CommonValue;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
