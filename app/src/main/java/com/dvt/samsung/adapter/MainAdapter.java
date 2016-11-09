@@ -42,7 +42,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.tvNumber.setText(number);
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inSampleSize = 4;
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_icon, opts);
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), item.getId(), opts);
         holder.ivType.setImageBitmap(bitmap);
 //        Picasso.with(context).load(bitmap).into(holder.ivType);
         holder.llMain.setOnClickListener(new View.OnClickListener() {

@@ -11,7 +11,7 @@
         android:layout_width="70dp"
         android:layout_height="match_parent"
         android:padding="5dp"
-        app:srcCompat="@drawable/icon_app" />
+        android:src="@drawable/music_song_icon" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -52,6 +52,7 @@ public class MyMusicService extends Service {
         mediaController.setListSong(arrSong);
         runForeground();
         playSong(currentSongPlay);
+        setPlaying(true);
     }
 
     public void playSong(int currentSongPlay) {

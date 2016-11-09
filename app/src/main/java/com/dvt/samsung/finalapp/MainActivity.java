@@ -11,11 +11,9 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dvt.samsung.adapter.MainAdapter;
-import com.dvt.samsung.adapter.MainBaseAdapter;
 import com.dvt.samsung.model.TypeItem;
 
 import java.util.ArrayList;
@@ -87,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -96,13 +93,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }, 2000);
     }
-    //    private boolean isMyServiceRunning(Class<?> serviceClass) {
-//        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-//        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-//            if (serviceClass.getName().equals(service.service.getClassName())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 }

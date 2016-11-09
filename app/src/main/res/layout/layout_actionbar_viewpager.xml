@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="#1565C0"
@@ -12,22 +13,40 @@
         android:padding="10dp"
         android:src="@drawable/go_back" />
 
-    <TextView
-        android:id="@+id/tv_name_viewpager"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="3dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="Music of Life"
-        android:textColor="@android:color/white"
-        android:textSize="20dp" />
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tv_name_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Music of Life"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:visibility="visible" />
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/edt_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:visibility="invisible"
+            app:queryHint="@string/search_hint" />
+    </FrameLayout>
+
 
     <ImageView
         android:id="@+id/im_other_viewpager"
         android:layout_width="40dp"
         android:layout_height="match_parent"
-        android:padding="10dp"
         android:layout_marginRight="10dp"
+        android:padding="10dp"
         android:src="@drawable/searcher" />
 </LinearLayout>

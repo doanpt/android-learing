@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -54,7 +55,11 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        unbindService(serviceConnection);
+        try {
+            unbindService(serviceConnection);
+        } catch (Exception e) {
+            Log.e("ERROR BIND SERVICE", "SERVICE NOT BIND");
+        }
         super.onDestroy();
     }
 
@@ -64,7 +69,7 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
             tvNameAction.setText(song.getName());
             tvSongName.setText(song.getName());
             tvSongArtist.setText(song.getArtist());
-            tvNumberSong.setText(myMusicService.getMediaController().getIndexSong() + "/" + myMusicService.getMediaController().getListSong().size());
+            tvNumberSong.setText((myMusicService.getMediaController().getIndexSong()+1) + "/" + myMusicService.getMediaController().getListSong().size());
             long duration = myMusicService.getMediaController().getmPlayer().getDuration();
             long current = myMusicService.getMediaController().getmPlayer().getCurrentPosition();
             String time = milliSecondsToTimer(current) + "/" + milliSecondsToTimer(duration);

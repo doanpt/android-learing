@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import java.util.Set;
  */
 
 public class AlbumBaseAdapter extends BaseAdapter {
+    //        implements Filterable {
     private Context context;
     private LayoutInflater inflater;
     private List<String> names = new ArrayList<>();
@@ -76,10 +79,10 @@ public class AlbumBaseAdapter extends BaseAdapter {
         List<Song> list = albums.get(names.get(position));
         viewHolder.tvName.setText(names.get(position));
         viewHolder.tvNumber.setText(String.valueOf(list.size()) + " bài hát");
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inSampleSize = 4;
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_icon, opts);
-        viewHolder.ivAlbum.setImageBitmap(bitmap);
+//        BitmapFactory.Options opts = new BitmapFactory.Options();
+//        opts.inSampleSize = 4;
+//        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_song_icon, opts);
+//        viewHolder.ivAlbum.setImageBitmap(bitmap);
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,4 +99,49 @@ public class AlbumBaseAdapter extends BaseAdapter {
         TextView tvNumber;
         LinearLayout linearLayout;
     }
+
+//    Filter myFilter = new Filter() {
+//        @Override
+//        protected FilterResults performFiltering(CharSequence constraint) {
+//            FilterResults filterResults = new FilterResults();
+//            HashMap<String, List<Song>> albumsSearch = new HashMap<>();
+//            private List<String> namesSearch = new ArrayList<>();
+//            String query = (String) constraint;
+//            if (constraint != null && names != null && !"".equals(query)) {
+//                int length = names.size();
+//                int i = 0;
+//                while (i < length) {
+//                    Song item = albums.get(names.get(i)).get(0);
+//                    String nameSong = item.getName().toLowerCase();
+//                    if (nameSong.contains(query)) {
+//                        namesSearch.add()
+//                        albumsSearch.put(item.getAlbum(), albums.get(names.get(i)));
+//                    }
+//                    i++;
+//                }
+//                filterResults.values = albumsSearch;
+//                filterResults.count = albumsSearch.size();
+//            } else {
+//                filterResults.values = albums;
+//                filterResults.count = albums.size();
+//            }
+//            return filterResults;
+//        }
+//
+//        @SuppressWarnings("unchecked")
+//        @Override
+//        protected void publishResults(CharSequence contraint, FilterResults results) {
+//            albums = (HashMap<String, List<Song>>) results.values;
+//            if (results.count > 0) {
+//                notifyDataSetChanged();
+//            } else {
+//                notifyDataSetInvalidated();
+//            }
+//        }
+//    };
+//
+//    @Override
+//    public Filter getFilter() {
+//        return myFilter;
+//    }
 }

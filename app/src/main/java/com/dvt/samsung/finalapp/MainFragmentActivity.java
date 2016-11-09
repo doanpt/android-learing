@@ -1,7 +1,6 @@
 package com.dvt.samsung.finalapp;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -10,37 +9,30 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvt.samsung.adapter.ViewPagerAdapter;
 import com.dvt.samsung.model.Song;
 import com.dvt.samsung.service.MyMusicService;
-import com.dvt.samsung.utils.CommonMethod;
 import com.dvt.samsung.utils.CommonValue;
 import com.dvt.samsung.utils.OnPlayMusic;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +51,7 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
     public static List<Song> songs;
     public static HashMap<String, List<Song>> albums;
     public static HashMap<String, List<Song>> artists;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,15 +182,6 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
             if (artists.get("Undefine").isEmpty()) artists.remove("Undefine");
             Log.d("tag", "size songs: " + songs.size());
         }
-
-//        viewPager = (ViewPager) findViewById(R.id.viewpager);
-//        viewPager.setAdapter(new ViewpagerAdapter(getSupportFragmentManager()));
-    }
-
-    public byte[] getBytesFromBitmap(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 70, stream);
-        return stream.toByteArray();
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -217,14 +201,14 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
         viewPagerAdapter = new ViewPagerAdapter(this, getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(viewPagerAdapter);
-        int posistonTabClick = getIntent().getIntExtra(CommonValue.KEY_MAIN_CLICK_ITEM, 0);
+        int positionTabClick = getIntent().getIntExtra(CommonValue.KEY_MAIN_CLICK_ITEM, 0);
         String[] tabBackgroundIds = new String[]{"Bài hát", "Album", "Nghệ sĩ", "Playlist", "Download"};
         tab = (TabLayout) findViewById(R.id.tab);
         tab.setupWithViewPager(viewPager);
         for (int i = 0; i < viewPagerAdapter.getCount(); i++) {
             tab.getTabAt(i).setText(tabBackgroundIds[i]);
         }
-        TabLayout.Tab tabSelection = tab.getTabAt(posistonTabClick);
+        TabLayout.Tab tabSelection = tab.getTabAt(positionTabClick);
         tabSelection.select();
         ivBack = (ImageView) findViewById(R.id.im_back_viewpager);
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -233,6 +217,29 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
                 finish();
             }
         });
+    }
+
+    private void searchOnTab(int select,String query) {
+        switch (select) {
+            case 0:
+                ArrayList<Song> arrSong= (ArrayList<Song>) MainFragmentActivity.songs;
+                ArrayList<Song> arrResult=new ArrayList<>();
+                query.toLowerCase();
+//                if("".equals(query)){
+//                    MainFragmentActivity.this.getFragmentManager().get
+//                }
+                for(Song song:arrSong){
+                    String name=song.getName().toLowerCase();
+                    if(name.contains(query)){
+                        arrResult.add(song);
+                    }
+                }
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
     }
 
     public boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -259,7 +266,7 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
                 mySongs.add(song);
             }
             if (myMusicService != null) {
-                myMusicService.setArrSong(mySongs);
+                myMusicService.getMediaController().setListSong(mySongs);
                 myMusicService.playSong(position);
             }
             myMusicService.setPlaying(true);
@@ -268,7 +275,6 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
 
     @Override
     protected void onDestroy() {
-        unbindService(serviceConnection);
         super.onDestroy();
     }
 }

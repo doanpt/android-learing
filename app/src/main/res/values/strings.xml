@@ -3,4 +3,5 @@
     <string name="open_navigation">OPEN</string>
     <string name="close_navigation">CLOSE</string>
     <string name="title_main_fragment">Music of Life</string>
+    <string name="search_hint">Enter key search</string>
 </resources>

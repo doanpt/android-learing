@@ -76,10 +76,10 @@ public class ArtistBaseAdapter extends BaseAdapter {
         List<Song> list = artist.get(names.get(position));
         viewHolder.tvArtist.setText(names.get(position).toString() + " ");
         viewHolder.tvNumber.setText(String.valueOf(list.size()) + " bài hát");
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inSampleSize = 4;
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_icon, opts);
-        viewHolder.ivArtist.setImageBitmap(bitmap);
+//        BitmapFactory.Options opts = new BitmapFactory.Options();
+//        opts.inSampleSize = 4;
+//        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_song_icon, opts);
+//        viewHolder.ivArtist.setImageBitmap(bitmap);
         viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
