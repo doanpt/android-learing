@@ -11,8 +11,22 @@
     <!--android:scrollbars="vertical">-->
 
     <!--</android.support.v7.widget.RecyclerView>-->
-    <ListView
-        android:id="@+id/lv_song"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lv_song"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <include
+            android:id="@+id/mini_play_song_fragment"
+            layout="@layout/layout_mini_play"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:visibility="invisible"
+            android:layout_gravity="bottom" />
+    </FrameLayout>
+
+
 </LinearLayout>

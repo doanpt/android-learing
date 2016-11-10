@@ -12,19 +12,15 @@ import android.os.IBinder;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dvt.samsung.adapter.SongBaseAdapter;
-import com.dvt.samsung.fragment.AlbumFragment;
 import com.dvt.samsung.model.Song;
 import com.dvt.samsung.service.MyMusicService;
 import com.dvt.samsung.utils.CommonValue;
-import com.dvt.samsung.utils.OnListListener;
-import com.dvt.samsung.utils.OnPlayMusic;
+import com.dvt.samsung.listener.OnPlayMusic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +45,7 @@ public class ShowListSongActivity extends Activity {
         setContentView(R.layout.activity_show_list_song);
         arraySong = new ArrayList<>();
         Intent intent = getIntent();
-        arraySong = intent.getParcelableArrayListExtra(CommonValue.KEY_LIST_SONG_CICK);
+        arraySong = intent.getParcelableArrayListExtra(CommonValue.KEY_LIST_SONG_CLICK);
         fromShow = intent.getIntExtra(CommonValue.KEY_FROM_SHOW_LIST, 0);
         tvTitle = (TextView) findViewById(R.id.tv_name_viewpager);
         ivBack = (ImageView) findViewById(R.id.im_back_viewpager);
@@ -101,7 +97,7 @@ public class ShowListSongActivity extends Activity {
         if (!isMyServiceRunning(MyMusicService.class)) {
             Intent intent = new Intent(this, MyMusicService.class);
             intent.putExtra(CommonValue.KEY_POSITION_SONG, position);
-            intent.putExtra(CommonValue.KEY_LIST_SONG_CICK, (ArrayList<? extends Parcelable>) paths);
+            intent.putExtra(CommonValue.KEY_LIST_SONG_CLICK, (ArrayList<? extends Parcelable>) paths);
             startService(intent);
             bindService(intent, serviceConnection, BIND_AUTO_CREATE);
         } else {
@@ -114,7 +110,6 @@ public class ShowListSongActivity extends Activity {
                         for (Song song : paths) {
                             mySongs.add(song);
                         }
-                        Log.d("run", "sdfsdfa");
                         isRun = true;
                         myMusicService.getMediaController().setListSong(mySongs);
                         myMusicService.playSong(position);

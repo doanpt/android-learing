@@ -9,8 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="60dp" />
 
-    <ListView
-        android:id="@+id/lv_show_song"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lv_show_song"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></ListView>
+
+        <include
+            android:id="@+id/mini_play_show_list"
+            layout="@layout/layout_mini_play"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:visibility="invisible"
+            android:layout_gravity="bottom" />
+    </FrameLayout>
+
 </LinearLayout>

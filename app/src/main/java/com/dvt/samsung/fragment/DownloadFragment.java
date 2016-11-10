@@ -22,7 +22,6 @@ public class DownloadFragment extends Fragment {
     public DownloadFragment(Context context) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         view = layoutInflater.inflate(R.layout.fragment_download, null);
-//        this.initializeComponent();
 
 
     }

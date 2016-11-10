@@ -30,15 +30,8 @@ public class TypeItem {
         return nameType;
     }
 
-    public void setNameType(String nameType) {
-        this.nameType = nameType;
-    }
-
     public String getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
 }

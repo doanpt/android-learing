@@ -12,14 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.dvt.samsung.adapter.AlbumBaseAdapter;
 import com.dvt.samsung.adapter.ArtistBaseAdapter;
 import com.dvt.samsung.finalapp.MainFragmentActivity;
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.finalapp.ShowListSongActivity;
 import com.dvt.samsung.model.Song;
 import com.dvt.samsung.utils.CommonValue;
-import com.dvt.samsung.utils.OnListListener;
+import com.dvt.samsung.listener.OnListListener;
 
 import java.util.ArrayList;
 import java.util.List;

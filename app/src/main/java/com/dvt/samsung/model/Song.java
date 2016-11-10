@@ -15,15 +15,15 @@ public class Song implements Parcelable {
     private long duration;
 //    byte[] aByte;
 
-    public Song(String name, String fileName, String path, String artist, String album, long duration){
-//            ,byte[] aByte) {
+    public Song(String name, String fileName, String path, String artist, String album, long duration) {
+//      ,byte[] aByte) {
         this.name = name;
         this.fileName = fileName;
         this.path = path;
         this.artist = artist;
         this.album = album;
         this.duration = duration;
-//        this.aByte=aByte;
+//      this.aByte=aByte;
         convertDate();
     }
 
@@ -58,10 +58,6 @@ public class Song implements Parcelable {
         this.name = name;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
     public void setPath(String path) {
         this.path = path;
     }
@@ -74,20 +70,8 @@ public class Song implements Parcelable {
         this.album = album;
     }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public String getFileName() {
-        return fileName;
     }
 
     public String getPath() {
@@ -102,26 +86,10 @@ public class Song implements Parcelable {
         return album;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
     private void convertDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
         time = dateFormat.format(new Date(duration));
     }
-
-//    public byte[] getaByte() {
-//        return aByte;
-//    }
-
-//    public void setaByte(byte[] aByte) {
-//        this.aByte = aByte;
-//    }
 
     @Override
     public int describeContents() {
@@ -137,6 +105,14 @@ public class Song implements Parcelable {
         dest.writeString(album);
         dest.writeString(time);
         dest.writeLong(duration);
-//        dest.writeByteArray(aByte);
+//      dest.writeByteArray(aByte);
     }
+
+//    public byte[] getaByte() {
+//        return aByte;
+//    }
+
+//    public void setaByte(byte[] aByte) {
+//        this.aByte = aByte;
+//    }
 }

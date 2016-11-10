@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView lvType;
     private ArrayList<TypeItem> arrType;
     private MainAdapter adapter;
-    //    private ListView lvType;
-//    private MainBaseAdapter adapter;
+//  private ListView lvType;
+//  private MainBaseAdapter adapter;
     private DrawerLayout drawerLayout;
     private NavigationView navigation;
     private ImageView btnMenu;
@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         lvType.setLayoutManager(linearLayoutManager);
-//        lvType = (ListView) findViewById(R.id.recycler_view_main);
         arrType = new ArrayList<>();
         arrType.add(new TypeItem(R.drawable.song, "Bài hát", "122"));
         arrType.add(new TypeItem(R.drawable.album, "Album", "12"));
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         arrType.add(new TypeItem(R.drawable.playlist, "Playlist", "11"));
         arrType.add(new TypeItem(R.drawable.download, "Download", "10"));
         adapter = new MainAdapter(this, arrType);
+        //lvType = (ListView) findViewById(R.id.recycler_view_main);
         //adapter=new MainBaseAdapter(this,arrType);
         lvType.setAdapter(adapter);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);

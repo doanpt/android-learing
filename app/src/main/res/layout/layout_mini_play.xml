@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#1976D2"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_continuous"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="20dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/shuffle" />
+
+            <ImageView
+                android:id="@+id/iv_no_continuous"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="20dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/continuous"
+                android:visibility="invisible" />
+        </FrameLayout>
+
+
+        <ImageView
+            android:id="@+id/iv_previous"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/previous_track" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_play"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="12dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/play"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/iv_pause"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="12dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/pause"
+                android:visibility="visible" />
+        </FrameLayout>
+
+
+        <ImageView
+            android:id="@+id/iv_next"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/next_button" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_loop_all"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="20dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/loop"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/iv_loop_one"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="20dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/loop_one"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/iv_no_loop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="20dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/no_loop"
+                android:visibility="visible" />
+
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

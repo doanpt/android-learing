@@ -2,12 +2,16 @@ package com.dvt.samsung.finalapp;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -16,16 +20,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dvt.samsung.model.Song;
 import com.dvt.samsung.service.MyMusicService;
 import com.dvt.samsung.utils.CommonValue;
+import com.dvt.samsung.listener.ShakeListener;
 
-import java.text.SimpleDateFormat;
+import java.io.File;
 
 
 public class PlaySongActivity extends Activity implements View.OnClickListener {
-    private ImageView btnPlay, btnPause, btnShuffle, btnPrevious, btnNext, btnLoopAll, btnLoopOne, btnNoLoop, btnConiuous;
+    private ImageView btnPlay, btnPause, btnShuffle, btnPrevious, btnNext, btnLoopAll, btnLoopOne, btnNoLoop, btnContiuous;
     private SeekBar seekBar;
     private ImageView ivShare, ivFavorite, ivOther, ivBackToList, ivImageSong;
     private TextView tvNameAction, tvSongName, tvSongArtist, tvNumberSong, tvTimeSong;
@@ -36,29 +42,84 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
     private SharedPreferences sharedPreferences;
     public int loopMusic;
     public boolean shuffle = true;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeListener mShakeDetector;
+    private BroadCastNotification broadCastNotification = new BroadCastNotification();
+    private IntentFilter intentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_song);
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(CommonValue.ACTION_PAUSE_SONG_FROM_NOTIFICATION);
+        registerReceiver(broadCastNotification, intentFilter);
         sharedPreferences = getSharedPreferences(CommonValue.KEY_SAVE_MODE, Context.MODE_PRIVATE);
         loopMusic = sharedPreferences.getInt(CommonValue.KEY_LOOP_MUSIC, 1);
         shuffle = sharedPreferences.getBoolean(CommonValue.KEY_SHUFFLE, true);
         Intent intent = getIntent();
-//        song = intent.getParcelableExtra(CommonValue.KEY_SEND_A_SONG);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeListener();
+        mShakeDetector.setOnShakeListener(new ShakeListener.OnShakeListener() {
+
+            @Override
+            public void onShake(int count) {
+                /*
+                 * The following method, "handleShakeEvent(count):" is a stub //
+				 * method you would use to setup whatever you want done once the
+				 * device has been shook.
+				 */
+                //if
+                myMusicService.getMediaController().next();
+            }
+        });
         sizeOfSong = intent.getStringExtra(CommonValue.KEY_SEND_SIZE_OF_SONG);
         if (isMyServiceRunning(MyMusicService.class)) {
             bindService(new Intent(this, MyMusicService.class), serviceConnection, BIND_AUTO_CREATE);
         }
         initView();
         setViewLoopAndShuffle(loopMusic, shuffle);
-        PlaySongActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showUI();
-                handler.postDelayed(this, 200);
+        PlaySongActivity.this.runOnUiThread(runnable);
+    }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            showUI();
+            handler.postDelayed(this, 200);
+        }
+    };
+    class BroadCastNotification extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case CommonValue.ACTION_PAUSE_SONG_FROM_NOTIFICATION:
+                    boolean isPlaying = intent.getBooleanExtra(CommonValue.KEY_SEND_PAUSE, false);
+                    if (isPlaying) {
+                        btnPause.setVisibility(View.VISIBLE);
+                        btnPlay.setVisibility(View.INVISIBLE);
+                    } else {
+                        btnPause.setVisibility(View.INVISIBLE);
+                        btnPlay.setVisibility(View.VISIBLE);
+                    }
+                    break;
             }
-        });
+        }
+    }
+    @Override
+    protected void onResume() {
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(mShakeDetector);
+        super.onPause();
     }
 
     @Override
@@ -87,16 +148,17 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
         }
         if (shuffle) {
             btnShuffle.setVisibility(View.VISIBLE);
-            btnConiuous.setVisibility(View.INVISIBLE);
+            btnContiuous.setVisibility(View.INVISIBLE);
         } else {
             btnShuffle.setVisibility(View.INVISIBLE);
-            btnConiuous.setVisibility(View.VISIBLE);
+            btnContiuous.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     protected void onDestroy() {
         try {
+            handler.removeCallbacks(runnable);
             unbindService(serviceConnection);
         } catch (Exception e) {
             Log.e("ERROR BIND SERVICE", "SERVICE NOT BIND");
@@ -174,7 +236,7 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
 
     private void initView() {
         btnShuffle = (ImageView) findViewById(R.id.iv_continuous);
-        btnConiuous = (ImageView) findViewById(R.id.iv_no_continuous);
+        btnContiuous = (ImageView) findViewById(R.id.iv_no_continuous);
         btnPlay = (ImageView) findViewById(R.id.iv_play);
         btnPause = (ImageView) findViewById(R.id.iv_pause);
         btnPrevious = (ImageView) findViewById(R.id.iv_previous);
@@ -213,7 +275,7 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
         tvSongName = (TextView) findViewById(R.id.tv_song_name);
         tvTimeSong = (TextView) findViewById(R.id.tv_time);
         btnShuffle.setOnClickListener(this);
-        btnConiuous.setOnClickListener(this);
+        btnContiuous.setOnClickListener(this);
         btnLoopAll.setOnClickListener(this);
         btnLoopOne.setOnClickListener(this);
         btnNoLoop.setOnClickListener(this);
@@ -222,12 +284,23 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
         btnPlay.setOnClickListener(this);
         btnPause.setOnClickListener(this);
         ivBackToList.setOnClickListener(this);
+        ivShare.setOnClickListener(this);
+        ivFavorite.setOnClickListener(this);
         tvNumberSong.setText(sizeOfSong);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.im_favorite:
+                Toast.makeText(this, "You clicked Favorite but sorry, we aren't support this function right now", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.im_share:
+                File audio = new File(myMusicService.getMediaController().getListSong().get(myMusicService.getMediaController().getIndexSong()).getPath());
+                Intent intent = new Intent(Intent.ACTION_SEND).setType("audio/*");
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(audio));
+                startActivity(Intent.createChooser(intent, "Share to"));
+                break;
             case R.id.im_back:
                 finish();
                 break;
@@ -235,14 +308,14 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
                 shuffle = false;
                 myMusicService.getMediaController().setShuffle(shuffle);
                 sharedPreferences.edit().putBoolean(CommonValue.KEY_SHUFFLE, shuffle).commit();
-                btnConiuous.setVisibility(View.VISIBLE);
+                btnContiuous.setVisibility(View.VISIBLE);
                 btnShuffle.setVisibility(View.INVISIBLE);
                 break;
             case R.id.iv_no_continuous:
                 shuffle = true;
                 myMusicService.getMediaController().setShuffle(shuffle);
                 sharedPreferences.edit().putBoolean(CommonValue.KEY_SHUFFLE, shuffle).commit();
-                btnConiuous.setVisibility(View.INVISIBLE);
+                btnContiuous.setVisibility(View.INVISIBLE);
                 btnShuffle.setVisibility(View.VISIBLE);
                 break;
             case R.id.iv_play:

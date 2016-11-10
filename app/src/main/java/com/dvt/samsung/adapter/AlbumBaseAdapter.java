@@ -1,21 +1,17 @@
 package com.dvt.samsung.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.model.Song;
-import com.dvt.samsung.utils.OnListListener;
+import com.dvt.samsung.listener.OnListListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +24,7 @@ import java.util.Set;
  */
 
 public class AlbumBaseAdapter extends BaseAdapter {
-    //        implements Filterable {
+    //implements Filterable {
     private Context context;
     private LayoutInflater inflater;
     private List<String> names = new ArrayList<>();

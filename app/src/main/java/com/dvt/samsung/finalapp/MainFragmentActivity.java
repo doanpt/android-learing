@@ -20,18 +20,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvt.samsung.adapter.ViewPagerAdapter;
 import com.dvt.samsung.model.Song;
 import com.dvt.samsung.service.MyMusicService;
 import com.dvt.samsung.utils.CommonValue;
-import com.dvt.samsung.utils.OnPlayMusic;
+import com.dvt.samsung.listener.OnPlayMusic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,8 +112,6 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
         if (musicCursor != null && musicCursor.moveToFirst()) {
             int titleColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.TITLE);
-            int idColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media._ID);
             int artistColumn = musicCursor.getColumnIndex
                     (MediaStore.Audio.Media.ARTIST);
             int albumColumn = musicCursor.getColumnIndex
@@ -175,7 +171,7 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
         @Override
         public void onServiceDisconnected(ComponentName name) {
             myMusicService = null;
-
+            myMusicService.setPlaying(false);
         }
     };
 

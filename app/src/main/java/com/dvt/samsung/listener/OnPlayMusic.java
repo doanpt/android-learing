@@ -1,4 +1,4 @@
-package com.dvt.samsung.utils;
+package com.dvt.samsung.listener;
 
 import com.dvt.samsung.model.Song;
 
@@ -9,5 +9,5 @@ import java.util.List;
  */
 
 public interface OnPlayMusic {
-    void playSong(List<Song> paths, int postion);
+    void playSong(List<Song> paths, int position);
 }

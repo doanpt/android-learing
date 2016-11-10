@@ -1,8 +1,6 @@
 package com.dvt.samsung.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,7 @@ import android.widget.TextView;
 
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.model.Song;
-import com.dvt.samsung.utils.OnListListener;
+import com.dvt.samsung.listener.OnListListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,8 +33,8 @@ public class ArtistBaseAdapter extends BaseAdapter {
     public ArtistBaseAdapter(Context context, HashMap<String, List<Song>> artist, OnListListener listListener) {
         this.context = context;
         this.artist = artist;
-        Set<String> setnames = artist.keySet();
-        Iterator<String> iterator = setnames.iterator();
+        Set<String> setNames = artist.keySet();
+        Iterator<String> iterator = setNames.iterator();
         while (iterator.hasNext()) {
             names.add(iterator.next());
         }

@@ -12,16 +12,13 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import com.dvt.samsung.finalapp.MainFragmentActivity;
 import com.dvt.samsung.finalapp.PlaySongActivity;
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.media.MediaController;
 import com.dvt.samsung.model.Song;
 import com.dvt.samsung.utils.CommonValue;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -35,11 +32,12 @@ public class MyMusicService extends Service {
     private MediaController mediaController;
     private ArrayList<Song> arrSong;
     private BroadCastMusic broadCastMusic = new BroadCastMusic();
+    private IntentFilter intentFilter = new IntentFilter();
     private RemoteViews remoteViews;
     private NotificationCompat.Builder mBuilder;
     private boolean isPlaying;
     private int currentSongPlay;
-    private IntentFilter intentFilter = new IntentFilter();
+
 
     @Nullable
     @Override
@@ -124,7 +122,7 @@ public class MyMusicService extends Service {
                     mediaController.playOrPause(true);
                     return;
                 } else if (mediaController.getLoop() == 3) {
-                    //neu che do 0 lap va da chay den het danh sach thi k play nua
+                    //neu che do lap all va da chay den het danh sach thi k play nua
                     if (mediaController.getIndexSong() + 1 == mediaController.getListSong().size()) {
                         mediaController.setIndexSong(0);
                         mediaController.playOrPause(true);
@@ -169,15 +167,13 @@ public class MyMusicService extends Service {
                         remoteViews.setImageViewResource(R.id.ibPause, R.drawable.pause);
                     }
                     isPlaying = !isPlaying;
+                    Intent intentPauseOrPlay = new Intent(CommonValue.ACTION_PAUSE_SONG_FROM_NOTIFICATION);
+                    intentPauseOrPlay.putExtra(CommonValue.KEY_SEND_PAUSE, isPlaying);
+                    sendBroadcast(intentPauseOrPlay);
                     startForeground(CommonValue.NOTIFICATION_ID, mBuilder.build());
                     break;
                 case CommonValue.ACTION_STOP:
-                    Toast.makeText(context, "STOP", Toast.LENGTH_SHORT).show();
-                    if (mediaController != null) {
-                        mediaController.stop();
-                        mediaController.getmPlayer().release();
-                        onDestroy();
-                    }
+                    stopSelf();
                     stopForeground(true);
                     break;
             }
@@ -191,41 +187,29 @@ public class MyMusicService extends Service {
                 this).setSmallIcon(R.drawable.notification_icon).setContent(
                 remoteViews);
         remoteViews.setTextViewText(R.id.tvTitle, "Ahihi");
-        Intent intentPress=new Intent(this, PlaySongActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, CommonValue.REQUEST_CODE_NOTIFICATION, intentPress , 0);
+        Intent intentPress = new Intent(this, PlaySongActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, CommonValue.REQUEST_CODE_NOTIFICATION, intentPress, 0);
         mBuilder.setContentIntent(pendingIntent);
-        PendingIntent pre = PendingIntent.getBroadcast(context, CommonValue.REQUEST_CODE_NOTIFICATION, new Intent(CommonValue.ACTION_PREVIOUS), 0);
+        PendingIntent pre = PendingIntent.getBroadcast(context, CommonValue.REQUEST_CODE_NOTIFICATION,
+                new Intent(CommonValue.ACTION_PREVIOUS), 0);
         remoteViews.setOnClickPendingIntent(R.id.ibPre, pre);
-        PendingIntent next = PendingIntent.getBroadcast(context, CommonValue.REQUEST_CODE_NOTIFICATION, new Intent(CommonValue.ACTION_NEXT), 0);
+        PendingIntent next = PendingIntent.getBroadcast(context, CommonValue.REQUEST_CODE_NOTIFICATION,
+                new Intent(CommonValue.ACTION_NEXT), 0);
         remoteViews.setOnClickPendingIntent(R.id.ibNext, next);
         Intent intentP = new Intent(CommonValue.ACTION_PAUSE_SONG);
         intentP.putExtra(CommonValue.KEY_SEND_PAUSE, isPlaying);
         PendingIntent pause = PendingIntent.getBroadcast(context, CommonValue.REQUEST_CODE_NOTIFICATION, intentP, 0);
         remoteViews.setOnClickPendingIntent(R.id.ibPause, pause);
-        PendingIntent close = PendingIntent.getBroadcast(context, CommonValue.REQUEST_CODE_NOTIFICATION, new Intent(CommonValue.ACTION_STOP), 0);
+        PendingIntent close = PendingIntent.getBroadcast(context, CommonValue.REQUEST_CODE_NOTIFICATION,
+                new Intent(CommonValue.ACTION_STOP), 0);
         remoteViews.setOnClickPendingIntent(R.id.ibNotiClose, close);
         startForeground(CommonValue.NOTIFICATION_ID, mBuilder.build());
-    }
-
-    public boolean isPlaying() {
-        return isPlaying;
-    }
-
-    public int getCurrentSongPlay() {
-        return currentSongPlay;
-    }
-
-    public void setCurrentSongPlay(int currentSongPlay) {
-        this.currentSongPlay = currentSongPlay;
     }
 
     public MediaController getMediaController() {
         return mediaController;
     }
 
-    public void setMediaController(MediaController mediaController) {
-        this.mediaController = mediaController;
-    }
 
     public void setPlaying(boolean playing) {
         isPlaying = playing;
@@ -236,6 +220,21 @@ public class MyMusicService extends Service {
         unregisterReceiver(broadCastMusic);
         stopForeground(true);
         super.onDestroy();
-
     }
+
+//    public boolean isPlaying() {
+//        return isPlaying;
+//    }
+//
+//    public int getCurrentSongPlay() {
+//        return currentSongPlay;
+//    }
+//
+//    public void setCurrentSongPlay(int currentSongPlay) {
+//        this.currentSongPlay = currentSongPlay;
+//    }
+//    public void setMediaController(MediaController mediaController) {
+//        this.mediaController = mediaController;
+//    }
+
 }
