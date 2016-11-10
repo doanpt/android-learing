@@ -3,6 +3,7 @@ package com.dvt.samsung.media;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,27 +31,22 @@ public class MediaController {
     public static int STATE_STOP = 3;
     public static int STATE_SEEKING = 4;
     private int mediaState = STATE_IDLE;
+    private int loop=1;
+    private boolean shuffle=true;
+    private Random random = new Random();
 
     public MediaController(Context mContext) {
         this.mContext = mContext;
         mPlayer = new MediaPlayer();
         mediaState = STATE_IDLE;
-        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                next();
-            }
-        });
+//        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                next();
+//            }
+//        });
         indexSong = 0;
     }
-
-//    public MediaController(Context mContext, List<Song> arrSong) {
-//        this.mContext = mContext;
-//        this.listSong = arrSong;
-//        mPlayer = new MediaPlayer();
-//        mediaState = STATE_IDLE;
-//        indexSong = 0;
-//    }
 
     public void setIndexSong(int indexSong) {
         this.indexSong = indexSong;
@@ -78,9 +74,7 @@ public class MediaController {
                 mPlayer.start();
                 Intent intent = new Intent(CommonValue.ACTION_SEND_DATA);
                 intent.putExtra(CommonValue.KEY_TITLE_SONG, song.getName());
-//                intent.putExtra("artist", getArtist());
                 mContext.sendBroadcast(intent);
-//                mListener.onMediaStarted(song.getName(), song.getTime(), mPlayer.getDuration());
                 mediaState = STATE_PLAYING;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -99,19 +93,27 @@ public class MediaController {
     }
 
     public void next() {
-        if (indexSong < listSong.size() - 2) {
-            indexSong++;
+        if (shuffle) {
+            indexSong = random.nextInt(listSong.size());
         } else {
-            indexSong = 0;
+            if (indexSong < listSong.size() - 2) {
+                indexSong++;
+            } else {
+                indexSong = 0;
+            }
         }
         playOrPause(true);
     }
 
     public void previous() {
-        if (indexSong > 0) {
-            indexSong--;
+        if (shuffle == true) {
+            indexSong = random.nextInt(listSong.size());
         } else {
-            indexSong = listSong.size() - 1;
+            if (indexSong > 0) {
+                indexSong--;
+            } else {
+                indexSong = listSong.size() - 1;
+            }
         }
         playOrPause(true);
     }
@@ -143,11 +145,19 @@ public class MediaController {
         return -1;
     }
 
-//    public void setOnPlayStartedListener(OnPlayStartedListener event) {
-//        mListener = event;
-//    }
-//
-//    public interface OnPlayStartedListener {
-//        void onMediaStarted(String songName, String totalTime, int totalTimeInt);
-//    }
+    public int getLoop() {
+        return loop;
+    }
+
+    public void setLoop(int loop) {
+        this.loop = loop;
+    }
+
+    public boolean isShuffle() {
+        return shuffle;
+    }
+
+    public void setShuffle(boolean shuffle) {
+        this.shuffle = shuffle;
+    }
 }

@@ -15,6 +15,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.dvt.samsung.finalapp.MainFragmentActivity;
+import com.dvt.samsung.finalapp.PlaySongActivity;
 import com.dvt.samsung.finalapp.R;
 import com.dvt.samsung.media.MediaController;
 import com.dvt.samsung.model.Song;
@@ -22,6 +23,7 @@ import com.dvt.samsung.utils.CommonValue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by sev_user on 11/8/2016.
@@ -64,49 +66,35 @@ public class MyMusicService extends Service {
                     //nếu đang lặp thì return
                     if (mediaController.getmPlayer().isLooping()) return;
                     //nếu phát ngẫu nhiên thì random song
-//                    if (shuffle) {
-//                        current = random.nextInt(songs.length);
-//                        play(current);
-//                        return;
-//                    }
-
-//                    if (LOOP == 2 && current + 1 == songs.length) {
-//                        if (ibPause != null && ibPlay != null) {
-//                            ibPause.setImageResource(R.drawable.ic_play_circle_outline);
-//                            ibPlay.setImageResource(R.drawable.ic_play_circle_outline);
-//                        }
-//                        return;
-//                    }
-
+                    if (mediaController.isShuffle()) {
+                        mediaController.setIndexSong(new Random().nextInt(mediaController.getListSong().size()));
+                        mediaController.playOrPause(false);
+                        registerReceiver(broadCastMusic, intentFilter);
+                        isPlaying = true;
+                        remoteViews.setImageViewResource(R.id.ibPause, R.drawable.pause);
+                        startForeground(CommonValue.NOTIFICATION_ID, mBuilder.build());
+                        return;
+                    }
+                    if (mediaController.getLoop() == 2) {
+                        return;
+                    }
                     mediaController.next();
                 }
             });
         } else {
             if (mediaController.getmPlayer().isPlaying())
                 mediaController.stop();
+            mediaController.getmPlayer().reset();
+            if (mediaController.getLoop() == 1)
+                mediaController.getmPlayer().setLooping(true);
             mediaController.setIndexSong(currentSongPlay);
             mediaController.playOrPause(true);
             registerReceiver(broadCastMusic, intentFilter);
-//        mediaController.reset();
-//        if (LOOP == 0) player.setLooping(true);
-//        current = pos;
-//        try {
-//            String path = songs[pos].getPath();
-//            player.setDataSource(path);
-//            player.prepare();
-//            player.start();
-//
-//            Intent intent = new Intent("data");
-//            intent.putExtra("title", getTitle());
-//            intent.putExtra("artist", getArtist());
-//            sendBroadcast(intent);
-//        } catch (IOException e) {
-//            next();
-//        }
+            isPlaying = true;
+            remoteViews.setImageViewResource(R.id.ibPause, R.drawable.pause);
+            startForeground(CommonValue.NOTIFICATION_ID, mBuilder.build());
         }
-        isPlaying = true;
-        remoteViews.setImageViewResource(R.id.ibPause, R.drawable.pause);
-        startForeground(123, mBuilder.build());
+
     }
 
     public class MyBinder extends Binder {
@@ -127,11 +115,32 @@ public class MyMusicService extends Service {
         intentFilter.addAction(CommonValue.ACTION_STOP);
         registerReceiver(broadCastMusic, intentFilter);
         mediaController = new MediaController(context);
-        arrSong = new ArrayList<>();
-    }
+        mediaController.getmPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                //nếu đang lặp thì return
+                if (mediaController.getLoop() == 2) {
+                    mediaController.getmPlayer().setLooping(true);
+                    mediaController.playOrPause(true);
+                    return;
+                } else if (mediaController.getLoop() == 3) {
+                    //neu che do 0 lap va da chay den het danh sach thi k play nua
+                    if (mediaController.getIndexSong() + 1 == mediaController.getListSong().size()) {
+                        mediaController.setIndexSong(0);
+                        mediaController.playOrPause(true);
+                        return;
+                    }
+                }
+                mediaController.next();
+                registerReceiver(broadCastMusic, intentFilter);
+                isPlaying = true;
+                remoteViews.setImageViewResource(R.id.ibPause, R.drawable.pause);
+                startForeground(CommonValue.NOTIFICATION_ID, mBuilder.build());
+                return;
 
-    public void setArrSong(ArrayList<Song> arr) {
-        arrSong = arr;
+            }
+        });
+        arrSong = new ArrayList<>();
     }
 
     class BroadCastMusic extends BroadcastReceiver {
@@ -164,15 +173,12 @@ public class MyMusicService extends Service {
                     break;
                 case CommonValue.ACTION_STOP:
                     Toast.makeText(context, "STOP", Toast.LENGTH_SHORT).show();
-//                    if (player != null && player.isPlaying()) player.stop();
-//                    player.release();
-                    //stopForeground(STOP_FOREGROUND_REMOVE);
                     if (mediaController != null) {
                         mediaController.stop();
+                        mediaController.getmPlayer().release();
                         onDestroy();
                     }
-
-//                    stopSelf();
+                    stopForeground(true);
                     break;
             }
         }
@@ -185,7 +191,8 @@ public class MyMusicService extends Service {
                 this).setSmallIcon(R.drawable.notification_icon).setContent(
                 remoteViews);
         remoteViews.setTextViewText(R.id.tvTitle, "Ahihi");
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, CommonValue.REQUEST_CODE_NOTIFICATION, new Intent(this, MainFragmentActivity.class), 0);
+        Intent intentPress=new Intent(this, PlaySongActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, CommonValue.REQUEST_CODE_NOTIFICATION, intentPress , 0);
         mBuilder.setContentIntent(pendingIntent);
         PendingIntent pre = PendingIntent.getBroadcast(context, CommonValue.REQUEST_CODE_NOTIFICATION, new Intent(CommonValue.ACTION_PREVIOUS), 0);
         remoteViews.setOnClickPendingIntent(R.id.ibPre, pre);

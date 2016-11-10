@@ -108,6 +108,7 @@ public class SongFragment extends Fragment {
                     }
                 });
                 lvSong.setAdapter(adapter);
+
                 adapter.getFilter().filter(newText.toLowerCase().trim());
                 adapter.notifyDataSetChanged();
                 return true;
@@ -130,5 +131,4 @@ public class SongFragment extends Fragment {
         }
         return view;
     }
-
 }

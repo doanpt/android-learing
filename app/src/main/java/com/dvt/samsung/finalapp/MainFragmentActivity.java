@@ -125,35 +125,16 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
             albums.put("Undefine", new ArrayList<Song>());
             artists.put("Undefine", new ArrayList<Song>());
 
-            //add songs to list
-//            int count = 0;
             do {
-                long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
                 String thisAlbum = musicCursor.getString(albumColumn);
                 String path = musicCursor.getString(pathColumn);
-//                MediaMetadataRetriever meta = new MediaMetadataRetriever();
                 Song song = new Song();
                 song.setName(thisTitle);
                 song.setArtist(thisArtist);
                 song.setPath(path);
                 song.setAlbum(thisAlbum);
-//                meta.setDataSource(path);
-//                byte[] mByte;
-//                try {
-//
-//                    mByte = meta.getEmbeddedPicture();
-//
-//                    Log.d("bbbb",mByte.length+"------");
-//                } catch (Exception e) {
-//                    BitmapFactory.Options opts = new BitmapFactory.Options();
-//                    opts.inSampleSize = 4;
-//                    Bitmap bitmap = BitmapFactory.decodeResource(MainFragmentActivity.this.getResources(), R.drawable.music_icon, opts);
-//                    mByte = getBytesFromBitmap(bitmap);
-//                }
-////                song.setPos(count++);
-//                song.setaByte(mByte);
                 if (thisAlbum != null) {
                     if (albums.containsKey(thisAlbum)) albums.get(thisAlbum).add(song);
                     else {
@@ -194,6 +175,7 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
         @Override
         public void onServiceDisconnected(ComponentName name) {
             myMusicService = null;
+
         }
     };
 
@@ -217,29 +199,6 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
                 finish();
             }
         });
-    }
-
-    private void searchOnTab(int select,String query) {
-        switch (select) {
-            case 0:
-                ArrayList<Song> arrSong= (ArrayList<Song>) MainFragmentActivity.songs;
-                ArrayList<Song> arrResult=new ArrayList<>();
-                query.toLowerCase();
-//                if("".equals(query)){
-//                    MainFragmentActivity.this.getFragmentManager().get
-//                }
-                for(Song song:arrSong){
-                    String name=song.getName().toLowerCase();
-                    if(name.contains(query)){
-                        arrResult.add(song);
-                    }
-                }
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-        }
     }
 
     public boolean isMyServiceRunning(Class<?> serviceClass) {

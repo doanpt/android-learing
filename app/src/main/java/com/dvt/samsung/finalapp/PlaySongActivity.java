@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,18 +33,25 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
     private Handler handler = new Handler();
     private Song song;
     private String sizeOfSong;
+    private SharedPreferences sharedPreferences;
+    public int loopMusic;
+    public boolean shuffle = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_song);
+        sharedPreferences = getSharedPreferences(CommonValue.KEY_SAVE_MODE, Context.MODE_PRIVATE);
+        loopMusic = sharedPreferences.getInt(CommonValue.KEY_LOOP_MUSIC, 1);
+        shuffle = sharedPreferences.getBoolean(CommonValue.KEY_SHUFFLE, true);
         Intent intent = getIntent();
-        song = intent.getParcelableExtra(CommonValue.KEY_SEND_A_SONG);
+//        song = intent.getParcelableExtra(CommonValue.KEY_SEND_A_SONG);
         sizeOfSong = intent.getStringExtra(CommonValue.KEY_SEND_SIZE_OF_SONG);
         if (isMyServiceRunning(MyMusicService.class)) {
             bindService(new Intent(this, MyMusicService.class), serviceConnection, BIND_AUTO_CREATE);
         }
         initView();
+        setViewLoopAndShuffle(loopMusic, shuffle);
         PlaySongActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -51,6 +59,39 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
                 handler.postDelayed(this, 200);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
+
+    private void setViewLoopAndShuffle(int loopMusic, boolean shuffle) {
+        switch (loopMusic) {
+            case 1:
+                btnNoLoop.setVisibility(View.VISIBLE);
+                btnLoopOne.setVisibility(View.INVISIBLE);
+                btnLoopAll.setVisibility(View.INVISIBLE);
+                break;
+            case 2:
+                btnNoLoop.setVisibility(View.INVISIBLE);
+                btnLoopOne.setVisibility(View.VISIBLE);
+                btnLoopAll.setVisibility(View.INVISIBLE);
+                break;
+            case 3:
+                btnNoLoop.setVisibility(View.INVISIBLE);
+                btnLoopOne.setVisibility(View.INVISIBLE);
+                btnLoopAll.setVisibility(View.VISIBLE);
+                break;
+        }
+        if (shuffle) {
+            btnShuffle.setVisibility(View.VISIBLE);
+            btnConiuous.setVisibility(View.INVISIBLE);
+        } else {
+            btnShuffle.setVisibility(View.INVISIBLE);
+            btnConiuous.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -69,13 +110,16 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
             tvNameAction.setText(song.getName());
             tvSongName.setText(song.getName());
             tvSongArtist.setText(song.getArtist());
-            tvNumberSong.setText((myMusicService.getMediaController().getIndexSong()+1) + "/" + myMusicService.getMediaController().getListSong().size());
+            tvNumberSong.setText((myMusicService.getMediaController().getIndexSong() + 1) + "/" + myMusicService.getMediaController().getListSong().size());
             long duration = myMusicService.getMediaController().getmPlayer().getDuration();
             long current = myMusicService.getMediaController().getmPlayer().getCurrentPosition();
             String time = milliSecondsToTimer(current) + "/" + milliSecondsToTimer(duration);
             seekBar.setProgress((int) current);
             seekBar.setMax((int) duration);
             tvTimeSong.setText(time);
+            tvSongName.setText(song.getName());
+            tvSongArtist.setText(song.getArtist());
+            tvNameAction.setText(song.getName());
 //            ivImageSong.setImageBitmap(BitmapFactory.decodeByteArray(song.getaByte(), 0, song.getaByte().length));
         }
     }
@@ -107,11 +151,14 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
         public void onServiceConnected(ComponentName name, IBinder service) {
             MyMusicService.MyBinder binder = (MyMusicService.MyBinder) service;
             myMusicService = binder.getMyService();
+            myMusicService.getMediaController().setShuffle(shuffle);
+            myMusicService.getMediaController().setLoop(loopMusic);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             myMusicService = null;
+            myMusicService.setPlaying(false);
         }
     };
 
@@ -175,10 +222,7 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
         btnPlay.setOnClickListener(this);
         btnPause.setOnClickListener(this);
         ivBackToList.setOnClickListener(this);
-        tvSongName.setText(song.getName());
-        tvSongArtist.setText(song.getArtist());
         tvNumberSong.setText(sizeOfSong);
-        tvNameAction.setText(song.getName());
     }
 
     @Override
@@ -188,10 +232,16 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.iv_continuous:
+                shuffle = false;
+                myMusicService.getMediaController().setShuffle(shuffle);
+                sharedPreferences.edit().putBoolean(CommonValue.KEY_SHUFFLE, shuffle).commit();
                 btnConiuous.setVisibility(View.VISIBLE);
                 btnShuffle.setVisibility(View.INVISIBLE);
                 break;
             case R.id.iv_no_continuous:
+                shuffle = true;
+                myMusicService.getMediaController().setShuffle(shuffle);
+                sharedPreferences.edit().putBoolean(CommonValue.KEY_SHUFFLE, shuffle).commit();
                 btnConiuous.setVisibility(View.INVISIBLE);
                 btnShuffle.setVisibility(View.VISIBLE);
                 break;
@@ -216,16 +266,25 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
                 sendBroadcast(intentNext);
                 break;
             case R.id.iv_loop_all:
+                loopMusic = 1;
+                myMusicService.getMediaController().setLoop(loopMusic);
+                sharedPreferences.edit().putInt(CommonValue.KEY_LOOP_MUSIC, loopMusic).commit();
                 btnLoopAll.setVisibility(View.INVISIBLE);
                 btnLoopOne.setVisibility(View.INVISIBLE);
                 btnNoLoop.setVisibility(View.VISIBLE);
                 break;
             case R.id.iv_loop_one:
+                loopMusic = 3;
+                myMusicService.getMediaController().setLoop(loopMusic);
+                sharedPreferences.edit().putInt(CommonValue.KEY_LOOP_MUSIC, loopMusic).commit();
                 btnLoopAll.setVisibility(View.VISIBLE);
                 btnLoopOne.setVisibility(View.INVISIBLE);
                 btnNoLoop.setVisibility(View.INVISIBLE);
                 break;
             case R.id.iv_no_loop:
+                loopMusic = 2;
+                sharedPreferences.edit().putInt(CommonValue.KEY_LOOP_MUSIC, loopMusic).commit();
+                myMusicService.getMediaController().setLoop(loopMusic);
                 btnLoopAll.setVisibility(View.INVISIBLE);
                 btnLoopOne.setVisibility(View.VISIBLE);
                 btnNoLoop.setVisibility(View.INVISIBLE);
