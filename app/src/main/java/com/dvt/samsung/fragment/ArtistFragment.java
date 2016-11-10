@@ -56,7 +56,7 @@ public class ArtistFragment extends Fragment {
                 @Override
                 public void onItemClick(List<Song> songs) {
                     Intent intent = new Intent(getActivity(), ShowListSongActivity.class);
-                    intent.putParcelableArrayListExtra(CommonValue.KEY_LIST_SONG_CICK, (ArrayList<? extends Parcelable>) songs);
+                    intent.putParcelableArrayListExtra(CommonValue.KEY_LIST_SONG_CLICK, (ArrayList<? extends Parcelable>) songs);
                     intent.putExtra(CommonValue.KEY_FROM_SHOW_LIST,1);
                     startActivity(intent);
                 }

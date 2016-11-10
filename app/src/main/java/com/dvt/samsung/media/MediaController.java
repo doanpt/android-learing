@@ -146,7 +146,10 @@ public class MediaController {
         this.shuffle = shuffle;
     }
 
-//    public void seekTo(int progress) {
+    public void setmPlayer(MediaPlayer mPlayer) {
+        this.mPlayer = mPlayer;
+    }
+    //    public void seekTo(int progress) {
 //        mPlayer.seekTo(progress);
 //    }
 

@@ -17,6 +17,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -47,13 +50,20 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
     private ShakeListener mShakeDetector;
     private BroadCastNotification broadCastNotification = new BroadCastNotification();
     private IntentFilter intentFilter;
+    private RotateAnimation anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_song);
+        anim = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        //RotateAnimation anim = new RotateAnimation(0f, 350f, 15f, 15f);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setDuration(6000);
         intentFilter = new IntentFilter();
         intentFilter.addAction(CommonValue.ACTION_PAUSE_SONG_FROM_NOTIFICATION);
+        intentFilter.addAction(CommonValue.ACTION_STOP_ALL);
         registerReceiver(broadCastNotification, intentFilter);
         sharedPreferences = getSharedPreferences(CommonValue.KEY_SAVE_MODE, Context.MODE_PRIVATE);
         loopMusic = sharedPreferences.getInt(CommonValue.KEY_LOOP_MUSIC, 1);
@@ -81,8 +91,17 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
             bindService(new Intent(this, MyMusicService.class), serviceConnection, BIND_AUTO_CREATE);
         }
         initView();
+        rotationImage(true);
         setViewLoopAndShuffle(loopMusic, shuffle);
+//        boolean stopAll = false;
+//        stopAll = getIntent().getBooleanExtra(CommonValue.KEY_EXTRA_STOP_ALL, false);
+//        if (stopAll == false)
         PlaySongActivity.this.runOnUiThread(runnable);
+    }
+
+    private void rotationImage(boolean show) {
+        if (show) ivImageSong.startAnimation(anim);
+        else ivImageSong.setAnimation(null);
     }
 
     Runnable runnable = new Runnable() {
@@ -92,24 +111,35 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
             handler.postDelayed(this, 200);
         }
     };
+
     class BroadCastNotification extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
+                case CommonValue.ACTION_STOP_ALL:
+                    finishAffinity();
+                    break;
                 case CommonValue.ACTION_PAUSE_SONG_FROM_NOTIFICATION:
-                    boolean isPlaying = intent.getBooleanExtra(CommonValue.KEY_SEND_PAUSE, false);
-                    if (isPlaying) {
-                        btnPause.setVisibility(View.VISIBLE);
-                        btnPlay.setVisibility(View.INVISIBLE);
-                    } else {
-                        btnPause.setVisibility(View.INVISIBLE);
-                        btnPlay.setVisibility(View.VISIBLE);
-                    }
+                    updateButtonPlayPause(intent);
                     break;
             }
         }
     }
+
+    private void updateButtonPlayPause(Intent intent) {
+        boolean isPlaying = intent.getBooleanExtra(CommonValue.KEY_SEND_PAUSE, false);
+        if (isPlaying) {
+            rotationImage(true);
+            btnPause.setVisibility(View.VISIBLE);
+            btnPlay.setVisibility(View.INVISIBLE);
+        } else {
+            rotationImage(false);
+            btnPause.setVisibility(View.INVISIBLE);
+            btnPlay.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     protected void onResume() {
         mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
@@ -159,6 +189,7 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
     protected void onDestroy() {
         try {
             handler.removeCallbacks(runnable);
+            unregisterReceiver(broadCastNotification);
             unbindService(serviceConnection);
         } catch (Exception e) {
             Log.e("ERROR BIND SERVICE", "SERVICE NOT BIND");
@@ -182,8 +213,15 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
             tvSongName.setText(song.getName());
             tvSongArtist.setText(song.getArtist());
             tvNameAction.setText(song.getName());
-//            ivImageSong.setImageBitmap(BitmapFactory.decodeByteArray(song.getaByte(), 0, song.getaByte().length));
+            if (myMusicService.getMediaController().isPlaying() == true) {
+                btnPause.setVisibility(View.VISIBLE);
+                btnPlay.setVisibility(View.INVISIBLE);
+            } else {
+                btnPause.setVisibility(View.INVISIBLE);
+                btnPlay.setVisibility(View.VISIBLE);
+            }
         }
+//            ivImageSong.setImageBitmap(BitmapFactory.decodeByteArray(song.getaByte(), 0, song.getaByte().length));
     }
 
     public String milliSecondsToTimer(long milliseconds) {
@@ -235,6 +273,7 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
+        ivImageSong = (ImageView) findViewById(R.id.iv_song_image);
         btnShuffle = (ImageView) findViewById(R.id.iv_continuous);
         btnContiuous = (ImageView) findViewById(R.id.iv_no_continuous);
         btnPlay = (ImageView) findViewById(R.id.iv_play);

@@ -11,6 +11,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.dvt.samsung.finalapp.PlaySongActivity;
@@ -48,7 +49,7 @@ public class MyMusicService extends Service {
 
     private void prepareEnvironmentService(Intent intent) {
         currentSongPlay = intent.getIntExtra(CommonValue.KEY_POSITION_SONG, 0);
-        arrSong = intent.getParcelableArrayListExtra(CommonValue.KEY_LIST_SONG_CICK);
+        arrSong = intent.getParcelableArrayListExtra(CommonValue.KEY_LIST_SONG_CLICK);
         mediaController.setListSong(arrSong);
         runForeground();
         playSong(currentSongPlay);
@@ -174,7 +175,11 @@ public class MyMusicService extends Service {
                     break;
                 case CommonValue.ACTION_STOP:
                     stopSelf();
-                    stopForeground(true);
+                    Intent intentStop=new Intent(CommonValue.ACTION_STOP_ALL);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.putExtra(CommonValue.KEY_EXTRA_STOP_ALL,true);
+                    sendBroadcast(intentStop);
+//                    onDestroy();
                     break;
             }
         }
@@ -217,9 +222,21 @@ public class MyMusicService extends Service {
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(broadCastMusic);
-        stopForeground(true);
+        try {
+            unregisterReceiver(broadCastMusic);
+            release();
+        }catch (Exception e){
+            Log.d("Error","ERROR ON DESTROY");
+        }
         super.onDestroy();
+    }
+
+    private void release() {
+        if (mediaController.getmPlayer() != null) {
+            if (mediaController.getmPlayer().isPlaying()) mediaController.getmPlayer().stop();
+            mediaController.getmPlayer().release();
+            mediaController.setmPlayer(null);
+        }
     }
 
 //    public boolean isPlaying() {

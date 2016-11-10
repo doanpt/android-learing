@@ -23,6 +23,7 @@ public class CommonValue {
     public static final String KEY_SHUFFLE = "KEY_SHUFFLE";
     public static final String KEY_LOOP_MUSIC = "KEY_LOOP_MUSIC";
     public static final String ACTION_PAUSE_SONG_FROM_NOTIFICATION = "ACTION_PAUSE_SONG_FROM_NOTIFICATION";
+    public static final String KEY_EXTRA_STOP_ALL = "KEY_EXTRA_STOP_ALL";
     public static final String ACTION_CONTINUOUS = "ACTION_CONTINUOUS";
     public static final String ACTION_SHUFFLE = "ACTION_SHUFFLE";
     public static final String ACTION_LOOP_ONE = "ACTION_LOOP_ONE";
@@ -34,4 +35,5 @@ public class CommonValue {
     public static final int NOTIFICATION_ID = 1234;
     public static final int REQUEST_PERMISSION = 111;
     public static final int REQUEST_CODE_NOTIFICATION = 12;
+    public static final String ACTION_STOP_ALL = "ACTION_STOP_ALL";
 }

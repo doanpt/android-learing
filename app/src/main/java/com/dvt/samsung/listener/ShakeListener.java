@@ -4,6 +4,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
+
 /**
  * Created by sev_user on 11/10/2016.
  */
@@ -55,6 +57,7 @@ public class ShakeListener implements SensorEventListener {
 
                 // reset the shake count after 3 seconds of no shakes
                 if (mShakeTimestamp + SHAKE_COUNT_RESET_TIME_MS < now) {
+                    Log.d("sen",mShakeCount+"----");
                     mShakeCount = 0;
                 }
 
