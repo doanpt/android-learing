@@ -1,5 +1,7 @@
 package com.dvt.samsung.finalapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -7,14 +9,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dvt.samsung.adapter.MainAdapter;
 import com.dvt.samsung.model.TypeItem;
+import com.dvt.samsung.utils.CommonValue;
 
 import java.util.ArrayList;
 
@@ -22,17 +27,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView lvType;
     private ArrayList<TypeItem> arrType;
     private MainAdapter adapter;
-//  private ListView lvType;
+    //  private ListView lvType;
 //  private MainBaseAdapter adapter;
     private DrawerLayout drawerLayout;
     private NavigationView navigation;
     private ImageView btnMenu;
     boolean doubleBackToExitPressedOnce = false;
+    SharedPreferences sharedPreferences;
+    private boolean detectShaking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences = getSharedPreferences(CommonValue.KEY_SAVE_MODE, Context.MODE_PRIVATE);
         initView();
     }
 
@@ -62,6 +70,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         navigation = (NavigationView) findViewById(R.id.navigation);
         navigation.setNavigationItemSelectedListener(this);
+        detectShaking = sharedPreferences.getBoolean(CommonValue.KEY_DETECT_SHAKING, false);
+        SwitchCompat item = (SwitchCompat) navigation.getMenu().findItem(R.id.shaking_detect).getActionView();
+        item.setChecked(detectShaking);
+        item.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                detectShaking = isChecked;
+                sharedPreferences.edit().putBoolean(CommonValue.KEY_DETECT_SHAKING, detectShaking).commit();
+            }
+        });
     }
 
     @Override
@@ -89,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }

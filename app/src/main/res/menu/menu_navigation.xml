@@ -17,6 +17,12 @@
             android:id="@+id/nav_h"
             android:icon="@drawable/help"
             android:title="Help" />
+        <item xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/shaking_detect"
+            android:title="Detect Shaking"
+            app:actionLayout="@layout/menu_switch"
+            android:icon="@drawable/shake"
+            app:showAsAction="always" />
     </group>
     <item android:title="More Options">
         <menu>

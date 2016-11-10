@@ -51,6 +51,7 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
     private BroadCastNotification broadCastNotification = new BroadCastNotification();
     private IntentFilter intentFilter;
     private RotateAnimation anim;
+    private boolean detectShaking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +83,10 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
 				 * method you would use to setup whatever you want done once the
 				 * device has been shook.
 				 */
-                //if
-                myMusicService.getMediaController().next();
+                detectShaking = sharedPreferences.getBoolean(CommonValue.KEY_DETECT_SHAKING, false);
+                if (detectShaking == true) {
+                    myMusicService.getMediaController().next();
+                }
             }
         });
         sizeOfSong = intent.getStringExtra(CommonValue.KEY_SEND_SIZE_OF_SONG);

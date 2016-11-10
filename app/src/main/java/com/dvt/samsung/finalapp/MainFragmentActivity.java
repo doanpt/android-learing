@@ -230,7 +230,11 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
 
     @Override
     protected void onDestroy() {
-        unbindService(serviceConnection);
+        try {
+            unbindService(serviceConnection);
+        }catch (Exception e){
+            Log.d("Error","Error unbind service connect");
+        }
         super.onDestroy();
     }
 }
