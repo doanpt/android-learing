@@ -212,7 +212,7 @@ public class MainFragmentActivity extends FragmentActivity implements OnPlayMusi
         if (!isMyServiceRunning(MyMusicService.class)) {
             Intent intent = new Intent(this, MyMusicService.class);
             intent.putExtra(CommonValue.KEY_POSITION_SONG, position);
-            intent.putExtra(CommonValue.KEY_LIST_SONG_CICK, (ArrayList<? extends Parcelable>) paths);
+            intent.putExtra(CommonValue.KEY_LIST_SONG_CLICK, (ArrayList<? extends Parcelable>) paths);
             startService(intent);
             bindService(intent, serviceConnection, BIND_AUTO_CREATE);
         } else {
