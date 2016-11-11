@@ -25,6 +25,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 Intent intent=new Intent(SplashActivity.this,MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             }

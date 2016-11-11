@@ -17,6 +17,7 @@
             android:id="@+id/lv_show_song"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/bkg_listview"
             android:layout_weight="1"></ListView>
 
         <include

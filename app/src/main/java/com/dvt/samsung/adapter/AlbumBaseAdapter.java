@@ -34,8 +34,8 @@ public class AlbumBaseAdapter extends BaseAdapter {
     public AlbumBaseAdapter(Context context, HashMap<String, List<Song>> albums, OnListListener listListener) {
         this.context = context;
         this.albums = albums;
-        Set<String> setnames = albums.keySet();
-        Iterator<String> iterator = setnames.iterator();
+        Set<String> setNames = albums.keySet();
+        Iterator<String> iterator = setNames.iterator();
         while (iterator.hasNext()) {
             names.add(iterator.next());
         }
@@ -68,6 +68,7 @@ public class AlbumBaseAdapter extends BaseAdapter {
             viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_album);
             viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.tv_number_song_album);
             viewHolder.linearLayout = (LinearLayout) convertView.findViewById(R.id.ll_item_album);
+            viewHolder.linearLayout.setBackgroundResource(R.drawable.bkg_listview);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

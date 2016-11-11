@@ -67,6 +67,7 @@ public class ArtistBaseAdapter extends BaseAdapter {
             viewHolder.tvArtist = (TextView) convertView.findViewById(R.id.tv_artist_song);
             viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.tv_number_song_artist);
             viewHolder.linearLayout = (LinearLayout) convertView.findViewById(R.id.ll_item_artist);
+            viewHolder.linearLayout.setBackgroundResource(R.drawable.bkg_listview);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

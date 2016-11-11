@@ -83,6 +83,7 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
 				 * method you would use to setup whatever you want done once the
 				 * device has been shook.
 				 */
+                Log.d("Count=",count+"----");
                 detectShaking = sharedPreferences.getBoolean(CommonValue.KEY_DETECT_SHAKING, false);
                 if (detectShaking == true) {
                     myMusicService.getMediaController().next();

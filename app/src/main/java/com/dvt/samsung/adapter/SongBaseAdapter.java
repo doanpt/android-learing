@@ -59,6 +59,7 @@ public class SongBaseAdapter extends BaseAdapter implements Filterable{
             viewHolder.tvArtist = (TextView) convertView.findViewById(R.id.tv_artist_song);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.tv_name_song);
             viewHolder.linearLayout = (LinearLayout) convertView.findViewById(R.id.ll_main_song);
+            viewHolder.linearLayout.setBackgroundResource(R.drawable.bkg_listview);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

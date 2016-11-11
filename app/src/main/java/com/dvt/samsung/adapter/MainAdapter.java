@@ -77,6 +77,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             tvTitle = (TextView) view.findViewById(R.id.tv_name_type);
             ivType = (ImageView) view.findViewById(R.id.iv_icon_type);
             llMain = (LinearLayout) view.findViewById(R.id.ll_main_type);
+            llMain.setBackgroundResource(R.drawable.bkg_list_view_main);
         }
     }
 }
