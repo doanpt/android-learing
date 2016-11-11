@@ -19,7 +19,6 @@ public class ShakeListener implements SensorEventListener {
     private OnShakeListener mListener;
     private long mShakeTimestamp;
     private int mShakeCount;
-
     public void setOnShakeListener(OnShakeListener listener) {
         this.mListener = listener;
     }

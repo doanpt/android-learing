@@ -45,13 +45,13 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
     private SharedPreferences sharedPreferences;
     public int loopMusic;
     public boolean shuffle = true;
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private ShakeListener mShakeDetector;
+//    private SensorManager mSensorManager;
+//    private Sensor mAccelerometer;
+//    private ShakeListener mShakeDetector;
     private BroadCastNotification broadCastNotification = new BroadCastNotification();
     private IntentFilter intentFilter;
     private RotateAnimation anim;
-    private boolean detectShaking;
+//    private boolean detectShaking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,26 +70,26 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
         loopMusic = sharedPreferences.getInt(CommonValue.KEY_LOOP_MUSIC, 1);
         shuffle = sharedPreferences.getBoolean(CommonValue.KEY_SHUFFLE, true);
         Intent intent = getIntent();
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mShakeDetector = new ShakeListener();
-        mShakeDetector.setOnShakeListener(new ShakeListener.OnShakeListener() {
-
-            @Override
-            public void onShake(int count) {
-                /*
-                 * The following method, "handleShakeEvent(count):" is a stub //
-				 * method you would use to setup whatever you want done once the
-				 * device has been shook.
-				 */
-                Log.d("Count=",count+"----");
-                detectShaking = sharedPreferences.getBoolean(CommonValue.KEY_DETECT_SHAKING, false);
-                if (detectShaking == true) {
-                    myMusicService.getMediaController().next();
-                }
-            }
-        });
+//        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        mAccelerometer = mSensorManager
+//                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//        mShakeDetector = new ShakeListener();
+//        mShakeDetector.setOnShakeListener(new ShakeListener.OnShakeListener() {
+//
+//            @Override
+//            public void onShake(int count) {
+//                /*
+//                 * The following method, "handleShakeEvent(count):" is a stub //
+//				 * method you would use to setup whatever you want done once the
+//				 * device has been shook.
+//				 */
+//                Log.d("Count=",count+"----");
+//                detectShaking = sharedPreferences.getBoolean(CommonValue.KEY_DETECT_SHAKING, false);
+//                if (detectShaking == true) {
+//                    myMusicService.getMediaController().next();
+//                }
+//            }
+//        });
         sizeOfSong = intent.getStringExtra(CommonValue.KEY_SEND_SIZE_OF_SONG);
         if (isMyServiceRunning(MyMusicService.class)) {
             bindService(new Intent(this, MyMusicService.class), serviceConnection, BIND_AUTO_CREATE);
@@ -146,13 +146,13 @@ public class PlaySongActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onResume() {
-        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+//        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        mSensorManager.unregisterListener(mShakeDetector);
+//        mSensorManager.unregisterListener(mShakeDetector);
         super.onPause();
     }
 

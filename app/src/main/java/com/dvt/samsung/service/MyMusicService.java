@@ -6,6 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
@@ -16,6 +19,7 @@ import android.widget.RemoteViews;
 
 import com.dvt.samsung.finalapp.PlaySongActivity;
 import com.dvt.samsung.finalapp.R;
+import com.dvt.samsung.listener.ShakeListener;
 import com.dvt.samsung.media.MediaController;
 import com.dvt.samsung.model.Song;
 import com.dvt.samsung.utils.CommonValue;
@@ -38,7 +42,11 @@ public class MyMusicService extends Service {
     private NotificationCompat.Builder mBuilder;
     private boolean isPlaying;
     private int currentSongPlay;
-
+    private ShakeListener mShakeDetector;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private boolean detectShaking;
+    private SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -54,6 +62,11 @@ public class MyMusicService extends Service {
         runForeground();
         playSong(currentSongPlay);
         setPlaying(true);
+    }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
     }
 
     public void playSong(int currentSongPlay) {
@@ -140,8 +153,29 @@ public class MyMusicService extends Service {
             }
         });
         arrSong = new ArrayList<>();
-    }
+        mSensorManager = (SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeListener();
+        sharedPreferences = getSharedPreferences(CommonValue.KEY_SAVE_MODE, Context.MODE_PRIVATE);
+        mShakeDetector.setOnShakeListener(new ShakeListener.OnShakeListener() {
 
+            @Override
+            public void onShake(int count) {
+                /*
+                 * The following method, "handleShakeEvent(count):" is a stub //
+				 * method you would use to setup whatever you want done once the
+				 * device has been shook.
+				 */
+                Log.d("Count=", count + "----");
+                detectShaking = sharedPreferences.getBoolean(CommonValue.KEY_DETECT_SHAKING, false);
+                if (detectShaking == true) {
+                    getMediaController().next();
+                }
+            }
+        });
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+    }
     class BroadCastMusic extends BroadcastReceiver {
 
         @Override
@@ -175,7 +209,7 @@ public class MyMusicService extends Service {
                     break;
                 case CommonValue.ACTION_STOP:
                     stopSelf();
-                    Intent intentStop=new Intent(CommonValue.ACTION_STOP_ALL);
+                    Intent intentStop = new Intent(CommonValue.ACTION_STOP_ALL);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                    intent.putExtra(CommonValue.KEY_EXTRA_STOP_ALL,true);
                     sendBroadcast(intentStop);
@@ -223,10 +257,11 @@ public class MyMusicService extends Service {
     @Override
     public void onDestroy() {
         try {
+            mSensorManager.unregisterListener(mShakeDetector);
             unregisterReceiver(broadCastMusic);
             release();
-        }catch (Exception e){
-            Log.d("Error","ERROR ON DESTROY");
+        } catch (Exception e) {
+            Log.d("Error", "ERROR ON DESTROY");
         }
         super.onDestroy();
     }

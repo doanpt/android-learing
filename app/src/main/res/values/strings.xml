@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicApp</string>
+    <string name="app_name">MofL</string>
     <string name="open_navigation">OPEN</string>
     <string name="close_navigation">CLOSE</string>
     <string name="title_main_fragment">Music of Life</string>
