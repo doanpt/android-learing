@@ -1,0 +1,37 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="tab_max_width">264dp</dimen>
+    <dimen name="tab_padding_bottom">16dp</dimen>
+    <dimen name="tab_label">14sp</dimen>
+    <dimen name="custom_tab_layout_height">72dp</dimen>
+    <dimen name="text_size_splash_welcome">25sp</dimen>
+    <dimen name="image_size_splash_icon">170dp</dimen>
+    <dimen name="txt_size_splash_app_name">45sp</dimen>
+    <dimen name="size_10dp">10dp</dimen>
+    <dimen name="text_size_food_item">14sp</dimen>
+    <dimen name="text_size_title_food_item">18sp</dimen>
+    <dimen name="activity_order_content_edt_padding_left_right">8dp</dimen>
+    <dimen name="activity_order_content_edt_padding_top_bottom">5dp</dimen>
+    <dimen name="activity_order_content_padding_default">2dp</dimen>
+    <dimen name="activity_order_content_margin_default">8dp</dimen>
+    <dimen name="activity_order_content_margin_left">4dp</dimen>
+    <dimen name="activity_order_content_label_with_default">100dp</dimen>
+
+    <dimen name="activity_add_food_content_padding_default">20dp</dimen>
+    <dimen name="activity_add_food_content_margin_default">8dp</dimen>
+    <dimen name="activity_add_food_content_img_height">180dp</dimen>
+    <dimen name="activity_add_food_content_textsize_default">16sp</dimen>
+
+    <dimen name="drawable_stroke_width_default">1dp</dimen>
+    <dimen name="drawable_corners_radius_default">2dp</dimen>
+
+    <dimen name="item_order_with_quantity_cardview_margin">2dp</dimen>
+    <dimen name="item_order_with_quantity_cardview_radius">2dp</dimen>
+    <dimen name="item_order_with_quantity_tvname_size">20sp</dimen>
+    <dimen name="size_5dp">10dp</dimen>
+</resources>

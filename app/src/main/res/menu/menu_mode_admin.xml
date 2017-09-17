@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_add_food"
+            android:icon="@drawable/ic_add_black"
+            android:title="Thêm món" />
+        <item
+
+            android:id="@+id/nav_control_order"
+            android:icon="@drawable/ic_restaurant_menu_black_24dp"
+            android:title="Quản lý đặt hàng" />
+        <item
+            android:id="@+id/nav_control_menu"
+            android:icon="@drawable/ic_food"
+            android:title="Quản lý món ăn" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_log_out_admin"
+                android:icon="@drawable/ic_log_out"
+                android:title="Đăng xuất" />
+        </menu>
+    </item>
+
+</menu>

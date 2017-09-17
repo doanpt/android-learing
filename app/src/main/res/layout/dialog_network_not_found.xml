@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="200dp"
+        android:background="@drawable/border_dialog_custome"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="@string/text_title_no_network"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:textColor="@android:color/black"
+            android:padding="15dp"
+            android:text="@string/text_network_not_found"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_wifj_setting"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="WIFI"/>
+
+            <Button
+                android:id="@+id/btn_3g_settting"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="3G/4G"
+                android:textColor="@android:color/holo_blue_dark"/>
+
+            <Button
+                android:id="@+id/btn_cancel"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="@string/exit"
+                android:textColor="@android:color/holo_red_light"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

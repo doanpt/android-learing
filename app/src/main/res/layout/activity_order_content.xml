@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_order_content_padding_default"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.google.foods.activity.OrderActivity"
+    tools:showIn="@layout/activity_order">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tv_final_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+            android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+            android:text="90 000 VND"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_price_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_final_price"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+            android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+            android:text="10 000 VND"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_above="@id/tv_price_off"
+            android:paddingTop="@dimen/activity_order_content_edt_padding_left_right"
+            android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+            android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+            android:text="100 000 VND"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/tv_price"
+            android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+            android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+            android:text="@string/text_order_final_price"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_final_price"
+            android:layout_toLeftOf="@id/tv_price"
+            android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+            android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+            android:text="@string/text_order_price_off"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/tv_price"
+            android:layout_above="@id/tv_price_off"
+            android:paddingTop="@dimen/activity_order_content_edt_padding_left_right"
+            android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+            android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+            android:text="@string/text_order_total_price"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_order"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/tv_price"
+            android:scrollbars="vertical" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <RadioGroup
+            android:id="@+id/rg_delever_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rdb_ship"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:paddingBottom="@dimen/activity_order_content_margin_default"
+                android:paddingTop="@dimen/activity_order_content_margin_default"
+                android:text="@string/activity_order_content_need_ship" />
+
+            <RadioButton
+                android:id="@+id/rdb_onShop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:paddingBottom="@dimen/activity_order_content_margin_default"
+                android:paddingTop="@dimen/activity_order_content_margin_default"
+                android:text="@string/activity_order_content_receive_on_shop" />
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/activity_order_content_padding_default">
+
+            <EditText
+                android:layout_width="@dimen/activity_order_content_label_with_default"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/border_order_textview"
+                android:focusable="false"
+                android:paddingBottom="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingTop="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:text="@string/activity_order_content_label_name"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/edt_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_order_content_margin_left"
+                android:background="@drawable/border_order_editext"
+                android:paddingBottom="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingTop="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:text="To Vu An" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/activity_order_content_padding_default">
+
+            <EditText
+                android:layout_width="@dimen/activity_order_content_label_with_default"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/border_order_textview"
+                android:focusable="false"
+                android:paddingBottom="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingTop="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:text="@string/activity_order_content_label_phone"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/edt_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_order_content_margin_left"
+                android:background="@drawable/border_order_editext"
+                android:inputType="phone"
+                android:paddingBottom="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingTop="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:text="0985 030 640" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/activity_order_content_padding_default">
+
+            <EditText
+                android:id="@+id/label_address"
+                android:layout_width="@dimen/activity_order_content_label_with_default"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/border_order_textview"
+                android:focusable="false"
+                android:paddingBottom="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingTop="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:text="@string/activity_order_content_label_address"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/edt_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_order_content_margin_left"
+                android:background="@drawable/border_order_editext"
+                android:paddingBottom="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:paddingLeft="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingRight="@dimen/activity_order_content_edt_padding_left_right"
+                android:paddingTop="@dimen/activity_order_content_edt_padding_top_bottom"
+                android:text="Số 18, FPT Cầu Giấy" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_booknow"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/state_bg_btn_order"
+            android:text="@string/activity_order_content_button_book_now"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+
+</LinearLayout>

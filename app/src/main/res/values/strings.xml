@@ -1,0 +1,175 @@
+<resources>
+    <string name="app_name">Food Store</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Cài đặt</string>
+    <string name="order">Đặt hàng</string>
+    <string name="text_number_of_order">Số lượng đặt:</string>
+    <string name="text_remaining_count">Số lượng còn lại:</string>
+
+    <string name="title_activity_main">Food order app</string>
+    <string name="title_activity_order">Xác nhận đặt hàng</string>
+    <string name="title_activity_add_food">Thêm món ăn </string>
+    <string name="activity_order_content_receive_on_shop">Nhận tại cửa hàng</string>
+    <string name="activity_order_content_need_ship">Cần ship</string>
+    <string name="activity_order_content_label_name">Họ tên</string>
+    <string name="activity_order_content_label_phone">Số ĐT</string>
+    <string name="activity_order_content_label_table">Bàn số</string>
+    <string name="activity_order_content_label_address">Địa chỉ</string>
+    <string name="activity_order_content_button_back">Quay lại</string>
+    <string name="activity_order_content_button_book_now">Đặt ngay</string>
+
+    <string name="activity_add_food_content_label_price">Loại giá:</string>
+    <string name="activity_add_food_content_label_name">Tên món:</string>
+    <string name="activity_add_food_content_button_select_img">Chọn ảnh</string>
+    <string name="activity_add_food_content_button_add_food">Thêm món</string>
+
+
+    <string name="numberpicker_max_value">100</string>
+    <string name="numberpicker_min_value">0</string>
+    <string name="numberpicker_default_value">0</string>
+    <string name="numberpicker_unit">1</string>
+    <string name="an_xuat_da_giao">Ẩn xuất đã giao</string>
+    <string name="tat_ca_dia_diem">Tất cả địa điểm</string>
+    <string name="quan_ly_order">Quản lý đặt hàng</string>
+    <string name="tat_ca_xuat_an">Tất cả xuất ăn</string>
+    <string name="an_xuat_da_het">Ẩn xuất đã hết</string>
+
+    <string name="title_food_name">Tên xuất</string>
+    <string name="title_type_food">Đơn giá</string>
+    <string name="title_soluong_con_lai">Còn lại</string>
+    <string name="title_option">Tùy chọn</string>
+
+    <string name="title_action_bar_food_manager">Quản lý món ăn</string>
+    <string name="title_action_bar_order_manager">Quản lý đặt hàng</string>
+
+
+    <string-array name="price_array">
+        <item>Set 30000 VND</item>
+        <item>Set 35000 VND</item>
+        <item>Set 40000 VND</item>
+        <item>Drink 5000 VND</item>
+        <item>Drink 10000 VND</item>
+        <item>Drink 15000 VND</item>
+    </string-array>
+    <string name="type_food_5">5.000 VND</string>
+    <string name="type_food_10">10.000 VND</string>
+    <string name="type_food_15">15.000 VND</string>
+    <string name="type_food_30">30.000 VND</string>
+    <string name="type_food_35">35.000 VND</string>
+    <string name="type_food_40">40.000 VND</string>
+
+    <string name="title_stt">STT</string>
+    <string name="title_ho_ten">Họ tên</string>
+    <string name="title_xuat_an">Xuất ăn</string>
+    <string name="title_dia_diem">Địa chỉ</string>
+    <string name="title_so_luong">Số lượng</string>
+    <string name="title_trang_thai">Trạng thái</string>
+    <string name="chua_co_acc">Chưa có tài khoản?</string>
+    <string name="click_here">Click vào đây!</string>
+    <string name="password">Mật khẩu</string>
+    <string name="phone_number">Số điện thoại</string>
+    <string name="user_name">Họ và tên</string>
+    <string name="address">Địa chỉ</string>
+    <string name="re_enter_password">Nhập lại mật khẩu</string>
+    <string name="create_account">Đăng ký</string>
+    <string name="login">Đăng nhập</string>
+    <string name="click_here_to_choose_image">Click vào đây để chọn hình ảnh</string>
+    <string name="activity_add_food_content_label_quantity">Số lượng:</string>
+    <string name="add_new_food">Thêm món ăn mới</string>
+    <string name="text_food_order_price">Đơn giá:</string>
+    <string name="text_order_total_price">Tổng tiền:</string>
+    <string name="text_order_final_price">Số tiền phải thanh toán:</string>
+    <string name="text_order_price_off">Giảm giá combo:</string>
+    <string name="notification">Thông báo</string>
+    <string name="exit">Thoát</string>
+    <string name="ok">OK</string>
+
+    <string name="account_existed">Số điện thoại %s đã được đăng ký. Vui lòng nhập số điện thoại khác!</string>
+    <string name="string_logout">Đăng xuất</string>
+    <string name="string_logouting">Đăng xuất...</string>
+    <string name="string_login">Đăng nhập</string>
+    <string name="string_signin">Đăng ký</string>
+    <string name="password_wrong">Mật khẩu không đúng</string>
+    <string name="phone_number_wrong">Số điện thoại không đúng</string>
+    <string name="check_login">Kiểm tra đăng nhập...</string>
+    <string name="creatting_account">Đang tạo tài khoản...</string>
+    <string name="error_enter_phone_number">Chưa nhập số điện thoại</string>
+    <string name="error_enter_password">Mật khẩu dài từ 4 đến 10 ký</string>
+    <string name="error_input_user_name">Nhập ít nhất 3 ký tự</string>
+    <string name="error_re_enter_password">Mật khẩu không trùng khớp</string>
+    <string name="error_enter_date_birthday">Nhập ngày sinh</string>
+    <string name="error_enter_address">Nhập địa chỉ</string>
+    <string name="question_ask_order_drink">Quý khách chưa có cơm hoặc nước uống! Nếu mua nước uống cùng cơm, quý khách sẽ được giảm giá. Quý khách có muốn mua thêm đồ không?</string>
+    <string name="confirm_remove_item">Quý khách có chắc chắn muốn xóa %s</string>
+    <string name="text_edit_food">Chỉnh sửa</string>
+    <string name="text_food_name">Tên món ăn</string>
+    <string name="text_food_type">Đơn giá</string>
+    <string name="text_food_total_quantity">Số lưọng</string>
+    <string name="title_user_phone">Số ĐT </string>
+    <string name="title_total_price">Tổng tiền</string>
+    <string name="dialog_infor_order_title_ho_ten">Họ tên:</string>
+    <string name="dialog_infor_order_title_user_phone">Số ĐT:</string>
+    <string name="dialog_infor_order_title_dia_diem">Địa chỉ:</string>
+    <string name="dialog_infor_order_title_total_price">Tổng tiền:</string>
+    <string name="dialog_infor_order_title_trang_thai">Trạng thái:</string>
+    <string name="dialog_infor_order_title">Thông tin đơn hàng</string>
+    <string name="dialog_infor_order_title_list_order">Danh sách món ăn đang đặt:</string>
+    <string name="dialog_infor_order_title_combo_price">Giảm giá:</string>
+    <string name="dialog_infor_order_title_date_order">Ngày đặt:</string>
+    <string name="dialog_infor_order_title_price_need_pay">Thanh toán:</string>
+    <string name="dialog_infor_order_title_cancel_order">Huỷ đơn</string>
+    <string name="da_giao_hang">Đã giao hàng</string>
+    <string name="chua_giao_hang">Chưa giao hàng</string>
+    <string name="text_no_data">Không có dữ liệu</string>
+    <string name="question_ask_order_food">Quý khách chưa chọn cơm hoăc đồ uống nào. Xin hãy chọn cơm hoặc đồ uống trước khi đặt hàng!</string>
+    <string name="text_yes">Có</string>
+    <string name="text_no">Không</string>
+    <string name="text_network_not_found">Không có kết nối INTERNET. Vui lòng kiểm tra kết nối mạng và thử lại!</string>
+    <string name="text_title_no_network">Mạng không có sẵn</string>
+
+    <string name="order_activity_reduce_remaining_quantity_msg">Số lượng còn lại của món %1$s bị giảm xuống còn %2$d. Quý khách vui lòng quay lại màn hình chọn món để chọn thêm.</string>
+    <string name="order_activity_remove_all_food_msg">Hóa đơn của quý khách không có bất kỳ món nào. Quay lại màn hình chính để chọn món!</string>
+    <string name="order_activity_remove_item_msg">Món %1$s đã bị xóa khỏi hóa đơn của quý khách. Quý khách hãy quay lại mành hình chính để chọn thêm!</string>
+    <string name="order_activity_request_user_full_infor_msg">Xin vui lòng điền đầy đủ thông tin người nhận!</string>
+    <string name="order_activity_prefix_banso">Bàn số</string>
+    <string name="order_activity_request_name_table_msg">Xin vui lòng điền tên của người nhận và số bàn!</string>
+    <string name="order_activity_booking_in_progress">Đang đặt món ăn...</string>
+    <string name="order_activity_booking_is_fail_msg">Đặt cơm thất bại, vui lòng kiểm tra mạng hoặc thử lại!</string>
+    <string name="order_activity_booking_success_with_combo_msg">Đặt cơm thành công, Quý khách được giảm %1$s còn %2$s từ các combo được giảm giá.</string>
+    <string name="order_activity_booking_success_msg">Đặt cơm thành công, Xin qúy khách vui lòng chờ phục vụ trong giây lát!</string>
+
+    <string name="status_not_handl">Chưa xử lý</string>
+    <string name="status_handling">Đang xử lý</string>
+    <string name="status_handled">Đã xử lý</string>
+    <string name="status_order">Trạng thái</string>
+    <string name="all">Tất cả</string>
+    <string name="dialog_infor_order_title_print_order">In</string>
+    <string name="cancel_order_success">Đã huỷ đơn hàng</string>
+    <string name="cancel_order_error">Xảy ra lỗi. Vui lòng thử lại</string>
+    <string name="order_not_cancel_handled">Bạn không thể hủy bỏ đơn hàng này vì đơn hàng đã được bàn giao thành công cho khách hàng. Xin cảm ơn!</string>
+    <string name="order_not_cancel_handling">Bạn không thể hủy bỏ đơn hàng này vì nhà hàng đang trong quá trình thực hiện đơn hàng. Vui lòng liên hệ với người quản trị!</string>
+    <string name="reset_data_food">Đặt lại dữ liệu</string>
+    <string name="input_quantity">Nhập số lượng:</string>
+    <string name="note_when_reset_data">Tất cả các món ăn trong danh sách hiện có sẽ đều được thiết lập cùng số lượng theo số lượng được nhập ở dưới đây: </string>
+    <string name="note">Chú ý</string>
+    <string name="update_successfull">Cập nhật thành công</string>
+    <string name="clear_data_list_order">Danh sách đặt hàng cũ đã được xoá</string>
+    <string name="no_data_food">Không có dữ liệu. Vui lòng thêm các món ăn vào trong danh sách để quản lý!</string>
+    <string name="deleted">Đã xóa</string>
+    <string name="fail_please_try_again">Không thành công. Vui lòng thử lại!</string>
+    <string name="not_input_food_name">Bạn chưa nhập tên món</string>
+    <string name="not_input_total_quantity">Bạn chưa nhập tổng số lượng món ăn</string>
+    <string name="need_choose_image_food_again">Bạn cần chọn lại ảnh trước khi thêm món!</string>
+    <string name="uploading_food">Đang thêm món ăn...</string>
+    <string name="add_food_successfull">Thêm món ăn thành công!</string>
+    <string name="login_successfull">đăng nhập thành công!</string>
+    <string name="logout_successfull">Đăng xuất thành công!</string>
+    <string name="out_of_stock">Hết hàng</string>
+    <string name="text_exit_upercase">THOÁT</string>
+    <string name="text_delete_upercase">XÓA</string>
+    <string name="loading">Đang tải dữ liệu...</string>
+
+
+</resources>

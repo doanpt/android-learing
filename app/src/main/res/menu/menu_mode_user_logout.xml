@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group_logout"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_log_out_user"
+            android:icon="@drawable/ic_log_out"
+            android:title="@string/string_logout"/>
+
+    </group>
+
+    <item
+        android:id="@+id/item_menu_login_about"
+        android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_about_me"
+                android:icon="@drawable/ic_menu_share"
+                android:title="About"/>
+        </menu>
+    </item>
+</menu>

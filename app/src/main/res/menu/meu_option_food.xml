@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="dev.hoangit.filemanager.MainActivity">
+
+    <item
+        android:id="@+id/menu_option"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="Sửa" />
+    <item
+        android:id="@+id/menu_delete"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="Xóa" />
+
+</menu>

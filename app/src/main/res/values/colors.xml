@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorTransferent">#00000000</color>
+    <color name="colorPrimary">#03A9F4</color>
+    <color name="colorPrimaryDark">#0288D1</color>
+    <color name="colorAccent">#4CAF50</color>
+    <color name="colorPrimaryLight">#03A9F4</color>
+
+    <color name="colorPrimaryAdmin">#009688</color>
+    <color name="colorPrimaryDarkAdmin">#00695C</color>
+    <color name="colorAccentAdmin">#009688</color>
+    <color name="colorPrimaryLightAdmin">#009688</color>
+
+    <color name="colorTextQuantityFood">#FFFFFF</color>
+    <color name="colorImageViewPlugFood">#BDBDBD</color>
+    <color name="color_item_food">#424242</color>
+
+    <color name="color_btn_order">#FF6F00</color>
+    <color name="color_btn_order_drark">#795548</color>
+    <color name="iron">#CCCCCC</color>
+    <color name="color_table_mgr_order">#03A9F4</color>
+    <color name="color_while">#FFFFFF</color>
+</resources>
