@@ -20,8 +20,8 @@
     <string name="text_GPS">GPS</string>
     <string name="network_disconnect">Mất kết nối</string>
     <string name="network_connect">Kết nối</string>
-    <string name="On">Bật</string>
-    <string name="Off">Tắt</string>
+    <string name="On">On</string>
+    <string name="Off">Off</string>
     <string name="text_time">Thời gian</string>
     <string name="note">Chú ý</string>
     <string name="note_when_set_time">Thiết lập thời gian thực hiện ghi nhận địa điểm</string>
