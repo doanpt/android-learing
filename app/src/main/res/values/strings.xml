@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Coldncool</string>
+    <string name="title_main">Coldncool app</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Cài đặt</string>
+    <string name="notif_small_desc">notif_small_desc</string>
+    <string name="text_logout">Đăng xuất</string>
+    <string name="text_user_infor">Thông tin tài khoản</string>
+    <string name="text_account">Tài khoản</string>
+    <string name="text_work_new">CV mới</string>
+    <string name="text_work_received">CV đã nhận</string>
+    <string name="text_work_completed">CV đã hoàn thành</string>
+    <string name="text_work_cancel">CV đã huỷ</string>
+    <string name="text_profile">Profile</string>
+    <string name="text_network">Mạng</string>
+    <string name="text_GPS">GPS</string>
+    <string name="network_disconnect">Mất kết nối</string>
+    <string name="network_connect">Kết nối</string>
+    <string name="On">Bật</string>
+    <string name="Off">Tắt</string>
+    <string name="text_time">Thời gian</string>
+    <string name="note">Chú ý</string>
+    <string name="note_when_set_time">Thiết lập thời gian thực hiện ghi nhận địa điểm</string>
+    <string name="input_time">Nhập thời gian:</string>
+    <string name="second">giây</string>
+    <string name="exit">Thoát</string>
+    <string name="ok">OK</string>
+    <string name="update_time_post_to_server_fail">Xảy ra lỗi. Vui lòng thử lại</string>
+    <string name="update_time_post_to_server_success">Cập nhật thời gian thành công</string>
+    <string name="please_input_param">Chưa nhập dữ liệu</string>
+    <string name="current_time">Thời gian hiện tại: %1$s giây</string>
+    <string name="notification">Thông báo</string>
+    <string name="text_noti_not_login">Chưa có tài khoản nào đăng nhập. Chọn OK để tiến hành đăng nhập tài khoản. </string>
+    <string name="home">Nhà</string>
+    <string name="company">Công ty</string>
+    <string name="dat_lai_mat_khau">Đặt lại mật khẩu</string>
+    <string name="new_password">Mật khẩu mới</string>
+    <string name="confirm_password">Nhập lại mật khẩu</string>
+    <string name="cannot_get_image_user_profile">GET dữ liệu thất bại</string>
+    <string name="loading">Đang tải...</string>
+    <string name="get_data_user_infor">Đang tải thông tin người dùng...</string>
+    <string name="logging_please_wait">Đăng nhập...</string>
+</resources>

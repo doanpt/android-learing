@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="2dp"
+            card_view:cardCornerRadius="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+                <!--Contact mail company-->
+                <LinearLayout style="@style/StyleLinnerLayoutItemUserInfor">
+
+                    <ImageView
+                        style="@style/StyleImageIconItemUserInfor"
+                        android:src="@drawable/ic_contact_mail_company" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <LinearLayout style="@style/StyleLinnerTitleItemUserInfor">
+
+                                <TextView
+                                    android:id="@+id/tv_full_name"
+                                    style="@style/StyleTextViewUserInfor"
+                                    android:text="hoangss@cnc.com" />
+
+                                <!--<TextView-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:text="@string/company" />-->
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView style="@style/StyleLine" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--Contact Name-->
+                <LinearLayout style="@style/StyleLinnerLayoutItemUserInfor">
+
+                    <ImageView
+                        style="@style/StyleImageIconItemUserInfor"
+                        android:src="@drawable/ic_contacts_name" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <LinearLayout style="@style/StyleLinnerTitleItemUserInfor">
+
+                                <TextView
+                                    android:id="@+id/tv_email"
+                                    style="@style/StyleTextViewUserInfor"
+                                    android:text="Hoang IT" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView style="@style/StyleLine" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--Contact mail company-->
+                <LinearLayout style="@style/StyleLinnerLayoutItemUserInfor">
+
+                    <ImageView
+                        style="@style/StyleImageIconItemUserInfor"
+                        android:src="@drawable/ic_contact_phone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <LinearLayout style="@style/StyleLinnerTitleItemUserInfor">
+
+                                <TextView
+                                    android:id="@+id/tv_phone"
+                                    style="@style/StyleTextViewUserInfor"
+                                    android:text="0974356883" />
+
+                                <!--<TextView-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:text="@string/home" />-->
+                            </LinearLayout>
+
+                            <ImageView
+                                style="@style/StyleImageIconItemUserInfor"
+                                android:src="@drawable/ic_contacts_message" />
+                        </LinearLayout>
+
+                        <TextView style="@style/StyleLine" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <!--&lt;!&ndash;Contact mail Home&ndash;&gt;-->
+                <!--<LinearLayout style="@style/StyleLinnerLayoutItemUserInfor">-->
+
+                <!--<ImageView-->
+                <!--style="@style/StyleImageIconItemUserInfor"-->
+                <!--android:src="@drawable/ic_contact_mail" />-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical"-->
+                <!--android:paddingLeft="10dp">-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<LinearLayout style="@style/StyleLinnerTitleItemUserInfor">-->
+
+                <!--<TextView-->
+                <!--style="@style/StyleTextViewUserInfor"-->
+                <!--android:text="hoangit174@gmail.com" />-->
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/home" />-->
+                <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+
+                <!--<TextView style="@style/StyleLine" />-->
+                <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
+
+                <!--&lt;!&ndash;Contact Date bithday&ndash;&gt;-->
+                <!--<LinearLayout style="@style/StyleLinnerLayoutItemUserInfor">-->
+
+                <!--<ImageView-->
+                <!--style="@style/StyleImageIconItemUserInfor"-->
+                <!--android:src="@drawable/ic_contacts_date_birthday" />-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical"-->
+                <!--android:paddingLeft="10dp">-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<LinearLayout style="@style/StyleLinnerTitleItemUserInfor">-->
+
+                <!--<TextView-->
+                <!--style="@style/StyleTextViewUserInfor"-->
+                <!--android:text="17/05/1995" />-->
+                <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
+
+                <!--<TextView style="@style/StyleLine" />-->
+                <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
+
+
+                <!--&lt;!&ndash;Contact Address&ndash;&gt;-->
+                <!--<LinearLayout style="@style/StyleLinnerLayoutItemUserInfor">-->
+
+                <!--<ImageView-->
+                <!--style="@style/StyleImageIconItemUserInfor"-->
+                <!--android:src="@drawable/ic_contacts_address" />-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical"-->
+                <!--android:paddingLeft="10dp">-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<LinearLayout style="@style/StyleLinnerTitleItemUserInfor">-->
+
+                <!--<TextView-->
+                <!--style="@style/StyleTextViewUserInfor"-->
+                <!--android:text="Ho Chi Minh City" />-->
+                <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</LinearLayout>
