@@ -330,7 +330,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     gpsService.setRunning(true);
                 }
                 progressDialog.dismiss();
-                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }

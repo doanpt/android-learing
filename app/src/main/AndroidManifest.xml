@@ -17,15 +17,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activity.LoginActivity"></activity>
-        <activity android:name=".activity.MainActivity" />
-
-        <service
-            android:name=".service.GPSService"
-            android:stopWithTask="false" />
-
-        <activity
-            android:name=".activity.SplashActivity"
+        <activity android:name=".activity.LoginActivity"
             android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,6 +25,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.MainActivity" />
+
+        <service
+            android:name=".service.GPSService"
+            android:stopWithTask="false" />
+
+        <!--<activity-->
+            <!--android:name=".activity.SplashActivity"-->
+            <!--android:theme="@style/AppTheme.FullScreen">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
         <activity
             android:name=".activity.ProfileActivity"
             android:theme="@style/ThemeProfile" />

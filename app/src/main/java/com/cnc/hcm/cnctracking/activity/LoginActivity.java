@@ -9,8 +9,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.input_password)
     EditText _passwordText;
     @Bind(R.id.btn_login)
-    Button _loginButton;
+    TextView _loginButton;
 
     private APIService mService;
     private ProgressDialog mProgressDialog;

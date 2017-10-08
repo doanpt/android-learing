@@ -19,7 +19,7 @@
         <item name="android:windowBackground">@drawable/bg_splash_activity</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
+        <!--<item name="android:windowFullscreen">true</item>-->
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
