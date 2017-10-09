@@ -18,13 +18,18 @@ public class TrackLocation {
     @Expose
     private Long timestamp;
 
+    @SerializedName("accuracy")
+    @Expose
+    private Float accuracy;
+
     public TrackLocation() {
     }
 
-    public TrackLocation(Double latitude, Double longitude, Long timestamp) {
+    public TrackLocation(Double latitude, Double longitude, Long timestamp, Float accuracy) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.timestamp = timestamp;
+        this.accuracy = accuracy;
     }
 
     public Double getLatitude() {
@@ -51,4 +56,11 @@ public class TrackLocation {
         this.timestamp = timestamp;
     }
 
+    public Float getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(Float accuracy) {
+        this.accuracy = accuracy;
+    }
 }

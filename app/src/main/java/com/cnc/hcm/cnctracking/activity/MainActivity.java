@@ -377,7 +377,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         dialog.show();
     }
 
-    public void myLocation(double latitude, double longitude, String addName) {
+    public void myLocation(double latitude, double longitude, float accuracy, String addName) { // TODO did we need accuracy here?
         if (mMap != null) {
             LatLng myLocation = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions().position(myLocation).title(addName));

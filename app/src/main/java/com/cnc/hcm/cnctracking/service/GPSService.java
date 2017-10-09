@@ -94,6 +94,7 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
     private ArrayList<TrackLocation> arrTrackLocation = new ArrayList<>();
     private double longitude;
     private double latitude;
+    private float accuracy;
     private boolean isNetworkConnected;
     private int batteryLevel;
     private int timeRunService;
@@ -154,8 +155,8 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
                     addressName = builder.toString();
                     Log.d(TAGG, "NameAddress:= " + addressName);
                     if (mainActivity != null) {
-                        mainActivity.appendText("" + original.getLatitude() + ", " + original.getLongitude());
-                        mainActivity.myLocation(original.getLatitude(), original.getLongitude(), addressName);
+                        mainActivity.appendText("" + original.getLatitude() + ", " + original.getLongitude() + ", " + original.getAccuracy());
+                        mainActivity.myLocation(original.getLatitude(), original.getLongitude(), original.getAccuracy(), addressName);
                     }
                 }
             }
@@ -163,11 +164,12 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
 
         setLatitude(location.getLatitude());
         setLongitude(location.getLongitude());
+        setAccuracy(location.getAccuracy());
 
-        TrackLocation trackLocation = new TrackLocation(location.getLatitude(), location.getLongitude(), System.currentTimeMillis());
+        TrackLocation trackLocation = new TrackLocation(location.getLatitude(), location.getLongitude(), System.currentTimeMillis(), location.getAccuracy());
         arrTrackLocation.add(trackLocation);
         if (UserInfo.getInstance(GPSService.this).getIsLogin())
-            updateNotification(location.getLatitude() + ", " + location.getLongitude());
+            updateNotification(location.getLatitude() + ", " + location.getLongitude() + ", " + location.getAccuracy());
     }
 
     public class MyBinder extends Binder {
@@ -262,15 +264,15 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
                 case BACKUP_GPS:
                     Log.d(TAGG, "handleMessage " + "BACKUP_GPS");
                     if (mainActivity != null) {
-                        mainActivity.appendText(latitude + ", " + longitude);
+                        mainActivity.appendText(latitude + ", " + longitude + ", " + accuracy);
                     }
                     break;
                 case ADD_GPS:
                     TrackLocation trackLocation = (TrackLocation) msg.obj;
                     if (mainActivity != null) {
-                        mainActivity.appendText(trackLocation.getLatitude() + ", " + trackLocation.getLongitude());
+                        mainActivity.appendText(trackLocation.getLatitude() + ", " + trackLocation.getLongitude() + ", " + trackLocation.getAccuracy());
                     }
-                    Log.d(TAGG, "handleMessage " + "ADD_GPS: " + trackLocation.getLatitude() + ", " + trackLocation.getLongitude());
+                    Log.d(TAGG, "handleMessage " + "ADD_GPS: " + trackLocation.getLatitude() + ", " + trackLocation.getLongitude() + ", " + trackLocation.getAccuracy());
 
                     break;
                 case UPDATE_TIME_RUN_SERVICE_TO_UI:
@@ -302,7 +304,7 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (longitude != 0 && latitude != 0) {
+                if (longitude != 0 && latitude != 0) {  // TODO WHILE
                     timeProgress++;
                     timeRunService++;
                     if (timeRunService > timePostToServer) {
@@ -318,7 +320,7 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
                         indexPost++;
                         if (isNetworkConnected) {
                             if (indexPost <= 5) {
-                                TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis());
+                                TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
                                 arrTrackLocation.add(trackLocation);
 
                                 int size = arrTrackLocation.size();
@@ -338,7 +340,7 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
                             }
                         } else {
 
-                            TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis());
+                            TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
                             arrTrackLocation.add(trackLocation);
 
                             Message meg3 = new Message();
@@ -483,7 +485,7 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
         PendingIntent piOpen = PendingIntent.getService(this, 0, intentOpen, PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews = new RemoteViews(getPackageName(), R.layout.item_3button_small);
-        remoteViews.setTextViewText(R.id.notif_content, "" + latitude + ", " + longitude);
+        remoteViews.setTextViewText(R.id.notif_content, "" + latitude + ", " + longitude + ", " + accuracy);
 
         remoteViews.setOnClickPendingIntent(R.id.notif_icon, piOpen);
 
@@ -554,5 +556,13 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
 
     public double getLatitude() {
         return latitude;
+    }
+
+    public float getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(float accuracy) {
+        this.accuracy = accuracy;
     }
 }
