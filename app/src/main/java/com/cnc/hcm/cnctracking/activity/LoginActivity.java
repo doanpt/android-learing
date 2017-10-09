@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -39,6 +39,13 @@ public class LoginActivity extends AppCompatActivity {
     EditText _passwordText;
     @Bind(R.id.btn_login)
     TextView _loginButton;
+
+    @Bind(R.id.tv_clear_text_id)
+    TextView tvClearId;
+
+    @Bind(R.id.tv_clear_text_pass)
+    TextView tvClearPass;
+
 
     private APIService mService;
     private ProgressDialog mProgressDialog;
@@ -61,6 +68,8 @@ public class LoginActivity extends AppCompatActivity {
                 login(false);
             }
         });
+        tvClearId.setOnClickListener(this);
+        tvClearPass.setOnClickListener(this);
     }
 
     public void login(boolean isLoginAuto) {
@@ -231,5 +240,17 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_clear_text_id:
+                _emailText.setText(Conts.BLANK);
+                break;
+            case R.id.tv_clear_text_pass:
+                _passwordText.setText(Conts.BLANK);
+                break;
+        }
     }
 }

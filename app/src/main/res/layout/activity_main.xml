@@ -80,6 +80,7 @@
                     </LinearLayout>
 
                     <ImageView
+                        android:id="@+id/imv_profile"
                         android:layout_width="27dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="-10dp"

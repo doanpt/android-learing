@@ -84,6 +84,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private CircleImageView imvAvatar;
     private TextView tvUsername, tvUserMail;
     private ImageView imvMenuDrawer, imvSearch;
+    private ImageView imvProfile;
     private DrawerLayout drawer;
     //private TextView tvTimeProgress, tvStatus;
 
@@ -183,6 +184,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         imvMenuDrawer = (ImageView) findViewById(R.id.imv_menu);
         imvSearch = (ImageView) findViewById(R.id.imv_seach_location);
+        imvProfile = (ImageView) findViewById(R.id.imv_profile);
+        imvProfile.setOnClickListener(this);
         imvMenuDrawer.setOnClickListener(this);
         imvSearch.setOnClickListener(this);
 
@@ -277,6 +280,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imv_avatar_profile:
+            case R.id.imv_profile:
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
