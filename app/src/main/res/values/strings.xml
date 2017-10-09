@@ -44,4 +44,5 @@
     <string name="loading">Đang tải...</string>
     <string name="get_data_user_infor">Đang tải thông tin người dùng...</string>
     <string name="logging_please_wait">Đăng nhập...</string>
+    <string name="help_feedback"><![CDATA[Help & feedback]]></string>
 </resources>

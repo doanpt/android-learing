@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -23,6 +24,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -39,12 +41,14 @@ import com.google.android.gms.location.DetectedActivity;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import io.nlopez.smartlocation.OnActivityUpdatedListener;
 import io.nlopez.smartlocation.OnGeofencingTransitionListener;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.OnReverseGeocodingListener;
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.geofencing.utils.TransitionGeofence;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
@@ -103,6 +107,9 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
     private boolean isRunning;
     private LocationGooglePlayServicesProvider provider;
 
+    String addressName;
+
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -131,15 +138,34 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
 
     @Override
     public void onLocationUpdated(Location location) {
-        if (mainActivity != null) {
-            mainActivity.appendText("" + location.getLatitude() + ", " + location.getLongitude());
-        }
+
+        // We are going to get the address for the current position
+        SmartLocation.with(this).geocoding().reverse(location, new OnReverseGeocodingListener() {
+            @Override
+            public void onAddressResolved(Location original, List<Address> results) {
+                if (results.size() > 0) {
+                    Address result = results.get(0);
+                    StringBuilder builder = new StringBuilder();
+                    List<String> addressElements = new ArrayList<>();
+                    for (int i = 0; i <= result.getMaxAddressLineIndex(); i++) {
+                        addressElements.add(result.getAddressLine(i));
+                    }
+                    builder.append(TextUtils.join(", ", addressElements));
+                    addressName = builder.toString();
+                    Log.d(TAGG, "NameAddress:= " + addressName);
+                    if (mainActivity != null) {
+                        mainActivity.appendText("" + original.getLatitude() + ", " + original.getLongitude());
+                        mainActivity.myLocation(original.getLatitude(), original.getLongitude(), addressName);
+                    }
+                }
+            }
+        });
+
         setLatitude(location.getLatitude());
         setLongitude(location.getLongitude());
 
         TrackLocation trackLocation = new TrackLocation(location.getLatitude(), location.getLongitude(), System.currentTimeMillis());
         arrTrackLocation.add(trackLocation);
-
         if (UserInfo.getInstance(GPSService.this).getIsLogin())
             updateNotification(location.getLatitude() + ", " + location.getLongitude());
     }

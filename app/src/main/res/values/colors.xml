@@ -3,16 +3,18 @@
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#2196F3</color>
     <!--<color name="colorPrimaryDark">#0288D1</color>-->
-    <color name="colorAccent">#8D8D8D</color>
+    <color name="colorAccent">#2196F3</color>
     <color name="colorPrimaryLight">#03A9F4</color>
 
     <color name="colorPrimaryFullScreen">#29B6F6</color>
     <color name="colorPrimaryDarkFullScreen">#2196F3</color>
     <color name="colorAccentFullScreen">#4CAF50</color>
 
-    <color name="color_text_status">#00E676</color>
+    <color name="color_text_status">#29B6F6</color>
+    <!--<color name="color_text_status">#00E676</color>-->
     <color name="iron">#CCCCCC</color>
 
     <color name="color_item_user_infor">#212121</color>
     <color name="color_line">#EEEEEE</color>
+    <color name="color_boder_avatar">#9affffff</color>
 </resources>

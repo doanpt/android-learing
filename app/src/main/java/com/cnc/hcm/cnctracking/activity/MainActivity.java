@@ -67,7 +67,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener
-        , DialogSetTimePostServer.OnClickButtonDialogResetDataFoodListener, OnMapReadyCallback {
+        , OnMapReadyCallback {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -75,10 +75,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private GoogleMap mMap;
     private ViewPager viewPager;
 
-    private LinearLayout llClickProfile;
-    private LinearLayout llClickTime;
     private LinearLayout llClickNetwork;
     private LinearLayout llClickGPS;
+    private LinearLayout llClickSetting;
+    private LinearLayout llClickHelp;
     private TextView tvStatusNetwork, tvStatusGPS;
     private Button btnLogout;
     private CircleImageView imvAvatar;
@@ -89,7 +89,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
     private GPSService gpsService;
-    private DialogSetTimePostServer dialogSetTimePostServer;
 
     private boolean isNetworkConnected;
 
@@ -127,10 +126,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     if (tvStatusNetwork != null)
                         if (isNetworkConnected) {
                             tvStatusNetwork.setTextColor(getResources().getColor(R.color.color_text_status));
-                            tvStatusNetwork.setText(getResources().getString(R.string.network_connect));
+                            tvStatusNetwork.setText(getResources().getString(R.string.On));
                         } else {
                             tvStatusNetwork.setTextColor(getResources().getColor(android.R.color.darker_gray));
-                            tvStatusNetwork.setText(getResources().getString(R.string.network_disconnect));
+                            tvStatusNetwork.setText(getResources().getString(R.string.Off));
                         }
                     break;
             }
@@ -177,8 +176,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void initObjects() {
-        dialogSetTimePostServer = new DialogSetTimePostServer(this);
-        dialogSetTimePostServer.setOnClickButtonDialogResetDataFoodListener(this);
     }
 
     private void initViews() {
@@ -189,15 +186,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         imvMenuDrawer.setOnClickListener(this);
         imvSearch.setOnClickListener(this);
 
-        llClickProfile = (LinearLayout) findViewById(R.id.ll_click_profile);
-        llClickTime = (LinearLayout) findViewById(R.id.ll_click_set_time);
         llClickNetwork = (LinearLayout) findViewById(R.id.ll_click_network);
         llClickGPS = (LinearLayout) findViewById(R.id.ll_click_gps);
+        llClickSetting = (LinearLayout) findViewById(R.id.ll_click_setting);
+        llClickHelp = (LinearLayout) findViewById(R.id.ll_click_help);
 
-        llClickProfile.setOnClickListener(this);
-        llClickTime.setOnClickListener(this);
         llClickNetwork.setOnClickListener(this);
         llClickGPS.setOnClickListener(this);
+        llClickSetting.setOnClickListener(this);
+        llClickHelp.setOnClickListener(this);
 
         tvStatusNetwork = (TextView) findViewById(R.id.tv_status_network);
         tvStatusGPS = (TextView) findViewById(R.id.tv_status_gps);
@@ -206,10 +203,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         btnLogout.setOnClickListener(this);
 
         imvAvatar = (CircleImageView) findViewById(R.id.imv_avatar_profile);
+        imvAvatar.setOnClickListener(this);
         tvUsername = (TextView) findViewById(R.id.tv_username_profile);
         tvUserMail = (TextView) findViewById(R.id.tv_user_email_profile);
 
-        Picasso.with(this).load(Conts.URL_BASE + UserInfo.getInstance(this).getUserUrlImage()).into(imvAvatar);
+        Picasso.with(this).load(Conts.URL_BASE + UserInfo.getInstance(this).getUserUrlImage())
+                .placeholder(R.drawable.ic_account_avatar)
+                .error(R.drawable.ic_account_avatar).into(imvAvatar);
         tvUsername.setText(UserInfo.getInstance(this).getUsername());
         tvUserMail.setText(UserInfo.getInstance(this).getUserEmail());
 
@@ -264,6 +264,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     if (gpsService != null) {
                         gpsService.requestLocationUpdate();
                     }
+
                 } else {
                     Toast.makeText(this, "Permision denied", Toast.LENGTH_SHORT).show();
                 }
@@ -275,18 +276,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ll_click_profile:
-                Intent intentProfile = new Intent(this, ProfileActivity.class);
-                startActivity(intentProfile);
-                drawer.closeDrawer(GravityCompat.START);
-                break;
-            case R.id.ll_click_set_time:
-                if (gpsService != null) {
-                    String str = String.format(getResources().getString(R.string.current_time), gpsService.getTimePostToServer() + Conts.BLANK);
-                    dialogSetTimePostServer.setTextCurrentTime(str);
-                }
-                dialogSetTimePostServer.releaseData();
-                dialogSetTimePostServer.show();
+            case R.id.imv_avatar_profile:
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
                 break;
             case R.id.ll_click_network:
@@ -301,7 +293,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.btn_logout:
                 actionLogout();
-//                Toast.makeText(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!", Toast.LENGTH_SHORT).show();
+                drawer.closeDrawer(GravityCompat.START);
+                break;
+            case R.id.ll_click_setting:
+                Toast.makeText(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!", Toast.LENGTH_SHORT).show();
+                drawer.closeDrawer(GravityCompat.START);
+                break;
+            case R.id.ll_click_help:
+                Toast.makeText(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!", Toast.LENGTH_SHORT).show();
                 drawer.closeDrawer(GravityCompat.START);
                 break;
             case R.id.imv_menu:
@@ -355,21 +354,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onClickButtonOK(int time) {
-        if (gpsService != null) {
-            gpsService.setTimePostToServer(time);
-            Toast.makeText(this, getResources().getString(R.string.update_time_post_to_server_success), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, getResources().getString(R.string.update_time_post_to_server_fail), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onClickButtonExit() {
-
-    }
-
     public void showMessageRequestLogout() {
         final DialogNotification dialog = new DialogNotification(MainActivity.this);
         dialog.setHiddenBtnExit();
@@ -389,13 +373,28 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         dialog.show();
     }
 
+    public void myLocation(double latitude, double longitude, String addName) {
+        if (mMap != null) {
+            LatLng myLocation = new LatLng(latitude, longitude);
+            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            String permissions[] = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
+            requestPermissions(permissions, MainActivity.REQUEST_CODE_LOCATION_UPDATE);
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 12));
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
     }
 }

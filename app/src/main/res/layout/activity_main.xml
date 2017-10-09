@@ -19,9 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorPrimary"
-        android:fitsSystemWindows="true"
-        android:padding="10dp">
+        android:fitsSystemWindows="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,192 +28,234 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginTop="15dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/ic_bg_profile"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imv_avatar_profile"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:background="?android:selectableItemBackground"
                     android:cropToPadding="true"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
                     android:padding="5dp"
-                    android:src="@drawable/ic_account_avatar"/>
+                    android:src="@drawable/ic_account_avatar"
+                    app:civ_border_color="@color/color_boder_avatar"
+                    app:civ_border_width="4dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_username_profile"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="HoangIT"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"/>
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_user_email_profile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="hoangit173@gmail.com"
-                        android:textColor="#E0E0E0"
-                        android:textSize="14sp"/>
+                        <TextView
+                            android:id="@+id/tv_username_profile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="HoangIT"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
 
+                        <TextView
+                            android:id="@+id/tv_user_email_profile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="hoangit173@gmail.com"
+                            android:textColor="#E0E0E0"
+                            android:textSize="12sp"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="27dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="-10dp"
+                        android:src="@drawable/ic_person"/>
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_click_profile"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:background="?android:selectableItemBackground"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingRight="15dp">
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_click_network"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="?android:selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="-15dp"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_internet"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:text="@string/text_network"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_status_network"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/Off"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_click_gps"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="?android:selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="-15dp"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_location"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:text="@string/text_GPS"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_status_gps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/On"
+                        android:textSize="16sp"/>
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/text_profile"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"/>
+                    android:layout_weight="1"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text=">"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="18sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btn_logout"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:text="@string/text_logout"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"/>
+                </LinearLayout>
+
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
-
-            <LinearLayout
-                android:id="@+id/ll_click_set_time"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="?android:selectableItemBackground"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingRight="15dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/text_time"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text=">"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
-
-            <LinearLayout
-                android:id="@+id/ll_click_network"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="?android:selectableItemBackground"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingRight="15dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/text_network"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/tv_status_network"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textSize="14sp"/>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
-
-            <LinearLayout
-                android:id="@+id/ll_click_gps"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="?android:selectableItemBackground"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingRight="15dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/text_GPS"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/tv_status_gps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textSize="14sp"/>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/black"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:paddingTop="7dp">
+                android:layout_height="140dp"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btn_logout"
+                <LinearLayout
+                    android:id="@+id/ll_click_setting"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg_btn_logout"
-                    android:text="@string/text_logout"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"/>
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:background="?android:selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="-15dp"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_settings"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:text="@string/action_settings"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_click_help"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="?android:selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="-15dp"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_help"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:text="@string/help_feedback"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
 

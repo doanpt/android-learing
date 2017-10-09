@@ -124,7 +124,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess(String accessToken, String message) {
 //        mProgressDialog.dismiss();
-        Snackbar.make(_loginButton, "Login success: " + message, Snackbar.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
 
         UserInfo.getInstance(LoginActivity.this).setUserInfoLogin(accessToken);

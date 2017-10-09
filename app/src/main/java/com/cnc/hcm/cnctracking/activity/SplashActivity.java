@@ -19,7 +19,6 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 boolean isLogin = UserInfo.getInstance(SplashActivity.this).getIsLogin();
-                //isLogin = true;
                 if (isLogin) {
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
