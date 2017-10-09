@@ -39,6 +39,7 @@
             android:hint="Your email"
             android:inputType="textEmailAddress"
             android:paddingLeft="30dp"
+            android:textColor="#8D8D8D"
             android:text="truongphamit@cnc.com" />
 
         <ImageView
@@ -64,6 +65,7 @@
             android:hint="Your password"
             android:inputType="textPassword"
             android:paddingLeft="30dp"
+            android:textColor="#8D8D8D"
             android:text="123456" />
 
         <ImageView
