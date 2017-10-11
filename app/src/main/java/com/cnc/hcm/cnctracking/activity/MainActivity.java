@@ -329,8 +329,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 if (gpsService != null) {
                     gpsService.stopForeground(true);
                     gpsService.stopSelf();
-                    gpsService.setIsStartThread(false);
-                    gpsService.setRunning(true);
                 }
                 progressDialog.dismiss();
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

@@ -63,32 +63,19 @@ import retrofit2.Response;
  * Created by giapmn on 9/14/17.
  */
 
-public class GPSService extends Service implements Runnable, OnLocationUpdatedListener, OnActivityUpdatedListener, OnGeofencingTransitionListener {
-    private static final long TIME_SLEEP = 1000;
-
+public class GPSService extends Service implements OnLocationUpdatedListener, OnActivityUpdatedListener, OnGeofencingTransitionListener {
     public static final String ACTION_SHOW_APP = "ACTION_SHOW_APP";
     private static final int NOTIFI_ID = 111;
     private static final String TAGG = "GPSService";
     public static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
-    private static final int BACKUP_GPS = 21;
-    private static final int ADD_GPS = 12;
-    private static final int POST_GPS_TO_SERVER = 1232;
-    private static final int UPDATE_TIME_RUN_SERVICE_TO_UI = 213234;
-    private static final int GPS_NOT_FOUND = 434324;
-    private static final String KEY_START_THREAD = "KEY_START_THREAD";
-    private static final String KEY_TIME_POST_TO_SERVER = "KEY_TIME_POST_TO_SERVER";
-    private static final float MIN_DISTANCE_GET_GPS = 30;
-    private static final long MIN_TIME_GET_GPS = 0;
+    private static final float MIN_DISTANCE_GET_GPS = 30.0f;
+    private static final long MIN_TIME_GET_GPS = 15000L;
 
     private NotificationManager notificationManager;
     private NotificationCompat.Builder mBuilder;
     private RemoteViews remoteViews;
     private Notification mNotification;
 
-    private Executor executor = Executors.newSingleThreadExecutor();
-
-    private long timeProgress;
-    private int indexPost;
     private boolean isPause;
 
     private ArrayList<TrackLocation> arrTrackLocation = new ArrayList<>();
@@ -97,15 +84,12 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
     private float accuracy;
     private boolean isNetworkConnected;
     private int batteryLevel;
-    private int timeRunService;
 
     private final Gson gson = new Gson();
     private APIService mService;
 
     private MainActivity mainActivity;
     private String body = "";
-    private int timePostToServer;
-    private boolean isRunning;
     private LocationGooglePlayServicesProvider provider;
 
     String addressName;
@@ -117,73 +101,10 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
         return new MyBinder();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        setIsStartThread(false);
-        unregisterReceiver(mBroadcast);
-        putInforSeriveDestroy();
-        sendBroadcast(new Intent(Conts.ACTION_RESTART_SERVICE));
-
-    }
-
-    @Override
-    public void onActivityUpdated(DetectedActivity detectedActivity) {
-
-    }
-
-    @Override
-    public void onGeofenceTransition(TransitionGeofence transitionGeofence) {
-
-    }
-
-    @Override
-    public void onLocationUpdated(Location location) {
-
-        // We are going to get the address for the current position
-        SmartLocation.with(this).geocoding().reverse(location, new OnReverseGeocodingListener() {
-            @Override
-            public void onAddressResolved(Location original, List<Address> results) {
-                if (results.size() > 0) {
-                    Address result = results.get(0);
-                    StringBuilder builder = new StringBuilder();
-                    List<String> addressElements = new ArrayList<>();
-                    for (int i = 0; i <= result.getMaxAddressLineIndex(); i++) {
-                        addressElements.add(result.getAddressLine(i));
-                    }
-                    builder.append(TextUtils.join(", ", addressElements));
-                    addressName = builder.toString();
-                    Log.d(TAGG, "NameAddress:= " + addressName);
-                    if (mainActivity != null) {
-                        mainActivity.appendText("" + original.getLatitude() + ", " + original.getLongitude() + ", " + original.getAccuracy());
-                        mainActivity.myLocation(original.getLatitude(), original.getLongitude(), original.getAccuracy(), addressName);
-                    }
-                }
-            }
-        });
-
-        setLatitude(location.getLatitude());
-        setLongitude(location.getLongitude());
-        setAccuracy(location.getAccuracy());
-
-        TrackLocation trackLocation = new TrackLocation(location.getLatitude(), location.getLongitude(), System.currentTimeMillis(), location.getAccuracy());
-        arrTrackLocation.add(trackLocation);
-        if (UserInfo.getInstance(GPSService.this).getIsLogin())
-            updateNotification(location.getLatitude() + ", " + location.getLongitude() + ", " + location.getAccuracy());
-    }
-
     public class MyBinder extends Binder {
         public GPSService getGPSService() {
             return GPSService.this;
         }
-    }
-
-    //TODO remove, method only for test
-    private void putInforSeriveDestroy() {
-        SharedPreferences sharedPreferences = getSharedPreferences("InforService", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("KEY_INFOR_SERVICE_DESTROY", "Service Destroy by System");
-        editor.apply();
     }
 
 
@@ -221,6 +142,82 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
         return START_STICKY;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mBroadcast);
+        sendBroadcast(new Intent(Conts.ACTION_RESTART_SERVICE));
+
+    }
+
+    @Override
+    public void onActivityUpdated(DetectedActivity detectedActivity) {
+
+    }
+
+    @Override
+    public void onGeofenceTransition(TransitionGeofence transitionGeofence) {
+
+    }
+
+    @Override
+    public void onLocationUpdated(Location location) {
+        if (UserInfo.getInstance(GPSService.this).getIsLogin())
+            updateNotification(location.getLatitude() + ", " + location.getLongitude() + ", " + location.getAccuracy());
+
+        // We are going to get the address for the current position
+        SmartLocation.with(this).geocoding().reverse(location, new OnReverseGeocodingListener() {
+            @Override
+            public void onAddressResolved(Location original, List<Address> results) {
+                if (results.size() > 0) {
+                    Address result = results.get(0);
+                    StringBuilder builder = new StringBuilder();
+                    List<String> addressElements = new ArrayList<>();
+                    for (int i = 0; i <= result.getMaxAddressLineIndex(); i++) {
+                        addressElements.add(result.getAddressLine(i));
+                    }
+                    builder.append(TextUtils.join(", ", addressElements));
+                    addressName = builder.toString();
+                    if (mainActivity != null) {
+                        mainActivity.myLocation(original.getLatitude(), original.getLongitude(), original.getAccuracy(), addressName);
+                    }
+                }
+            }
+        });
+
+        setLatitude(location.getLatitude());
+        setLongitude(location.getLongitude());
+        setAccuracy(location.getAccuracy());
+
+        if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0 && latitude != 0) {
+            isNetworkConnected = getNetworkConntected();
+            if (isNetworkConnected) {
+                Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
+
+                TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
+                arrTrackLocation.add(trackLocation);
+
+                int size = arrTrackLocation.size();
+                if (size >= 5) {
+                    Log.d(TAGG, "onLocationUpdated " + "POST_GPS_TO_SERVER");
+                    ItemTrackLocation itemTrackLocation = new ItemTrackLocation(arrTrackLocation, batteryLevel);
+                    updateLocation(itemTrackLocation);
+                }
+
+            } else {
+                Log.d(TAGG, "onLocationUpdated " + "BACK_UP_GPS");
+                TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
+                arrTrackLocation.add(trackLocation);
+            }
+
+        } else {
+            updateNotification("GPS not found");
+            Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND");
+        }
+
+    }
+
+
     public void requestLocationUpdate() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -251,130 +248,20 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
         smartLocation.location(provider).config(params).start(this);
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case POST_GPS_TO_SERVER:
-                    Log.d(TAGG, "handleMessage " + "POST_GPS_TO_SERVER");
-                    if (mainActivity != null)
-                        mainActivity.appendText("---------- POST GPS TO SERVER --------- \n" + body + "\n");
-                    break;
-                case BACKUP_GPS:
-                    Log.d(TAGG, "handleMessage " + "BACKUP_GPS");
-                    if (mainActivity != null) {
-                        mainActivity.appendText(latitude + ", " + longitude + ", " + accuracy);
-                    }
-                    break;
-                case ADD_GPS:
-                    TrackLocation trackLocation = (TrackLocation) msg.obj;
-                    if (mainActivity != null) {
-                        mainActivity.appendText(trackLocation.getLatitude() + ", " + trackLocation.getLongitude() + ", " + trackLocation.getAccuracy());
-                    }
-                    Log.d(TAGG, "handleMessage " + "ADD_GPS: " + trackLocation.getLatitude() + ", " + trackLocation.getLongitude() + ", " + trackLocation.getAccuracy());
-
-                    break;
-                case UPDATE_TIME_RUN_SERVICE_TO_UI:
-                    Log.d(TAGG, "handleMessage " + "UPDATE_TIME_RUN_SERVICE_TO_UI, isMainActivityActive: " + UserInfo.getInstance(GPSService.this).getMainActivityActive());
-
-                    if (mainActivity != null) {
-                        mainActivity.disPlayTimeProgress(msg.arg1);
-                        boolean statusGPS = SmartLocation.with(mainActivity).location().state().isAnyProviderAvailable();
-                        mainActivity.setTitleStatusGPS(statusGPS);
-                    }
-                    break;
-                case GPS_NOT_FOUND:
-                    Log.d(TAGG, "handleMessage " + "GPS_NOT_FOUND");
-                    if (mainActivity != null)
-                        mainActivity.appendText("Vui lòng Di chuyển vị trí để get toạ độ GPS");
-                    break;
-            }
-
-        }
-    };
-
-    @Override
-    public void run() {
-        while (!isRunning && UserInfo.getInstance(GPSService.this).getIsLogin()) {
-            if (!isPause) {
-                try {
-                    Thread.sleep(TIME_SLEEP);
-                    isNetworkConnected = getNetworkConntected();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (longitude != 0 && latitude != 0) {  // TODO WHILE
-                    timeProgress++;
-                    timeRunService++;
-                    if (timeRunService > timePostToServer) {
-                        timeRunService = 1;
-                    }
-                    Message meg1 = new Message();
-                    meg1.what = UPDATE_TIME_RUN_SERVICE_TO_UI;
-                    meg1.arg1 = timeRunService;
-                    meg1.setTarget(handler);
-                    meg1.sendToTarget();
-
-                    if (timeProgress % timePostToServer == 0) {
-                        indexPost++;
-                        if (isNetworkConnected) {
-                            if (indexPost <= 5) {
-                                TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
-                                arrTrackLocation.add(trackLocation);
-
-                                int size = arrTrackLocation.size();
-                                if (size >= 5) {
-                                    ItemTrackLocation location = new ItemTrackLocation(arrTrackLocation, batteryLevel);
-                                    updateLocation(location);
-                                } else {
-                                    Message meg2 = new Message();
-                                    meg2.what = ADD_GPS;
-                                    meg2.obj = trackLocation;
-                                    meg2.setTarget(handler);
-                                    meg2.sendToTarget();
-                                }
-                            } else {
-                                ItemTrackLocation location = new ItemTrackLocation(arrTrackLocation, batteryLevel);
-                                updateLocation(location);
-                            }
-                        } else {
-
-                            TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
-                            arrTrackLocation.add(trackLocation);
-
-                            Message meg3 = new Message();
-                            meg3.what = BACKUP_GPS;
-                            meg3.setTarget(handler);
-                            meg3.sendToTarget();
-                        }
-
-                    }
-
-                } else {
-                    Message meg3 = new Message();
-                    meg3.what = GPS_NOT_FOUND;
-                    meg3.setTarget(handler);
-                    meg3.sendToTarget();
-                }
-            }
-        }
-    }
 
     public void updateLocation(ItemTrackLocation location) {
         isPause = true;
-        Log.d(TAGG, "updateLocation(), body: " + location);
+        Log.d(TAGG, "onLocationUpdated, body: " + location);
         mService.updateLocation(location).enqueue(new Callback<UpdateLocationResponseStatus>() {
             @Override
             public void onResponse(Call<UpdateLocationResponseStatus> call, Response<UpdateLocationResponseStatus> response) {
                 int statusCode = response.code();
-                Log.d(TAGG, "updateLocation.onResponse(), statusCode: " + statusCode);
+                Log.d(TAGG, "onLocationUpdated.onResponse(), statusCode: " + statusCode);
                 if (response.isSuccessful()) {
                     UpdateLocationResponseStatus updateLocation = response.body();
                     if (updateLocation != null) {
                         int updateLocationCode = updateLocation.getStatusCode();
                         if (updateLocationCode == Conts.RESPONSE_STATUS_OK) {
-                            indexPost = 0;
                             arrTrackLocation.clear();
                             isPause = false;
                             body = gson.toJson(response.body());
@@ -387,15 +274,11 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
                         }
                     }
 
-                    Log.d(TAGG, "updateLocation.onResponse().isSuccessful(), body: " + body);
+                    Log.d(TAGG, "onLocationUpdated.onResponse().isSuccessful(), body: " + body);
                 } else {
                     body = gson.toJson(response.body());
-                    Log.d(TAGG, "updateLocation.onResponse().isNOTSuccessful(), body: " + body);
+                    Log.d(TAGG, "onLocationUpdated.onResponse().isFail(), body: " + body);
                 }
-                Message message = new Message();
-                message.what = POST_GPS_TO_SERVER;
-                message.setTarget(handler);
-                message.sendToTarget();
             }
 
             @Override
@@ -437,43 +320,9 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
 
 
     public void startThread() {
-        if (!isStartThread()) {
-            Log.d(TAGG, "startThread");
-            timeProgress = 0;
-            indexPost = 0;
-            timeRunService = 0;
-            setIsStartThread(true);
-        }
         registerBroadcast();
-        timePostToServer = getTimePostToServer();
         String token = UserInfo.getInstance(this).getAccessToken();
         mService = ApiUtils.getAPIService(token);
-        executor.execute(this);
-    }
-
-    private boolean isStartThread() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Conts.SETTING, MODE_PRIVATE);
-        return sharedPreferences.getBoolean(KEY_START_THREAD, false);
-    }
-
-    public void setIsStartThread(boolean isStartThread) {
-        SharedPreferences sharedPreferences = getSharedPreferences(Conts.SETTING, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(KEY_START_THREAD, isStartThread);
-        editor.apply();
-    }
-
-    public int getTimePostToServer() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Conts.SETTING, MODE_PRIVATE);
-        return sharedPreferences.getInt(KEY_TIME_POST_TO_SERVER, Conts.DEFAULT_VALUE_INT_15);
-    }
-
-    public void setTimePostToServer(int timePostToServer) {
-        this.timePostToServer = timePostToServer;
-        SharedPreferences sharedPreferences = getSharedPreferences(Conts.SETTING, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(KEY_TIME_POST_TO_SERVER, timePostToServer);
-        editor.apply();
     }
 
 
@@ -496,7 +345,7 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
 
         if (apiVersion < Build.VERSION_CODES.HONEYCOMB) {
 
-            mNotification = new Notification(R.drawable.ic_tracking, ticker, System.currentTimeMillis());
+            mNotification = new Notification(R.mipmap.ic_launcher, ticker, System.currentTimeMillis());
             mNotification.contentView = remoteViews;
             mNotification.contentIntent = piOpen;
             mNotification.flags |= Notification.FLAG_NO_CLEAR;
@@ -505,7 +354,7 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
 
         } else if (apiVersion >= Build.VERSION_CODES.HONEYCOMB) {
 
-            mBuilder.setSmallIcon(R.drawable.ic_tracking)
+            mBuilder.setSmallIcon(R.mipmap.ic_launcher)
                     .setAutoCancel(false)
                     .setOngoing(true)
                     .setContentIntent(piOpen)
@@ -544,10 +393,6 @@ public class GPSService extends Service implements Runnable, OnLocationUpdatedLi
 
     public void setPause(boolean pause) {
         isPause = pause;
-    }
-
-    public void setRunning(boolean running) {
-        isRunning = running;
     }
 
     public double getLongitude() {
