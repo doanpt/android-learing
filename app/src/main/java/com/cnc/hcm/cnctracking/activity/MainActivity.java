@@ -99,7 +99,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
             gpsService.setMainActivity(MainActivity.this);
-            gpsService.requestLocationUpdate();
             Log.d(TAG, "ServiceConnection, onServiceConnected");
         }
 
@@ -377,6 +376,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void myLocation(double latitude, double longitude, float accuracy, String addName) { // TODO did we need accuracy here?
         if (mMap != null) {
+            mMap.clear();
             LatLng myLocation = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions().position(myLocation).title(addName));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));

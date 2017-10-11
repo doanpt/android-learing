@@ -68,7 +68,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     private static final int NOTIFI_ID = 111;
     private static final String TAGG = "GPSService";
     public static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
-    private static final float MIN_DISTANCE_GET_GPS = 30.0f;
+    private static final float MIN_DISTANCE_GET_GPS = 0.0f;
+    private static final float MAX_DISTANCE_GET_GPS = 30.0f;
     private static final long MIN_TIME_GET_GPS = 15000L;
 
     private NotificationManager notificationManager;
@@ -92,8 +93,10 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     private String body = "";
     private LocationGooglePlayServicesProvider provider;
 
-    String addressName;
+    private String addressName;
+    private boolean isFirstLocation;
 
+    private Location locationOld;
 
     @Nullable
     @Override
@@ -119,7 +122,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
             switch (action) {
                 case ACTION_SHOW_APP:
                     if (isUserLogin) {
-                        requestLocationUpdate();
                         Intent intent1 = new Intent(this, MainActivity.class);
                         intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -161,12 +163,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     }
 
     @Override
-    public void onLocationUpdated(Location location) {
+    public void onLocationUpdated(Location locationNew) {
         if (UserInfo.getInstance(GPSService.this).getIsLogin())
-            updateNotification(location.getLatitude() + ", " + location.getLongitude() + ", " + location.getAccuracy());
+            updateNotification(locationNew.getLatitude() + ", " + locationNew.getLongitude() + ", " + locationNew.getAccuracy());
 
         // We are going to get the address for the current position
-        SmartLocation.with(this).geocoding().reverse(location, new OnReverseGeocodingListener() {
+        SmartLocation.with(this).geocoding().reverse(locationNew, new OnReverseGeocodingListener() {
             @Override
             public void onAddressResolved(Location original, List<Address> results) {
                 if (results.size() > 0) {
@@ -185,38 +187,61 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
             }
         });
 
+        if (!isFirstLocation) {
+            this.locationOld = locationNew;
+
+            setLatitude(locationOld.getLatitude());
+            setLongitude(locationOld.getLongitude());
+            setAccuracy(locationOld.getAccuracy());
+
+            if (longitude != 0 && latitude != 0) {
+                TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
+                arrTrackLocation.add(trackLocation);
+                isFirstLocation = true;
+                Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
+            }
+        } else {
+            if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin()) {
+                double distance = locationOld.distanceTo(locationNew);
+                Log.d(TAGG, "onLocationUpdated, Distance:= " + distance);
+                if (distance <= MAX_DISTANCE_GET_GPS) {
+                    pushGPSToServer(locationOld);
+                    Log.d(TAGG, "onLocationUpdated " + "ADD_GPS OLDDDD: " + locationOld.getLatitude() + ", " + locationOld.getLongitude() + ", " + locationOld.getAccuracy());
+                } else {
+                    pushGPSToServer(locationNew);
+                    this.locationOld = locationNew;
+                    Log.d(TAGG, "onLocationUpdated " + "ADD_GPS NEWWWW: " + locationNew.getLatitude() + ", " + locationNew.getLongitude() + ", " + locationNew.getAccuracy());
+                }
+            } else {
+                updateNotification("GPS not found");
+                Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND");
+            }
+
+        }
+    }
+
+
+    private void pushGPSToServer(Location location) {
+
         setLatitude(location.getLatitude());
         setLongitude(location.getLongitude());
         setAccuracy(location.getAccuracy());
 
-        if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0 && latitude != 0) {
-            isNetworkConnected = getNetworkConntected();
-            if (isNetworkConnected) {
-                Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
-
-                TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
-                arrTrackLocation.add(trackLocation);
-
-                int size = arrTrackLocation.size();
-                if (size >= 5) {
-                    Log.d(TAGG, "onLocationUpdated " + "POST_GPS_TO_SERVER");
-                    ItemTrackLocation itemTrackLocation = new ItemTrackLocation(arrTrackLocation, batteryLevel);
-                    updateLocation(itemTrackLocation);
-                }
-
+        isNetworkConnected = getNetworkConntected();
+        if (isNetworkConnected) {
+            int size = arrTrackLocation.size();
+            if (size >= 5) {
+                Log.d(TAGG, "onLocationUpdated " + "POST_GPS_TO_SERVER");
+                updateLocation(new ItemTrackLocation(arrTrackLocation, batteryLevel));
             } else {
-                Log.d(TAGG, "onLocationUpdated " + "BACK_UP_GPS");
-                TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
-                arrTrackLocation.add(trackLocation);
+                arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
             }
-
         } else {
-            updateNotification("GPS not found");
-            Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND");
+            arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
+            Log.d(TAGG, "onLocationUpdated " + "BACK_UP_GPS");
+
         }
-
     }
-
 
     public void requestLocationUpdate() {
 
