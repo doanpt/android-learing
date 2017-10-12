@@ -186,40 +186,41 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
                 }
             }
         });
+        if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin()) {
 
-        if (!isFirstLocation) {
-            this.locationOld = locationNew;
+            if (!isFirstLocation) {
+                this.locationOld = locationNew;
 
-            setLatitude(locationOld.getLatitude());
-            setLongitude(locationOld.getLongitude());
-            setAccuracy(locationOld.getAccuracy());
+                setLatitude(locationOld.getLatitude());
+                setLongitude(locationOld.getLongitude());
+                setAccuracy(locationOld.getAccuracy());
 
-            if (longitude != 0 && latitude != 0) {
-                TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
-                arrTrackLocation.add(trackLocation);
-                isFirstLocation = true;
-                Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
-            }
-        } else {
-            if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin()) {
-                double distance = locationOld.distanceTo(locationNew);
-                Log.d(TAGG, "onLocationUpdated, Distance:= " + distance);
-                if (distance <= MAX_DISTANCE_GET_GPS) {
-                    pushGPSToServer(locationOld);
-                    Log.d(TAGG, "onLocationUpdated " + "ADD_GPS OLDDDD: " + locationOld.getLatitude() + ", " + locationOld.getLongitude() + ", " + locationOld.getAccuracy());
-                } else {
-                    pushGPSToServer(locationNew);
-                    this.locationOld = locationNew;
-                    Log.d(TAGG, "onLocationUpdated " + "ADD_GPS NEWWWW: " + locationNew.getLatitude() + ", " + locationNew.getLongitude() + ", " + locationNew.getAccuracy());
+                if (longitude != 0 && latitude != 0) {
+                    TrackLocation trackLocation = new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy);
+                    arrTrackLocation.add(trackLocation);
+                    isFirstLocation = true;
+                    Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
                 }
             } else {
-                updateNotification("GPS not found");
-                Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND");
-            }
+                if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin()) {
+                    double distance = locationOld.distanceTo(locationNew);
+                    Log.d(TAGG, "onLocationUpdated, Distance:= " + distance);
+                    if (distance <= MAX_DISTANCE_GET_GPS) {
+                        pushGPSToServer(locationOld);
+                        Log.d(TAGG, "onLocationUpdated " + "ADD_GPS OLDDDD: " + locationOld.getLatitude() + ", " + locationOld.getLongitude() + ", " + locationOld.getAccuracy());
+                    } else {
+                        pushGPSToServer(locationNew);
+                        this.locationOld = locationNew;
+                        Log.d(TAGG, "onLocationUpdated " + "ADD_GPS NEWWWW: " + locationNew.getLatitude() + ", " + locationNew.getLongitude() + ", " + locationNew.getAccuracy());
+                    }
+                } else {
+                    updateNotification("GPS not found");
+                    Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND");
+                }
 
+            }
         }
     }
-
 
     private void pushGPSToServer(Location location) {
 
