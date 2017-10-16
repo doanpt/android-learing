@@ -86,7 +86,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView imvMenuDrawer, imvSearch;
     private ImageView imvProfile;
     private DrawerLayout drawer;
-    private TextView tvTimeProgress, tvStatus;
+    //private TextView tvTimeProgress, tvStatus;
 
 
     private GPSService gpsService;
@@ -222,7 +222,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 //        pagerTabStrip.setTextColor(Color.WHITE);
 //        pagerTabStrip.setTabIndicatorColor(Color.YELLOW);
 
-        tvTimeProgress = (TextView) findViewById(R.id.tv_time_run_service);
+        //tvTimeProgress = (TextView) findViewById(R.id.tv_time_run_service);
 //        tvStatus = (TextView) findViewById(R.id.textView);
 
     }
@@ -232,7 +232,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void disPlayTimeProgress(int time) {
-        tvTimeProgress.setText("Time: " + time);
+        //tvTimeProgress.setText("Time: " + time);
     }
 
     private boolean checkGPSServiceRunning(Class<?> serviceClass) {
@@ -379,7 +379,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             mMap.clear();
             LatLng myLocation = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions().position(myLocation).title(addName));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
         }
     }
 
