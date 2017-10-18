@@ -45,6 +45,7 @@ dependencies {
         transitive = false
     }
 
+    compile 'com.github.nkzawa:socket.io-client:0.3.0'
     // test lib
     testCompile 'junit:junit:4.12'
 }

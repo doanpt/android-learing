@@ -37,9 +37,14 @@ import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Ack;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.google.android.gms.location.DetectedActivity;
 import com.google.gson.Gson;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -94,6 +99,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     private LocationGooglePlayServicesProvider provider;
 
     private String addressName;
+    private Socket mSocket;
+    private boolean isConnectSocket;
 
     @Nullable
     @Override
@@ -145,7 +152,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mBroadcast);
-        sendBroadcast(new Intent(Conts.ACTION_RESTART_SERVICE));
 
     }
 
@@ -319,8 +325,36 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
         registerBroadcast();
         String token = UserInfo.getInstance(this).getAccessToken();
         mService = ApiUtils.getAPIService(token);
+
+        try {
+            mSocket = IO.socket(Conts.BASE_URL);
+            mSocket.on("join_res", onNewMessage);
+            mSocket.emit("join", token, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    Log.d(TAGG, "startThread Tao nhan dc roi");
+                    Log.d(TAGG, "startThread" + args.toString());
+                }
+            });
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.d(TAGG, "Tao nhan dc roi");
+
+        }
+    };
+
+    public void disconnectSocket() {
+        if (mSocket != null) {
+            mSocket.disconnect();
+        }
+    }
 
     private void setupNotification() {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

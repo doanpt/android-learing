@@ -34,23 +34,6 @@ public class BroadcastRecever extends BroadcastReceiver {
                 }
                 Log.d(TAGG, "BroadcastRecever, ACTION_BOOT_COMPLETED");
                 break;
-            case Conts.ACTION_RESTART_SERVICE:
-                Log.d(TAGG, "ACTION_RESTART_SERVICE");
-                boolean existServiceRunning = false;
-                Class<?> serviceClass = GPSService.class;
-                ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-                for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
-                    if (serviceClass.getName().equals(serviceInfo.service.getClassName())) {
-                        existServiceRunning = true;
-                    }
-                }
-                if (!existServiceRunning && isUserLogin) {
-                    Intent intentService = new Intent(context, GPSService.class);
-                    intentService.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                    context.startService(intentService);
-                    Log.d(TAGG, "START_SERVICE_AGAIN");
-                }
-                break;
         }
     }
 

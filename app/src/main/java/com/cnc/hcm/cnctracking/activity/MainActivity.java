@@ -326,6 +326,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public void run() {
                 UserInfo.getInstance(MainActivity.this).setUserInfoLogout();
                 if (gpsService != null) {
+                    gpsService.disconnectSocket();
                     gpsService.stopForeground(true);
                     gpsService.stopSelf();
                 }
