@@ -160,6 +160,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
         super.onDestroy();
         unregisterReceiver(mBroadcast);
         disconnectSocket();
+        SmartLocation.with(mainActivity).location().stop();
+        SmartLocation.with(this).geocoding().stop();
     }
 
     @Override
