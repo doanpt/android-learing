@@ -100,6 +100,15 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
 
     private String addressName;
     private Socket mSocket;
+
+//    {
+//        try {
+//            mSocket = IO.socket(Conts.BASE_URL);
+//        } catch (URISyntaxException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     private boolean isConnectSocket;
 
     @Nullable
@@ -152,7 +161,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mBroadcast);
-
+        disconnectSocket();
     }
 
     @Override
@@ -325,7 +334,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
         registerBroadcast();
         String token = UserInfo.getInstance(this).getAccessToken();
         mService = ApiUtils.getAPIService(token);
-
         try {
             mSocket = IO.socket(Conts.BASE_URL);
             mSocket.on("join_res", onNewMessage);
@@ -336,7 +344,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
                     Log.d(TAGG, "startThread" + args.toString());
                 }
             });
-        } catch (URISyntaxException e) {
+            mSocket.connect();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -346,12 +355,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
         @Override
         public void call(Object... args) {
             Log.d(TAGG, "Tao nhan dc roi");
-
+            Log.d(TAGG, "startThread" + args.toString());
         }
     };
 
     public void disconnectSocket() {
-        if (mSocket != null) {
+        if (mSocket != null && mSocket.connected()) {
             mSocket.disconnect();
         }
     }
