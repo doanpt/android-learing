@@ -101,15 +101,13 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     private String addressName;
     private Socket mSocket;
 
-//    {
-//        try {
-//            mSocket = IO.socket(Conts.BASE_URL);
-//        } catch (URISyntaxException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    private boolean isConnectSocket;
+    {
+        try {
+            mSocket = IO.socket(Conts.BASE_URL);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Nullable
     @Override
@@ -334,34 +332,39 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
         registerBroadcast();
         String token = UserInfo.getInstance(this).getAccessToken();
         mService = ApiUtils.getAPIService(token);
-        try {
-            mSocket = IO.socket(Conts.BASE_URL);
-            mSocket.on("join_res", onNewMessage);
-            mSocket.emit("join", token, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    Log.d(TAGG, "startThread Tao nhan dc roi");
-                    Log.d(TAGG, "startThread" + args.toString());
-                }
-            });
-            mSocket.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Log.d(TAGG, "Call connect in Service");
+        connectSocket(token);
     }
 
+    public Socket getmSocket() {
+        return mSocket;
+    }
 
-    private Emitter.Listener onNewMessage = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            Log.d(TAGG, "Tao nhan dc roi");
-            Log.d(TAGG, "startThread" + args.toString());
-        }
-    };
+    public void connectSocket(String token) {
+        //FIXME Please don't remove code in below comment. It will use later
+//            mSocket.on("join_res", onNewMessage);
+        mSocket.emit("join", token, new Ack() {
+            @Override
+            public void call(Object... args) {
+                Log.d(TAGG, "Tao nhan dc roi1");
+                Log.d(TAGG, "startThread1" + args.toString());
+            }
+        });
+        mSocket.connect();
+    }
+    //FIXME Please don't remove code in below comment. It will use later
+//    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+//        @Override
+//        public void call(Object... args) {
+//            Log.d(TAGG, "Tao nhan dc roi2");
+//            Log.d(TAGG, "startThread2" + args.toString());
+//        }
+//    };
 
     public void disconnectSocket() {
         if (mSocket != null && mSocket.connected()) {
             mSocket.disconnect();
+            mSocket = null;
         }
     }
 

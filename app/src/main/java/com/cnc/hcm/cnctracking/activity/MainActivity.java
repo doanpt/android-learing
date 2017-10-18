@@ -99,6 +99,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
             gpsService.setMainActivity(MainActivity.this);
+            //FIXME this code which is commented could remove if you want
+//            if (gpsService.getmSocket() == null || !gpsService.getmSocket().connected()) {
+//                String token = UserInfo.getInstance(MainActivity.this).getAccessToken();
+//                Log.d("GPSService","Call connect in MainActivity");
+//                gpsService.connectSocket(token);
+//            }
             Log.d(TAG, "ServiceConnection, onServiceConnected");
         }
 
