@@ -9,7 +9,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
@@ -18,9 +17,7 @@ import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -37,7 +34,6 @@ import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
-import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Ack;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -47,8 +43,6 @@ import com.google.gson.Gson;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import io.nlopez.smartlocation.OnActivityUpdatedListener;
 import io.nlopez.smartlocation.OnGeofencingTransitionListener;
@@ -69,12 +63,11 @@ import retrofit2.Response;
  */
 
 public class GPSService extends Service implements OnLocationUpdatedListener, OnActivityUpdatedListener, OnGeofencingTransitionListener {
-    public static final String ACTION_SHOW_APP = "ACTION_SHOW_APP";
-    private static final int NOTIFI_ID = 111;
+    private static final String ACTION_SHOW_APP = "ACTION_SHOW_APP";
     private static final String TAGG = "GPSService";
-    public static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
+    private static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
+    private static final int NOTIFI_ID = 111;
     private static final float MIN_DISTANCE_GET_GPS = 30.0f;
-    private static final float MAX_DISTANCE_GET_GPS = 30.0f;
     private static final long MIN_TIME_GET_GPS = 0L;
 
     private NotificationManager notificationManager;
@@ -82,23 +75,24 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     private RemoteViews remoteViews;
     private Notification mNotification;
 
-    private boolean isPause;
-
     private ArrayList<TrackLocation> arrTrackLocation = new ArrayList<>();
+
+    private Gson gson = new Gson();
+    private APIService mService;
+    private MainActivity mainActivity;
+    private LocationGooglePlayServicesProvider provider;
+
     private double longitude;
     private double latitude;
     private float accuracy;
-    private boolean isNetworkConnected;
     private int batteryLevel;
-
-    private final Gson gson = new Gson();
-    private APIService mService;
-
-    private MainActivity mainActivity;
     private String body = "";
-    private LocationGooglePlayServicesProvider provider;
-
     private String addressName;
+
+    private boolean isNetworkConnected;
+    private boolean isServiceConnected;
+    private boolean isPause;
+
     private Socket mSocket;
 
     {
@@ -146,10 +140,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
                     break;
             }
         }
-        if (isUserLogin) {
+        if (isUserLogin && !isServiceConnected) {
+            registerBroadcast();
             startThread();
             setupNotification();
             requestLocationUpdate();
+            isServiceConnected = true;
         }
         Log.i(TAGG, "onStartCommand, UserLogin = " + isUserLogin);
         return START_STICKY;
@@ -158,8 +154,10 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mBroadcast);
+        Log.d(TAGG, "Service on Destroy");
+        isServiceConnected = false;
         disconnectSocket();
+        unregisterReceiver(mBroadcast);
         SmartLocation.with(mainActivity).location().stop();
         SmartLocation.with(this).geocoding().stop();
     }
@@ -204,19 +202,18 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
         });
         if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0 && latitude != 0) {
 
-            isNetworkConnected = getNetworkConntected();
             if (isNetworkConnected) {
                 int size = arrTrackLocation.size();
                 if (size >= 5) {
                     Log.d(TAGG, "onLocationUpdated " + "POST_GPS_TO_SERVER");
                     updateLocation(new ItemTrackLocation(arrTrackLocation, batteryLevel));
                 } else {
-                    Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
-                    arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
+                    Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + location.getLatitude() + ", " + location.getLongitude() + ", " + location.getAccuracy());
+                    arrTrackLocation.add(new TrackLocation(location.getLatitude(), location.getLongitude(), System.currentTimeMillis(), location.getAccuracy()));
                 }
             } else {
-                arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
-                Log.d(TAGG, "onLocationUpdated " + "BACK_UP_GPS");
+                arrTrackLocation.add(new TrackLocation(location.getLatitude(), location.getLongitude(), System.currentTimeMillis(), location.getAccuracy()));
+                Log.d(TAGG, "onLocationUpdated " + "BACK_UP_GPS: " + location.getLatitude() + ", " + location.getLongitude() + ", " + location.getAccuracy());
 
             }
 
@@ -260,7 +257,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
 
     public void updateLocation(ItemTrackLocation location) {
         isPause = true;
-        Log.d(TAGG, "onLocationUpdated, body: " + location);
         mService.updateLocation(location).enqueue(new Callback<UpdateLocationResponseStatus>() {
             @Override
             public void onResponse(Call<UpdateLocationResponseStatus> call, Response<UpdateLocationResponseStatus> response) {
@@ -331,7 +327,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
 
 
     public void startThread() {
-        registerBroadcast();
         String token = UserInfo.getInstance(this).getAccessToken();
         mService = ApiUtils.getAPIService(token);
         Log.d(TAGG, "Call connect in Service");
@@ -363,11 +358,16 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
 //        }
 //    };
 
-    public void disconnectSocket() {
+    private void disconnectSocket() {
         if (mSocket != null && mSocket.connected()) {
             mSocket.disconnect();
             mSocket = null;
         }
+    }
+
+    public void disconnectService() {
+        stopSelf();
+        stopForeground(true);
     }
 
     private void setupNotification() {

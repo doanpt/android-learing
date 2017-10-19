@@ -332,9 +332,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public void run() {
                 UserInfo.getInstance(MainActivity.this).setUserInfoLogout();
                 if (gpsService != null) {
-                    gpsService.disconnectSocket();
-                    gpsService.stopForeground(true);
-                    gpsService.stopSelf();
+                    gpsService.disconnectService();
                 }
                 progressDialog.dismiss();
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -401,9 +399,5 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        // Add a marker in Sydney, Australia, and move the camera.
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
     }
 }
