@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.cnc.hcm.cnctracking.fragment.WorkCancelFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkCompletedFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkNewFragment;
-import com.cnc.hcm.cnctracking.fragment.WorkReceivedFragment;
+import com.cnc.hcm.cnctracking.fragment.WorkDoingFragment;
 import com.cnc.hcm.cnctracking.util.Conts;
 
 /**
@@ -17,10 +17,10 @@ import com.cnc.hcm.cnctracking.util.Conts;
 public class WorkFragmentAdapter extends FragmentPagerAdapter {
 
     private String arrPageTitle[] = new String[]{
-            "Công việc mới",
-            "Công việc đã nhận",
-            "Công việc đã hoàn thành",
-            "Công việc đã huỷ"};
+            "Mới",
+            "Đang thực hiện",
+            "Hoàn thành",
+            "Huỷ"};
 
     public WorkFragmentAdapter(FragmentManager fm) {
         super(fm);
@@ -32,7 +32,7 @@ public class WorkFragmentAdapter extends FragmentPagerAdapter {
             case Conts.DEFAULT_VALUE_INT_0:
                 return new WorkNewFragment();
             case Conts.DEFAULT_VALUE_INT_1:
-                return new WorkReceivedFragment();
+                return new WorkDoingFragment();
             case Conts.DEFAULT_VALUE_INT_2:
                 return new WorkCompletedFragment();
             case Conts.DEFAULT_VALUE_INT_3:

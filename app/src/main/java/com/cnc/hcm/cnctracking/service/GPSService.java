@@ -67,7 +67,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
     private static final String TAGG = "GPSService";
     private static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
     private static final int NOTIFI_ID = 111;
-    private static final float MIN_DISTANCE_GET_GPS = 30.0f;
+    private static final float MIN_DISTANCE_GET_GPS = 30f;
     private static final long MIN_TIME_GET_GPS = 0L;
 
     private NotificationManager notificationManager;
@@ -91,7 +91,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
 
     private boolean isNetworkConnected;
     private boolean isServiceConnected;
-    private boolean isPause;
 
     private Socket mSocket;
 
@@ -144,7 +143,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
             registerBroadcast();
             startThread();
             setupNotification();
-            requestLocationUpdate();
+            startLocation();
+            //requestLocationUpdate();
             isServiceConnected = true;
         }
         Log.i(TAGG, "onStartCommand, UserLogin = " + isUserLogin);
@@ -200,7 +200,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
                 }
             }
         });
-        if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0 && latitude != 0) {
+        if (UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0 && latitude != 0) {
 
             if (isNetworkConnected) {
                 int size = arrTrackLocation.size();
@@ -224,19 +224,19 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
 
     }
 
-    public void requestLocationUpdate() {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                String permissions[] = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
-                if (mainActivity != null) {
-                    mainActivity.requestPermissions(permissions, MainActivity.REQUEST_CODE_LOCATION_UPDATE);
-                }
-            }
-        } else {
-            startLocation();
-        }
-    }
+//    public void requestLocationUpdate() {
+//
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                String permissions[] = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+//                if (mainActivity != null) {
+//                    mainActivity.requestPermissions(permissions, MainActivity.REQUEST_CODE_LOCATION_UPDATE);
+//                }
+//            }
+//        } else {
+//            startLocation();
+//        }
+//    }
 
     private void checkGPSOnOff() {
         if (mainActivity != null) {
@@ -245,8 +245,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
         }
     }
 
-    private void startLocation() {
-        LocationParams params = new LocationParams.Builder().setAccuracy(LocationAccuracy.HIGH).setDistance(MIN_DISTANCE_GET_GPS).setInterval(MIN_TIME_GET_GPS).build();
+    public void startLocation() {
+        LocationParams params = new LocationParams.Builder().setAccuracy(LocationAccuracy.HIGH).setDistance(MIN_DISTANCE_GET_GPS).build();
         provider = new LocationGooglePlayServicesProvider();
         provider.setCheckLocationSettings(true);
 
@@ -256,7 +256,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
 
 
     public void updateLocation(ItemTrackLocation location) {
-        isPause = true;
         mService.updateLocation(location).enqueue(new Callback<UpdateLocationResponseStatus>() {
             @Override
             public void onResponse(Call<UpdateLocationResponseStatus> call, Response<UpdateLocationResponseStatus> response) {
@@ -268,7 +267,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
                         int updateLocationCode = updateLocation.getStatusCode();
                         if (updateLocationCode == Conts.RESPONSE_STATUS_OK) {
                             arrTrackLocation.clear();
-                            isPause = false;
                             body = gson.toJson(response.body());
                         } else if (updateLocationCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
                             UserInfo.getInstance(GPSService.this).setUserLoginOnOtherDevice(true);
@@ -281,7 +279,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
 
                     Log.d(TAGG, "onLocationUpdated.onResponse().isSuccessful(), body: " + body);
                 } else {
-                    isPause = false;
                     body = gson.toJson(response.body());
                     Log.d(TAGG, "onLocationUpdated.onResponse().isFail(), body: " + body);
                 }
@@ -290,7 +287,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
             @Override
             public void onFailure(Call<UpdateLocationResponseStatus> call, Throwable t) {
                 Log.e(TAGG, "updateLocation.onFailure()");
-                isPause = false;
                 t.printStackTrace();
             }
         });
@@ -435,9 +431,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener, On
         this.mainActivity = mainActivity;
     }
 
-    public void setPause(boolean pause) {
-        isPause = pause;
-    }
 
     public double getLongitude() {
         return longitude;

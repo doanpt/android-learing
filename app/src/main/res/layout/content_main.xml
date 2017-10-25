@@ -1,38 +1,59 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.cnc.hcm.cnctracking.activity.MainActivity">
 
     <include layout="@layout/tool_bar"></include>
 
-    <fragment xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:map="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/map"
+              android:name="com.google.android.gms.maps.SupportMapFragment"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginBottom="40dp"
+              android:layout_marginTop="56dp"
+              map:cameraBearing="112.5"
+              map:cameraTilt="30"
+              map:cameraZoom="13"
+              map:mapType="normal"
+              map:uiCompass="true"
+              map:uiRotateGestures="true"
+              map:uiScrollGestures="true"
+              map:uiTiltGestures="true"
+              map:uiZoomControls="true"
+              map:uiZoomGestures="true"/>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:context=".activity.MainActivity" />
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="96dp"
+        app:layout_behavior="@string/view_pager_bottom_sheet_behavior">
 
-    <!--<?xml version="1.0" encoding="utf-8"?>--><!--<LinearLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:gravity="center"--><!--android:orientation="vertical"--><!--app:layout_behavior="@string/appbar_scrolling_view_behavior"--><!--tools:context="com.cnc.hcm.cnctracking.activity.MainActivity"--><!--tools:showIn="@layout/app_bar_main">-->
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="56dp"
+            android:background="@color/colorPrimary"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabTextColor="#80FFFFFF"/>
 
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 
-    <!--&lt;!&ndash;<android.support.v4.view.ViewPager&ndash;&gt;--><!--&lt;!&ndash;android:id="@+id/viewPager"&ndash;&gt;--><!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;--><!--&lt;!&ndash;android:layout_height="match_parent">&ndash;&gt;-->
-
-    <!--&lt;!&ndash;<android.support.v4.view.PagerTabStrip&ndash;&gt;--><!--&lt;!&ndash;android:elevation="5dp"&ndash;&gt;--><!--&lt;!&ndash;android:id="@+id/pager_tab_strip"&ndash;&gt;--><!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;--><!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;--><!--&lt;!&ndash;android:background="@color/colorPrimary">&ndash;&gt;-->
-
-    <!--&lt;!&ndash;</android.support.v4.view.PagerTabStrip>&ndash;&gt;--><!--&lt;!&ndash;</android.support.v4.view.ViewPager>&ndash;&gt;-->
-
-    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:orientation="horizontal">-->
-
-    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_marginTop="10dp"--><!--android:gravity="center_vertical"--><!--android:paddingLeft="10dp"--><!--android:text="Time:"--><!--android:textColor="@color/colorPrimary"--><!--android:textSize="18dp"/>-->
-
-    <!--<TextView--><!--android:id="@+id/tv_time_run_service"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_marginTop="10dp"--><!--android:gravity="center_vertical"--><!--android:paddingLeft="5dp"--><!--android:textColor="@android:color/holo_red_light"--><!--android:textSize="18dp"/>--><!--</LinearLayout>-->
-
-    <!--<TextView--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_marginTop="10dp"--><!--android:gravity="center_vertical"--><!--android:paddingLeft="10dp"--><!--android:text="Status:"--><!--android:textColor="@color/colorPrimary"--><!--android:textSize="18dp"/>-->
-
-    <!--<ScrollView--><!--android:id="@+id/scrollView_log"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:layout_weight="1">-->
-
-    <!--<TextView--><!--android:id="@+id/textView"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:maxLines="1000"--><!--android:padding="10dp"--><!--android:scrollbars="vertical"/>--><!--</ScrollView>--><!--</LinearLayout>-->
-</LinearLayout>
-
-
+</android.support.design.widget.CoordinatorLayout>

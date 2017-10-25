@@ -14,7 +14,7 @@ import com.cnc.hcm.cnctracking.R;
  * Created by giapmn on 9/27/17.
  */
 
-public class WorkReceivedFragment extends Fragment {
+public class WorkDoingFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class WorkReceivedFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_work_received, container, false);
+        View view = inflater.inflate(R.layout.fragment_work_doing, container, false);
         Log.i("onCreateView", "Received");
         return view;
     }

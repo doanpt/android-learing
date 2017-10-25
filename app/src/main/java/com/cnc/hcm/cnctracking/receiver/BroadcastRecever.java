@@ -1,6 +1,5 @@
-package com.cnc.hcm.cnctracking.recever;
+package com.cnc.hcm.cnctracking.receiver;
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.service.GPSService;
-import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
 

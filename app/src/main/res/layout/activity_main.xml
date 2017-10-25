@@ -42,7 +42,6 @@
                     android:background="?android:selectableItemBackground"
                     android:cropToPadding="true"
                     android:padding="5dp"
-                    android:src="@drawable/ic_account_avatar"
                     app:civ_border_color="@color/color_boder_avatar"
                     app:civ_border_width="4dp"/>
 

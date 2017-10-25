@@ -27,6 +27,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
@@ -63,6 +64,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
+import biz.laenger.android.vpbs.BottomSheetUtils;
+import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -71,7 +74,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    public static final int REQUEST_CODE_LOCATION_UPDATE = 12132;
+    private static final int REQUEST_CODE_LOCATION_UPDATE = 4234;
     private GoogleMap mMap;
     private ViewPager viewPager;
 
@@ -79,6 +82,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private LinearLayout llClickGPS;
     private LinearLayout llClickSetting;
     private LinearLayout llClickHelp;
+    private LinearLayout bottomSheetLayout;
     private TextView tvStatusNetwork, tvStatusGPS;
     private Button btnLogout;
     private CircleImageView imvAvatar;
@@ -86,6 +90,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView imvMenuDrawer, imvSearch;
     private ImageView imvProfile;
     private DrawerLayout drawer;
+    private ViewPagerBottomSheetBehavior bottomSheetBehavior;
+
     //private TextView tvTimeProgress, tvStatus;
 
 
@@ -216,18 +222,37 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tvUserMail = (TextView) findViewById(R.id.tv_user_email_profile);
 
         Picasso.with(this).load(Conts.URL_BASE + UserInfo.getInstance(this).getUserUrlImage())
-                .placeholder(R.drawable.ic_account_avatar)
-                .error(R.drawable.ic_account_avatar).into(imvAvatar);
+                .placeholder(R.drawable.ic_account)
+                .error(R.drawable.ic_account).into(imvAvatar);
         tvUsername.setText(UserInfo.getInstance(this).getUsername());
         tvUserMail.setText(UserInfo.getInstance(this).getUserEmail());
 
-//        WorkFragmentAdapter adapter = new WorkFragmentAdapter(getSupportFragmentManager());
-//        viewPager = (ViewPager) findViewById(R.id.viewPager);
-//        viewPager.setAdapter(adapter);
-//        PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.pager_tab_strip);
-//        pagerTabStrip.setTextColor(Color.WHITE);
-//        pagerTabStrip.setTabIndicatorColor(Color.YELLOW);
+        bottomSheetLayout = (LinearLayout) findViewById(R.id.linear_layout_bottom_sheet);
+        bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(bottomSheetLayout);
 
+        WorkFragmentAdapter adapter = new WorkFragmentAdapter(getSupportFragmentManager());
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        BottomSheetUtils.setupViewPager(viewPager);
         //tvTimeProgress = (TextView) findViewById(R.id.tv_time_run_service);
 //        tvStatus = (TextView) findViewById(R.id.textView);
 
@@ -260,26 +285,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             tvStatusGPS.setText(getResources().getString(R.string.Off));
         }
     }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_CODE_LOCATION_UPDATE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (gpsService != null) {
-                        gpsService.requestLocationUpdate();
-                    }
-
-                } else {
-                    Toast.makeText(this, "Permision denied", Toast.LENGTH_SHORT).show();
-                }
-                break;
-        }
-    }
-
 
     @Override
     public void onClick(View view) {
@@ -352,6 +357,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
+        if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
+            return;
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -388,12 +398,27 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_LOCATION_UPDATE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permision accept", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Permision denied", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            String permissions[] = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
+            String permissions[] = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
             requestPermissions(permissions, MainActivity.REQUEST_CODE_LOCATION_UPDATE);
             return;
         }

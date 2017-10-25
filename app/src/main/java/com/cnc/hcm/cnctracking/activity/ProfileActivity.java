@@ -63,8 +63,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void loadDatas() {
         UserInfo userInfo = UserInfo.getInstance(ProfileActivity.this);
         Picasso.with(ProfileActivity.this).load(Conts.URL_BASE + userInfo.getUserUrlImage())
-                .placeholder(R.drawable.ic_account_avatar)
-                .error(R.drawable.ic_account_avatar)
+                .placeholder(R.drawable.ic_account)
+                .error(R.drawable.ic_account)
                 .into(imvAvatar);
         tvName.setText(!TextUtils.isEmpty(userInfo.getUsername()) ? userInfo.getUsername() : Conts.UNKNOWN);
     }
