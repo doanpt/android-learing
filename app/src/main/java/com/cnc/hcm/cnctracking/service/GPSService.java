@@ -85,6 +85,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private boolean isPause;
 
     private Socket mSocket;
+    private StringBuilder builder = new StringBuilder();
 
     {
         try {
@@ -178,7 +179,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
                     String addressName = builderAddress.toString();
                     if (mainActivity != null) {
-                        mainActivity.myLocation(latitude, longitude, accuracy, addressName, result.getCountryName() +", " + result.getAdminArea());
+                        mainActivity.myLocation(latitude, longitude, accuracy, addressName, result.getCountryName() + ", " + result.getAdminArea());
                     }
                 }
             }
@@ -188,23 +189,27 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             if (isNetworkConnected) {
                 int size = arrTrackLocation.size();
                 if (size >= 5) {
+                    builder.append("POST_GPS_TO_SERVER\n");
                     Log.d(TAGG, "onLocationUpdated " + "POST_GPS_TO_SERVER");
                     updateLocation(new ItemTrackLocation(arrTrackLocation, batteryLevel));
                 } else {
+                    builder.append("ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy + "\n");
                     Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
                     arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
                 }
             } else {
+                builder.append("BACK_UP_GPS: " + latitude + ", " + longitude + ", " + accuracy + "\n");
                 arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
                 Log.d(TAGG, "onLocationUpdated " + "BACK_UP_GPS: " + latitude + ", " + longitude + ", " + accuracy);
-
             }
-
         } else {
             updateNotification("GPS not found");
             Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND");
         }
 
+        if (mainActivity != null) {
+            mainActivity.appendText(builder.toString());
+        }
     }
 
     private void checkGPSOnOff() {
@@ -215,7 +220,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     }
 
     public void startLocation() {
-        LocationParams params = new LocationParams.Builder().setAccuracy(LocationAccuracy.HIGH).setDistance(MIN_DISTANCE_GET_GPS).build();
+        LocationParams params = new LocationParams.Builder().setAccuracy(LocationAccuracy.HIGH).setInterval(3000).build();
 //        provider = new LocationGooglePlayServicesProvider();
 //        provider.setCheckLocationSettings(true);
 //
@@ -250,6 +255,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     }
                     isPause = false;
                     Log.d(TAGG, "onLocationUpdated.onResponse().isSuccessful(), body: " + body);
+                    builder.append(body + "\n");
                 } else {
                     isPause = false;
                     body = gson.toJson(response.body());

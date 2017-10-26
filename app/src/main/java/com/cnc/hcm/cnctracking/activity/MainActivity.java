@@ -52,6 +52,7 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.WorkFragmentAdapter;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogSetTimePostServer;
+import com.cnc.hcm.cnctracking.fragment.WorkNewFragment;
 import com.cnc.hcm.cnctracking.model.User;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -260,6 +261,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void appendText(String str) {
 //        tvStatus.append("\n" + str);
+        WorkNewFragment.getInstance().setTextStatus(str);
     }
 
     public void disPlayTimeProgress(int time) {

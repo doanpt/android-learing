@@ -30,7 +30,7 @@ public class WorkFragmentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case Conts.DEFAULT_VALUE_INT_0:
-                return new WorkNewFragment();
+                return WorkNewFragment.getInstance();
             case Conts.DEFAULT_VALUE_INT_1:
                 return new WorkDoingFragment();
             case Conts.DEFAULT_VALUE_INT_2:
