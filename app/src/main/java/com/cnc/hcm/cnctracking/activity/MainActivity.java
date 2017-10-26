@@ -162,7 +162,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         UserInfo.getInstance(this).setMainActivityActive(true);
         registerBroadcastReciver();
         initViews();
-        if (!checkGPSServiceRunning(GPSService.class)) {
+        if (!isServiceRunning(GPSService.class)) {
             Intent intent = new Intent(this, GPSService.class);
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             startService(intent);
@@ -266,7 +266,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //tvTimeProgress.setText("Time: " + time);
     }
 
-    private boolean checkGPSServiceRunning(Class<?> serviceClass) {
+    private boolean isServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(serviceInfo.service.getClassName())) {
@@ -389,12 +389,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         dialog.show();
     }
 
-    public void myLocation(double latitude, double longitude, float accuracy, String addName) { // TODO did we need accuracy here?
+    public void myLocation(double latitude, double longitude, float accuracy, String addName, String cityName) { // TODO did we need accuracy here?
         if (mMap != null) {
             mMap.clear();
             LatLng myLocation = new LatLng(latitude, longitude);
-            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName).snippet(cityName));
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
         }
     }
 

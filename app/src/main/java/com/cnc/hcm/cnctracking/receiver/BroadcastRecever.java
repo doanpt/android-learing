@@ -1,5 +1,6 @@
 package com.cnc.hcm.cnctracking.receiver;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,20 +21,26 @@ public class BroadcastRecever extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
         boolean isUserLogin = UserInfo.getInstance(context).getIsLogin();
-        switch (action) {
-            case Intent.ACTION_BOOT_COMPLETED:
-                if (isUserLogin) {
-                    Toast.makeText(context, "CNCTracking start", Toast.LENGTH_SHORT).show();
-                    Intent intentService = new Intent(context, GPSService.class);
-                    intentService.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                    context.startService(intentService);
-                }
-                Log.d(TAGG, "BroadcastRecever, ACTION_BOOT_COMPLETED");
-                break;
+        if (isUserLogin) {
+            if (!isServiceRunning(context, GPSService.class)) {
+                Toast.makeText(context, "CNCTracking start", Toast.LENGTH_SHORT).show();
+                Intent intentService = new Intent(context, GPSService.class);
+                intentService.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                context.startService(intentService);
+            }
         }
+        Log.d(TAGG, "BroadcastRecever: " + intent.getAction());
     }
 
+    public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
