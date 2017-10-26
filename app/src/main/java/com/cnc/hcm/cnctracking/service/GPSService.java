@@ -220,7 +220,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     }
 
     public void startLocation() {
-        LocationParams params = new LocationParams.Builder().setAccuracy(LocationAccuracy.HIGH).setInterval(3000).build();
+        LocationParams params = new LocationParams.Builder().setAccuracy(LocationAccuracy.HIGH).setDistance(MIN_DISTANCE_GET_GPS).build();
 //        provider = new LocationGooglePlayServicesProvider();
 //        provider.setCheckLocationSettings(true);
 //
