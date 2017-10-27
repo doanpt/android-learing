@@ -84,7 +84,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private LinearLayout llClickGPS;
     private LinearLayout llClickSetting;
     private LinearLayout llClickHelp;
-//    private LinearLayout bottomSheetLayout;
+    //    private LinearLayout bottomSheetLayout;
     private TextView tvStatusNetwork, tvStatusGPS;
     private Button btnLogout;
     private CircleImageView imvAvatar;
@@ -262,7 +262,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void appendText(String str) {
 //        tvStatus.append("\n" + str);
-        WorkNewFragment.getInstance().setTextStatus(str);
     }
 
     public void disPlayTimeProgress(int time) {
