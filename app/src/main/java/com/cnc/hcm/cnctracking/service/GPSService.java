@@ -290,9 +290,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 case ACTION_NETWORK_CHANGE:
                     isNetworkConnected = getNetworkConntected();
                     if (isNetworkConnected) {
-                        connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
+                        //connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
                     } else {
-                        disconnectSocket();
+                        //disconnectSocket();
                     }
                     break;
             }
