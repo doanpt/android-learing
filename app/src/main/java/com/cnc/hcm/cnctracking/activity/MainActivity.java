@@ -61,12 +61,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
-import biz.laenger.android.vpbs.BottomSheetUtils;
-import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
+//import biz.laenger.android.vpbs.BottomSheetUtils;
+//import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -83,7 +84,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private LinearLayout llClickGPS;
     private LinearLayout llClickSetting;
     private LinearLayout llClickHelp;
-    private LinearLayout bottomSheetLayout;
+//    private LinearLayout bottomSheetLayout;
     private TextView tvStatusNetwork, tvStatusGPS;
     private Button btnLogout;
     private CircleImageView imvAvatar;
@@ -91,7 +92,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView imvMenuDrawer, imvSearch;
     private ImageView imvProfile;
     private DrawerLayout drawer;
-    private ViewPagerBottomSheetBehavior bottomSheetBehavior;
+//    private ViewPagerBottomSheetBehavior bottomSheetBehavior;
 
     //private TextView tvTimeProgress, tvStatus;
 
@@ -228,32 +229,32 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tvUsername.setText(UserInfo.getInstance(this).getUsername());
         tvUserMail.setText(UserInfo.getInstance(this).getUserEmail());
 
-        bottomSheetLayout = (LinearLayout) findViewById(R.id.linear_layout_bottom_sheet);
-        bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(bottomSheetLayout);
+//        bottomSheetLayout = (LinearLayout) findViewById(R.id.linear_layout_bottom_sheet);
+//        bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(bottomSheetLayout);
 
-        WorkFragmentAdapter adapter = new WorkFragmentAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(adapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
-            }
+//        WorkFragmentAdapter adapter = new WorkFragmentAdapter(getSupportFragmentManager());
+//        viewPager = (ViewPager) findViewById(R.id.viewpager);
+//        viewPager.setAdapter(adapter);
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+//        tabLayout.setupWithViewPager(viewPager);
+//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+////                bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        });
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        BottomSheetUtils.setupViewPager(viewPager);
+//        BottomSheetUtils.setupViewPager(viewPager);
         //tvTimeProgress = (TextView) findViewById(R.id.tv_time_run_service);
 //        tvStatus = (TextView) findViewById(R.id.textView);
 
@@ -359,10 +360,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
-        if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
-            return;
-        }
+//        if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+//            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
+//            return;
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -391,16 +392,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         dialog.show();
     }
 
-    public void myLocation(double latitude, double longitude, float accuracy, String addName, String cityName) { // TODO did we need accuracy here?
-        if (mMap != null) {
-            mMap.clear();
-            LatLng myLocation = new LatLng(latitude, longitude);
-            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName).snippet(cityName));
-            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -427,5 +418,37 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        if (gpsService != null) {
+            if (gpsService.getLatitude() != 0 && gpsService.getLongitude() != 0) {
+                myLocation(gpsService.getLatitude(), gpsService.getLongitude(),
+                        gpsService.getAccuracy(), gpsService.getAddressName(), gpsService.getCityName());
+            }
+        }
+    }
+
+    public void myLocation(double latitude, double longitude, float accuracy, String addName, String cityName) { // TODO did we need accuracy here?
+        if (mMap != null) {
+            mMap.clear();
+            LatLng myLocation = new LatLng(latitude, longitude);
+            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName).snippet(cityName));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+        }
+    }
+
+    public void addMarkerMap(double latitude, double longitude, String addName, String cityName) {
+        if (mMap != null) {
+            //BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+
+            LatLng myLocation = new LatLng(latitude, longitude);
+            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName).snippet(cityName));
+        }
+
+    }
+
+    public void moveCameraMap(LatLng myLocation) {
+        if (mMap != null) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+        }
     }
 }
