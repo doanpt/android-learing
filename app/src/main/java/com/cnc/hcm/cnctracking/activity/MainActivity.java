@@ -200,7 +200,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 file_no_network.createNewFile();
             }
             if (!file_size.exists()) {
-                file_network.createNewFile();
+                file_size.createNewFile();
             }
         } catch (IOException e) {
             e.printStackTrace();
