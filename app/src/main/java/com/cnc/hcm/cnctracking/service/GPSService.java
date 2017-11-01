@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -27,8 +28,11 @@ import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.api.APIService;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
+import com.cnc.hcm.cnctracking.model.LocationBackupFile;
+import com.cnc.hcm.cnctracking.model.LocationUploadSize;
 import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
+import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.github.nkzawa.socketio.client.Ack;
@@ -36,6 +40,10 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -156,6 +164,30 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         SmartLocation.with(this).geocoding().stop();
     }
 
+    private static boolean saveLocationToFile(String fileName, Object item) {
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(fileName), true);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(item.toString());
+            oos.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private LocationBackupFile getItemBackupValue(Location location, boolean isNet) {
+        LocationBackupFile itemBackup = new LocationBackupFile();
+        itemBackup.setLatitude(location.getLatitude());
+        itemBackup.setAccuracy(location.getAccuracy());
+        itemBackup.setLongitude(location.getLongitude());
+        itemBackup.setTimestamp(System.currentTimeMillis());
+        itemBackup.setNetwork(isNet);
+        return itemBackup;
+    }
+
     @Override
     public void onLocationUpdated(Location location) {
         if (UserInfo.getInstance(GPSService.this).getIsLogin())
@@ -193,10 +225,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
             if (isNetworkConnected) {
                 int size = arrTrackLocation.size();
+                saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_NETWORK, getItemBackupValue(location, true));
                 if (size >= 5) {
                     builder.append("-------- POST_GPS_TO_SERVER ---------\n");
                     Log.d(TAGG, "onLocationUpdated " + "POST_GPS_TO_SERVER");
                     updateLocation(new ItemTrackLocation(arrTrackLocation, batteryLevel));
+                    saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_UPLOAD_SIZE, new LocationUploadSize(size + "", System.currentTimeMillis(), UserInfo.getInstance(this).getUserEmail()));
                 } else {
                     builder.append("ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy + "\n");
                     Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
@@ -205,10 +239,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             } else {
                 builder.append("BACK_UP_GPS: " + latitude + ", " + longitude + ", " + accuracy + "\n");
                 arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
+                saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_NO_NETWORK, getItemBackupValue(location, false));
                 Log.d(TAGG, "onLocationUpdated " + "BACK_UP_GPS: " + latitude + ", " + longitude + ", " + accuracy);
-
             }
-
         } else {
             updateNotification("GPS not found");
             Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND");

@@ -11,6 +11,6 @@ public class CommonMethod {
 
     public static String formatTimeToString(long time) {
         Date date = new Date(time);
-        return new SimpleDateFormat("HH:mm:ss").format(date);
+        return new SimpleDateFormat("dd/MM/yy HH:mm:ss").format(date);
     }
 }

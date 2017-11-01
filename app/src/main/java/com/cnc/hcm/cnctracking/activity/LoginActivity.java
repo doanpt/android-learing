@@ -55,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private APIService mService;
     private ProgressDialog mProgressDialog;
-//    private ProgressDialog mProgressGetUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,9 +66,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void checkPermistion() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                String permissions[] = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+                String permissions[] = new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE};
                 requestPermissions(permissions, REQUEST_CODE_LOCATION_UPDATE);
                 return;
             }
@@ -210,11 +214,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getDataUserProfile(String accessToken) {
-
-//        mProgressGetUser = new ProgressDialog(LoginActivity.this);
-//        mProgressGetUser.setIndeterminate(true);
-//        mProgressGetUser.setMessage(getResources().getString(R.string.get_data_user_infor));
-//        mProgressGetUser.show();
 
         mService = ApiUtils.getAPIService(accessToken);
         mService.getUserProfile().enqueue(new Callback<GetUserProfileResponseStatus>() {

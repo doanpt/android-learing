@@ -45,7 +45,7 @@ dependencies {
         transitive = false
     }
 
-    compile('com.github.nkzawa:socket.io-client:0.4.1') {
+    compile('com.github.nkzawa:socket.io-client:0.4.2') {
         exclude group: 'org.json', module: 'json'
     }
 //    compile 'biz.laenger.android:vpbs:0.0.4'

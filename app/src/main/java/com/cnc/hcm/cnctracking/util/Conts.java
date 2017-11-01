@@ -133,4 +133,8 @@ public class Conts {
 
     public static final String KEY_ACCESS_TOKEN = "accessToken";
     public static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
+
+    public static final String FILE_LOCATION_NO_NETWORK = "NoNetwork.txt";
+    public static final String FILE_LOCATION_NETWORK = "Network.txt";
+    public static final String FILE_LOCATION_UPLOAD_SIZE = "UploadSize.txt";
 }

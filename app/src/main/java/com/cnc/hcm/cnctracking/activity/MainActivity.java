@@ -19,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -68,6 +69,9 @@ import com.squareup.picasso.Picasso;
 
 //import biz.laenger.android.vpbs.BottomSheetUtils;
 //import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
+import java.io.File;
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -161,6 +165,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        createFileBackup();
         UserInfo.getInstance(this).setMainActivityActive(true);
         registerBroadcastReciver();
         initViews();
@@ -175,6 +180,31 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initMap();
 
         Log.d("MainActivity", "getInforService: " + getInforSeriveDestroy());
+    }
+
+    private void createFileBackup() {
+        try {
+            File folderBackup = new File(Environment.getExternalStorageDirectory(), "/CoolBackup");
+            if (!folderBackup.exists()) {
+                folderBackup.mkdirs();
+                Log.w("DEBUG", "Created default directory.");
+            }
+            File file_network = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_NETWORK);
+            File file_no_network = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_NO_NETWORK);
+            File file_size = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_UPLOAD_SIZE);
+
+            if (!file_network.exists()) {
+                file_network.createNewFile();
+            }
+            if (!file_no_network.exists()) {
+                file_no_network.createNewFile();
+            }
+            if (!file_size.exists()) {
+                file_network.createNewFile();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initMap() {
