@@ -17,4 +17,7 @@
     <color name="color_item_user_infor">#212121</color>
     <color name="color_line">#EEEEEE</color>
     <color name="color_boder_avatar">#9affffff</color>
+
+    <color name="color_bg_list">#c9c7c9</color>
+
 </resources>

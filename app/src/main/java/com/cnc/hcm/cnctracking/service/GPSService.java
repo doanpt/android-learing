@@ -32,7 +32,6 @@ import com.cnc.hcm.cnctracking.model.LocationBackupFile;
 import com.cnc.hcm.cnctracking.model.LocationUploadSize;
 import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
-import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.github.nkzawa.socketio.client.Ack;
@@ -53,7 +52,6 @@ import io.nlopez.smartlocation.OnReverseGeocodingListener;
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
 import io.nlopez.smartlocation.location.config.LocationParams;
-import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -218,7 +216,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         });
 
         if (mainActivity != null) {
-            mainActivity.myLocation(latitude, longitude, accuracy, addressName, cityName);
+            mainActivity.myLocationHere(latitude, longitude, accuracy, addressName, cityName);
         }
 
         if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0.0f && latitude != 0.0f) {

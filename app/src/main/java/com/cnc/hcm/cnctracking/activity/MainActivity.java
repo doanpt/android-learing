@@ -9,52 +9,39 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.WorkFragmentAdapter;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
-import com.cnc.hcm.cnctracking.dialog.DialogSetTimePostServer;
+import com.cnc.hcm.cnctracking.fragment.WorkCancelFragment;
+import com.cnc.hcm.cnctracking.fragment.WorkCompletedFragment;
+import com.cnc.hcm.cnctracking.fragment.WorkDoingFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkNewFragment;
-import com.cnc.hcm.cnctracking.model.User;
+import com.cnc.hcm.cnctracking.model.ItemWork;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
@@ -62,17 +49,20 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
-//import biz.laenger.android.vpbs.BottomSheetUtils;
-//import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import biz.laenger.android.vpbs.BottomSheetUtils;
+import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+//import biz.laenger.android.vpbs.BottomSheetUtils;
+//import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener
@@ -82,13 +72,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_UPDATE = 4234;
     private GoogleMap mMap;
-    private ViewPager viewPager;
 
+    private ViewPager viewPager;
     private LinearLayout llClickNetwork;
     private LinearLayout llClickGPS;
     private LinearLayout llClickSetting;
     private LinearLayout llClickHelp;
-    //    private LinearLayout bottomSheetLayout;
+    private LinearLayout bottomSheetLayout;
     private TextView tvStatusNetwork, tvStatusGPS;
     private Button btnLogout;
     private CircleImageView imvAvatar;
@@ -96,14 +86,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView imvMenuDrawer, imvSearch;
     private ImageView imvProfile;
     private DrawerLayout drawer;
-//    private ViewPagerBottomSheetBehavior bottomSheetBehavior;
+    private ViewPagerBottomSheetBehavior bottomSheetBehavior;
 
-    //private TextView tvTimeProgress, tvStatus;
 
+    private ArrayList<ItemWork> arrItemWorkNew = new ArrayList<>();
+    private boolean isNetworkConnected;
+
+    private WorkNewFragment workNewFragment = new WorkNewFragment();
+    private WorkDoingFragment workDoingFragment = new WorkDoingFragment();
+    private WorkCompletedFragment workCompletedFragment = new WorkCompletedFragment();
+    private WorkCancelFragment workCancelFragment = new WorkCancelFragment();
+
+    private Fragment[] listFrag = {workNewFragment, workDoingFragment, workCompletedFragment, workCancelFragment};
 
     private GPSService gpsService;
-
-    private boolean isNetworkConnected;
 
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -145,6 +141,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         if (isNetworkConnected) {
                             tvStatusNetwork.setTextColor(getResources().getColor(R.color.color_text_status));
                             tvStatusNetwork.setText(getResources().getString(R.string.On));
+
+                            if (workNewFragment != null && gpsService != null) {
+                                workNewFragment.updateDistance(gpsService.getLatitude(), gpsService.getLongitude());
+                            }
                         } else {
                             tvStatusNetwork.setTextColor(getResources().getColor(android.R.color.darker_gray));
                             tvStatusNetwork.setText(getResources().getString(R.string.Off));
@@ -155,31 +155,65 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     };
 
-    //TODO remove, method only for test
-    private String getInforSeriveDestroy() {
-        SharedPreferences sharedPreferences = getSharedPreferences("InforService", MODE_PRIVATE);
-        return sharedPreferences.getString("KEY_INFOR_SERVICE_DESTROY", "Service Running!");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initData();
+        initViews();
         createFileBackup();
         UserInfo.getInstance(this).setMainActivityActive(true);
         registerBroadcastReciver();
-        initViews();
         if (!isServiceRunning(GPSService.class)) {
             Intent intent = new Intent(this, GPSService.class);
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             startService(intent);
         }
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
-        initObjects();
         checkUserLoginOnOtherDevice();
         initMap();
+    }
 
-        Log.d("MainActivity", "getInforService: " + getInforSeriveDestroy());
+
+    private void initData() {
+        arrItemWorkNew.clear();
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.172724, 105.910090, "0 Km", "",
+                "14:20 - 16h20", "Mầu Ngô Giáp", "0974356994", "Unnamed Road, thôn Đông, Thuỵ Lâm, Đông Anh, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa điều hoà", 21.025291, 105.793761, "0 Km", "",
+                "14:20 - 16h20", "Đỗ Văn Tân", "0973545345", "602 Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa điều hoà",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.021846, 105.786384, "0 Km", "",
+                "14:20 - 16h20", "Lê Quốc Nam", "0974356995", "Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.0273855, 105.7846931, "0 Km", "",
+                "14:20 - 16h20", "Trần Văn Gạo", "0974356996", "5 Tôn Thất Thuyết, Dịch Vọng Hậu, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa máy lạnh", 21.0232644, 105.7843098, "0 Km", "",
+                "14:20 - 16h20", "Phạm Trung Đoan", "0974356997", "Ngõ 3 Tôn Thất thuyết, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa máy lạnh",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+
+
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_DOING_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.0273855, 105.7846931, "0 Km", "",
+                "14:20 - 16h20", "Trần Văn Gạo", "0974356996", "5 Tôn Thất Thuyết, Dịch Vọng Hậu, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_DOING_TASK, "11:30:24 07/11/2017", "Sửa máy lạnh", 21.0232644, 105.7843098, "0 Km", "",
+                "14:20 - 16h20", "Phạm Trung Đoan", "0974356997", "Ngõ 3 Tôn Thất thuyết, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa máy lạnh",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+
+
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_COMPLETE_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.021846, 105.786384, "0 Km", "",
+                "14:20 - 16h20", "Lê Quốc Nam", "0974356995", "Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+
+
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_CANCEL_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.172724, 105.910090, "0 Km", "",
+                "14:20 - 16h20", "Mầu Ngô Giáp", "0974356994", "Unnamed Road, thôn Đông, Thuỵ Lâm, Đông Anh, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_CANCEL_TASK, "11:30:24 07/11/2017", "Sửa điều hoà", 21.025291, 105.793761, "0 Km", "",
+                "14:20 - 16h20", "Đỗ Văn Tân", "0973545345", "602 Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa điều hoà",
+                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
+
     }
 
     private void createFileBackup() {
@@ -219,9 +253,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    private void initObjects() {
-    }
-
     private void initViews() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -259,35 +290,53 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tvUsername.setText(UserInfo.getInstance(this).getUsername());
         tvUserMail.setText(UserInfo.getInstance(this).getUserEmail());
 
-//        bottomSheetLayout = (LinearLayout) findViewById(R.id.linear_layout_bottom_sheet);
-//        bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(bottomSheetLayout);
+        bottomSheetLayout = (LinearLayout) findViewById(R.id.linear_layout_bottom_sheet);
+        bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(bottomSheetLayout);
 
-//        WorkFragmentAdapter adapter = new WorkFragmentAdapter(getSupportFragmentManager());
-//        viewPager = (ViewPager) findViewById(R.id.viewpager);
-//        viewPager.setAdapter(adapter);
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//        tabLayout.setupWithViewPager(viewPager);
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-////                bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
 
-//        BottomSheetUtils.setupViewPager(viewPager);
-        //tvTimeProgress = (TextView) findViewById(R.id.tv_time_run_service);
-//        tvStatus = (TextView) findViewById(R.id.textView);
+        WorkFragmentAdapter adapter = new WorkFragmentAdapter(getSupportFragmentManager(), listFrag);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        BottomSheetUtils.setupViewPager(viewPager);
+
+    }
+
+    public void switchDataTo4TabWork() {
+        for (int index = 0; index < arrItemWorkNew.size(); index++) {
+            ItemWork itemWork = arrItemWorkNew.get(index);
+            switch (itemWork.getTypeWork()) {
+                case Conts.TYPE_NEW_TASK:
+                    workNewFragment.addItem(itemWork);
+                    break;
+                case Conts.TYPE_DOING_TASK:
+                    workDoingFragment.addItem(itemWork);
+                    break;
+                case Conts.TYPE_COMPLETE_TASK:
+                    workCompletedFragment.addItem(itemWork);
+                    break;
+                case Conts.TYPE_CANCEL_TASK:
+                    workCancelFragment.addItem(itemWork);
+                    break;
+            }
+        }
     }
 
     public void appendText(String str) {
@@ -389,10 +438,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
-//        if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
-//            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
-//            return;
-//        }
+        if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
+            return;
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -450,19 +499,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         if (gpsService != null) {
             if (gpsService.getLatitude() != 0 && gpsService.getLongitude() != 0) {
-                myLocation(gpsService.getLatitude(), gpsService.getLongitude(),
+                myLocationHere(gpsService.getLatitude(), gpsService.getLongitude(),
                         gpsService.getAccuracy(), gpsService.getAddressName(), gpsService.getCityName());
             }
         }
     }
 
-    public void myLocation(double latitude, double longitude, float accuracy, String addName, String cityName) { // TODO did we need accuracy here?
+    public void myLocationHere(double latitude, double longitude, float accuracy, String addName, String cityName) { // TODO did we need accuracy here?
         if (mMap != null) {
             mMap.clear();
             LatLng myLocation = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions().position(myLocation).title(addName).snippet(cityName));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
         }
+
+        workNewFragment.updateDistance(latitude, longitude);
     }
 
     public void addMarkerMap(double latitude, double longitude, String addName, String cityName) {
@@ -479,5 +530,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (mMap != null) {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
         }
+    }
+
+    public double getLongtitude() {
+        if (gpsService != null) {
+            return gpsService.getLongitude();
+        }
+        return 0;
+    }
+
+    public double getLatitude() {
+        if (gpsService != null) {
+            return gpsService.getLatitude();
+        }
+        return 0;
     }
 }

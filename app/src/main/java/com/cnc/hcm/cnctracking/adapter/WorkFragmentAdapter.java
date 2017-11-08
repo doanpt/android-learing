@@ -16,35 +16,27 @@ import com.cnc.hcm.cnctracking.util.Conts;
 
 public class WorkFragmentAdapter extends FragmentPagerAdapter {
 
+    private Fragment[] listFrag;
+
     private String arrPageTitle[] = new String[]{
             "Mới",
             "Đang thực hiện",
             "Hoàn thành",
             "Huỷ"};
 
-    public WorkFragmentAdapter(FragmentManager fm) {
+    public WorkFragmentAdapter(FragmentManager fm, Fragment[] listFrag) {
         super(fm);
+        this.listFrag = listFrag;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case Conts.DEFAULT_VALUE_INT_0:
-                return new WorkNewFragment();
-            case Conts.DEFAULT_VALUE_INT_1:
-                return new WorkDoingFragment();
-            case Conts.DEFAULT_VALUE_INT_2:
-                return new WorkCompletedFragment();
-            case Conts.DEFAULT_VALUE_INT_3:
-                return new WorkCancelFragment();
-            default:
-                return null;
-        }
+        return listFrag[position];
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return listFrag.length;
     }
 
     @Override

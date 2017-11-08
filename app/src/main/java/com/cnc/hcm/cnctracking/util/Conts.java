@@ -114,10 +114,6 @@ public class Conts {
     public static final Integer RESPONSE_STATUS_OK = 200;
     public static final Integer RESPONSE_STATUS_TOKEN_WRONG = 403;
 
-
-    public static final String SETTING = "setting";
-    public static final String ACTION_RESTART_SERVICE = "ACTION_RESTART_SERVICE";
-
     public static final String BASE_URL = "http://35.185.177.251:3001/";
     public static final String URL_BASE = "http://35.185.177.251:3001";
     public static final String PATH_TRACKING = "/tracking";
@@ -137,4 +133,22 @@ public class Conts {
     public static final String FILE_LOCATION_NO_NETWORK = "NoNetwork.txt";
     public static final String FILE_LOCATION_NETWORK = "Network.txt";
     public static final String FILE_LOCATION_UPLOAD_SIZE = "UploadSize.txt";
+
+    public static final int TYPE_NEW_TASK = 0;
+    public static final int TYPE_DOING_TASK = 1;
+    public static final int TYPE_COMPLETE_TASK = 2;
+    public static final int TYPE_CANCEL_TASK = 3;
+
+    public static final String JSON_ELEMENT_ROWS = "rows";
+    public static final String JSON_ELEMENT = "elements";
+    public static final String JSON_ELEMENT_DISTANCE = "distance";
+    public static final String JSON_ELEMENT_DURATION = "duration";
+    public static final String JSON_ELEMENT_TEXT = "text";
+
+    public static final String STRING_MINITE_EN = "mins";
+    public static final String STRING_MINITE_VN = "phút";
+
+
+
+
 }

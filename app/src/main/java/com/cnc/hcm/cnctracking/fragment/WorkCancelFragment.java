@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.model.ItemWork;
 
 /**
  * Created by giapmn on 9/27/17.
@@ -34,5 +35,9 @@ public class WorkCancelFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    public void addItem(ItemWork itemWork) {
+
     }
 }
