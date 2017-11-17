@@ -1,10 +1,13 @@
 package com.cnc.hcm.cnctracking.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by giapmn on 11/7/17.
  */
 
-public class ItemWork {
+public class ItemWork implements Parcelable{
 
     private int typeWork;
     private String timeGetWork;
@@ -13,9 +16,9 @@ public class ItemWork {
     private double longitude;
     private String distanceToMyLocation;
     private String timeGoToMyLocation;
-    private String scheduleWork;
-    private String contact;
-    private String phoneNo;
+    private String appointmentDate;
+    private String contactName;
+    private String contactPhone;
     private String address;
     private String requestService;
     private String price;
@@ -31,7 +34,7 @@ public class ItemWork {
 
 
     public ItemWork(int typeWork, String timeGetWork, String titleWork, double latitude, double longitude,
-                    String distanceToMyLocation, String timeGoToMyLocation, String scheduleWork, String contactWork, String phoneNo, String address,
+                    String distanceToMyLocation, String timeGoToMyLocation, String appointmentDate, String contactWork, String phoneNo, String address,
                     String requestService, String price, String noteService, boolean statusWork,
                     String timeStart, String timeEnd, String totalTimeToCompleted, String totalMoney,
                     boolean statusPayment) {
@@ -42,9 +45,9 @@ public class ItemWork {
         this.latitude = latitude;
         this.distanceToMyLocation = distanceToMyLocation;
         this.timeGoToMyLocation = timeGoToMyLocation;
-        this.scheduleWork = scheduleWork;
-        this.contact = contactWork;
-        this.phoneNo = phoneNo;
+        this.appointmentDate = appointmentDate;
+        this.contactName = contactWork;
+        this.contactPhone = phoneNo;
         this.address = address;
         this.requestService = requestService;
         this.price = price;
@@ -57,6 +60,42 @@ public class ItemWork {
         this.statusPayment = statusPayment;
         this.isExpand = false;
     }
+
+    protected ItemWork(Parcel in) {
+        typeWork = in.readInt();
+        timeGetWork = in.readString();
+        titleWork = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        distanceToMyLocation = in.readString();
+        timeGoToMyLocation = in.readString();
+        appointmentDate = in.readString();
+        contactName = in.readString();
+        contactPhone = in.readString();
+        address = in.readString();
+        requestService = in.readString();
+        price = in.readString();
+        noteService = in.readString();
+        statusWork = in.readByte() != 0;
+        timeStart = in.readString();
+        timeEnd = in.readString();
+        totalTimeToCompleted = in.readString();
+        totalMoney = in.readString();
+        statusPayment = in.readByte() != 0;
+        isExpand = in.readByte() != 0;
+    }
+
+    public static final Creator<ItemWork> CREATOR = new Creator<ItemWork>() {
+        @Override
+        public ItemWork createFromParcel(Parcel in) {
+            return new ItemWork(in);
+        }
+
+        @Override
+        public ItemWork[] newArray(int size) {
+            return new ItemWork[size];
+        }
+    };
 
     public int getTypeWork() {
         return typeWork;
@@ -98,28 +137,28 @@ public class ItemWork {
         this.latitude = latitude;
     }
 
-    public String getScheduleWork() {
-        return scheduleWork;
+    public String getAppointmentDate() {
+        return appointmentDate;
     }
 
-    public void setScheduleWork(String scheduleWork) {
-        this.scheduleWork = scheduleWork;
+    public void setAppointmentDate(String appointmentDate) {
+        this.appointmentDate = appointmentDate;
     }
 
-    public String getContact() {
-        return contact;
+    public String getContactName() {
+        return contactName;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
+    public String getContactPhone() {
+        return contactPhone;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 
     public String getAddress() {
@@ -224,5 +263,35 @@ public class ItemWork {
 
     public void setTimeGoToMyLocation(String timeGoToMyLocation) {
         this.timeGoToMyLocation = timeGoToMyLocation;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(typeWork);
+        dest.writeString(timeGetWork);
+        dest.writeString(titleWork);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeString(distanceToMyLocation);
+        dest.writeString(timeGoToMyLocation);
+        dest.writeString(appointmentDate);
+        dest.writeString(contactName);
+        dest.writeString(contactPhone);
+        dest.writeString(address);
+        dest.writeString(requestService);
+        dest.writeString(price);
+        dest.writeString(noteService);
+        dest.writeByte((byte) (statusWork ? 1 : 0));
+        dest.writeString(timeStart);
+        dest.writeString(timeEnd);
+        dest.writeString(totalTimeToCompleted);
+        dest.writeString(totalMoney);
+        dest.writeByte((byte) (statusPayment ? 1 : 0));
+        dest.writeByte((byte) (isExpand ? 1 : 0));
     }
 }

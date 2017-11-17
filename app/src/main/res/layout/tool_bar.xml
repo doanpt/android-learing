@@ -15,7 +15,7 @@
             android:layout_width="56dp"
             android:layout_height="match_parent"
             android:background="@drawable/bg_view_hover"
-            android:padding="17dp"
+            android:padding="15dp"
             android:src="@drawable/ic_menu"/>
 
         <TextView

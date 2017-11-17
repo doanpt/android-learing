@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -18,7 +17,6 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.event.OnResultTimeDistance;
 import com.cnc.hcm.cnctracking.model.ItemWork;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
-import com.cnc.hcm.cnctracking.util.Conts;
 
 import java.util.ArrayList;
 
@@ -38,11 +36,11 @@ public class WorkNewAdapter extends RecyclerView.Adapter<WorkNewAdapter.ViewHold
     private double longitude;
 
 
-    public WorkNewAdapter(Context context) {
+    public WorkNewAdapter(Context context, ArrayList<ItemWork> arrItemWorkNew) {
         this.context = context;
+        this.arrItemWorkNew = arrItemWorkNew;
         inflater = LayoutInflater.from(context);
-        //initData();
-        CommonMethod.jsonRequest(latitude, longitude, getDestination(), this);
+        CommonMethod.jsonRequest(latitude, longitude, CommonMethod.getDestination(arrItemWorkNew), this);
     }
 
     @Override
@@ -57,6 +55,7 @@ public class WorkNewAdapter extends RecyclerView.Adapter<WorkNewAdapter.ViewHold
         if (!itemWork.isExpand()) {
             holder.llContentExpand.setVisibility(View.GONE);
             holder.imvExpand.setImageResource(R.drawable.ic_expand);
+
         } else {
             holder.llContentExpand.setVisibility(View.VISIBLE);
             holder.imvExpand.setImageResource(R.drawable.ic_expand_less);
@@ -66,8 +65,8 @@ public class WorkNewAdapter extends RecyclerView.Adapter<WorkNewAdapter.ViewHold
         holder.tvTitleWork.setText(itemWork.getTitleWork());
         holder.tvDistance.setText(itemWork.getDistanceToMyLocation());
         holder.tvTimeGoToMyLocation.setText(itemWork.getTimeGoToMyLocation());
-        holder.tvContact.setText(itemWork.getContact());
-        holder.tvPhoneNo.setText(itemWork.getPhoneNo());
+        holder.tvContact.setText(itemWork.getContactName());
+        holder.tvPhoneNo.setText(itemWork.getContactPhone());
         holder.tvAddress.setText(itemWork.getAddress());
         holder.tvService.setText(itemWork.getRequestService());
         holder.tvPrice.setText(itemWork.getPrice());
@@ -98,19 +97,6 @@ public class WorkNewAdapter extends RecyclerView.Adapter<WorkNewAdapter.ViewHold
         }
     };
 
-
-    private String getDestination() {
-        String result = Conts.BLANK;
-        if (arrItemWorkNew.size() > Conts.DEFAULT_VALUE_INT_0) {
-            StringBuilder builder = new StringBuilder();
-            for (ItemWork itemWork : arrItemWorkNew) {
-                builder.append(itemWork.getLatitude() + "," + itemWork.getLongitude() + "|");
-            }
-            result = builder.toString().substring(Conts.DEFAULT_VALUE_INT_0, builder.toString().lastIndexOf("|"));
-        }
-        return result;
-    }
-
     @Override
     public int getItemCount() {
         return arrItemWorkNew.size();
@@ -120,11 +106,11 @@ public class WorkNewAdapter extends RecyclerView.Adapter<WorkNewAdapter.ViewHold
         return arrItemWorkNew.get(position);
     }
 
-    public void updateDistance(double latitude, double longitude) {
+    public void updateDistanceNewWork(double latitude, double longitude) {
         if (latitude != 0.0 || longitude != 0.0) {
             this.latitude = latitude;
             this.longitude = longitude;
-            CommonMethod.jsonRequest(latitude, longitude, getDestination(), WorkNewAdapter.this);
+            CommonMethod.jsonRequest(latitude, longitude, CommonMethod.getDestination(arrItemWorkNew), WorkNewAdapter.this);
         }
     }
 
@@ -156,8 +142,8 @@ public class WorkNewAdapter extends RecyclerView.Adapter<WorkNewAdapter.ViewHold
         private TextView tvService;
         private TextView tvPrice;
         private TextView tvNoteService;
-        private Button btnCancelWorl;
-        private Button btnReceiveWorl;
+        private TextView btnCancelWorl;
+        private TextView btnReceiveWorl;
         private ImageView imvExpand;
 
         private LinearLayout llContentExpand;
@@ -178,9 +164,9 @@ public class WorkNewAdapter extends RecyclerView.Adapter<WorkNewAdapter.ViewHold
             tvPrice = (TextView) itemView.findViewById(R.id.tv_price);
             tvNoteService = (TextView) itemView.findViewById(R.id.tv_note_service);
 
-            btnCancelWorl = (Button) itemView.findViewById(R.id.btn_cancel_work);
+            btnCancelWorl = (TextView) itemView.findViewById(R.id.tv_reject_work);
             btnCancelWorl.setOnClickListener(this);
-            btnReceiveWorl = (Button) itemView.findViewById(R.id.btn_receive_work);
+            btnReceiveWorl = (TextView) itemView.findViewById(R.id.tv_receive_work);
             btnReceiveWorl.setOnClickListener(this);
 
             imvExpand = (ImageView) itemView.findViewById(R.id.imv_expand);
@@ -195,12 +181,12 @@ public class WorkNewAdapter extends RecyclerView.Adapter<WorkNewAdapter.ViewHold
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.btn_cancel_work:
+                case R.id.tv_reject_work:
                     if (onClickButtonItemNewTaskListener != null) {
                         onClickButtonItemNewTaskListener.onClickButtonCancelTask(getAdapterPosition());
                     }
                     break;
-                case R.id.btn_receive_work:
+                case R.id.tv_receive_work:
                     if (onClickButtonItemNewTaskListener != null) {
                         onClickButtonItemNewTaskListener.onClickButtonReceiveTask(getAdapterPosition());
                     }
@@ -214,6 +200,7 @@ public class WorkNewAdapter extends RecyclerView.Adapter<WorkNewAdapter.ViewHold
                         arrItemWorkNew.get(getAdapterPosition()).setExpand(true);
                     }
                     notifyDataSetChanged();
+
                     break;
             }
         }

@@ -1,6 +1,12 @@
 package com.cnc.hcm.cnctracking.util;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.widget.Toast;
+
 import com.cnc.hcm.cnctracking.event.OnResultTimeDistance;
+import com.cnc.hcm.cnctracking.model.ItemWork;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,6 +15,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import okhttp3.Call;
@@ -31,6 +38,18 @@ public class CommonMethod {
     public static String format(double number) {
         DecimalFormat format = new DecimalFormat("#.##");
         return format.format(number) + Conts.BLANK;
+    }
+
+    public static String getDestination(ArrayList<ItemWork> arrayList) {
+        String result = Conts.BLANK;
+        if (arrayList.size() > Conts.DEFAULT_VALUE_INT_0) {
+            StringBuilder builder = new StringBuilder();
+            for (ItemWork itemWork : arrayList) {
+                builder.append(itemWork.getLatitude() + "," + itemWork.getLongitude() + "|");
+            }
+            result = builder.toString().substring(Conts.DEFAULT_VALUE_INT_0, builder.toString().lastIndexOf("|"));
+        }
+        return result;
     }
 
     public static void jsonRequest(double latiOrigin, double longtiOrigin, String destination, final OnResultTimeDistance onResultTimeDistance) {
@@ -77,4 +96,27 @@ public class CommonMethod {
             e.printStackTrace();
         }
     }
+
+    public static void actionFindWayInMapApp(Context context, double latitude_cur, double longitude_cur, double latitude, double longitude) {
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?saddr=" + latitude_cur + "," + longitude_cur + "&daddr=" + latitude + "," + longitude));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+        context.startActivity(intent);
+    }
+
+    public static void actionCall(Context context, String phoneNo) {
+        context.startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNo, null)));
+    }
+
+    public static void actionSMS(Context context, String phoneNo) {
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNo, null)));
+    }
+
+    public static void toast(Context context, String title) {
+        Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+    }
+
+
 }

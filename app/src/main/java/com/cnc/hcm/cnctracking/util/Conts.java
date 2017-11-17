@@ -114,8 +114,8 @@ public class Conts {
     public static final Integer RESPONSE_STATUS_OK = 200;
     public static final Integer RESPONSE_STATUS_TOKEN_WRONG = 403;
 
-    public static final String BASE_URL = "http://35.185.177.251:3001/";
-    public static final String URL_BASE = "http://35.185.177.251:3001";
+    public static final String BASE_URL = "http://35.198.195.55:3001/";
+    public static final String URL_BASE = "http://35.198.195.55:3001";
     public static final String PATH_TRACKING = "/tracking";
     public static final String PATH_USER = "/user";
     public static final String PATH_USER_LOGIN = PATH_USER + "/login";
@@ -149,6 +149,5 @@ public class Conts {
     public static final String STRING_MINITE_VN = "phút";
 
 
-
-
+    public static final String KEY_OBJECT_ITEM_WORK = "KEY_OBJECT_ITEM_WORK";
 }

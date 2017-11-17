@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkNewAdapter;
-import com.cnc.hcm.cnctracking.model.ItemWork;
+import com.cnc.hcm.cnctracking.util.Conts;
 
 /**
  * Created by giapmn on 9/27/17.
@@ -26,6 +26,7 @@ public class WorkNewFragment extends Fragment implements WorkNewAdapter.OnClickB
     private static final String TAGG = WorkNewFragment.class.getSimpleName();
     private RecyclerView rvNewTask;
     private WorkNewAdapter workNewAdapter;
+    private MainActivity mainActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,11 +36,10 @@ public class WorkNewFragment extends Fragment implements WorkNewAdapter.OnClickB
     }
 
     private void initObject() {
-        workNewAdapter = new WorkNewAdapter(getContext());
+        mainActivity = (MainActivity) getActivity();
+        workNewAdapter = new WorkNewAdapter(getContext(), mainActivity.getDataByWorkType(Conts.TYPE_NEW_TASK));
         workNewAdapter.setOnClickButtonItemNewTaskListener(this);
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.switchDataTo4TabWork();
-        updateDistance(mainActivity.getLatitude(), mainActivity.getLongtitude());
+        updateDistanceNewWork(mainActivity.getLatitude(), mainActivity.getLongtitude());
     }
 
     @Nullable
@@ -69,7 +69,7 @@ public class WorkNewFragment extends Fragment implements WorkNewAdapter.OnClickB
 
     @Override
     public void onClickButtonCancelTask(int position) {
-        Toast.makeText(getContext(), "Cancel: " + workNewAdapter.getItem(position).getContact(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Cancel: " + workNewAdapter.getItem(position).getContactName(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -77,17 +77,9 @@ public class WorkNewFragment extends Fragment implements WorkNewAdapter.OnClickB
         Toast.makeText(getContext(), "Receive: " + workNewAdapter.getItem(position).getRequestService(), Toast.LENGTH_LONG).show();
     }
 
-    public void updateDistance(double latitude, double longitude) {
+    public void updateDistanceNewWork(double latitude, double longitude) {
         if (workNewAdapter != null) {
-            workNewAdapter.updateDistance(latitude, longitude);
+            workNewAdapter.updateDistanceNewWork(latitude, longitude);
         }
-    }
-
-    public void addItem(ItemWork itemWork) {
-        if (workNewAdapter != null) {
-            workNewAdapter.addItem(itemWork);
-        }
-        Log.d(TAGG, "addItem" + workNewAdapter);
-
     }
 }

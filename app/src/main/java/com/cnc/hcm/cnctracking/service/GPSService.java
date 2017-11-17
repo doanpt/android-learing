@@ -25,6 +25,7 @@ import android.widget.RemoteViews;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
+import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.api.APIService;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
@@ -79,6 +80,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private Gson gson = new Gson();
     private APIService mService;
     private MainActivity mainActivity;
+    private WorkDetailActivity workDetailActivity;
     //private LocationGooglePlayServicesProvider provider;
 
     private double longitude;
@@ -217,6 +219,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
         if (mainActivity != null) {
             mainActivity.myLocationHere(latitude, longitude, accuracy, addressName, cityName);
+        }
+        if (workDetailActivity != null) {
+            workDetailActivity.myLocationHere(latitude, longitude);
         }
 
         if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0.0f && latitude != 0.0f) {
@@ -478,5 +483,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     public String getCityName() {
         return cityName;
+    }
+
+    public void setWorkDetailActivity(WorkDetailActivity workDetailActivity) {
+        this.workDetailActivity = workDetailActivity;
     }
 }

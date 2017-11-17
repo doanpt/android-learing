@@ -19,5 +19,9 @@
     <color name="color_boder_avatar">#9affffff</color>
 
     <color name="color_bg_list">#c9c7c9</color>
+    <color name="color_view_hover_ok">#FFFFFF</color>
+    <color name="color_view_hover_cancel">#757575</color>
+    <color name="text_color_secondary">#757575</color>
+    <color name="text_color">#a0a0a0</color>
 
 </resources>

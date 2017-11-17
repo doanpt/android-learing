@@ -66,5 +66,9 @@
         <item name="android:background">@color/color_line</item>
     </style>
 
-
+    <style name="menu_labels_style">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:padding">4dp</item>
+    </style>
 </resources>

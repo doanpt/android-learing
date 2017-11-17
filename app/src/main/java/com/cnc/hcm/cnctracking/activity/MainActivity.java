@@ -49,6 +49,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
@@ -60,9 +62,6 @@ import java.util.ArrayList;
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-//import biz.laenger.android.vpbs.BottomSheetUtils;
-//import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener
@@ -141,10 +140,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         if (isNetworkConnected) {
                             tvStatusNetwork.setTextColor(getResources().getColor(R.color.color_text_status));
                             tvStatusNetwork.setText(getResources().getString(R.string.On));
-
-                            if (workNewFragment != null && gpsService != null) {
-                                workNewFragment.updateDistance(gpsService.getLatitude(), gpsService.getLongitude());
+                            if (gpsService != null) {
+                                updateDistanceTo4TabWork();
                             }
+
                         } else {
                             tvStatusNetwork.setTextColor(getResources().getColor(android.R.color.darker_gray));
                             tvStatusNetwork.setText(getResources().getString(R.string.Off));
@@ -154,6 +153,24 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         }
     };
+
+    private void updateDistanceTo4TabWork() {
+        if (workNewFragment != null) {
+            workNewFragment.updateDistanceNewWork(gpsService.getLatitude(), gpsService.getLongitude());
+        }
+
+        if (workDoingFragment != null) {
+            workDoingFragment.updateDistanceDoingWork(gpsService.getLatitude(), gpsService.getLongitude());
+        }
+
+        if (workCompletedFragment != null) {
+            workCompletedFragment.updateDistanceCompleteWork(gpsService.getLatitude(), gpsService.getLongitude());
+        }
+
+        if (workCancelFragment != null) {
+            workCancelFragment.updateDistanceCancelWork(gpsService.getLatitude(), gpsService.getLongitude());
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,42 +195,66 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void initData() {
         arrItemWorkNew.clear();
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.172724, 105.910090, "0 Km", "",
-                "14:20 - 16h20", "Mầu Ngô Giáp", "0974356994", "Unnamed Road, thôn Đông, Thuỵ Lâm, Đông Anh, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "14:20 - 16h20, 09/11/2017", "Mầu Ngô Giáp", "0974356994", "Unnamed Road, thôn Đông, Thuỵ Lâm, Đông Anh, Hà Nội, Vietnam", "Sửa tủ lạnh",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa điều hoà", 21.025291, 105.793761, "0 Km", "",
-                "14:20 - 16h20", "Đỗ Văn Tân", "0973545345", "602 Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa điều hoà",
+                "14:20 - 16h20, 09/11/2017", "Đỗ Văn Tân", "0973545345", "602 Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa điều hoà",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.021846, 105.786384, "0 Km", "",
-                "14:20 - 16h20", "Lê Quốc Nam", "0974356995", "Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "14:20 - 16h20, 09/11/2017", "Lê Quốc Nam", "0974356995", "Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.0273855, 105.7846931, "0 Km", "",
-                "14:20 - 16h20", "Trần Văn Gạo", "0974356996", "5 Tôn Thất Thuyết, Dịch Vọng Hậu, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "14:20 - 16h20, 09/11/2017", "Trần Văn Gạo", "0974356996", "5 Tôn Thất Thuyết, Dịch Vọng Hậu, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa máy lạnh", 21.0232644, 105.7843098, "0 Km", "",
-                "14:20 - 16h20", "Phạm Trung Đoan", "0974356997", "Ngõ 3 Tôn Thất thuyết, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa máy lạnh",
+                "14:20 - 16h20, 09/11/2017", "Phạm Trung Đoan", "0974356997", "Ngõ 3 Tôn Thất thuyết, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa máy lạnh",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
 
 
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_DOING_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.0273855, 105.7846931, "0 Km", "",
-                "14:20 - 16h20", "Trần Văn Gạo", "0974356996", "5 Tôn Thất Thuyết, Dịch Vọng Hậu, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "14:20 - 16h20, 09/11/2017", "Trần Văn Gạo", "0974356996", "5 Tôn Thất Thuyết, Dịch Vọng Hậu, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_DOING_TASK, "11:30:24 07/11/2017", "Sửa máy lạnh", 21.0232644, 105.7843098, "0 Km", "",
-                "14:20 - 16h20", "Phạm Trung Đoan", "0974356997", "Ngõ 3 Tôn Thất thuyết, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa máy lạnh",
+                "14:20 - 16h20, 09/11/2017", "Phạm Trung Đoan", "0974356997", "Ngõ 3 Tôn Thất thuyết, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa máy lạnh",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
 
 
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_COMPLETE_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.021846, 105.786384, "0 Km", "",
-                "14:20 - 16h20", "Lê Quốc Nam", "0974356995", "Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "14:20 - 16h20, 09/11/2017", "Lê Quốc Nam", "0974356995", "Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
 
 
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_CANCEL_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.172724, 105.910090, "0 Km", "",
-                "14:20 - 16h20", "Mầu Ngô Giáp", "0974356994", "Unnamed Road, thôn Đông, Thuỵ Lâm, Đông Anh, Hà Nội, Vietnam", "Sửa tủ lạnh",
+                "14:20 - 16h20, 09/11/2017", "Mầu Ngô Giáp", "0974356994", "Unnamed Road, thôn Đông, Thuỵ Lâm, Đông Anh, Hà Nội, Vietnam", "Sửa tủ lạnh",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
         arrItemWorkNew.add(new ItemWork(Conts.TYPE_CANCEL_TASK, "11:30:24 07/11/2017", "Sửa điều hoà", 21.025291, 105.793761, "0 Km", "",
-                "14:20 - 16h20", "Đỗ Văn Tân", "0973545345", "602 Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa điều hoà",
+                "14:20 - 16h20, 09/11/2017", "Đỗ Văn Tân", "0973545345", "602 Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa điều hoà",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
 
+
+    }
+
+    private void initMarkerOnMap() {
+        for (ItemWork work : arrItemWorkNew) {
+            switch (work.getTypeWork()) {
+                case Conts.TYPE_NEW_TASK:
+                    addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
+                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                    break;
+                case Conts.TYPE_DOING_TASK:
+                    addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
+                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    break;
+                case Conts.TYPE_COMPLETE_TASK:
+                    addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
+                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                    break;
+                case Conts.TYPE_CANCEL_TASK:
+                    addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
+                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+                    break;
+            }
+        }
     }
 
     private void createFileBackup() {
@@ -319,24 +360,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
-    public void switchDataTo4TabWork() {
+    public ArrayList<ItemWork> getDataByWorkType(int typeWork) {
+        ArrayList<ItemWork> arrayList = new ArrayList<>();
         for (int index = 0; index < arrItemWorkNew.size(); index++) {
             ItemWork itemWork = arrItemWorkNew.get(index);
-            switch (itemWork.getTypeWork()) {
-                case Conts.TYPE_NEW_TASK:
-                    workNewFragment.addItem(itemWork);
-                    break;
-                case Conts.TYPE_DOING_TASK:
-                    workDoingFragment.addItem(itemWork);
-                    break;
-                case Conts.TYPE_COMPLETE_TASK:
-                    workCompletedFragment.addItem(itemWork);
-                    break;
-                case Conts.TYPE_CANCEL_TASK:
-                    workCancelFragment.addItem(itemWork);
-                    break;
+            if (itemWork.getTypeWork() == typeWork) {
+                arrayList.add(itemWork);
             }
         }
+        return arrayList;
     }
 
     public void appendText(String str) {
@@ -438,17 +470,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+            return;
+        }
+
         if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
             return;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     public void showMessageRequestLogout() {
@@ -511,20 +544,26 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             LatLng myLocation = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions().position(myLocation).title(addName).snippet(cityName));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+
+            initMarkerOnMap();
         }
 
-        workNewFragment.updateDistance(latitude, longitude);
+        workNewFragment.updateDistanceNewWork(latitude, longitude);
+        workDoingFragment.updateDistanceDoingWork(latitude, longitude);
+        workCompletedFragment.updateDistanceCompleteWork(latitude, longitude);
+        workCancelFragment.updateDistanceCancelWork(latitude, longitude);
+
     }
 
-    public void addMarkerMap(double latitude, double longitude, String addName, String cityName) {
+    public void addMarkerMap(double latitude, double longitude, String addName, BitmapDescriptor bitmapDescriptor) {
         if (mMap != null) {
             //BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
 
             LatLng myLocation = new LatLng(latitude, longitude);
-            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName).snippet(cityName));
+            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName)).setIcon(bitmapDescriptor);
         }
-
     }
+
 
     public void moveCameraMap(LatLng myLocation) {
         if (mMap != null) {
