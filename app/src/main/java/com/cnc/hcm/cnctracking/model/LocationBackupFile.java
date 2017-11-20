@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 
 public class LocationBackupFile implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Double latitude;
     private Double longitude;
     private Long timestamp;

@@ -133,6 +133,7 @@ public class Conts {
     public static final String FILE_LOCATION_NO_NETWORK = "NoNetwork.txt";
     public static final String FILE_LOCATION_NETWORK = "Network.txt";
     public static final String FILE_LOCATION_UPLOAD_SIZE = "UploadSize.txt";
+    public static final String FILE_RESPONSE = "FileResponse.txt";
 
     public static final int TYPE_NEW_TASK = 0;
     public static final int TYPE_DOING_TASK = 1;

@@ -30,6 +30,7 @@ import com.cnc.hcm.cnctracking.api.APIService;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LocationBackupFile;
+import com.cnc.hcm.cnctracking.model.LocationResponseUpload;
 import com.cnc.hcm.cnctracking.model.LocationUploadSize;
 import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
@@ -40,11 +41,14 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,8 +171,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private static boolean saveLocationToFile(String fileName, Object item) {
         try {
             FileOutputStream fos = new FileOutputStream(new File(fileName), true);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(item.toString());
+            BufferedWriter oos = new BufferedWriter(new OutputStreamWriter(fos, Charset.forName("UTF-8")));
+            oos.write(item.toString());
+            oos.newLine();
             oos.close();
             fos.close();
         } catch (IOException e) {
@@ -232,8 +237,24 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 if (size >= 5) {
                     builder.append("-------- POST_GPS_TO_SERVER ---------\n");
                     Log.d(TAGG, "onLocationUpdated " + "POST_GPS_TO_SERVER");
-                    updateLocation(new ItemTrackLocation(arrTrackLocation, batteryLevel));
-                    saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_UPLOAD_SIZE, new LocationUploadSize(size + "", System.currentTimeMillis(), UserInfo.getInstance(this).getUserEmail()));
+                    int sizeUpload = arrTrackLocation.size() / 100;
+                    int phanDu = arrTrackLocation.size() % 100;
+                    for (int i = 0; i < sizeUpload; i++) {
+                        ArrayList<TrackLocation> arrUpload = new ArrayList<>();
+                        for (int j = 0; j < 100; j++) {
+                            arrUpload.add(arrTrackLocation.get((i * 100) + j));
+                        }
+                        updateLocation(new ItemTrackLocation(arrUpload, batteryLevel));
+                        saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_UPLOAD_SIZE, new LocationUploadSize(100 + "", System.currentTimeMillis(), UserInfo.getInstance(this).getUserEmail()));
+                    }
+                    if (phanDu > 0) {
+                        ArrayList<TrackLocation> arrUpload = new ArrayList<>();
+                        for (int j = 0; j < phanDu; j++) {
+                            arrUpload.add(arrTrackLocation.get(j));
+                        }
+                        updateLocation(new ItemTrackLocation(arrUpload, batteryLevel));
+                        saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_UPLOAD_SIZE, new LocationUploadSize(phanDu + "", System.currentTimeMillis(), UserInfo.getInstance(this).getUserEmail()));
+                    }
                 } else {
                     builder.append("ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy + "\n");
                     Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
@@ -281,7 +302,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             public void onResponse(Call<UpdateLocationResponseStatus> call, Response<UpdateLocationResponseStatus> response) {
                 int statusCode = response.code();
                 Log.d(TAGG, "onLocationUpdated.onResponse(), statusCode: " + statusCode);
-
+                LocationResponseUpload locationBackupFile = new LocationResponseUpload(statusCode, response.body().getMessage(), System.currentTimeMillis());
+                saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
                 if (response.isSuccessful()) {
                     UpdateLocationResponseStatus updateLocation = response.body();
                     if (updateLocation != null) {
@@ -310,6 +332,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             @Override
             public void onFailure(Call<UpdateLocationResponseStatus> call, Throwable t) {
                 Log.e(TAGG, "updateLocation.onFailure()");
+                LocationResponseUpload locationBackupFile = new LocationResponseUpload(4004, "Upload fail", System.currentTimeMillis());
+                saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
                 t.printStackTrace();
                 isPause = false;
             }

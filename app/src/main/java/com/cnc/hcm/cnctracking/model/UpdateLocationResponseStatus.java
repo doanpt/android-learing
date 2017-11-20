@@ -15,13 +15,11 @@ public class UpdateLocationResponseStatus {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public UpdateLocationResponseStatus() {
     }
 
     /**
-     *
      * @param message
      * @param statusCode
      */
@@ -47,4 +45,8 @@ public class UpdateLocationResponseStatus {
         this.message = message;
     }
 
+    @Override
+    public String toString() {
+        return "{" + "statusCode:" + statusCode + ", message:'" + message + '}';
+    }
 }

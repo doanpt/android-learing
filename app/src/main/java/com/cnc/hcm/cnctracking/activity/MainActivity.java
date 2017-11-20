@@ -267,6 +267,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             File file_network = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_NETWORK);
             File file_no_network = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_NO_NETWORK);
             File file_size = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_UPLOAD_SIZE);
+            File file_response = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_RESPONSE);
 
             if (!file_network.exists()) {
                 file_network.createNewFile();
@@ -276,6 +277,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
             if (!file_size.exists()) {
                 file_size.createNewFile();
+            }
+            if (!file_response.exists()) {
+                file_response.createNewFile();
             }
         } catch (IOException e) {
             e.printStackTrace();

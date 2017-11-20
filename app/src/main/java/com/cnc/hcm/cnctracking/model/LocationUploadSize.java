@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 
 public class LocationUploadSize implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String size;
     private long time;
     private String account;
