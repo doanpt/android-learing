@@ -16,6 +16,7 @@ import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -39,6 +40,7 @@ import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.github.nkzawa.socketio.client.Ack;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.android.gms.internal.bo;
 import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
@@ -72,7 +74,10 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
     private static final int NOTIFI_ID = 111;
     private static final float MIN_DISTANCE_GET_GPS = 20f;
-    private static final long MIN_TIME_GET_GPS = 0L;
+    private static final long MIN_TIME_GET_GPS = 1000L;
+    private static final int MAXIMUM_PACKAGE = 100;
+    private static final int MINXIMUM_PACKAGE = 5;
+
 
     private NotificationManager notificationManager;
     private NotificationCompat.Builder mBuilder;
@@ -94,12 +99,11 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private String body = "";
 
     private boolean isNetworkConnected;
-    private boolean isPause;
-
     private Socket mSocket;
-    private StringBuilder builder = new StringBuilder();
     private String addressName;
     private String cityName;
+    private Thread mThreadUpload;
+    private boolean isUploading;
 
     {
         try {
@@ -158,6 +162,17 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         startLocation();
     }
 
+    public void startLocation() {
+        LocationParams params = new LocationParams.Builder().setAccuracy(LocationAccuracy.HIGH).setDistance(MIN_DISTANCE_GET_GPS).build();
+//        provider = new LocationGooglePlayServicesProvider();
+//        provider.setCheckLocationSettings(true);
+//
+//        SmartLocation smartLocation = new SmartLocation.Builder(this).logging(true).build();
+//        smartLocation.location(provider).config(params).start(this);
+        SmartLocation.with(GPSService.this).location().config(params).start(this);
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -213,7 +228,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     for (int i = 0; i <= result.getMaxAddressLineIndex(); i++) {
                         addressElements.add(result.getAddressLine(i));
                     }
-
                     builderAddress.append(TextUtils.join(", ", addressElements));
 
                     addressName = builderAddress.toString();
@@ -229,52 +243,35 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             workDetailActivity.myLocationHere(latitude, longitude);
         }
 
-        if (!isPause && UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0.0f && latitude != 0.0f) {
+        if (UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0.0f && latitude != 0.0f) {
 
             if (isNetworkConnected) {
                 int size = arrTrackLocation.size();
                 saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_NETWORK, getItemBackupValue(location, true));
-                if (size >= 5) {
-                    builder.append("-------- POST_GPS_TO_SERVER ---------\n");
-                    Log.d(TAGG, "onLocationUpdated " + "POST_GPS_TO_SERVER");
-                    int sizeUpload = arrTrackLocation.size() / 100;
-                    int phanDu = arrTrackLocation.size() % 100;
-                    for (int i = 0; i < sizeUpload; i++) {
-                        ArrayList<TrackLocation> arrUpload = new ArrayList<>();
-                        for (int j = 0; j < 100; j++) {
-                            arrUpload.add(arrTrackLocation.get((i * 100) + j));
-                        }
-                        updateLocation(new ItemTrackLocation(arrUpload, batteryLevel));
-                        saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_UPLOAD_SIZE, new LocationUploadSize(100 + "", System.currentTimeMillis(), UserInfo.getInstance(this).getUserEmail()));
-                    }
-                    if (phanDu > 0) {
-                        ArrayList<TrackLocation> arrUpload = new ArrayList<>();
-                        for (int j = 0; j < phanDu; j++) {
-                            arrUpload.add(arrTrackLocation.get(j));
-                        }
-                        updateLocation(new ItemTrackLocation(arrUpload, batteryLevel));
-                        saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_UPLOAD_SIZE, new LocationUploadSize(phanDu + "", System.currentTimeMillis(), UserInfo.getInstance(this).getUserEmail()));
-                    }
+                if (size >= MINXIMUM_PACKAGE && !isUploading) {
+                    pushDataGPSToServer();
                 } else {
-                    builder.append("ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy + "\n");
                     Log.d(TAGG, "onLocationUpdated " + "ADD_GPS: " + latitude + ", " + longitude + ", " + accuracy);
                     arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
                 }
             } else {
-                builder.append("BACK_UP_GPS: " + latitude + ", " + longitude + ", " + accuracy + "\n");
                 arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
                 saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_NO_NETWORK, getItemBackupValue(location, false));
                 Log.d(TAGG, "onLocationUpdated " + "BACK_UP_GPS: " + latitude + ", " + longitude + ", " + accuracy);
             }
         } else {
             updateNotification("GPS not found");
-            Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND");
+            Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND, " + longitude + ", " + latitude);
         }
-
         if (mainActivity != null) {
-            mainActivity.appendText(builder.toString());
+            mainActivity.appendText("");
         }
+    }
 
+    private void removeGPSAfterUpload(int size) {
+        for (int i = 0; i < size; i++) {
+            arrTrackLocation.remove(0);
+        }
     }
 
     private void checkGPSOnOff() {
@@ -284,19 +281,31 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         }
     }
 
-    public void startLocation() {
-        LocationParams params = new LocationParams.Builder().setAccuracy(LocationAccuracy.HIGH).setDistance(MIN_DISTANCE_GET_GPS).build();
-//        provider = new LocationGooglePlayServicesProvider();
-//        provider.setCheckLocationSettings(true);
-//
-//        SmartLocation smartLocation = new SmartLocation.Builder(this).logging(true).build();
-//        smartLocation.location(provider).config(params).start(this);
-        SmartLocation.with(GPSService.this).location().config(params).start(this);
+
+    private synchronized void pushDataGPSToServer() {
+        int sizeUpload = arrTrackLocation.size() / MAXIMUM_PACKAGE;
+        int phanDu = arrTrackLocation.size() % MAXIMUM_PACKAGE;
+        int isDoneSizeUpload = 0;
+        if (sizeUpload > 0) {
+            ArrayList<TrackLocation> arrUpload = new ArrayList<>();
+            for (int j = 0; j < MAXIMUM_PACKAGE; j++) {
+                arrUpload.add(arrTrackLocation.get(j));
+            }
+            updateLocation(new ItemTrackLocation(arrUpload, batteryLevel));
+            isDoneSizeUpload++;
+        } else {
+            if (isDoneSizeUpload == sizeUpload && phanDu > 0) {
+                ArrayList<TrackLocation> arrUpload = new ArrayList<>();
+                for (int j = 0; j < phanDu; j++) {
+                    arrUpload.add(arrTrackLocation.get(j));
+                }
+                updateLocation(new ItemTrackLocation(arrUpload, batteryLevel));
+            }
+        }
     }
 
-
-    public void updateLocation(ItemTrackLocation location) {
-        isPause = true;
+    public void updateLocation(final ItemTrackLocation location) {
+        isUploading = true;
         mService.updateLocation(location).enqueue(new Callback<UpdateLocationResponseStatus>() {
             @Override
             public void onResponse(Call<UpdateLocationResponseStatus> call, Response<UpdateLocationResponseStatus> response) {
@@ -309,8 +318,15 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     if (updateLocation != null) {
                         int updateLocationCode = updateLocation.getStatusCode();
                         if (updateLocationCode == Conts.RESPONSE_STATUS_OK) {
-                            arrTrackLocation.clear();
+                            int sizeUpload = location.getTrackLocation().size();
+                            removeGPSAfterUpload(sizeUpload);
                             body = gson.toJson(response.body());
+                            int size = arrTrackLocation.size();
+                            if (size > MINXIMUM_PACKAGE && isNetworkConnected) {
+                                pushDataGPSToServer();
+                            } else {
+                                isUploading = false;
+                            }
                         } else if (updateLocationCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
                             UserInfo.getInstance(GPSService.this).setUserLoginOnOtherDevice(true);
                             updateNotification("Tài khoản này đã được đăng nhập trên thiết bị khác");
@@ -319,23 +335,27 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                             }
                         }
                     }
-                    isPause = false;
-                    Log.d(TAGG, "onLocationUpdated.onResponse().isSuccessful(), body: " + body);
-                    builder.append(body + "\n");
+                    Log.d(TAGG, "onLocationUpdated.onResponse().isSuccessful(), body: " + body + "\nSize:= " + location.getTrackLocation().size());
                 } else {
-                    isPause = false;
                     body = gson.toJson(response.body());
+                    LocationResponseUpload locationBackupFile2 = new LocationResponseUpload(response.body().getStatusCode(), "onLocationUpdated.onResponse().isFail(), body:", System.currentTimeMillis());
                     Log.d(TAGG, "onLocationUpdated.onResponse().isFail(), body: " + body);
+                    saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile2);
+                    if (isNetworkConnected) {
+                        pushDataGPSToServer();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<UpdateLocationResponseStatus> call, Throwable t) {
                 Log.e(TAGG, "updateLocation.onFailure()");
-                LocationResponseUpload locationBackupFile = new LocationResponseUpload(4004, "Upload fail", System.currentTimeMillis());
+                LocationResponseUpload locationBackupFile = new LocationResponseUpload(4004, "Upload fail:+\n" + t.getCause() + t.getStackTrace(), System.currentTimeMillis());
                 saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
                 t.printStackTrace();
-                isPause = false;
+                if (isNetworkConnected) {
+                    pushDataGPSToServer();
+                }
             }
         });
     }
