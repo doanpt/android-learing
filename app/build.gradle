@@ -28,9 +28,10 @@ dependencies {
     compile('io.nlopez.smartlocation:library:3.3.1') {
         transitive = false
     }
-    compile('com.github.nkzawa:socket.io-client:0.4.2') {
-        exclude group: 'org.json', module: 'json'
-    }
+	compile ('io.socket:socket.io-client:1.0.0') {
+		// excluding org.json which is provided by Android
+		exclude group: 'org.json', module: 'json'
+	}
     // test lib
     compile project(':zxing-android-embedded')
     compile 'com.google.android.gms:play-services-maps:11.0.2'
