@@ -341,11 +341,13 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     Log.d(TAGG, "onLocationUpdated.onResponse().isSuccessful(), body: " + body + "\nSize:= " + location.getTrackLocation().size());
                 } else {
                     body = gson.toJson(response.body());
-                    LocationResponseUpload locationBackupFile2 = new LocationResponseUpload(response.body().getStatusCode(), "onLocationUpdated.onResponse().isFail(), body:", System.currentTimeMillis());
+                    LocationResponseUpload locationBackupFile2 = new LocationResponseUpload(response.body().getStatusCode(), "onLocationUpdated.onResponse().isFail(), body: " + body, System.currentTimeMillis());
                     Log.d(TAGG, "onLocationUpdated.onResponse().isFail(), body: " + body);
                     saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile2);
                     if (isNetworkConnected) {
                         pushDataGPSToServer();
+                    } else {
+                        isUploading = false;
                     }
                 }
             }
@@ -353,11 +355,13 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             @Override
             public void onFailure(Call<UpdateLocationResponseStatus> call, Throwable t) {
                 Log.e(TAGG, "updateLocation.onFailure()");
-                LocationResponseUpload locationBackupFile = new LocationResponseUpload(4004, "Upload fail:+\n" + t.getCause() + t.getStackTrace(), System.currentTimeMillis());
+                LocationResponseUpload locationBackupFile = new LocationResponseUpload(4004, "Upload fail:+\n" + t.getCause() + t.getStackTrace().toString(), System.currentTimeMillis());
                 saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
                 t.printStackTrace();
                 if (isNetworkConnected) {
                     pushDataGPSToServer();
+                } else {
+                    isUploading = false;
                 }
             }
         });
@@ -374,6 +378,10 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     isNetworkConnected = getNetworkConntected();
                     if (isNetworkConnected) {
                         //connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
+                        int size = arrTrackLocation.size();
+                        if (size >= MINXIMUM_PACKAGE && !isUploading) {
+                            pushDataGPSToServer();
+                        }
                     } else {
                         //disconnectSocket();
                     }
