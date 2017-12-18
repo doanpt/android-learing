@@ -15,6 +15,8 @@ public class UserInfo {
     private static final String KEY_USER_LOGIN_ON_OTHER_DEVICE = "KEY_USER_LOGIN_ON_OTHER_DEVICE";
     private static final String KEY_MAIN_ACTIVITY_ACTIVE = "KEY_MAIN_ACTIVITY_ACTIVE";
 
+    private static final String KEY_UPLOAD_FIRST_TIME = "KEY_UPLOAD_FIRST_TIME";
+
 
     private static UserInfo userInfo;
 
@@ -116,6 +118,14 @@ public class UserInfo {
 
     public boolean getMainActivityActive() {
         return sharedPreferences.getBoolean(KEY_MAIN_ACTIVITY_ACTIVE, true);
+    }
+
+    public void setUploadFirstTime(boolean isUploadFirstTime) {
+        putBoolean(KEY_UPLOAD_FIRST_TIME, isUploadFirstTime);
+    }
+
+    public boolean getIsUploadFirstTime() {
+        return sharedPreferences.getBoolean(KEY_UPLOAD_FIRST_TIME, true);
     }
 
     private void putString(String key, String value) {

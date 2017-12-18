@@ -453,6 +453,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             @Override
             public void run() {
                 UserInfo.getInstance(MainActivity.this).setUserInfoLogout();
+                UserInfo.getInstance(MainActivity.this).setUploadFirstTime(true);
                 if (gpsService != null) {
                     gpsService.disconnectService();
                 }
