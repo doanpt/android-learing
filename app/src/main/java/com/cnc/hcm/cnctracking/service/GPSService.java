@@ -249,7 +249,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         if (UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0.0f && latitude != 0.0f) {
 
             if (isNetworkConnected) {
-                int size = arrTrackLocation.size();
                 saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_LOCATION_NETWORK, getItemBackupValue(location, true));
 
                 boolean isPushServerFirstTime = UserInfo.getInstance(GPSService.this).getIsUploadFirstTime();
@@ -260,7 +259,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     }
                     UserInfo.getInstance(GPSService.this).setUploadFirstTime(false);
                 }
-
+                int size = arrTrackLocation.size();
                 if (size >= MINXIMUM_PACKAGE && !isUploading) {
                     pushDataGPSToServer();
                 } else {
