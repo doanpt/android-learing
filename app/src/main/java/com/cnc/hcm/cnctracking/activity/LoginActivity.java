@@ -182,62 +182,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mProgressDialog.setMessage(getResources().getString(R.string.get_data_user_infor));
         getDataUserProfile(accessToken);
 
-        //TODO for check api before make UI. START (*)
-        try {
-            tryGetTaskList(accessToken);
-        } catch (Exception e) {
-            Log.e(TAG, "Exception occurs when tryGetTaskList -> tryGetTaskDetail");
-            e.printStackTrace();
-        }
-        //TODO for check api before make UI. END (*)
-    }
-
-    private void tryGetTaskList(final String accessToken) {
-        Log.e(TAG, "tryGetTaskList()");
-        ApiUtils.getAPIService(accessToken).getTaskList().enqueue(new Callback<GetTaskListResult>() {
-            @Override
-            public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
-                int statusCode = response.code();
-                Log.d(TAG, "tryGetTaskList.onResponse(), statusCode: " + statusCode);
-                if (response.isSuccessful()) {
-                    GetTaskListResult getTaskListResult = response.body();
-                    Log.e(TAG, "tryGetTaskList.onResponse(), --> " + getTaskListResult);
-                    if (getTaskListResult != null) {
-                        GetTaskListResult.Result[] result1 = getTaskListResult.result;
-                        if (result1 != null && result1.length > 0) {
-                            tryGetTaskDetail(accessToken, result1[0]._id);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetTaskListResult> call, Throwable t) {
-                Log.e(TAG, "tryGetTaskList.onFailure() --> " + t);
-                t.printStackTrace();
-            }
-        });
-    }
-
-    private void tryGetTaskDetail(String accessToken, String _id) {
-        Log.e(TAG, "tryGetTaskDetail()");
-        ApiUtils.getAPIService(accessToken).getTaskDetails(_id).enqueue(new Callback<GetTaskDetailResult>() {
-            @Override
-            public void onResponse(Call<GetTaskDetailResult> call, Response<GetTaskDetailResult> response) {
-                int statusCode = response.code();
-                Log.d(TAG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode);
-                if (response.isSuccessful()) {
-                    GetTaskDetailResult getTaskDetailResult = response.body();
-                    Log.e(TAG, "tryGetTaskDetail.onResponse(), --> " + getTaskDetailResult);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetTaskDetailResult> call, Throwable t) {
-                Log.e(TAG, "tryGetTaskDetail.onFailure() --> " + t);
-                t.printStackTrace();
-            }
-        });
     }
 
     public void onLoginFailed(boolean isLoginAuto, String message) {

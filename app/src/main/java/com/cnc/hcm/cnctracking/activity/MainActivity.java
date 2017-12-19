@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.WorkFragmentAdapter;
+import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.customeview.HighlightWeekendsDecorator;
 import com.cnc.hcm.cnctracking.customeview.MySelectorDecorator;
 import com.cnc.hcm.cnctracking.customeview.OneDayDecorator;
@@ -44,6 +45,8 @@ import com.cnc.hcm.cnctracking.fragment.WorkAllFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkCompletedFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkDoingFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkNewFragment;
+import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemWork;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -70,6 +73,9 @@ import java.util.Calendar;
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_SINGLE;
 
@@ -203,6 +209,67 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         checkUserLoginOnOtherDevice();
         initMap();
+
+
+        //TODO for check api before make UI. START (*)
+        try {
+            tryGetTaskList(UserInfo.getInstance(MainActivity.this).getAccessToken());
+        } catch (Exception e) {
+            Log.e(TAG, "Exception occurs when tryGetTaskList -> tryGetTaskDetail");
+            e.printStackTrace();
+        }
+        //TODO for check api before make UI. END (*)
+    }
+
+
+    private void tryGetTaskList(final String accessToken) {
+        Log.e(TAG, "tryGetTaskList()");
+        ApiUtils.getAPIService(accessToken).getTaskList().enqueue(new Callback<GetTaskListResult>() {
+            @Override
+            public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
+                int statusCode = response.code();
+                Log.e(TAG, "tryGetTaskList.onResponse(), statusCode: " + statusCode);
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "tryGetTaskList.onResponse(), --> response: " + response.toString());
+                    GetTaskListResult getTaskListResult = response.body();
+                    Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
+                    if (getTaskListResult != null) {
+                        GetTaskListResult.Result[] result1 = getTaskListResult.result;
+                        if (result1 != null && result1.length > 0) {
+                            tryGetTaskDetail(accessToken, result1[0]._id);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTaskListResult> call, Throwable t) {
+                Log.e(TAG, "tryGetTaskList.onFailure() --> " + t);
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void tryGetTaskDetail(String accessToken, String _id) {
+        Log.e(TAG, "tryGetTaskDetail(), _id: " + _id);
+        ApiUtils.getAPIService(accessToken).getTaskDetails(_id).enqueue(new Callback<GetTaskDetailResult>() {
+            @Override
+            public void onResponse(Call<GetTaskDetailResult> call, Response<GetTaskDetailResult> response) {
+                int statusCode = response.code();
+                Log.e(TAG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode);
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "tryGetTaskDetail.onResponse(), --> response: " + response.toString());
+                    GetTaskDetailResult getTaskDetailResult = response.body();
+                    Log.e(TAG, "tryGetTaskDetail.onResponse(), --> getTaskDetailResult: " + getTaskDetailResult.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTaskDetailResult> call, Throwable t) {
+                Log.e(TAG, "tryGetTaskDetail.onFailure() --> " + t);
+                t.printStackTrace();
+            }
+        });
     }
 
 
