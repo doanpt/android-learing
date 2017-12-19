@@ -4,12 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.cnc.hcm.cnctracking.fragment.WorkCancelFragment;
-import com.cnc.hcm.cnctracking.fragment.WorkCompletedFragment;
-import com.cnc.hcm.cnctracking.fragment.WorkNewFragment;
-import com.cnc.hcm.cnctracking.fragment.WorkDoingFragment;
-import com.cnc.hcm.cnctracking.util.Conts;
-
 /**
  * Created by giapmn on 9/27/17.
  */
@@ -22,7 +16,7 @@ public class WorkFragmentAdapter extends FragmentPagerAdapter {
             "Mới",
             "Đang thực hiện",
             "Hoàn thành",
-            "Huỷ"};
+            "Tất cả"};
 
     public WorkFragmentAdapter(FragmentManager fm, Fragment[] listFrag) {
         super(fm);

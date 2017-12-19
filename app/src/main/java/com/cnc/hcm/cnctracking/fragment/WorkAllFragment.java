@@ -14,19 +14,18 @@ import android.view.ViewGroup;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDoingAdapter;
-import com.cnc.hcm.cnctracking.model.ItemWork;
 import com.cnc.hcm.cnctracking.util.Conts;
 
 /**
  * Created by giapmn on 9/27/17.
  */
 
-public class WorkCancelFragment extends Fragment implements WorkDoingAdapter.OnClickButtonItemDoingComleteWorkListener {
+public class WorkAllFragment extends Fragment implements WorkDoingAdapter.OnClickButtonItemDoingComleteWorkListener {
 
     private WorkDoingAdapter doingAdapter;
     private MainActivity mainActivity;
 
-    private RecyclerView rvCancelWork;
+    private RecyclerView rvAllWork;
 
 
     @Override
@@ -39,22 +38,22 @@ public class WorkCancelFragment extends Fragment implements WorkDoingAdapter.OnC
 
     private void initObject() {
         mainActivity = (MainActivity) getActivity();
-        doingAdapter = new WorkDoingAdapter(getContext(), mainActivity.getDataByWorkType(Conts.TYPE_CANCEL_TASK), R.layout.item_cancel_task);
+        doingAdapter = new WorkDoingAdapter(getContext(), mainActivity.getDataByWorkType(Conts.TYPE_ALL_TASK), R.layout.item_all_task);
         doingAdapter.setOnClickButtonItemDoingComleteWorkListener(this);
-        updateDistanceCancelWork(mainActivity.getLatitude(), mainActivity.getLongtitude());
+        updateDistanceAllWork(mainActivity.getLatitude(), mainActivity.getLongtitude());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_work_cancel, container, false);
+        View view = inflater.inflate(R.layout.fragment_work_all, container, false);
         Log.i("onCreateView", "Cancel");
 
-        rvCancelWork = (RecyclerView) view.findViewById(R.id.rv_cancel_tasks);
+        rvAllWork = (RecyclerView) view.findViewById(R.id.rv_all_tasks);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rvCancelWork.setLayoutManager(layoutManager);
-        rvCancelWork.setItemAnimator(new DefaultItemAnimator());
+        rvAllWork.setLayoutManager(layoutManager);
+        rvAllWork.setItemAnimator(new DefaultItemAnimator());
         return view;
     }
 
@@ -66,11 +65,11 @@ public class WorkCancelFragment extends Fragment implements WorkDoingAdapter.OnC
     @Override
     public void onStart() {
         super.onStart();
-        rvCancelWork.setAdapter(doingAdapter);
+        rvAllWork.setAdapter(doingAdapter);
 
     }
 
-    public void updateDistanceCancelWork(double latitude, double longitude) {
+    public void updateDistanceAllWork(double latitude, double longitude) {
         if (doingAdapter != null) {
             doingAdapter.updateDistanceDoingWork(latitude, longitude);
         }

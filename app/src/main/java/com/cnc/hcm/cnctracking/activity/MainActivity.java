@@ -36,8 +36,11 @@ import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.WorkFragmentAdapter;
+import com.cnc.hcm.cnctracking.customeview.HighlightWeekendsDecorator;
+import com.cnc.hcm.cnctracking.customeview.MySelectorDecorator;
+import com.cnc.hcm.cnctracking.customeview.OneDayDecorator;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
-import com.cnc.hcm.cnctracking.fragment.WorkCancelFragment;
+import com.cnc.hcm.cnctracking.fragment.WorkAllFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkCompletedFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkDoingFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkNewFragment;
@@ -53,15 +56,22 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.CalendarMode;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_SINGLE;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener
@@ -78,6 +88,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private LinearLayout llClickSetting;
     private LinearLayout llClickHelp;
     private LinearLayout bottomSheetLayout;
+    private LinearLayout llTabs;
     private TextView tvStatusNetwork, tvStatusGPS;
     private Button btnLogout;
     private CircleImageView imvAvatar;
@@ -87,6 +98,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private DrawerLayout drawer;
     private ViewPagerBottomSheetBehavior bottomSheetBehavior;
 
+    private MaterialCalendarView calendarView;
+    private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
+
 
     private ArrayList<ItemWork> arrItemWorkNew = new ArrayList<>();
     private boolean isNetworkConnected;
@@ -94,9 +108,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private WorkNewFragment workNewFragment = new WorkNewFragment();
     private WorkDoingFragment workDoingFragment = new WorkDoingFragment();
     private WorkCompletedFragment workCompletedFragment = new WorkCompletedFragment();
-    private WorkCancelFragment workCancelFragment = new WorkCancelFragment();
+    private WorkAllFragment workAllFragment = new WorkAllFragment();
 
-    private Fragment[] listFrag = {workNewFragment, workDoingFragment, workCompletedFragment, workCancelFragment};
+    private Fragment[] listFrag = {workAllFragment, workNewFragment, workDoingFragment, workCompletedFragment};
 
     private GPSService gpsService;
 
@@ -167,8 +181,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             workCompletedFragment.updateDistanceCompleteWork(gpsService.getLatitude(), gpsService.getLongitude());
         }
 
-        if (workCancelFragment != null) {
-            workCancelFragment.updateDistanceCancelWork(gpsService.getLatitude(), gpsService.getLongitude());
+        if (workAllFragment != null) {
+            workAllFragment.updateDistanceAllWork(gpsService.getLatitude(), gpsService.getLongitude());
         }
     }
 
@@ -224,10 +238,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
 
 
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_CANCEL_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.172724, 105.910090, "0 Km", "",
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_ALL_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.172724, 105.910090, "0 Km", "",
                 "14:20 - 16h20, 09/11/2017", "Mầu Ngô Giáp", "0974356994", "Unnamed Road, thôn Đông, Thuỵ Lâm, Đông Anh, Hà Nội, Vietnam", "Sửa tủ lạnh",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_CANCEL_TASK, "11:30:24 07/11/2017", "Sửa điều hoà", 21.025291, 105.793761, "0 Km", "",
+        arrItemWorkNew.add(new ItemWork(Conts.TYPE_ALL_TASK, "11:30:24 07/11/2017", "Sửa điều hoà", 21.025291, 105.793761, "0 Km", "",
                 "14:20 - 16h20, 09/11/2017", "Đỗ Văn Tân", "0973545345", "602 Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa điều hoà",
                 "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
 
@@ -249,7 +263,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
                             BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                     break;
-                case Conts.TYPE_CANCEL_TASK:
+                case Conts.TYPE_ALL_TASK:
                     addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
                             BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
                     break;
@@ -312,7 +326,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         llClickGPS = (LinearLayout) findViewById(R.id.ll_click_gps);
         llClickSetting = (LinearLayout) findViewById(R.id.ll_click_setting);
         llClickHelp = (LinearLayout) findViewById(R.id.ll_click_help);
-
+        llTabs = (LinearLayout) findViewById(R.id.tabs);
         llClickNetwork.setOnClickListener(this);
         llClickGPS.setOnClickListener(this);
         llClickSetting.setOnClickListener(this);
@@ -337,31 +351,56 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         bottomSheetLayout = (LinearLayout) findViewById(R.id.linear_layout_bottom_sheet);
         bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(bottomSheetLayout);
+        bottomSheetBehavior.setBottomSheetCallback(new ViewPagerBottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int i) {
+                Log.d(TAG, "onStateChanged: " + i);
+            }
 
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+                Log.d(TAG, "onSlide: " + v);
+                if (v <= 0) {
+                    llTabs.setVisibility(View.VISIBLE);
+                } else {
+                    llTabs.setVisibility(View.GONE);
+                }
+
+            }
+        });
 
         WorkFragmentAdapter adapter = new WorkFragmentAdapter(getSupportFragmentManager(), listFrag);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
         BottomSheetUtils.setupViewPager(viewPager);
 
+        calendarView = (MaterialCalendarView) findViewById(R.id.calendarView);
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                oneDayDecorator.setDate(date.getDate());
+                widget.invalidateDecorators();
+            }
+        });
+        calendarView.setTopbarVisible(false);
+        calendarView.setShowOtherDates(MaterialCalendarView.SHOW_ALL);
+        Calendar instance = Calendar.getInstance();
+        calendarView.setSelectedDate(instance.getTime());
+        calendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS).commit();
+        calendarView.setSelectionMode(SELECTION_MODE_SINGLE);
+        Calendar instance1 = Calendar.getInstance();
+        instance1.set(instance1.get(Calendar.YEAR), Calendar.JANUARY, 1);
+        Calendar instance2 = Calendar.getInstance();
+        instance2.set(instance2.get(Calendar.YEAR), Calendar.DECEMBER, 31);
+        calendarView.state().edit()
+                .setMinimumDate(instance1.getTime())
+                .setMaximumDate(instance2.getTime())
+                .commit();
+        calendarView.addDecorators(
+                new MySelectorDecorator(this),
+                oneDayDecorator
+        );
     }
 
     public ArrayList<ItemWork> getDataByWorkType(int typeWork) {
@@ -556,7 +595,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         workNewFragment.updateDistanceNewWork(latitude, longitude);
         workDoingFragment.updateDistanceDoingWork(latitude, longitude);
         workCompletedFragment.updateDistanceCompleteWork(latitude, longitude);
-        workCancelFragment.updateDistanceCancelWork(latitude, longitude);
+        workAllFragment.updateDistanceAllWork(latitude, longitude);
 
     }
 

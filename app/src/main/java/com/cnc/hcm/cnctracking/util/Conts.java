@@ -138,7 +138,7 @@ public class Conts {
     public static final int TYPE_NEW_TASK = 0;
     public static final int TYPE_DOING_TASK = 1;
     public static final int TYPE_COMPLETE_TASK = 2;
-    public static final int TYPE_CANCEL_TASK = 3;
+    public static final int TYPE_ALL_TASK = 3;
 
     public static final String JSON_ELEMENT_ROWS = "rows";
     public static final String JSON_ELEMENT = "elements";
