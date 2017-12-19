@@ -21,11 +21,11 @@ public final class GetTaskListResult {
         public final long __v;
         public final String createdDate;
         public final Status status;
-        public final Proces process[];
+        public final String process[];
         public final Executive executive[];
         public final String appointmentDate;
 
-        public Result(String _id, String title, Service service, Customer customer, String note, String id, long __v, String createdDate, Status status, Proces[] process, Executive[] executive, String appointmentDate) {
+        public Result(String _id, String title, Service service, Customer customer, String note, String id, long __v, String createdDate, Status status, String[] process, Executive[] executive, String appointmentDate) {
             this._id = _id;
             this.title = title;
             this.service = service;
@@ -67,12 +67,12 @@ public final class GetTaskListResult {
             public final String phone;
             public final String email;
             public final String gender;
-            public final DateOfBirth dateOfBirth;
+            public final String dateOfBirth;
             public final long __v;
             public final String createdDate;
             public final Address address;
 
-            public Customer(String _id, String type, String fullname, String phone, String email, String gender, DateOfBirth dateOfBirth, long __v, String createdDate, Address address) {
+            public Customer(String _id, String type, String fullname, String phone, String email, String gender, String dateOfBirth, long __v, String createdDate, Address address) {
                 this._id = _id;
                 this.type = type;
                 this.fullname = fullname;
@@ -83,12 +83,6 @@ public final class GetTaskListResult {
                 this.__v = __v;
                 this.createdDate = createdDate;
                 this.address = address;
-            }
-
-            public static final class DateOfBirth {
-
-                public DateOfBirth() {
-                }
             }
 
             public static final class Address {
@@ -125,12 +119,6 @@ public final class GetTaskListResult {
                 this._id = _id;
                 this.title = title;
                 this.description = description;
-            }
-        }
-
-        public static final class Proces {
-
-            public Proces() {
             }
         }
 
