@@ -116,9 +116,15 @@ public class Conts {
 
     public static final String BASE_URL = "http://35.198.195.55:3001/";
     public static final String URL_BASE = "http://35.198.195.55:3001";
+
     public static final String PATH_TRACKING = "/tracking";
+
     public static final String PATH_USER = "/user";
     public static final String PATH_USER_LOGIN = PATH_USER + "/login";
+
+    public static final String PATH_TASK_LIST = "/tasks";
+    public static final String PATH_TASK_DETAIL = PATH_TASK_LIST + "/{id}";
+
     public static final String PATH_USER_PROFILE = PATH_USER + "/profile";
 
     public static final String KEY_AUTHORIZATION = "Authorization";
