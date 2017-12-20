@@ -53,6 +53,13 @@
     <string name="string_null">null</string>
     <string name="cannot_get_current_location">Không thể lấy được vị trí hiện tại!</string>
     <string name="text_to_day">Hôm nay</string>
+    <string name="text_choose_type_work">Chọn loại công việc hiển thị</string>
+    <string name="type_work_new">Vừa mới nhận được</string>
+    <string name="type_work_doing">Đang đợi thực hiện</string>
+    <string name="type_work_complete">Đã hoàn thành</string>
+    <string name="type_all_work">Tất cả</string>
+    <string name="text_month">Tháng</string>
+    <string name="text_year">Năm</string>
 
 
 </resources>

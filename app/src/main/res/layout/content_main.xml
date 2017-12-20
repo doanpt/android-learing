@@ -36,7 +36,7 @@
         android:gravity="center"
         android:orientation="vertical"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="50dp"
+        app:behavior_peekHeight="250dp"
         app:layout_behavior="@string/view_pager_bottom_sheet_behavior">
 
         <LinearLayout
@@ -50,21 +50,66 @@
             android:paddingTop="13dp">
 
             <LinearLayout
+                android:id="@+id/ll_tab_work_new_not_read"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_ll_type_work"></LinearLayout>
+                android:background="@drawable/boder_ll_type_work">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:src="@mipmap/ic_launcher"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="13"
+                    android:textColor="@android:color/white"/>
+            </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_tab_work_doing"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/boder_ll_type_work"></LinearLayout>
+                android:background="@drawable/boder_ll_type_work">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:src="@mipmap/ic_launcher"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@android:color/white"/>
+            </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_tab_work_complete"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_ll_type_work"></LinearLayout>
+                android:background="@drawable/boder_ll_type_work">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:src="@mipmap/ic_launcher"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="32"
+                    android:textColor="@android:color/white"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -79,21 +124,23 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_month_calendar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:text="11"
+                    android:text="01"
                     android:textColor="@android:color/white"
                     android:textSize="40dp"
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:id="@+id/tv_year_calendar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-30dp"
                     android:gravity="center"
-                    android:text="2017"
+                    android:text="2099"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
 
@@ -117,18 +164,21 @@
                         android:src="@drawable/ic_filter_list"/>
 
                     <TextView
-                        android:id="@+id/tv_filter_date_month"
+                        android:id="@+id/tv_change_view_month_year"
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:layout_toLeftOf="@+id/imv_filter_list"
+                        android:background="?android:selectableItemBackground"
                         android:gravity="center"
-                        android:text="Thang"
+                        android:text="@string/text_month"
                         android:textColor="@android:color/white"/>
 
                     <TextView
+                        android:id="@+id/tv_today"
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
-                        android:layout_toLeftOf="@+id/tv_filter_date_month"
+                        android:layout_toLeftOf="@+id/tv_change_view_month_year"
+                        android:background="?android:selectableItemBackground"
                         android:gravity="center"
                         android:text="@string/text_to_day"
                         android:textColor="@android:color/white"/>

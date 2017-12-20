@@ -19,14 +19,15 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -37,10 +38,10 @@ import android.widget.Toast;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.WorkFragmentAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
-import com.cnc.hcm.cnctracking.customeview.HighlightWeekendsDecorator;
 import com.cnc.hcm.cnctracking.customeview.MySelectorDecorator;
 import com.cnc.hcm.cnctracking.customeview.OneDayDecorator;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
+import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
 import com.cnc.hcm.cnctracking.fragment.WorkAllFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkCompletedFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkDoingFragment;
@@ -63,12 +64,14 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
@@ -80,27 +83,21 @@ import retrofit2.Response;
 import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_SINGLE;
 
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener
-        , OnMapReadyCallback {
-
+public class MainActivity extends FragmentActivity implements View.OnClickListener, OnMapReadyCallback {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_UPDATE = 4234;
     private GoogleMap mMap;
 
     private ViewPager viewPager;
-    private LinearLayout llClickNetwork;
-    private LinearLayout llClickGPS;
-    private LinearLayout llClickSetting;
-    private LinearLayout llClickHelp;
+    private LinearLayout llClickNetwork, llClickGPS, llClickSetting, llClickHelp, llTabs,
+            llTabNewWork, llTabDoingWork, llTabCompleteWork;
     private LinearLayout bottomSheetLayout;
-    private LinearLayout llTabs;
-    private TextView tvStatusNetwork, tvStatusGPS;
+    private TextView tvStatusNetwork, tvStatusGPS, tvUsername, tvUserMail, tvMonth, tvYear,
+            tvChangeViewMonthYear, tvToday;
     private Button btnLogout;
     private CircleImageView imvAvatar;
-    private TextView tvUsername, tvUserMail;
-    private ImageView imvMenuDrawer, imvSearch;
-    private ImageView imvProfile;
+    private ImageView imvMenuDrawer, imvSearch, imvProfile, imvFilter;
     private DrawerLayout drawer;
     private ViewPagerBottomSheetBehavior bottomSheetBehavior;
 
@@ -117,7 +114,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private WorkAllFragment workAllFragment = new WorkAllFragment();
 
     private Fragment[] listFrag = {workAllFragment, workNewFragment, workDoingFragment, workCompletedFragment};
-
     private GPSService gpsService;
 
 
@@ -140,57 +136,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             Log.d(TAG, "ServiceConnection, onServiceDisconnected");
         }
     };
-
-    private void registerBroadcastReciver() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Conts.ACTION_NETWORK_CHANGE);
-        registerReceiver(receiver, filter);
-    }
-
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            switch (action) {
-                case Conts.ACTION_NETWORK_CHANGE:
-                    ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                    NetworkInfo activeNetInfor = connectivityManager.getActiveNetworkInfo();
-                    isNetworkConnected = activeNetInfor != null && activeNetInfor.isConnectedOrConnecting();
-                    if (tvStatusNetwork != null)
-                        if (isNetworkConnected) {
-                            tvStatusNetwork.setTextColor(getResources().getColor(R.color.color_text_status));
-                            tvStatusNetwork.setText(getResources().getString(R.string.On));
-                            if (gpsService != null) {
-                                updateDistanceTo4TabWork();
-                            }
-
-                        } else {
-                            tvStatusNetwork.setTextColor(getResources().getColor(android.R.color.darker_gray));
-                            tvStatusNetwork.setText(getResources().getString(R.string.Off));
-                        }
-                    break;
-            }
-
-        }
-    };
-
-    private void updateDistanceTo4TabWork() {
-        if (workNewFragment != null) {
-            workNewFragment.updateDistanceNewWork(gpsService.getLatitude(), gpsService.getLongitude());
-        }
-
-        if (workDoingFragment != null) {
-            workDoingFragment.updateDistanceDoingWork(gpsService.getLatitude(), gpsService.getLongitude());
-        }
-
-        if (workCompletedFragment != null) {
-            workCompletedFragment.updateDistanceCompleteWork(gpsService.getLatitude(), gpsService.getLongitude());
-        }
-
-        if (workAllFragment != null) {
-            workAllFragment.updateDistanceAllWork(gpsService.getLatitude(), gpsService.getLongitude());
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +165,39 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
         //TODO for check api before make UI. END (*)
     }
+
+    private void registerBroadcastReciver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Conts.ACTION_NETWORK_CHANGE);
+        registerReceiver(receiver, filter);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            switch (action) {
+                case Conts.ACTION_NETWORK_CHANGE:
+                    ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo activeNetInfor = connectivityManager.getActiveNetworkInfo();
+                    isNetworkConnected = activeNetInfor != null && activeNetInfor.isConnectedOrConnecting();
+                    if (tvStatusNetwork != null)
+                        if (isNetworkConnected) {
+                            tvStatusNetwork.setTextColor(getResources().getColor(R.color.color_text_status));
+                            tvStatusNetwork.setText(getResources().getString(R.string.On));
+                            if (gpsService != null) {
+                                updateDistanceTo4TabWork();
+                            }
+
+                        } else {
+                            tvStatusNetwork.setTextColor(getResources().getColor(android.R.color.darker_gray));
+                            tvStatusNetwork.setText(getResources().getString(R.string.Off));
+                        }
+                    break;
+            }
+
+        }
+    };
 
 
     private void tryGetTaskList(final String accessToken) {
@@ -315,6 +293,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
+    public ArrayList<ItemWork> getDataByWorkType(int typeWork) {
+        ArrayList<ItemWork> arrayList = new ArrayList<>();
+        for (int index = 0; index < arrItemWorkNew.size(); index++) {
+            ItemWork itemWork = arrItemWorkNew.get(index);
+            if (itemWork.getTypeWork() == typeWork) {
+                arrayList.add(itemWork);
+            }
+        }
+        return arrayList;
+    }
+
     private void initMarkerOnMap() {
         for (ItemWork work : arrItemWorkNew) {
             switch (work.getTypeWork()) {
@@ -338,34 +327,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    private void createFileBackup() {
-        try {
-            File folderBackup = new File(Environment.getExternalStorageDirectory(), "/CoolBackup");
-            if (!folderBackup.exists()) {
-                folderBackup.mkdirs();
-                Log.w("DEBUG", "Created default directory.");
-            }
-            File file_network = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_NETWORK);
-            File file_no_network = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_NO_NETWORK);
-            File file_size = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_UPLOAD_SIZE);
-            File file_response = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_RESPONSE);
-
-            if (!file_network.exists()) {
-                file_network.createNewFile();
-            }
-            if (!file_no_network.exists()) {
-                file_no_network.createNewFile();
-            }
-            if (!file_size.exists()) {
-                file_size.createNewFile();
-            }
-            if (!file_response.exists()) {
-                file_response.createNewFile();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -373,11 +334,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mapFragment.getMapAsync(this);
     }
 
-    private void checkUserLoginOnOtherDevice() {
-        if (UserInfo.getInstance(this).getUserLoginOnOtherDevice()) {
-            showMessageRequestLogout();
-        }
-    }
 
     private void initViews() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -385,36 +341,55 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         imvMenuDrawer = (ImageView) findViewById(R.id.imv_menu);
         imvSearch = (ImageView) findViewById(R.id.imv_seach_location);
         imvProfile = (ImageView) findViewById(R.id.imv_profile);
+        imvFilter = (ImageView) findViewById(R.id.imv_filter_list);
+
         imvProfile.setOnClickListener(this);
         imvMenuDrawer.setOnClickListener(this);
         imvSearch.setOnClickListener(this);
+        imvFilter.setOnClickListener(this);
 
         llClickNetwork = (LinearLayout) findViewById(R.id.ll_click_network);
         llClickGPS = (LinearLayout) findViewById(R.id.ll_click_gps);
         llClickSetting = (LinearLayout) findViewById(R.id.ll_click_setting);
         llClickHelp = (LinearLayout) findViewById(R.id.ll_click_help);
         llTabs = (LinearLayout) findViewById(R.id.tabs);
+        llTabNewWork = (LinearLayout) findViewById(R.id.ll_tab_work_new_not_read);
+        llTabDoingWork = (LinearLayout) findViewById(R.id.ll_tab_work_doing);
+        llTabCompleteWork = (LinearLayout) findViewById(R.id.ll_tab_work_complete);
+
+        llTabs.setOnClickListener(this);
         llClickNetwork.setOnClickListener(this);
         llClickGPS.setOnClickListener(this);
         llClickSetting.setOnClickListener(this);
         llClickHelp.setOnClickListener(this);
+        llTabNewWork.setOnClickListener(this);
+        llTabDoingWork.setOnClickListener(this);
+        llTabCompleteWork.setOnClickListener(this);
 
         tvStatusNetwork = (TextView) findViewById(R.id.tv_status_network);
         tvStatusGPS = (TextView) findViewById(R.id.tv_status_gps);
+        tvMonth = (TextView) findViewById(R.id.tv_month_calendar);
+        tvYear = (TextView) findViewById(R.id.tv_year_calendar);
+        tvUsername = (TextView) findViewById(R.id.tv_username_profile);
+        tvUserMail = (TextView) findViewById(R.id.tv_user_email_profile);
+        tvUsername.setText(UserInfo.getInstance(this).getUsername());
+        tvUserMail.setText(UserInfo.getInstance(this).getUserEmail());
+        tvChangeViewMonthYear = (TextView) findViewById(R.id.tv_change_view_month_year);
+        tvChangeViewMonthYear.setOnClickListener(this);
+        tvToday = (TextView) findViewById(R.id.tv_today);
+        tvToday.setOnClickListener(this);
 
         btnLogout = (Button) findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(this);
 
         imvAvatar = (CircleImageView) findViewById(R.id.imv_avatar_profile);
         imvAvatar.setOnClickListener(this);
-        tvUsername = (TextView) findViewById(R.id.tv_username_profile);
-        tvUserMail = (TextView) findViewById(R.id.tv_user_email_profile);
+
 
         Picasso.with(this).load(Conts.URL_BASE + UserInfo.getInstance(this).getUserUrlImage())
                 .placeholder(R.drawable.ic_account)
                 .error(R.drawable.ic_account).into(imvAvatar);
-        tvUsername.setText(UserInfo.getInstance(this).getUsername());
-        tvUserMail.setText(UserInfo.getInstance(this).getUserEmail());
+
 
         bottomSheetLayout = (LinearLayout) findViewById(R.id.linear_layout_bottom_sheet);
         bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(bottomSheetLayout);
@@ -439,15 +414,24 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         WorkFragmentAdapter adapter = new WorkFragmentAdapter(getSupportFragmentManager(), listFrag);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
-
         BottomSheetUtils.setupViewPager(viewPager);
 
         calendarView = (MaterialCalendarView) findViewById(R.id.calendarView);
+        calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+                tvMonth.setText(date.getMonth() + Conts.BLANK);
+                tvYear.setText(date.getYear() + Conts.BLANK);
+                Log.d(TAG, "onMonthChanged: ");
+
+            }
+        });
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 oneDayDecorator.setDate(date.getDate());
                 widget.invalidateDecorators();
+                Log.d(TAG, "onDateSelected: " + date);
             }
         });
         calendarView.setTopbarVisible(false);
@@ -468,45 +452,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 new MySelectorDecorator(this),
                 oneDayDecorator
         );
-    }
 
-    public ArrayList<ItemWork> getDataByWorkType(int typeWork) {
-        ArrayList<ItemWork> arrayList = new ArrayList<>();
-        for (int index = 0; index < arrItemWorkNew.size(); index++) {
-            ItemWork itemWork = arrItemWorkNew.get(index);
-            if (itemWork.getTypeWork() == typeWork) {
-                arrayList.add(itemWork);
-            }
-        }
-        return arrayList;
-    }
-
-    public void appendText(String str) {
-//        tvStatus.append("\n" + str);
-    }
-
-    public void disPlayTimeProgress(int time) {
-        //tvTimeProgress.setText("Time: " + time);
-    }
-
-    private boolean isServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(serviceInfo.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void setTitleStatusGPS(boolean status) {
-        if (status) {
-            tvStatusGPS.setTextColor(getResources().getColor(R.color.color_text_status));
-            tvStatusGPS.setText(getResources().getString(R.string.On));
-        } else {
-            tvStatusGPS.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            tvStatusGPS.setText(getResources().getString(R.string.Off));
-        }
     }
 
     @Override
@@ -518,6 +464,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
                 break;
+            case R.id.imv_menu:
+                drawer.openDrawer(GravityCompat.START);
+                break;
+            case R.id.imv_seach_location:
+                Toast.makeText(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.imv_filter_list:
+                DialogOptionFilter filter = new DialogOptionFilter(this);
+                filter.show();
+                break;
             case R.id.ll_click_network:
                 Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
                 startActivity(intentWifi);
@@ -528,10 +484,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 startActivity(intentGps);
                 drawer.closeDrawer(GravityCompat.START);
                 break;
-            case R.id.btn_logout:
-                actionLogout();
-                drawer.closeDrawer(GravityCompat.START);
-                break;
             case R.id.ll_click_setting:
                 Toast.makeText(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!", Toast.LENGTH_SHORT).show();
                 drawer.closeDrawer(GravityCompat.START);
@@ -540,35 +492,61 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 Toast.makeText(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!", Toast.LENGTH_SHORT).show();
                 drawer.closeDrawer(GravityCompat.START);
                 break;
-            case R.id.imv_menu:
-                drawer.openDrawer(GravityCompat.START);
+            case R.id.tabs:
+                setCurrentItemViewPager(0);
                 break;
-            case R.id.imv_seach_location:
-                Toast.makeText(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!", Toast.LENGTH_SHORT).show();
+            case R.id.ll_tab_work_new_not_read:
+                setCurrentItemViewPager(1);
                 break;
+            case R.id.ll_tab_work_doing:
+                setCurrentItemViewPager(2);
+                break;
+            case R.id.ll_tab_work_complete:
+                setCurrentItemViewPager(3);
+                break;
+
+            case R.id.tv_change_view_month_year:
+                showPopupMenu(view);
+                break;
+            case R.id.tv_today:
+                Calendar instance = Calendar.getInstance();
+                oneDayDecorator.setDate(instance.getTime());
+                calendarView.invalidateDecorators();
+                break;
+            case R.id.btn_logout:
+                actionLogout();
+                drawer.closeDrawer(GravityCompat.START);
+                break;
+
         }
     }
 
-    private void actionLogout() {
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this, R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(getResources().getString(R.string.text_logout));
-        progressDialog.show();
 
-        new android.os.Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                UserInfo.getInstance(MainActivity.this).setUserInfoLogout();
-                UserInfo.getInstance(MainActivity.this).setUploadFirstTime(true);
-                if (gpsService != null) {
-                    gpsService.disconnectService();
+    private void showPopupMenu(View view) {
+        PopupMenu popup = new PopupMenu(MainActivity.this, view);
+        popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_month:
+
+                        break;
+                    case R.id.menu_year:
+                        break;
                 }
-                progressDialog.dismiss();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                tvChangeViewMonthYear.setText(item.getTitle().toString());
+                return true;
             }
-        }, 1000);
+        });
+        popup.show();
+    }
+
+    private void setCurrentItemViewPager(int position) {
+        viewPager.setCurrentItem(position);
+        if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_COLLAPSED) {
+            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
+        }
     }
 
     @Override
@@ -694,5 +672,104 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             return gpsService.getLatitude();
         }
         return 0;
+    }
+
+    private void updateDistanceTo4TabWork() {
+        if (workNewFragment != null) {
+            workNewFragment.updateDistanceNewWork(gpsService.getLatitude(), gpsService.getLongitude());
+        }
+
+        if (workDoingFragment != null) {
+            workDoingFragment.updateDistanceDoingWork(gpsService.getLatitude(), gpsService.getLongitude());
+        }
+
+        if (workCompletedFragment != null) {
+            workCompletedFragment.updateDistanceCompleteWork(gpsService.getLatitude(), gpsService.getLongitude());
+        }
+
+        if (workAllFragment != null) {
+            workAllFragment.updateDistanceAllWork(gpsService.getLatitude(), gpsService.getLongitude());
+        }
+    }
+
+    private void createFileBackup() {
+        try {
+            File folderBackup = new File(Environment.getExternalStorageDirectory(), "/CoolBackup");
+            if (!folderBackup.exists()) {
+                folderBackup.mkdirs();
+                Log.w("DEBUG", "Created default directory.");
+            }
+            File file_network = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_NETWORK);
+            File file_no_network = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_NO_NETWORK);
+            File file_size = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_LOCATION_UPLOAD_SIZE);
+            File file_response = new File(Environment.getExternalStorageDirectory() + "/CoolBackup", Conts.FILE_RESPONSE);
+
+            if (!file_network.exists()) {
+                file_network.createNewFile();
+            }
+            if (!file_no_network.exists()) {
+                file_no_network.createNewFile();
+            }
+            if (!file_size.exists()) {
+                file_size.createNewFile();
+            }
+            if (!file_response.exists()) {
+                file_response.createNewFile();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void actionLogout() {
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(getResources().getString(R.string.text_logout));
+        progressDialog.show();
+
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UserInfo.getInstance(MainActivity.this).setUserInfoLogout();
+                UserInfo.getInstance(MainActivity.this).setUploadFirstTime(true);
+                if (gpsService != null) {
+                    gpsService.disconnectService();
+                }
+                progressDialog.dismiss();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        }, 1000);
+    }
+
+    public void appendText(String str) {
+//        tvStatus.append("\n" + str);
+    }
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(serviceInfo.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setTitleStatusGPS(boolean status) {
+        if (status) {
+            tvStatusGPS.setTextColor(getResources().getColor(R.color.color_text_status));
+            tvStatusGPS.setText(getResources().getString(R.string.On));
+        } else {
+            tvStatusGPS.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            tvStatusGPS.setText(getResources().getString(R.string.Off));
+        }
+    }
+
+    private void checkUserLoginOnOtherDevice() {
+        if (UserInfo.getInstance(this).getUserLoginOnOtherDevice()) {
+            showMessageRequestLogout();
+        }
     }
 }
