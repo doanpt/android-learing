@@ -50,6 +50,7 @@ import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemWork;
 import com.cnc.hcm.cnctracking.service.GPSService;
+import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -71,7 +72,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
@@ -116,26 +116,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Fragment[] listFrag = {workAllFragment, workNewFragment, workDoingFragment, workCompletedFragment};
     private GPSService gpsService;
 
+    private ProgressDialog mProgressDialog;
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
-            gpsService.setMainActivity(MainActivity.this);
-            //FIXME this code which is commented could remove if you want
-//            if (gpsService.getmSocket() == null || !gpsService.getmSocket().connected()) {
-//                String token = UserInfo.getInstance(MainActivity.this).getAccessToken();
-//                Log.d("GPSService","Call connect in MainActivity");
-//                gpsService.connectSocket(token);
-//            }
-            Log.d(TAG, "ServiceConnection, onServiceConnected");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            Log.d(TAG, "ServiceConnection, onServiceDisconnected");
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +147,26 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
         //TODO for check api before make UI. END (*)
     }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
+            gpsService.setMainActivity(MainActivity.this);
+            //FIXME this code which is commented could remove if you want
+//            if (gpsService.getmSocket() == null || !gpsService.getmSocket().connected()) {
+//                String token = UserInfo.getInstance(MainActivity.this).getAccessToken();
+//                Log.d("GPSService","Call connect in MainActivity");
+//                gpsService.connectSocket(token);
+//            }
+            Log.d(TAG, "ServiceConnection, onServiceConnected");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.d(TAG, "ServiceConnection, onServiceDisconnected");
+        }
+    };
 
     private void registerBroadcastReciver() {
         IntentFilter filter = new IntentFilter();
@@ -201,29 +203,45 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
     private void tryGetTaskList(final String accessToken) {
+        showDialogLoadding();
         Log.e(TAG, "tryGetTaskList()");
         ApiUtils.getAPIService(accessToken).getTaskList().enqueue(new Callback<GetTaskListResult>() {
             @Override
             public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
                 int statusCode = response.code();
                 Log.e(TAG, "tryGetTaskList.onResponse(), statusCode: " + statusCode);
+
                 if (response.isSuccessful()) {
                     Log.e(TAG, "tryGetTaskList.onResponse(), --> response: " + response.toString());
                     GetTaskListResult getTaskListResult = response.body();
                     Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
+
                     if (getTaskListResult != null) {
                         GetTaskListResult.Result[] result1 = getTaskListResult.result;
                         if (result1 != null && result1.length > 0) {
-                            tryGetTaskDetail(accessToken, result1[0]._id);
+                            ArrayList<GetTaskListResult.Result> resultArrayList = new ArrayList<>();
+                            for (int index = 0; index < result1.length; index++) {
+                                resultArrayList.add(result1[index]);
+                            }
+                            if (workAllFragment != null) {
+                                workAllFragment.setDataToRecyclerView(resultArrayList);
+                            }
+
                         }
                     }
+                    dismisDialogLoading();
+                } else {
+                    CommonMethod.toast(MainActivity.this, response.toString());
                 }
+
             }
 
             @Override
             public void onFailure(Call<GetTaskListResult> call, Throwable t) {
                 Log.e(TAG, "tryGetTaskList.onFailure() --> " + t);
                 t.printStackTrace();
+                CommonMethod.toast(MainActivity.this, t.getMessage().toString());
+                dismisDialogLoading();
             }
         });
     }
@@ -637,7 +655,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             initMarkerOnMap();
         }
 
-        workNewFragment.updateDistanceNewWork(latitude, longitude);
+//        workNewFragment.updateDistanceNewWork(latitude, longitude);
         workDoingFragment.updateDistanceDoingWork(latitude, longitude);
         workCompletedFragment.updateDistanceCompleteWork(latitude, longitude);
         workAllFragment.updateDistanceAllWork(latitude, longitude);
@@ -676,7 +694,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void updateDistanceTo4TabWork() {
         if (workNewFragment != null) {
-            workNewFragment.updateDistanceNewWork(gpsService.getLatitude(), gpsService.getLongitude());
+//            workNewFragment.updateDistanceNewWork(gpsService.getLatitude(), gpsService.getLongitude());
         }
 
         if (workDoingFragment != null) {
@@ -770,6 +788,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void checkUserLoginOnOtherDevice() {
         if (UserInfo.getInstance(this).getUserLoginOnOtherDevice()) {
             showMessageRequestLogout();
+        }
+    }
+
+    private void showDialogLoadding() {
+        mProgressDialog = new ProgressDialog(MainActivity.this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
+        mProgressDialog.show();
+    }
+
+    private void dismisDialogLoading() {
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
     }
 }

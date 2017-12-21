@@ -13,16 +13,19 @@ import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
-import com.cnc.hcm.cnctracking.adapter.WorkDoingAdapter;
+import com.cnc.hcm.cnctracking.adapter.WorkAdapter;
+import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.util.Conts;
+
+import java.util.ArrayList;
 
 /**
  * Created by giapmn on 9/27/17.
  */
 
-public class WorkAllFragment extends Fragment implements WorkDoingAdapter.OnClickButtonItemDoingComleteWorkListener {
+public class WorkAllFragment extends Fragment implements WorkAdapter.OnItemWorkClickListener {
 
-    private WorkDoingAdapter doingAdapter;
+    private WorkAdapter workAdapter;
     private MainActivity mainActivity;
 
     private RecyclerView rvAllWork;
@@ -38,8 +41,8 @@ public class WorkAllFragment extends Fragment implements WorkDoingAdapter.OnClic
 
     private void initObject() {
         mainActivity = (MainActivity) getActivity();
-        doingAdapter = new WorkDoingAdapter(getContext(), mainActivity.getDataByWorkType(Conts.TYPE_ALL_TASK), R.layout.item_all_task);
-        doingAdapter.setOnClickButtonItemDoingComleteWorkListener(this);
+        workAdapter = new WorkAdapter(getContext());
+        workAdapter.setOnItemWorkClickListener(this);
         updateDistanceAllWork(mainActivity.getLatitude(), mainActivity.getLongtitude());
     }
 
@@ -65,33 +68,24 @@ public class WorkAllFragment extends Fragment implements WorkDoingAdapter.OnClic
     @Override
     public void onStart() {
         super.onStart();
-        rvAllWork.setAdapter(doingAdapter);
+        rvAllWork.setAdapter(workAdapter);
 
     }
 
     public void updateDistanceAllWork(double latitude, double longitude) {
-        if (doingAdapter != null) {
-            doingAdapter.updateDistanceDoingWork(latitude, longitude);
+//        if (doingAdapter != null) {
+////            doingAdapter.updateDistanceDoingWork(latitude, longitude);
+//        }
+    }
+
+    @Override
+    public void onClickItemWork(int position) {
+
+    }
+
+    public void setDataToRecyclerView(ArrayList<GetTaskListResult.Result> resultArrayList) {
+        if (workAdapter != null) {
+            workAdapter.notiDataChange(resultArrayList);
         }
-    }
-
-    @Override
-    public void onClickButtonCall(int position) {
-
-    }
-
-    @Override
-    public void onClickButtonSMS(int position) {
-
-    }
-
-    @Override
-    public void onClickButtonAddress(int position) {
-
-    }
-
-    @Override
-    public void onClickButtonMoreDetail(int position) {
-
     }
 }

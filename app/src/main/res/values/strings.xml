@@ -60,6 +60,8 @@
     <string name="type_all_work">Tất cả</string>
     <string name="text_month">Tháng</string>
     <string name="text_year">Năm</string>
+    <string name="loadding">Chờ tý nhé...</string>
+
 
 
 </resources>

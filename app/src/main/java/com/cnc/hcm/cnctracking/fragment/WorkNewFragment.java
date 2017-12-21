@@ -14,18 +14,17 @@ import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
-import com.cnc.hcm.cnctracking.adapter.WorkNewAdapter;
 import com.cnc.hcm.cnctracking.util.Conts;
 
 /**
  * Created by giapmn on 9/27/17.
  */
 
-public class WorkNewFragment extends Fragment implements WorkNewAdapter.OnClickButtonItemNewTaskListener {
+public class WorkNewFragment extends Fragment{
 
     private static final String TAGG = WorkNewFragment.class.getSimpleName();
     private RecyclerView rvNewTask;
-    private WorkNewAdapter workNewAdapter;
+//    private WorkNewAdapter workNewAdapter;
     private MainActivity mainActivity;
 
     @Override
@@ -37,9 +36,9 @@ public class WorkNewFragment extends Fragment implements WorkNewAdapter.OnClickB
 
     private void initObject() {
         mainActivity = (MainActivity) getActivity();
-        workNewAdapter = new WorkNewAdapter(getContext(), mainActivity.getDataByWorkType(Conts.TYPE_NEW_TASK));
-        workNewAdapter.setOnClickButtonItemNewTaskListener(this);
-        updateDistanceNewWork(mainActivity.getLatitude(), mainActivity.getLongtitude());
+//        workNewAdapter = new WorkNewAdapter(getContext(), mainActivity.getDataByWorkType(Conts.TYPE_NEW_TASK));
+//        workNewAdapter.setOnClickButtonItemNewTaskListener(this);
+//        updateDistanceNewWork(mainActivity.getLatitude(), mainActivity.getLongtitude());
     }
 
     @Nullable
@@ -64,22 +63,22 @@ public class WorkNewFragment extends Fragment implements WorkNewAdapter.OnClickB
     @Override
     public void onStart() {
         super.onStart();
-        rvNewTask.setAdapter(workNewAdapter);
+//        rvNewTask.setAdapter(workNewAdapter);
     }
 
-    @Override
-    public void onClickButtonCancelTask(int position) {
-        Toast.makeText(getContext(), "Cancel: " + workNewAdapter.getItem(position).getContactName(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onClickButtonReceiveTask(int position) {
-        Toast.makeText(getContext(), "Receive: " + workNewAdapter.getItem(position).getRequestService(), Toast.LENGTH_LONG).show();
-    }
-
-    public void updateDistanceNewWork(double latitude, double longitude) {
-        if (workNewAdapter != null) {
-            workNewAdapter.updateDistanceNewWork(latitude, longitude);
-        }
-    }
+//    @Override
+//    public void onClickButtonCancelTask(int position) {
+//        Toast.makeText(getContext(), "Cancel: " + workNewAdapter.getItem(position).getContactName(), Toast.LENGTH_LONG).show();
+//    }
+//
+//    @Override
+//    public void onClickButtonReceiveTask(int position) {
+//        Toast.makeText(getContext(), "Receive: " + workNewAdapter.getItem(position).getRequestService(), Toast.LENGTH_LONG).show();
+//    }
+//
+//    public void updateDistanceNewWork(double latitude, double longitude) {
+//        if (workNewAdapter != null) {
+//            workNewAdapter.updateDistanceNewWork(latitude, longitude);
+//        }
+//    }
 }

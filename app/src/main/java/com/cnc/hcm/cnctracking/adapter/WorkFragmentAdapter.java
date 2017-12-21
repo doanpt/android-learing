@@ -13,10 +13,10 @@ public class WorkFragmentAdapter extends FragmentPagerAdapter {
     private Fragment[] listFrag;
 
     private String arrPageTitle[] = new String[]{
+            "Tất cả",
             "Mới",
             "Đang thực hiện",
-            "Hoàn thành",
-            "Tất cả"};
+            "Hoàn thành"};
 
     public WorkFragmentAdapter(FragmentManager fm, Fragment[] listFrag) {
         super(fm);

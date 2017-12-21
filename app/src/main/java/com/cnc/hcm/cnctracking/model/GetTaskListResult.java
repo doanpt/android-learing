@@ -17,7 +17,6 @@ public final class GetTaskListResult {
         public final Service service;
         public final Customer customer;
         public final String note;
-        public final String id;
         public final long __v;
         public final String createdDate;
         public final Status status;
@@ -25,13 +24,12 @@ public final class GetTaskListResult {
         public final Executive executive[];
         public final String appointmentDate;
 
-        public Result(String _id, String title, Service service, Customer customer, String note, String id, long __v, String createdDate, Status status, String[] process, Executive[] executive, String appointmentDate) {
+        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Status status, String[] process, Executive[] executive, String appointmentDate) {
             this._id = _id;
             this.title = title;
             this.service = service;
             this.customer = customer;
             this.note = note;
-            this.id = id;
             this.__v = __v;
             this.createdDate = createdDate;
             this.status = status;
