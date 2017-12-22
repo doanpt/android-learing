@@ -8,17 +8,17 @@ import android.support.v4.app.FragmentPagerAdapter;
  * Created by giapmn on 9/27/17.
  */
 
-public class WorkFragmentAdapter extends FragmentPagerAdapter {
+public class TaskFragmentAdapter extends FragmentPagerAdapter {
 
     private Fragment[] listFrag;
 
     private String arrPageTitle[] = new String[]{
-            "Tất cả",
             "Mới",
             "Đang thực hiện",
-            "Hoàn thành"};
+            "Hoàn thành",
+            "Tất cả"};
 
-    public WorkFragmentAdapter(FragmentManager fm, Fragment[] listFrag) {
+    public TaskFragmentAdapter(FragmentManager fm, Fragment[] listFrag) {
         super(fm);
         this.listFrag = listFrag;
     }

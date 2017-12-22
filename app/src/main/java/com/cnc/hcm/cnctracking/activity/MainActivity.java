@@ -36,22 +36,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
-import com.cnc.hcm.cnctracking.adapter.WorkFragmentAdapter;
+import com.cnc.hcm.cnctracking.adapter.TaskFragmentAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.customeview.MySelectorDecorator;
 import com.cnc.hcm.cnctracking.customeview.OneDayDecorator;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
-import com.cnc.hcm.cnctracking.fragment.WorkAllFragment;
-import com.cnc.hcm.cnctracking.fragment.WorkCompletedFragment;
-import com.cnc.hcm.cnctracking.fragment.WorkDoingFragment;
-import com.cnc.hcm.cnctracking.fragment.WorkNewFragment;
+import com.cnc.hcm.cnctracking.fragment.TaskAllFragment;
+import com.cnc.hcm.cnctracking.fragment.TaskCompletedFragment;
+import com.cnc.hcm.cnctracking.fragment.TaskDoingFragment;
+import com.cnc.hcm.cnctracking.fragment.TaskNewFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
-import com.cnc.hcm.cnctracking.model.ItemWork;
+import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
+import com.cnc.hcm.cnctracking.util.SettingApp;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -97,7 +98,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             tvChangeViewMonthYear, tvToday;
     private Button btnLogout;
     private CircleImageView imvAvatar;
-    private ImageView imvMenuDrawer, imvSearch, imvProfile, imvFilter;
+    private ImageView imvMenuDrawer, imvFilterActionBar, imvProfile, imvFilter;
     private DrawerLayout drawer;
     private ViewPagerBottomSheetBehavior bottomSheetBehavior;
 
@@ -105,15 +106,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
 
 
-    private ArrayList<ItemWork> arrItemWorkNew = new ArrayList<>();
+    private ArrayList<ItemTask> arrItemTask = new ArrayList<>();
     private boolean isNetworkConnected;
 
-    private WorkNewFragment workNewFragment = new WorkNewFragment();
-    private WorkDoingFragment workDoingFragment = new WorkDoingFragment();
-    private WorkCompletedFragment workCompletedFragment = new WorkCompletedFragment();
-    private WorkAllFragment workAllFragment = new WorkAllFragment();
+    private TaskNewFragment taskNewFragment;
+    private TaskDoingFragment taskDoingFragment;
+    private TaskCompletedFragment taskCompletedFragment;
+    private TaskAllFragment taskAllFragment;
 
-    private Fragment[] listFrag = {workAllFragment, workNewFragment, workDoingFragment, workCompletedFragment};
+    private Fragment[] listFrag;
     private GPSService gpsService;
 
     private ProgressDialog mProgressDialog;
@@ -123,7 +124,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initData();
+        initObject();
         initViews();
         createFileBackup();
         UserInfo.getInstance(this).setMainActivityActive(true);
@@ -146,6 +147,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             e.printStackTrace();
         }
         //TODO for check api before make UI. END (*)
+    }
+
+    private void initObject() {
+        taskNewFragment = new TaskNewFragment();
+        taskDoingFragment = new TaskDoingFragment();
+        taskCompletedFragment = new TaskCompletedFragment();
+        taskAllFragment = new TaskAllFragment();
+        listFrag = new Fragment[]{taskNewFragment, taskDoingFragment, taskCompletedFragment, taskAllFragment};
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -219,19 +228,36 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     if (getTaskListResult != null) {
                         GetTaskListResult.Result[] result1 = getTaskListResult.result;
                         if (result1 != null && result1.length > 0) {
-                            ArrayList<GetTaskListResult.Result> resultArrayList = new ArrayList<>();
+                            arrItemTask.clear();
                             for (int index = 0; index < result1.length; index++) {
-                                resultArrayList.add(result1[index]);
-                            }
-                            if (workAllFragment != null) {
-                                workAllFragment.setDataToRecyclerView(resultArrayList);
+                                ItemTask itemTask = new ItemTask(result1[index]);
+                                arrItemTask.add(new ItemTask(result1[index]));
+                                if (taskAllFragment != null) {
+                                    taskAllFragment.addItem(itemTask);
+                                }
+                                switch ((int) itemTask.getTaskResult().status._id) {
+                                    case Conts.TYPE_COMPLETE_TASK:
+                                        if (taskCompletedFragment != null) {
+                                            taskCompletedFragment.addItem(itemTask);
+                                        }
+                                        break;
+                                    case Conts.TYPE_DOING_TASK:
+                                        if (taskDoingFragment != null) {
+                                            taskDoingFragment.addItem(itemTask);
+                                        }
+                                        break;
+                                }
                             }
 
+                            notiDataChange();
+                            initMarkerOnMap();
                         }
+                    } else {
+                        CommonMethod.makeToast(MainActivity.this, "Không có công việc nào cả");
                     }
                     dismisDialogLoading();
                 } else {
-                    CommonMethod.toast(MainActivity.this, response.toString());
+                    CommonMethod.makeToast(MainActivity.this, response.toString());
                 }
 
             }
@@ -240,10 +266,22 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public void onFailure(Call<GetTaskListResult> call, Throwable t) {
                 Log.e(TAG, "tryGetTaskList.onFailure() --> " + t);
                 t.printStackTrace();
-                CommonMethod.toast(MainActivity.this, t.getMessage().toString());
+                CommonMethod.makeToast(MainActivity.this, t.getMessage().toString());
                 dismisDialogLoading();
             }
         });
+    }
+
+    private void notiDataChange() {
+        if (taskAllFragment != null) {
+            taskAllFragment.notiDataChange();
+        }
+        if (taskDoingFragment != null) {
+            taskDoingFragment.notiDataChange();
+        }
+        if (taskCompletedFragment != null) {
+            taskCompletedFragment.notiDataChange();
+        }
     }
 
     private void tryGetTaskDetail(String accessToken, String _id) {
@@ -269,79 +307,36 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-    private void initData() {
-        arrItemWorkNew.clear();
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.172724, 105.910090, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Mầu Ngô Giáp", "0974356994", "Unnamed Road, thôn Đông, Thuỵ Lâm, Đông Anh, Hà Nội, Vietnam", "Sửa tủ lạnh",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa điều hoà", 21.025291, 105.793761, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Đỗ Văn Tân", "0973545345", "602 Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa điều hoà",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.021846, 105.786384, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Lê Quốc Nam", "0974356995", "Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.0273855, 105.7846931, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Trần Văn Gạo", "0974356996", "5 Tôn Thất Thuyết, Dịch Vọng Hậu, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_NEW_TASK, "11:30:24 07/11/2017", "Sửa máy lạnh", 21.0232644, 105.7843098, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Phạm Trung Đoan", "0974356997", "Ngõ 3 Tôn Thất thuyết, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa máy lạnh",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-
-
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_DOING_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.0273855, 105.7846931, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Trần Văn Gạo", "0974356996", "5 Tôn Thất Thuyết, Dịch Vọng Hậu, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_DOING_TASK, "11:30:24 07/11/2017", "Sửa máy lạnh", 21.0232644, 105.7843098, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Phạm Trung Đoan", "0974356997", "Ngõ 3 Tôn Thất thuyết, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa máy lạnh",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-
-
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_COMPLETE_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.021846, 105.786384, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Lê Quốc Nam", "0974356995", "Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa tủ lạnh",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-
-
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_ALL_TASK, "11:30:24 07/11/2017", "Sửa tủ lạnh", 21.172724, 105.910090, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Mầu Ngô Giáp", "0974356994", "Unnamed Road, thôn Đông, Thuỵ Lâm, Đông Anh, Hà Nội, Vietnam", "Sửa tủ lạnh",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-        arrItemWorkNew.add(new ItemWork(Conts.TYPE_ALL_TASK, "11:30:24 07/11/2017", "Sửa điều hoà", 21.025291, 105.793761, "0 Km", "",
-                "14:20 - 16h20, 09/11/2017", "Đỗ Văn Tân", "0973545345", "602 Dương Đình Nghệ, Yên Hoà, Cầu Giấy, Hà Nội, Vietnam", "Sửa điều hoà",
-                "200.000 VND", "Máy vẫn chạy nhưng không còn lạnh, rỉ nước", false, "14:30", "16:30", "2h20'", "", false));
-
-
-    }
-
-    public ArrayList<ItemWork> getDataByWorkType(int typeWork) {
-        ArrayList<ItemWork> arrayList = new ArrayList<>();
-        for (int index = 0; index < arrItemWorkNew.size(); index++) {
-            ItemWork itemWork = arrItemWorkNew.get(index);
-            if (itemWork.getTypeWork() == typeWork) {
-                arrayList.add(itemWork);
+    public ArrayList<ItemTask> getDataByWorkType(int typeWork) {
+        ArrayList<ItemTask> arrayList = new ArrayList<>();
+        for (int index = 0; index < arrItemTask.size(); index++) {
+            ItemTask itemTask = arrItemTask.get(index);
+            if ((int) itemTask.getTaskResult().status._id == typeWork) {
+                arrayList.add(itemTask);
             }
         }
         return arrayList;
     }
 
     private void initMarkerOnMap() {
-        for (ItemWork work : arrItemWorkNew) {
-            switch (work.getTypeWork()) {
+        for (ItemTask task : arrItemTask) {
+            BitmapDescriptor bitmapDescriptor = null;
+            switch ((int) task.getTaskResult().status._id) {
                 case Conts.TYPE_NEW_TASK:
-                    addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
-                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
                     break;
                 case Conts.TYPE_DOING_TASK:
-                    addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
-                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
                     break;
                 case Conts.TYPE_COMPLETE_TASK:
-                    addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
-                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
                     break;
                 case Conts.TYPE_ALL_TASK:
-                    addMarkerMap(work.getLatitude(), work.getLongitude(), work.getAddress(),
-                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
                     break;
             }
+            addMarkerMap(task.getTaskResult().customer.address.location.latitude,
+                    task.getTaskResult().customer.address.location.longitude, task.getTaskResult().customer.address.street, bitmapDescriptor);
         }
     }
 
@@ -357,13 +352,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         imvMenuDrawer = (ImageView) findViewById(R.id.imv_menu);
-        imvSearch = (ImageView) findViewById(R.id.imv_seach_location);
+        imvFilterActionBar = (ImageView) findViewById(R.id.imv_filter_list_on_action_bar);
         imvProfile = (ImageView) findViewById(R.id.imv_profile);
         imvFilter = (ImageView) findViewById(R.id.imv_filter_list);
 
         imvProfile.setOnClickListener(this);
         imvMenuDrawer.setOnClickListener(this);
-        imvSearch.setOnClickListener(this);
+        imvFilterActionBar.setOnClickListener(this);
         imvFilter.setOnClickListener(this);
 
         llClickNetwork = (LinearLayout) findViewById(R.id.ll_click_network);
@@ -414,25 +409,27 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bottomSheetBehavior.setBottomSheetCallback(new ViewPagerBottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View view, int i) {
-                Log.d(TAG, "onStateChanged: " + i);
             }
 
             @Override
             public void onSlide(@NonNull View view, float v) {
-                Log.d(TAG, "onSlide: " + v);
-                if (v <= 0) {
+                if (v < 0) {
                     llTabs.setVisibility(View.VISIBLE);
-                } else {
+                } else if (v > 0) {
                     llTabs.setVisibility(View.GONE);
+                } else if (v == 0) {
+                    llTabs.setVisibility(View.VISIBLE);
+                    viewPager.setCurrentItem(SettingApp.getInstance(MainActivity.this).getTypeFilterList());
                 }
 
             }
         });
 
-        WorkFragmentAdapter adapter = new WorkFragmentAdapter(getSupportFragmentManager(), listFrag);
+        TaskFragmentAdapter adapter = new TaskFragmentAdapter(getSupportFragmentManager(), listFrag);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
         BottomSheetUtils.setupViewPager(viewPager);
+        viewPager.setCurrentItem(SettingApp.getInstance(this).getTypeFilterList());
 
         calendarView = (MaterialCalendarView) findViewById(R.id.calendarView);
         calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
@@ -485,9 +482,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.imv_menu:
                 drawer.openDrawer(GravityCompat.START);
                 break;
-            case R.id.imv_seach_location:
-                Toast.makeText(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!", Toast.LENGTH_SHORT).show();
-                break;
+            case R.id.imv_filter_list_on_action_bar:
             case R.id.imv_filter_list:
                 DialogOptionFilter filter = new DialogOptionFilter(this);
                 filter.show();
@@ -511,16 +506,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 drawer.closeDrawer(GravityCompat.START);
                 break;
             case R.id.tabs:
-                setCurrentItemViewPager(0);
+                setCurrentItemViewPager(SettingApp.getInstance(this).getTypeFilterList());
                 break;
             case R.id.ll_tab_work_new_not_read:
-                setCurrentItemViewPager(1);
+                setCurrentItemViewPager(0);
                 break;
             case R.id.ll_tab_work_doing:
-                setCurrentItemViewPager(2);
+                setCurrentItemViewPager(1);
                 break;
             case R.id.ll_tab_work_complete:
-                setCurrentItemViewPager(3);
+                setCurrentItemViewPager(2);
                 break;
 
             case R.id.tv_change_view_month_year:
@@ -560,11 +555,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         popup.show();
     }
 
-    private void setCurrentItemViewPager(int position) {
+    public void setCurrentItemViewPager(int position) {
         viewPager.setCurrentItem(position);
         if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_COLLAPSED) {
             bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
         }
+    }
+
+    public void setCurrentItemViewPagerByFilterList(int position) {
+        viewPager.setCurrentItem(position);
     }
 
     @Override
@@ -637,11 +636,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        if (gpsService != null) {
-            if (gpsService.getLatitude() != 0 && gpsService.getLongitude() != 0) {
-                myLocationHere(gpsService.getLatitude(), gpsService.getLongitude(),
-                        gpsService.getAccuracy(), gpsService.getAddressName(), gpsService.getCityName());
-            }
+        if (gpsService != null && gpsService.getLatitude() != 0 && gpsService.getLongitude() != 0) {
+            myLocationHere(gpsService.getLatitude(), gpsService.getLongitude(),
+                    gpsService.getAccuracy(), gpsService.getAddressName(), gpsService.getCityName());
         }
     }
 
@@ -651,21 +648,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             LatLng myLocation = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions().position(myLocation).title(addName).snippet(cityName));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
-
-            initMarkerOnMap();
         }
 
-//        workNewFragment.updateDistanceNewWork(latitude, longitude);
-        workDoingFragment.updateDistanceDoingWork(latitude, longitude);
-        workCompletedFragment.updateDistanceCompleteWork(latitude, longitude);
-        workAllFragment.updateDistanceAllWork(latitude, longitude);
-
+        updateDistanceTo4TabWork();
     }
 
     public void addMarkerMap(double latitude, double longitude, String addName, BitmapDescriptor bitmapDescriptor) {
         if (mMap != null) {
             //BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-
             LatLng myLocation = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions().position(myLocation).title(addName)).setIcon(bitmapDescriptor);
         }
@@ -693,20 +683,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void updateDistanceTo4TabWork() {
-        if (workNewFragment != null) {
-//            workNewFragment.updateDistanceNewWork(gpsService.getLatitude(), gpsService.getLongitude());
+        if (taskNewFragment != null) {
+            taskNewFragment.updateDistanceNewWork(gpsService.getLatitude(), gpsService.getLongitude());
         }
 
-        if (workDoingFragment != null) {
-            workDoingFragment.updateDistanceDoingWork(gpsService.getLatitude(), gpsService.getLongitude());
+        if (taskDoingFragment != null) {
+            taskDoingFragment.updateDistanceDoingWork(gpsService.getLatitude(), gpsService.getLongitude());
         }
 
-        if (workCompletedFragment != null) {
-            workCompletedFragment.updateDistanceCompleteWork(gpsService.getLatitude(), gpsService.getLongitude());
+        if (taskCompletedFragment != null) {
+            taskCompletedFragment.updateDistanceCompleteWork(gpsService.getLatitude(), gpsService.getLongitude());
         }
 
-        if (workAllFragment != null) {
-            workAllFragment.updateDistanceAllWork(gpsService.getLatitude(), gpsService.getLongitude());
+        if (taskAllFragment != null) {
+            taskAllFragment.updateDistanceForAllTask(gpsService.getLatitude(), gpsService.getLongitude());
         }
     }
 
@@ -802,5 +792,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    public boolean isNetworkConnected() {
+        return isNetworkConnected;
     }
 }

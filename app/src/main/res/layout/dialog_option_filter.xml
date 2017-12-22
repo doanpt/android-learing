@@ -7,14 +7,14 @@
               android:orientation="vertical">
 
     <TextView
-        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginBottom="-20dp"
         android:gravity="center"
         android:text="@string/text_choose_type_work"
         android:textColor="@android:color/black"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="250dp"
@@ -22,93 +22,48 @@
         android:orientation="horizontal"
         android:padding="15dp">
 
-        <LinearLayout
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
-
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <RadioButton
-                    android:id="@+id/rd_option_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"/>
-
-                <RadioButton
-                    android:id="@+id/rd_option_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"/>
-
-                <RadioButton
-                    android:id="@+id/rd_option_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"/>
-
-                <RadioButton
-                    android:id="@+id/rd_option_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"/>
-            </RadioGroup>
-        </LinearLayout>
-
-        <LinearLayout
+        <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:paddingLeft="15dp">
 
-
-            <TextView
-                android:textColor="@android:color/black"
-                android:id="@+id/tv_option_1"
+            <RadioButton
+                android:id="@+id/rd_option_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/type_work_new"
-                android:textSize="14sp"/>
+                android:paddingLeft="15dp"
+                android:text="@string/type_work_new"/>
 
-            <TextView
-                android:textColor="@android:color/black"
-                android:id="@+id/tv_option_2"
+            <RadioButton
+                android:id="@+id/rd_option_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/type_work_doing"
-                android:textSize="14sp"/>
+                android:paddingLeft="15dp"
+                android:text="@string/type_work_doing"/>
 
-            <TextView
-                android:textColor="@android:color/black"
-                android:id="@+id/tv_option_3"
+            <RadioButton
+                android:id="@+id/rd_option_3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/type_work_complete"
-                android:textSize="14sp"/>
+                android:paddingLeft="15dp"
+                android:text="@string/type_work_complete"/>
 
-            <TextView
-                android:textColor="@android:color/black"
-                android:id="@+id/tv_option_4"
+            <RadioButton
+                android:id="@+id/rd_option_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/type_all_work"
-                android:textSize="14sp"/>
-        </LinearLayout>
+                android:paddingLeft="15dp"
+                android:text="@string/type_all_work"/>
+        </RadioGroup>
     </LinearLayout>
 
     <Button

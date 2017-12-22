@@ -2,22 +2,20 @@ package com.cnc.hcm.cnctracking.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
+import com.cnc.hcm.cnctracking.util.SettingApp;
 
 
 /**
@@ -28,17 +26,17 @@ public class DialogOptionFilter extends Dialog implements View.OnClickListener {
 
     private static final String TAGG = DialogOptionFilter.class.getSimpleName();
 
-
     private RadioButton rdOption1, rdOption2, rdOption3, rdOption4;
-    private TextView tvOption1, tvOption2, tvOption3, tvOption4;
     private Button btnOK;
 
     private int option;
     private Context context;
+    private MainActivity mainActivity;
 
     public DialogOptionFilter(@NonNull Context context) {
         super(context);
         this.context = context;
+        mainActivity = (MainActivity) context;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setContentView(R.layout.dialog_option_filter);
@@ -57,49 +55,31 @@ public class DialogOptionFilter extends Dialog implements View.OnClickListener {
         rdOption3.setOnClickListener(this);
         rdOption4.setOnClickListener(this);
 
-        tvOption1 = (TextView) findViewById(R.id.tv_option_1);
-        tvOption2 = (TextView) findViewById(R.id.tv_option_2);
-        tvOption3 = (TextView) findViewById(R.id.tv_option_3);
-        tvOption4 = (TextView) findViewById(R.id.tv_option_4);
-
-        tvOption4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rdOption4.setChecked(true);
-                option = Conts.TYPE_ALL_TASK;
-            }
-        });
-        tvOption3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rdOption3.setChecked(true);
-                option = Conts.TYPE_COMPLETE_TASK;
-            }
-        });
-        tvOption2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rdOption2.setChecked(true);
-                option = Conts.TYPE_DOING_TASK;
-
-            }
-        });
-        tvOption1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        option = SettingApp.getInstance(context).getTypeFilterList();
+        switch (option) {
+            case Conts.TYPE_NEW_TASK:
                 rdOption1.setChecked(true);
-                option = Conts.TYPE_NEW_TASK;
-            }
-        });
+                break;
+            case Conts.TYPE_DOING_TASK:
+                rdOption2.setChecked(true);
+                break;
+            case Conts.TYPE_COMPLETE_TASK:
+                rdOption3.setChecked(true);
+                break;
+            case Conts.TYPE_ALL_TASK:
+                rdOption4.setChecked(true);
 
-        rdOption1.setChecked(true);
-        option = Conts.TYPE_NEW_TASK;
+                break;
+        }
 
         btnOK = (Button) findViewById(R.id.btn_ok);
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommonMethod.toast(context, "" + option);
+                SettingApp.getInstance(context).setTypeFilterList(option);
+                if (mainActivity != null) {
+                    mainActivity.setCurrentItemViewPagerByFilterList(option);
+                }
                 dismiss();
             }
         });

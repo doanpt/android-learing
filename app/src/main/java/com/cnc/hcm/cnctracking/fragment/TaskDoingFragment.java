@@ -1,6 +1,5 @@
 package com.cnc.hcm.cnctracking.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,20 +13,23 @@ import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
-import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
+import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
+import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
-import com.cnc.hcm.cnctracking.util.Conts;
+
+import java.util.ArrayList;
 
 /**
  * Created by giapmn on 9/27/17.
  */
 
-public class WorkDoingFragment extends Fragment {
+public class TaskDoingFragment extends Fragment implements TaskListAdapter.OnItemWorkClickListener {
 
-//    private WorkDoingAdapter doingWorkAdapter;
+    private TaskListAdapter taskListAdapter;
     private MainActivity mainActivity;
 
     private RecyclerView rvDoingWork;
+    private ArrayList<ItemTask> arrTask = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,8 +40,10 @@ public class WorkDoingFragment extends Fragment {
 
     private void initObject() {
         mainActivity = (MainActivity) getActivity();
-//        doingWorkAdapter = new WorkDoingAdapter(getContext(), mainActivity.getDataByWorkType(Conts.TYPE_DOING_TASK), R.layout.item_doing_complete_task);
-//        doingWorkAdapter.setOnClickButtonItemDoingComleteWorkListener(this);
+        taskListAdapter = new TaskListAdapter(getContext());
+        taskListAdapter.notiDataChange(arrTask);
+        taskListAdapter.setOnItemWorkClickListener(this);
+
         updateDistanceDoingWork(mainActivity.getLatitude(), mainActivity.getLongtitude());
 
     }
@@ -47,7 +51,7 @@ public class WorkDoingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_work_doing, container, false);
+        View view = inflater.inflate(R.layout.fragment_doing_task, container, false);
         Log.i("onCreateView", "WorkDoing");
 
         rvDoingWork = (RecyclerView) view.findViewById(R.id.rv_doing_tasks);
@@ -66,40 +70,27 @@ public class WorkDoingFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        rvDoingWork.setAdapter(doingWorkAdapter);
+        rvDoingWork.setAdapter(taskListAdapter);
     }
 
     public void updateDistanceDoingWork(double latitude, double longitude) {
-//        if (doingWorkAdapter != null) {
-//            doingWorkAdapter.updateDistanceDoingWork(latitude, longitude);
-//        }
+        if (taskListAdapter != null) {
+            taskListAdapter.updateDistanceForTask(mainActivity.isNetworkConnected(), latitude, longitude);
+        }
     }
 
-//    @Override
-//    public void onClickButtonCall(int position) {
-//        CommonMethod.actionCall(getContext(), doingWorkAdapter.getItem(position).getContactPhone());
-//    }
-//
-//    @Override
-//    public void onClickButtonSMS(int position) {
-//        CommonMethod.actionSMS(getContext(), doingWorkAdapter.getItem(position).getContactPhone());
-//    }
-//
-//    @Override
-//    public void onClickButtonAddress(int position) {
-//
-//        double longitude_cur = mainActivity.getLongtitude();
-//        double latitude_cur = mainActivity.getLatitude();
-//        double latitude = doingWorkAdapter.getItem(position).getLatitude();
-//        double longitude = doingWorkAdapter.getItem(position).getLongitude();
-//
-//        CommonMethod.actionFindWayInMapApp(getContext(), latitude_cur, longitude_cur, latitude, longitude);
-//    }
-//
-//    @Override
-//    public void onClickButtonMoreDetail(int position) {
-//        Intent intent = new Intent(getActivity(), WorkDetailActivity.class);
-//        intent.putExtra(Conts.KEY_OBJECT_ITEM_WORK, doingWorkAdapter.getItem(position));
-//        startActivity(intent);
-//    }
+    public void addItem(ItemTask itemTask) {
+        arrTask.add(itemTask);
+    }
+
+    @Override
+    public void onClickItemWork(int position) {
+        CommonMethod.makeToast(getContext(), taskListAdapter.getItem(position).getTaskResult().title);
+    }
+
+    public void notiDataChange() {
+        if (taskListAdapter != null) {
+            taskListAdapter.notifyDataSetChanged();
+        }
+    }
 }

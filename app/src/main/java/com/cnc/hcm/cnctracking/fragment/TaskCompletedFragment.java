@@ -13,19 +13,25 @@ import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
+import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
+import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
-import com.cnc.hcm.cnctracking.util.Conts;
+
+import java.util.ArrayList;
 
 
 /**
  * Created by giapmn on 9/27/17.
  */
 
-public class WorkCompletedFragment extends Fragment{
+public class TaskCompletedFragment extends Fragment implements TaskListAdapter.OnItemWorkClickListener {
 
     private MainActivity mainActivity;
+    private TaskListAdapter taskListAdapter;
 
     private RecyclerView rvCompleteWork;
+    private ArrayList<ItemTask> arrTask = new ArrayList<>();
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,15 +42,16 @@ public class WorkCompletedFragment extends Fragment{
 
     private void initObject() {
         mainActivity = (MainActivity) getActivity();
-//        doingAdapter = new WorkDoingAdapter(getContext(), mainActivity.getDataByWorkType(Conts.TYPE_COMPLETE_TASK), R.layout.item_doing_complete_task);
-//        doingAdapter.setOnClickButtonItemDoingComleteWorkListener(this);
+        taskListAdapter = new TaskListAdapter(getContext());
+        taskListAdapter.notiDataChange(arrTask);
+        taskListAdapter.setOnItemWorkClickListener(this);
         updateDistanceCompleteWork(mainActivity.getLatitude(), mainActivity.getLongtitude());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_work_completed, container, false);
+        View view = inflater.inflate(R.layout.fragment_completed_task, container, false);
         Log.i("onCreateView", "Completed");
 
         rvCompleteWork = (RecyclerView) view.findViewById(R.id.rv_complete_tasks);
@@ -63,36 +70,29 @@ public class WorkCompletedFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-//        rvCompleteWork.setAdapter(doingAdapter);
+        rvCompleteWork.setAdapter(taskListAdapter);
     }
 
 
     public void updateDistanceCompleteWork(double latitude, double longitude) {
-//        if (doingAdapter != null) {
-//            doingAdapter.updateDistanceDoingWork(latitude, longitude);
-//        }
+        if (taskListAdapter != null) {
+            taskListAdapter.updateDistanceForTask(mainActivity.isNetworkConnected(), latitude, longitude);
+        }
     }
-//
-//    @Override
-//    public void onClickButtonCall(int position) {
-//        CommonMethod.actionCall(getContext(), doingAdapter.getItem(position).getContactPhone());
-//
-//    }
-//
-//    @Override
-//    public void onClickButtonSMS(int position) {
-//        CommonMethod.actionSMS(getContext(), doingAdapter.getItem(position).getContactPhone());
-//
-//    }
 
-//    @Override
-//    public void onClickButtonAddress(int position) {
-//        double longitude_cur = mainActivity.getLongtitude();
-//        double latitude_cur = mainActivity.getLatitude();
-//        double latitude = doingAdapter.getItem(position).getLatitude();
-//        double longitude = doingAdapter.getItem(position).getLongitude();
-//
-//        CommonMethod.actionFindWayInMapApp(getContext(), latitude_cur, longitude_cur, latitude, longitude);
-//    }
 
+    public void notiDataChange() {
+        if (taskListAdapter != null) {
+            taskListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void addItem(ItemTask itemTask) {
+        arrTask.add(itemTask);
+    }
+
+    @Override
+    public void onClickItemWork(int position) {
+        CommonMethod.makeToast(getContext(), taskListAdapter.getItem(position).getTaskResult().title);
+    }
 }

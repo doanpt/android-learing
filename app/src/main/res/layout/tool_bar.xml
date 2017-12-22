@@ -28,11 +28,11 @@
             android:textSize="20sp"/>
 
         <ImageView
-            android:id="@+id/imv_seach_location"
+            android:id="@+id/imv_filter_list_on_action_bar"
             android:layout_width="56dp"
             android:layout_height="match_parent"
             android:background="@drawable/bg_view_hover"
             android:padding="15dp"
-            android:src="@drawable/ic_search"/>
+            android:src="@drawable/ic_filter_list"/>
     </LinearLayout>
 </LinearLayout>

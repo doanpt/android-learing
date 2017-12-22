@@ -13,22 +13,24 @@ import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
-import com.cnc.hcm.cnctracking.adapter.WorkAdapter;
-import com.cnc.hcm.cnctracking.model.GetTaskListResult;
-import com.cnc.hcm.cnctracking.util.Conts;
+import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
+import com.cnc.hcm.cnctracking.model.ItemTask;
+import com.cnc.hcm.cnctracking.util.CommonMethod;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by giapmn on 9/27/17.
  */
 
-public class WorkAllFragment extends Fragment implements WorkAdapter.OnItemWorkClickListener {
+public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemWorkClickListener {
 
-    private WorkAdapter workAdapter;
+    private TaskListAdapter taskListAdapter;
     private MainActivity mainActivity;
 
     private RecyclerView rvAllWork;
+    private ArrayList<ItemTask> arrTask = new ArrayList<>();
 
 
     @Override
@@ -41,15 +43,16 @@ public class WorkAllFragment extends Fragment implements WorkAdapter.OnItemWorkC
 
     private void initObject() {
         mainActivity = (MainActivity) getActivity();
-        workAdapter = new WorkAdapter(getContext());
-        workAdapter.setOnItemWorkClickListener(this);
-        updateDistanceAllWork(mainActivity.getLatitude(), mainActivity.getLongtitude());
+        taskListAdapter = new TaskListAdapter(getContext());
+        taskListAdapter.notiDataChange(arrTask);
+        taskListAdapter.setOnItemWorkClickListener(this);
+        updateDistanceForAllTask(mainActivity.getLatitude(), mainActivity.getLongtitude());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_work_all, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_task, container, false);
         Log.i("onCreateView", "Cancel");
 
         rvAllWork = (RecyclerView) view.findViewById(R.id.rv_all_tasks);
@@ -68,24 +71,28 @@ public class WorkAllFragment extends Fragment implements WorkAdapter.OnItemWorkC
     @Override
     public void onStart() {
         super.onStart();
-        rvAllWork.setAdapter(workAdapter);
+        rvAllWork.setAdapter(taskListAdapter);
 
     }
 
-    public void updateDistanceAllWork(double latitude, double longitude) {
-//        if (doingAdapter != null) {
-////            doingAdapter.updateDistanceDoingWork(latitude, longitude);
-//        }
+    public void updateDistanceForAllTask(double latitude, double longitude) {
+        if (taskListAdapter != null) {
+            taskListAdapter.updateDistanceForTask(mainActivity.isNetworkConnected(), latitude, longitude);
+        }
     }
 
     @Override
     public void onClickItemWork(int position) {
-
+        CommonMethod.makeToast(getContext(), taskListAdapter.getItem(position).getTaskResult().title);
     }
 
-    public void setDataToRecyclerView(ArrayList<GetTaskListResult.Result> resultArrayList) {
-        if (workAdapter != null) {
-            workAdapter.notiDataChange(resultArrayList);
+    public void addItem(ItemTask itemTask) {
+        arrTask.add(itemTask);
+    }
+
+    public void notiDataChange() {
+        if (taskListAdapter != null) {
+            taskListAdapter.notifyDataSetChanged();
         }
     }
 }

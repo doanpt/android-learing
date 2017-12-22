@@ -36,7 +36,7 @@
         android:gravity="center"
         android:orientation="vertical"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="250dp"
+        app:behavior_peekHeight="50dp"
         app:layout_behavior="@string/view_pager_bottom_sheet_behavior">
 
         <LinearLayout
@@ -58,8 +58,8 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_launcher"/>
+                    android:padding="3dp"
+                    android:src="@drawable/ic_noti_work_new"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -80,8 +80,8 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_launcher"/>
+                    android:padding="3dp"
+                    android:src="@drawable/ic_noti_work_doing_on_tab"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -100,8 +100,8 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_launcher"/>
+                    android:padding="3dp"
+                    android:src="@drawable/ic_noti_work_complete_on_tab"/>
 
                 <TextView
                     android:layout_width="match_parent"

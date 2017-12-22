@@ -10,19 +10,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
-import com.cnc.hcm.cnctracking.util.Conts;
 
 /**
  * Created by giapmn on 9/27/17.
  */
 
-public class WorkNewFragment extends Fragment{
+public class TaskNewFragment extends Fragment{
 
-    private static final String TAGG = WorkNewFragment.class.getSimpleName();
+    private static final String TAGG = TaskNewFragment.class.getSimpleName();
     private RecyclerView rvNewTask;
 //    private WorkNewAdapter workNewAdapter;
     private MainActivity mainActivity;
@@ -46,7 +44,7 @@ public class WorkNewFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         Log.i("onCreateView", "New");
 
-        View view = inflater.inflate(R.layout.fragment_work_new, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_task, container, false);
         rvNewTask = (RecyclerView) view.findViewById(R.id.rv_new_tasks);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -76,9 +74,9 @@ public class WorkNewFragment extends Fragment{
 //        Toast.makeText(getContext(), "Receive: " + workNewAdapter.getItem(position).getRequestService(), Toast.LENGTH_LONG).show();
 //    }
 //
-//    public void updateDistanceNewWork(double latitude, double longitude) {
+    public void updateDistanceNewWork(double latitude, double longitude) {
 //        if (workNewAdapter != null) {
 //            workNewAdapter.updateDistanceNewWork(latitude, longitude);
 //        }
-//    }
+    }
 }
