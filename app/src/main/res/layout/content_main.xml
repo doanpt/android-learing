@@ -62,10 +62,11 @@
                     android:src="@drawable/ic_noti_work_new"/>
 
                 <TextView
+                    android:id="@+id/tv_quantity_new_task"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="13"
+                    android:text="0"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
 
@@ -84,10 +85,11 @@
                     android:src="@drawable/ic_noti_work_doing_on_tab"/>
 
                 <TextView
+                    android:id="@+id/tv_quantity_doing_task"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="2"
+                    android:text="0"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
 
@@ -104,10 +106,11 @@
                     android:src="@drawable/ic_noti_work_complete_on_tab"/>
 
                 <TextView
+                    android:id="@+id/tv_quantity_done_task"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="32"
+                    android:text="0"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
         </LinearLayout>

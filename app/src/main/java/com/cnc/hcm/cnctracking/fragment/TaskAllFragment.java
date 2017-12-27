@@ -92,7 +92,7 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
 
     public void notiDataChange() {
         if (taskListAdapter != null) {
-            taskListAdapter.notifyDataSetChanged();
+            taskListAdapter.notiDataChange(arrTask);
         }
     }
 }

@@ -101,13 +101,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView imvMenuDrawer, imvFilterActionBar, imvProfile, imvFilter;
     private DrawerLayout drawer;
     private ViewPagerBottomSheetBehavior bottomSheetBehavior;
-
     private MaterialCalendarView calendarView;
-    private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
+    private OneDayDecorator oneDayDecorator = new OneDayDecorator();
+    private TextView tvQuantityNewTask, tvQuantityDoingTask, tvQuantityCompleteTask;
 
 
     private ArrayList<ItemTask> arrItemTask = new ArrayList<>();
-    private boolean isNetworkConnected;
 
     private TaskNewFragment taskNewFragment;
     private TaskDoingFragment taskDoingFragment;
@@ -116,9 +115,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private Fragment[] listFrag;
     private GPSService gpsService;
-
     private ProgressDialog mProgressDialog;
 
+    private boolean isNetworkConnected;
+    private int quantityNewTask, quantityDoingTask, quantityCompletedTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,8 +212,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
     private void tryGetTaskList(final String accessToken) {
+        quantityNewTask = 0;
+        quantityDoingTask = 0;
+        quantityCompletedTask = 0;
         showDialogLoadding();
-        Log.e(TAG, "tryGetTaskList()");
         ApiUtils.getAPIService(accessToken).getTaskList().enqueue(new Callback<GetTaskListResult>() {
             @Override
             public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
@@ -240,11 +242,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                         if (taskCompletedFragment != null) {
                                             taskCompletedFragment.addItem(itemTask);
                                         }
+                                        quantityCompletedTask++;
                                         break;
                                     case Conts.TYPE_DOING_TASK:
                                         if (taskDoingFragment != null) {
                                             taskDoingFragment.addItem(itemTask);
                                         }
+                                        quantityDoingTask++;
                                         break;
                                 }
                             }
@@ -282,6 +286,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (taskCompletedFragment != null) {
             taskCompletedFragment.notiDataChange();
         }
+
+        tvQuantityDoingTask.setText(quantityDoingTask + Conts.BLANK);
+        tvQuantityCompleteTask.setText(quantityCompletedTask + Conts.BLANK);
     }
 
     private void tryGetTaskDetail(String accessToken, String _id) {
@@ -306,37 +313,25 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
     }
 
-
-    public ArrayList<ItemTask> getDataByWorkType(int typeWork) {
-        ArrayList<ItemTask> arrayList = new ArrayList<>();
-        for (int index = 0; index < arrItemTask.size(); index++) {
-            ItemTask itemTask = arrItemTask.get(index);
-            if ((int) itemTask.getTaskResult().status._id == typeWork) {
-                arrayList.add(itemTask);
-            }
-        }
-        return arrayList;
-    }
-
     private void initMarkerOnMap() {
         for (ItemTask task : arrItemTask) {
             BitmapDescriptor bitmapDescriptor = null;
             switch ((int) task.getTaskResult().status._id) {
-                case Conts.TYPE_NEW_TASK:
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-                    break;
                 case Conts.TYPE_DOING_TASK:
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_doing);
                     break;
                 case Conts.TYPE_COMPLETE_TASK:
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
-                    break;
-                case Conts.TYPE_ALL_TASK:
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
+                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_done);
                     break;
             }
-            addMarkerMap(task.getTaskResult().customer.address.location.latitude,
-                    task.getTaskResult().customer.address.location.longitude, task.getTaskResult().customer.address.street, bitmapDescriptor);
+            if (task.getTaskResult().address != null) {
+                addMarkerMap(task.getTaskResult().address.location.latitude,
+                        task.getTaskResult().address.location.longitude, task.getTaskResult().address.street, bitmapDescriptor);
+            } else {
+                addMarkerMap(task.getTaskResult().customer.address.location.latitude,
+                        task.getTaskResult().customer.address.location.longitude, task.getTaskResult().customer.address.street, bitmapDescriptor);
+            }
+
         }
     }
 
@@ -391,6 +386,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tvChangeViewMonthYear.setOnClickListener(this);
         tvToday = (TextView) findViewById(R.id.tv_today);
         tvToday.setOnClickListener(this);
+        tvQuantityNewTask = (TextView) findViewById(R.id.tv_quantity_new_task);
+        tvQuantityDoingTask = (TextView) findViewById(R.id.tv_quantity_doing_task);
+        tvQuantityCompleteTask = (TextView) findViewById(R.id.tv_quantity_done_task);
+
 
         btnLogout = (Button) findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(this);

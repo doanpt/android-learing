@@ -18,12 +18,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.api.APIService;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
-import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
-import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.GetUserProfileResponseStatus;
 import com.cnc.hcm.cnctracking.model.LoginResponseStatus;
 import com.cnc.hcm.cnctracking.model.UserProfile;

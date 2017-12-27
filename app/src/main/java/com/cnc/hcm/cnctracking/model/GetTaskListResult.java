@@ -23,8 +23,10 @@ public final class GetTaskListResult {
         public final String process[];
         public final Executive executive[];
         public final String appointmentDate;
+        public final Address address;
 
-        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Status status, String[] process, Executive[] executive, String appointmentDate) {
+
+        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Status status, String[] process, Executive[] executive, String appointmentDate, Address address) {
             this._id = _id;
             this.title = title;
             this.service = service;
@@ -36,6 +38,7 @@ public final class GetTaskListResult {
             this.process = process;
             this.executive = executive;
             this.appointmentDate = appointmentDate;
+            this.address = address;
         }
 
         public static final class Service {
@@ -167,6 +170,20 @@ public final class GetTaskListResult {
                     this.isDriver = isDriver;
                     this.agent = agent;
                 }
+            }
+        }
+
+        public static final class Address {
+            public final String street;
+            public final String district;
+            public final String province;
+            public final Customer.Address.Location location;
+
+            public Address(String province, String district, String street, Customer.Address.Location location) {
+                this.province = province;
+                this.district = district;
+                this.street = street;
+                this.location = location;
             }
         }
     }

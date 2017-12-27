@@ -35,6 +35,11 @@ public class CommonMethod {
         return new SimpleDateFormat("dd/MM/yy HH:mm:ss").format(date);
     }
 
+    public static String formatDateToString(long time) {
+        Date date = new Date(time);
+        return new SimpleDateFormat("HH:mm").format(date);
+    }
+
     public static String format(double number) {
         DecimalFormat format = new DecimalFormat("#.##");
         return format.format(number) + Conts.BLANK;

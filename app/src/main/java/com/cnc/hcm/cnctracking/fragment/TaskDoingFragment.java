@@ -90,7 +90,7 @@ public class TaskDoingFragment extends Fragment implements TaskListAdapter.OnIte
 
     public void notiDataChange() {
         if (taskListAdapter != null) {
-            taskListAdapter.notifyDataSetChanged();
+            taskListAdapter.notiDataChange(arrTask);
         }
     }
 }

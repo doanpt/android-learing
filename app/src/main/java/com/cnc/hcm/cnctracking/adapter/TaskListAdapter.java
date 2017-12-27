@@ -18,7 +18,10 @@ import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by giapmn on 12/21/17.
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> implements OnResultTimeDistance {
 
     private static final int NOTIDATA_SET_CHANGE = 32;
+    private static final String TAGG = TaskListAdapter.class.getSimpleName();
     private Context context;
     private ArrayList<ItemTask> arrTask = new ArrayList<>();
 
@@ -50,7 +54,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         ItemTask itemTask = arrTask.get(position);
         GetTaskListResult.Result result = itemTask.getTaskResult();
         holder.tvTitleWork.setText(result.title);
-        holder.tvAddressWork.setText(result.customer.address.street);
+        if (itemTask.getTaskResult().address != null) {
+            holder.tvAddressWork.setText(result.address.street);
+        } else {
+            holder.tvAddressWork.setText(result.customer.address.street);
+        }
         long idTypeWork = result.status._id;
         if (idTypeWork == Conts.TYPE_DOING_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_noti_work_doing);
@@ -58,6 +66,16 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_noti_work_complete);
         }
         holder.tvDistance.setText(itemTask.getDistanceToMyLocation());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        String createDate = itemTask.getTaskResult().createdDate.substring(0, itemTask.getTaskResult().createdDate.lastIndexOf(".")) + "Z";
+        try {
+            Date date = format.parse(createDate);
+            String time = CommonMethod.formatDateToString(date.getTime());
+            holder.tvTime.setText(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

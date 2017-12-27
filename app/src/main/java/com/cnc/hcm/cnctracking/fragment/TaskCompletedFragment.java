@@ -83,7 +83,7 @@ public class TaskCompletedFragment extends Fragment implements TaskListAdapter.O
 
     public void notiDataChange() {
         if (taskListAdapter != null) {
-            taskListAdapter.notifyDataSetChanged();
+            taskListAdapter.notiDataChange(arrTask);
         }
     }
 
