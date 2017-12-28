@@ -270,7 +270,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public void onFailure(Call<GetTaskListResult> call, Throwable t) {
                 Log.e(TAG, "tryGetTaskList.onFailure() --> " + t);
                 t.printStackTrace();
-                CommonMethod.makeToast(MainActivity.this, t.getMessage().toString());
+                CommonMethod.makeToast(MainActivity.this, t.getMessage() != null ? t.getMessage().toString() : "onFailure");
                 dismisDialogLoading();
             }
         });
@@ -431,6 +431,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         viewPager.setCurrentItem(SettingApp.getInstance(this).getTypeFilterList());
 
         calendarView = (MaterialCalendarView) findViewById(R.id.calendarView);
+        Calendar instance = Calendar.getInstance();
+        calendarView.setSelectedDate(instance.getTime());
         calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
@@ -450,8 +452,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
         calendarView.setTopbarVisible(false);
         calendarView.setShowOtherDates(MaterialCalendarView.SHOW_ALL);
-        Calendar instance = Calendar.getInstance();
-        calendarView.setSelectedDate(instance.getTime());
         calendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS).commit();
         calendarView.setSelectionMode(SELECTION_MODE_SINGLE);
         Calendar instance1 = Calendar.getInstance();
