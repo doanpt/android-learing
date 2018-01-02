@@ -325,12 +325,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 int statusCode = response.code();
                 Log.d(TAGG, "onLocationUpdated.onResponse(), statusCode: " + statusCode);
                 if (response.isSuccessful()) {
-                    LocationResponseUpload locationBackupFile = new LocationResponseUpload(statusCode, "in isSuccessful: and message=" + response.body().getMessage(), System.currentTimeMillis());
+                    LocationResponseUpload locationBackupFile = new LocationResponseUpload(statusCode, "in isSuccessful: and message=" + response.body().getMessage() +"\nFirst location in package:"+location.getTrackLocation().get(0).toString()+" \n size Total Array:"+ arrTrackLocation.size()+" -- size arr push:"+location.getTrackLocation().size(), System.currentTimeMillis());
                     saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
                     UpdateLocationResponseStatus updateLocation = response.body();
                     if (updateLocation != null) {
                         int updateLocationCode = updateLocation.getStatusCode();
-                        String updateLocationMSG=updateLocation.getMessage();
+                        String updateLocationMSG = updateLocation.getMessage();
                         if (updateLocationCode == Conts.RESPONSE_STATUS_OK && updateLocationMSG.equals("Success")) {
                             int sizeUpload = location.getTrackLocation().size();
                             removeGPSAfterUpload(sizeUpload);
@@ -338,7 +338,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                             int size = arrTrackLocation.size();
                             if (size > MINXIMUM_PACKAGE && isNetworkConnected) {
                                 pushDataGPSToServer();
-                            }else{
+                            } else {
                                 isUploading = false;
                             }
                         } else if (updateLocationCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
@@ -348,18 +348,18 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                             if (mainActivity != null && UserInfo.getInstance(GPSService.this).getMainActivityActive()) {
                                 mainActivity.showMessageRequestLogout();
                             }
-                        }else{
+                        } else {
                             isUploading = false;
                         }
                     } else {
                         isUploading = false;
-                        LocationResponseUpload locationBackupFileA = new LocationResponseUpload(statusCode, "updateLocation==null" + response.body().getMessage(), System.currentTimeMillis());
+                        LocationResponseUpload locationBackupFileA = new LocationResponseUpload(statusCode, "updateLocation==null in isSuccessful " + response.body().getMessage()+" \n size Total Array:"+ arrTrackLocation.size()+" -- size arr push:"+location.getTrackLocation().size(), System.currentTimeMillis());
                         saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFileA);
                     }
                     Log.d(TAGG, "onLocationUpdated.onResponse().isSuccessful(), body: " + body + "\nSize:= " + location.getTrackLocation().size());
                 } else {
                     body = gson.toJson(response.body());
-                    LocationResponseUpload locationBackupFile2 = new LocationResponseUpload(statusCode, "onLocationUpdated.onResponse().isFail(), body: " + body + "\n" + response.body().getMessage(), System.currentTimeMillis());
+                    LocationResponseUpload locationBackupFile2 = new LocationResponseUpload(statusCode, "onLocationUpdated.onResponse().isFail(), body: " + body + "\n" + response.body().getMessage()+" \n size Total Array:"+ arrTrackLocation.size()+" -- size arr push:"+location.getTrackLocation().size(), System.currentTimeMillis());
                     Log.d(TAGG, "onLocationUpdated.onResponse().isFail(), body: " + body);
                     saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile2);
                     if (isNetworkConnected) {
@@ -372,14 +372,30 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
             @Override
             public void onFailure(Call<UpdateLocationResponseStatus> call, Throwable t) {
+                LocationResponseUpload locationBackupFile = null;
                 Log.e(TAGG, "updateLocation.onFailure()");
-                LocationResponseUpload locationBackupFile = new LocationResponseUpload(4004, "Upload fail:+\n" + t.getCause().toString() + "\n---" + t.getMessage().toString() + "\n---" + t.getStackTrace().toString(), System.currentTimeMillis());
-                saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
-                t.printStackTrace();
-                if (isNetworkConnected) {
-                    pushDataGPSToServer();
-                } else {
-                    isUploading = false;
+                if (t != null) {
+                    try {
+                        locationBackupFile = new LocationResponseUpload(4004, "Upload fail:\n" + t.getCause() + "\n---" + t.getMessage().toString() + "\n---" + t.getStackTrace().toString()+" \n size Total Array:"+ arrTrackLocation.size()+" -- size arr push:"+location.getTrackLocation().size(), System.currentTimeMillis());
+//                        t.printStackTrace();
+                    } catch (Exception e) {
+                        locationBackupFile = new LocationResponseUpload(4004, "Upload fail:\n" + t.getCause() + "\n---" + t.getMessage() + "\n---" + t.getStackTrace()+" \n size Total Array:"+ arrTrackLocation.size()+" -- size arr push:"+location.getTrackLocation().size(), System.currentTimeMillis());
+                    } finally {
+                        saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
+                        if (isNetworkConnected) {
+                            pushDataGPSToServer();
+                        } else {
+                            isUploading = false;
+                        }
+                    }
+                }else{
+                    locationBackupFile = new LocationResponseUpload(4004, "Upload fail:\n size Total Array:"+ arrTrackLocation.size()+" -- size arr push:"+location.getTrackLocation().size(), System.currentTimeMillis());
+                    saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
+                    if (isNetworkConnected) {
+                        pushDataGPSToServer();
+                    } else {
+                        isUploading = false;
+                    }
                 }
             }
         });

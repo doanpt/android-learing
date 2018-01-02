@@ -63,4 +63,14 @@ public class TrackLocation {
     public void setAccuracy(Float accuracy) {
         this.accuracy = accuracy;
     }
+
+    @Override
+    public String toString() {
+        return "TrackLocation{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", timestamp=" + timestamp +
+                ", accuracy=" + accuracy +
+                '}';
+    }
 }
