@@ -68,8 +68,14 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
         registerBroadcastReciver();
         setContentView(R.layout.activity_work_detail);
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        getIdTask();
         initViews();
 
+    }
+
+    private void getIdTask() {
+        String idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
+        CommonMethod.makeToast(this, "ID: " + idTask);
     }
 
 

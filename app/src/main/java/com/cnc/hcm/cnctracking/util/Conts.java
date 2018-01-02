@@ -146,6 +146,10 @@ public class Conts {
     public static final int TYPE_COMPLETE_TASK = 2;
     public static final int TYPE_ALL_TASK = 3;
 
+    public static final int TYPE_VIEW_BY_MONTH = 0;
+    public static final int TYPE_VIEW_BY_YEARS = 1;
+
+
     public static final String JSON_ELEMENT_ROWS = "rows";
     public static final String JSON_ELEMENT = "elements";
     public static final String JSON_ELEMENT_DISTANCE = "distance";
@@ -157,4 +161,5 @@ public class Conts {
 
 
     public static final String KEY_OBJECT_ITEM_WORK = "KEY_OBJECT_ITEM_WORK";
+    public static final String KEY_ID_TASK = "KEY_ID_TASK";
 }
