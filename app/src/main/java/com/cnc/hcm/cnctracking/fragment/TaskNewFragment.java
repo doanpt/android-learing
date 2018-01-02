@@ -18,11 +18,11 @@ import com.cnc.hcm.cnctracking.activity.MainActivity;
  * Created by giapmn on 9/27/17.
  */
 
-public class TaskNewFragment extends Fragment{
+public class TaskNewFragment extends Fragment {
 
     private static final String TAGG = TaskNewFragment.class.getSimpleName();
     private RecyclerView rvNewTask;
-//    private WorkNewAdapter workNewAdapter;
+    //    private WorkNewAdapter workNewAdapter;
     private MainActivity mainActivity;
 
     @Override
@@ -64,7 +64,7 @@ public class TaskNewFragment extends Fragment{
 //        rvNewTask.setAdapter(workNewAdapter);
     }
 
-//    @Override
+    //    @Override
 //    public void onClickButtonCancelTask(int position) {
 //        Toast.makeText(getContext(), "Cancel: " + workNewAdapter.getItem(position).getContactName(), Toast.LENGTH_LONG).show();
 //    }

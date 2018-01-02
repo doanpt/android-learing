@@ -330,7 +330,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     UpdateLocationResponseStatus updateLocation = response.body();
                     if (updateLocation != null) {
                         int updateLocationCode = updateLocation.getStatusCode();
-                        String updateLocationMSG=updateLocation.getMessage();
+                        String updateLocationMSG = updateLocation.getMessage();
                         if (updateLocationCode == Conts.RESPONSE_STATUS_OK && updateLocationMSG.equals("Success")) {
                             int sizeUpload = location.getTrackLocation().size();
                             removeGPSAfterUpload(sizeUpload);
@@ -338,7 +338,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                             int size = arrTrackLocation.size();
                             if (size > MINXIMUM_PACKAGE && isNetworkConnected) {
                                 pushDataGPSToServer();
-                            }else{
+                            } else {
                                 isUploading = false;
                             }
                         } else if (updateLocationCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
@@ -348,7 +348,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                             if (mainActivity != null && UserInfo.getInstance(GPSService.this).getMainActivityActive()) {
                                 mainActivity.showMessageRequestLogout();
                             }
-                        }else{
+                        } else {
                             isUploading = false;
                         }
                     } else {
@@ -373,7 +373,11 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             @Override
             public void onFailure(Call<UpdateLocationResponseStatus> call, Throwable t) {
                 Log.e(TAGG, "updateLocation.onFailure()");
-                LocationResponseUpload locationBackupFile = new LocationResponseUpload(4004, "Upload fail:+\n" + t.getCause().toString() + "\n---" + t.getMessage().toString() + "\n---" + t.getStackTrace().toString(), System.currentTimeMillis());
+                String message = "Upload fail:+\n";
+                if (t != null) {
+                    message = message + t.getCause().toString() + "\n---" + t.getMessage().toString() + "\n---" + t.getStackTrace().toString();
+                }
+                LocationResponseUpload locationBackupFile = new LocationResponseUpload(4004, message, System.currentTimeMillis());
                 saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
                 t.printStackTrace();
                 if (isNetworkConnected) {

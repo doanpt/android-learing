@@ -1,5 +1,6 @@
 package com.cnc.hcm.cnctracking.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,9 +14,11 @@ import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
+import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
+import com.cnc.hcm.cnctracking.util.Conts;
 
 import java.util.ArrayList;
 
@@ -93,6 +96,8 @@ public class TaskCompletedFragment extends Fragment implements TaskListAdapter.O
 
     @Override
     public void onClickItemWork(int position) {
-        CommonMethod.makeToast(getContext(), taskListAdapter.getItem(position).getTaskResult().title);
+        Intent intent =new Intent(getContext(), WorkDetailActivity.class);
+        intent.putExtra(Conts.KEY_ID_TASK, taskListAdapter.getItem(position).getTaskResult()._id);
+        startActivity(intent);
     }
 }

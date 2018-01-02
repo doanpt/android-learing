@@ -45,6 +45,17 @@ public class CommonMethod {
         return format.format(number) + Conts.BLANK;
     }
 
+
+    public static String formatTimeToMonth(long time) {
+        Date date = new Date(time);
+        return new SimpleDateFormat("MM").format(date);
+    }
+
+    public static String formatTimeToYear(long time) {
+        Date date = new Date(time);
+        return new SimpleDateFormat("YYYY").format(date);
+    }
+
     public static String getDestination(ArrayList<GetTaskListResult> arrayList) {
         String result = Conts.BLANK;
         if (arrayList.size() > Conts.DEFAULT_VALUE_INT_0) {

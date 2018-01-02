@@ -42,10 +42,13 @@ import com.cnc.hcm.cnctracking.customeview.MySelectorDecorator;
 import com.cnc.hcm.cnctracking.customeview.OneDayDecorator;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
+import com.cnc.hcm.cnctracking.dialog.DialogTaskDetailOnMarked;
+import com.cnc.hcm.cnctracking.fragment.MonthViewFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskAllFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskCompletedFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskDoingFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskNewFragment;
+import com.cnc.hcm.cnctracking.fragment.YearsViewFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemTask;
@@ -61,6 +64,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -84,7 +88,7 @@ import retrofit2.Response;
 import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_SINGLE;
 
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener, OnMapReadyCallback {
+public class MainActivity extends FragmentActivity implements View.OnClickListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_UPDATE = 4234;
@@ -101,8 +105,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView imvMenuDrawer, imvFilterActionBar, imvProfile, imvFilter;
     private DrawerLayout drawer;
     private ViewPagerBottomSheetBehavior bottomSheetBehavior;
-    private MaterialCalendarView calendarView;
-    private OneDayDecorator oneDayDecorator = new OneDayDecorator();
+
     private TextView tvQuantityNewTask, tvQuantityDoingTask, tvQuantityCompleteTask;
 
 
@@ -119,6 +122,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private boolean isNetworkConnected;
     private int quantityNewTask, quantityDoingTask, quantityCompletedTask;
+    private MonthViewFragment monthViewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -430,43 +434,35 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         BottomSheetUtils.setupViewPager(viewPager);
         viewPager.setCurrentItem(SettingApp.getInstance(this).getTypeFilterList());
 
-        calendarView = (MaterialCalendarView) findViewById(R.id.calendarView);
-        Calendar instance = Calendar.getInstance();
-        calendarView.setSelectedDate(instance.getTime());
-        calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
-            @Override
-            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-                tvMonth.setText(date.getMonth() + Conts.BLANK);
-                tvYear.setText(date.getYear() + Conts.BLANK);
-                Log.d(TAG, "onMonthChanged: ");
+        int typeView = SettingApp.getInstance(this).getTypeView();
+        callViewCalendar(typeView);
 
-            }
-        });
-        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                oneDayDecorator.setDate(date.getDate());
-                widget.invalidateDecorators();
-                Log.d(TAG, "onDateSelected: " + date);
-            }
-        });
-        calendarView.setTopbarVisible(false);
-        calendarView.setShowOtherDates(MaterialCalendarView.SHOW_ALL);
-        calendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS).commit();
-        calendarView.setSelectionMode(SELECTION_MODE_SINGLE);
-        Calendar instance1 = Calendar.getInstance();
-        instance1.set(instance1.get(Calendar.YEAR), Calendar.JANUARY, 1);
-        Calendar instance2 = Calendar.getInstance();
-        instance2.set(instance2.get(Calendar.YEAR), Calendar.DECEMBER, 31);
-        calendarView.state().edit()
-                .setMinimumDate(instance1.getTime())
-                .setMaximumDate(instance2.getTime())
-                .commit();
-        calendarView.addDecorators(
-                new MySelectorDecorator(this),
-                oneDayDecorator
-        );
 
+    }
+
+    public void callViewCalendar(int typeView) {
+        long time = Calendar.getInstance().getTime().getTime();
+        switch (typeView) {
+            case Conts.TYPE_VIEW_BY_MONTH:
+                SettingApp.getInstance(MainActivity.this).setTypeView(Conts.TYPE_VIEW_BY_MONTH);
+                callFragment(new MonthViewFragment());
+                tvToday.setVisibility(View.VISIBLE);
+                tvYear.setVisibility(View.VISIBLE);
+                tvMonth.setText(CommonMethod.formatTimeToMonth(time));
+                tvYear.setText(CommonMethod.formatTimeToYear(time));
+                tvMonth.setTextSize(40);
+                tvChangeViewMonthYear.setText(getResources().getString(R.string.text_month));
+                break;
+            case Conts.TYPE_VIEW_BY_YEARS:
+                SettingApp.getInstance(MainActivity.this).setTypeView(Conts.TYPE_VIEW_BY_YEARS);
+                callFragment(new YearsViewFragment());
+                tvToday.setVisibility(View.INVISIBLE);
+                tvYear.setVisibility(View.GONE);
+                tvMonth.setText(CommonMethod.formatTimeToYear(time));
+                tvMonth.setTextSize(30);
+                tvChangeViewMonthYear.setText(getResources().getString(R.string.text_year));
+                break;
+        }
     }
 
     @Override
@@ -521,9 +517,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 showPopupMenu(view);
                 break;
             case R.id.tv_today:
-                Calendar instance = Calendar.getInstance();
-                oneDayDecorator.setDate(instance.getTime());
-                calendarView.invalidateDecorators();
+                if (monthViewFragment!=null){
+                    monthViewFragment.gotoCurrentDate();
+                }
                 break;
             case R.id.btn_logout:
                 actionLogout();
@@ -540,14 +536,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
+                int viewType = -1;
                 switch (item.getItemId()) {
                     case R.id.menu_month:
-
+                        viewType = Conts.TYPE_VIEW_BY_MONTH;
                         break;
                     case R.id.menu_year:
+                        viewType = Conts.TYPE_VIEW_BY_YEARS;
                         break;
                 }
-                tvChangeViewMonthYear.setText(item.getTitle().toString());
+                if (viewType != -1) {
+                    callViewCalendar(viewType);
+                }
                 return true;
             }
         });
@@ -634,7 +634,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
+        mMap.setOnMarkerClickListener(MainActivity.this);
         if (gpsService != null && gpsService.getLatitude() != 0 && gpsService.getLongitude() != 0) {
             myLocationHere(gpsService.getLatitude(), gpsService.getLongitude(),
                     gpsService.getAccuracy(), gpsService.getAddressName(), gpsService.getCityName());
@@ -780,6 +780,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
+    public void callFragment(Fragment fragment) {
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment, fragment);
+        fragmentTransaction.commit();
+    }
+
     private void showDialogLoadding() {
         mProgressDialog = new ProgressDialog(MainActivity.this);
         mProgressDialog.setIndeterminate(true);
@@ -795,5 +802,37 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public boolean isNetworkConnected() {
         return isNetworkConnected;
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        DialogTaskDetailOnMarked dialogNotification = new DialogTaskDetailOnMarked(this);
+        dialogNotification.show();
+
+        // Retrieve the data from the marker.
+//        Integer clickCount = (Integer) marker.getTag();
+//
+//        // Check if a click count was set, then display the click count.
+//        if (clickCount != null) {
+//            clickCount = clickCount + 1;
+//            marker.setTag(clickCount);
+//            Toast.makeText(this,
+//                    marker.getTitle() +
+//                            " has been clicked " + clickCount + " times.",
+//                    Toast.LENGTH_SHORT).show();
+//        }
+
+        return false;
+    }
+
+    public void updateMonthChange(CalendarDay date) {
+        int month = (date.getMonth() + 1);
+        tvMonth.setText(month > 9 ? (month + Conts.BLANK) : "0" + month);
+        tvYear.setText(date.getYear() + Conts.BLANK);
+    }
+
+    public void setMonthViewFragment(MonthViewFragment monthViewFragment) {
+        this.monthViewFragment = monthViewFragment;
     }
 }

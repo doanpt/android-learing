@@ -36,7 +36,7 @@
         android:gravity="center"
         android:orientation="vertical"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="50dp"
+        app:behavior_peekHeight="250dp"
         app:layout_behavior="@string/view_pager_bottom_sheet_behavior">
 
         <LinearLayout
@@ -121,7 +121,9 @@
             android:background="@color/colorPrimary">
 
             <LinearLayout
-                android:layout_width="80dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -190,81 +192,10 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/fragment"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="-15dp"
-            android:background="@color/colorPrimary">
-
-            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-                android:id="@+id/calendarView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-20dp"
-                app:mcv_arrowColor="@android:color/white"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/colorPrimary"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="T2"
-                    android:textColor="@android:color/white"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="T3"
-                    android:textColor="@android:color/white"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="T4"
-                    android:textColor="@android:color/white"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="T5"
-                    android:textColor="@android:color/white"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="T6"
-                    android:textColor="@android:color/white"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="T7"
-                    android:textColor="@android:color/white"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="CN"
-                    android:textColor="@android:color/white"/>
-            </LinearLayout>
-        </FrameLayout>
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"></FrameLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
