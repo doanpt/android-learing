@@ -162,7 +162,9 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
                 fabMenu.collapse();
                 break;
             case R.id.fab_add_product:
-                CommonMethod.makeToast(WorkDetailActivity.this, "fab_add_product");
+                Intent intent=new Intent(this,AddDeviceActivity.class);
+                startActivity(intent);
+//                CommonMethod.makeToast(WorkDetailActivity.this, "fab_add_product");
                 fabMenu.collapse();
                 break;
             case R.id.fab_scan_qr:

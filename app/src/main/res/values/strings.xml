@@ -64,6 +64,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_add_device">Thêm thiết bị</string>
+    <string name="hint_name_device">Tên thiết bị</string>
+    <string name="edt_hint_manufacture">Hãng sản xuất</string>
+    <string name="hint_barcode">Barcode</string>
 
 
 </resources>

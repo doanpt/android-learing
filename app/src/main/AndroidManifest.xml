@@ -22,7 +22,7 @@
 
         <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.MainActivity"/>
-
+        <activity android:name=".activity.AddDeviceActivity"/>
         <service
             android:name=".service.GPSService"
             android:stopWithTask="false"/>
