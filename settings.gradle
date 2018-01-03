@@ -1,1 +1,1 @@
-include ':app', ':zxing-android-embedded'
+include ':app', ':zxing-android-embedded', ':vpbs'

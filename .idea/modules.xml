@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/cnc.iml" filepath="$PROJECT_DIR$/cnc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpbs/vpbs.iml" filepath="$PROJECT_DIR$/vpbs/vpbs.iml" />
       <module fileurl="file://$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" filepath="$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" />
     </modules>
   </component>
