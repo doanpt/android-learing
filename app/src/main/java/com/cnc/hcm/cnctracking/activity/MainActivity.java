@@ -36,10 +36,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
-import com.cnc.hcm.cnctracking.adapter.TaskFragmentAdapter;
+import com.cnc.hcm.cnctracking.adapter.FragmentAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
-import com.cnc.hcm.cnctracking.customeview.MySelectorDecorator;
-import com.cnc.hcm.cnctracking.customeview.OneDayDecorator;
+import com.cnc.hcm.cnctracking.dialog.DialogFragment;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
 import com.cnc.hcm.cnctracking.fragment.MonthViewFragment;
@@ -66,10 +65,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.CalendarMode;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -84,8 +79,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_SINGLE;
-
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -97,13 +90,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private LinearLayout llClickNetwork, llClickGPS, llClickSetting, llClickHelp, llTabs,
             llTabNewWork, llTabDoingWork, llTabCompleteWork;
     private LinearLayout bottomSheetLayout;
+    private ViewPagerBottomSheetBehavior bottomSheetBehavior;
+
     private TextView tvStatusNetwork, tvStatusGPS, tvUsername, tvUserMail, tvMonth, tvYear,
             tvChangeViewMonthYear, tvToday;
     private Button btnLogout;
     private CircleImageView imvAvatar;
     private ImageView imvMenuDrawer, imvFilterActionBar, imvProfile, imvFilter;
     private DrawerLayout drawer;
-    private ViewPagerBottomSheetBehavior bottomSheetBehavior;
 
     private TextView tvQuantityNewTask, tvQuantityDoingTask, tvQuantityCompleteTask;
 
@@ -427,7 +421,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
         });
 
-        TaskFragmentAdapter adapter = new TaskFragmentAdapter(getSupportFragmentManager(), listFrag);
+        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), listFrag);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
         BottomSheetUtils.setupViewPager(viewPager);
@@ -516,7 +510,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 showPopupMenu(view);
                 break;
             case R.id.tv_today:
-                if (monthViewFragment!=null){
+                if (monthViewFragment != null) {
                     monthViewFragment.gotoCurrentDate();
                 }
                 break;
@@ -805,6 +799,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+
+
+//        DialogFragment dialogFragment = new DialogFragment();
+//        dialogFragment.show(getSupportFragmentManager(), dialogFragment.getTag());
+//        dialogFragment.showExpaned();
+
         // Retrieve the data from the marker.
 //        Integer clickCount = (Integer) marker.getTag();
 //

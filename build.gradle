@@ -13,14 +13,31 @@ buildscript {
     }
 }
 
+ext {
+    runningOnJenkins = System.getenv('JENKINS_URL') != null
+    nexusReleasesRepository = getEnvOrProperty('NEXUS_RELEASES_REPOSITORY')
+    nexusSnapshotsRepository = getEnvOrProperty('NEXUS_SNAPSHOTS_REPOSITORY')
+    nexusUsername = getEnvOrProperty('NEXUS_USERNAME')
+    nexusPassword = getEnvOrProperty('NEXUS_PASSWORD')
+
+    buildToolsVersion = '26.0.0'
+
+    supportVersion = '25.1.0'
+}
+
 allprojects {
     repositories {
         jcenter()
-        maven { url "https://raw.github.com/laenger/maven-releases/master/releases" }
+//        maven { url "https://raw.github.com/laenger/maven-releases/master/releases" }
+//        maven { url "https://raw.github.com/laenger/maven-releases/master/snapshots" }
         google()
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+def getEnvOrProperty(String name) {
+    return System.getenv(name) ?: project.hasProperty(name) ? project[name] : '';
 }
