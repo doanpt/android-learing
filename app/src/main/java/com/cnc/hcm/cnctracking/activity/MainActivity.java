@@ -42,7 +42,6 @@ import com.cnc.hcm.cnctracking.customeview.MySelectorDecorator;
 import com.cnc.hcm.cnctracking.customeview.OneDayDecorator;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
-import com.cnc.hcm.cnctracking.dialog.DialogTaskDetailOnMarked;
 import com.cnc.hcm.cnctracking.fragment.MonthViewFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskAllFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskCompletedFragment;
@@ -806,10 +805,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
-        DialogTaskDetailOnMarked dialogNotification = new DialogTaskDetailOnMarked(this);
-        dialogNotification.show();
-
         // Retrieve the data from the marker.
 //        Integer clickCount = (Integer) marker.getTag();
 //
