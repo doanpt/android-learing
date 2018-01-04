@@ -35,7 +35,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     private TextView tvComplete;
     private TextView tvCancel;
     private FloatingActionButton fabCall, fabFindWay, fabScanQR, fabAddProduct;
-
+    private String idTask;
     //TOTO
     private GPSService gpsService;
 
@@ -74,7 +74,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void getIdTask() {
-        String idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
+        idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
         CommonMethod.makeToast(this, "ID: " + idTask);
     }
 
@@ -162,7 +162,8 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
                 fabMenu.collapse();
                 break;
             case R.id.fab_add_product:
-                Intent intent=new Intent(this,AddDeviceActivity.class);
+                Intent intent = new Intent(this, AddProductActivity.class);
+                intent.putExtra(Conts.KEY_ID_TASK, idTask);
                 startActivity(intent);
 //                CommonMethod.makeToast(WorkDetailActivity.this, "fab_add_product");
                 fabMenu.collapse();
