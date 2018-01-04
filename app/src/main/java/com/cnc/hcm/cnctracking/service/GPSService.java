@@ -576,5 +576,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     public void setWorkDetailActivity(WorkDetailActivity workDetailActivity) {
         this.workDetailActivity = workDetailActivity;
+        workDetailActivity.myLocationHere(latitude, longitude);
     }
 }

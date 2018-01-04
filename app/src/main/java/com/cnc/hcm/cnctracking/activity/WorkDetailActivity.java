@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +49,9 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     private String idTask;
     private RelativeLayout rlExpandHeaderBill;
     private LinearLayout ll_content_bill;
+    private LinearLayout tv_detail_work_call_action;
+    private LinearLayout tv_detail_work_sms_action;
+    private LinearLayout tv_detail_work_address_action;
     private ImageView imv_expand_bill;
     private TextView tv_detail_work_title_work;
     private TextView tv_detail_work_time_get_work_hour;
@@ -147,6 +151,10 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
         tv_detail_work_distance = (TextView) findViewById(R.id.tv_detail_work_distance);
         tv_detail_work_contact_name = (TextView) findViewById(R.id.tv_detail_work_contact_name);
         tv_detail_work_contact_phone = (TextView) findViewById(R.id.tv_detail_work_contact_phone);
+
+        tv_detail_work_call_action = (LinearLayout) findViewById(R.id.tv_detail_work_call_action);
+        tv_detail_work_sms_action = (LinearLayout) findViewById(R.id.tv_detail_work_sms_action);
+        tv_detail_work_address_action = (LinearLayout) findViewById(R.id.tv_detail_work_address_action);
     }
 
     private void loadTaskInfoToUI() {
@@ -187,16 +195,53 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
                 }
                 if (getTaskDetailResult.result.address != null) {
                     tv_detail_work_address.setText(getTaskDetailResult.result.address.street + "");
+                    handleActions(getTaskDetailResult.result.address);
                 }
                 if (getTaskDetailResult.result.customer != null) {
                     tv_detail_work_contact_name.setText(getTaskDetailResult.result.customer.fullname + "");
                     tv_detail_work_contact_phone.setText(getTaskDetailResult.result.customer.phone + "");
+
+                    handleActions(getTaskDetailResult.result.customer);
                 }
                 tv_detail_work_distance.setText("0 km");
             }
         } catch (Exception e) {
             Log.e(TAGG, "onTaskInfoLoaded() --> Exception occurs.", e);
         }
+    }
+
+    private void handleActions(final GetTaskDetailResult.Result.Address address) {
+        tv_detail_work_address_action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?saddr=" + latitude + "," + longitude
+                                + "&daddr=" + address.location.latitude + "," + address.location.longitude));
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void handleActions(final GetTaskDetailResult.Result.Customer customer) {
+        tv_detail_work_call_action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", customer.phone, null)));
+            }
+        });
+        tv_detail_work_sms_action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Uri uri = Uri.parse("smsto:" + customer.phone);
+                    Intent smsIntent = new Intent(Intent.ACTION_SENDTO, uri);
+                    smsIntent.putExtra("sms_body", "sms content");
+                    startActivity(smsIntent);
+                } catch (Exception e) {
+                    Log.e(TAGG, "send sms --> Exception occurs.", e);
+                }
+            }
+        });
     }
 
     public void myLocationHere(double latitude, double longitude) {
