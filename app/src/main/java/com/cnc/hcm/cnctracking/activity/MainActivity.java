@@ -38,7 +38,7 @@ import android.widget.Toast;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.FragmentAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
-import com.cnc.hcm.cnctracking.dialog.DialogFragment;
+import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
 import com.cnc.hcm.cnctracking.fragment.MonthViewFragment;
@@ -801,9 +801,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public boolean onMarkerClick(Marker marker) {
 
 
-//        DialogFragment dialogFragment = new DialogFragment();
-//        dialogFragment.show(getSupportFragmentManager(), dialogFragment.getTag());
-//        dialogFragment.showExpaned();
+        DialogDetailTaskFragment dialogDetailTaskFragment = new DialogDetailTaskFragment();
+        dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
 
         // Retrieve the data from the marker.
 //        Integer clickCount = (Integer) marker.getTag();

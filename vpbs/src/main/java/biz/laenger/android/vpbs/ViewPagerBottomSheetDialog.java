@@ -170,8 +170,10 @@ public final class ViewPagerBottomSheetDialog extends AppCompatDialog {
     private ViewPagerBottomSheetBehavior.BottomSheetCallback mBottomSheetCallback
             = new ViewPagerBottomSheetBehavior.BottomSheetCallback() {
         @Override
-        public void onStateChanged(@NonNull View bottomSheet,
-                                   @ViewPagerBottomSheetBehavior.State int newState) {
+        public void onStateChanged(@NonNull View bottomSheet, @ViewPagerBottomSheetBehavior.State int newState) {
+            if (onSlideBottomSheet != null) {
+                onSlideBottomSheet.onStateChangedBottomSheet(bottomSheet, newState);
+            }
             if (newState == ViewPagerBottomSheetBehavior.STATE_HIDDEN) {
                 cancel();
             }
@@ -179,13 +181,37 @@ public final class ViewPagerBottomSheetDialog extends AppCompatDialog {
 
         @Override
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            if (onSlideBottomSheet != null) {
+                onSlideBottomSheet.onSlideBottomSheet(bottomSheet, slideOffset);
+            }
         }
     };
 
     public void showExpanded() {
         if (mBehavior != null && mBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_COLLAPSED) {
             mBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
+            if (onSlideBottomSheet != null) {
+                onSlideBottomSheet.setVisibilityView();
+            }
             return;
         }
     }
+
+    //START GiapMN
+    private OnSlideListener onSlideBottomSheet;
+
+    public interface OnSlideListener {
+        void onSlideBottomSheet(@NonNull View bottomSheet, float slideOffset);
+
+        void onStateChangedBottomSheet(@NonNull View bottomSheet, @ViewPagerBottomSheetBehavior.State int newState);
+
+        void setVisibilityView();
+    }
+
+    public void setOnSlideBottomSheet(OnSlideListener onSlideBottomSheet) {
+        this.onSlideBottomSheet = onSlideBottomSheet;
+    }
+    //END GiapMN
+
+
 }

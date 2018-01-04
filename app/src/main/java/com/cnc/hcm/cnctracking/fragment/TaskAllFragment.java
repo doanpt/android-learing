@@ -1,6 +1,5 @@
 package com.cnc.hcm.cnctracking.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,15 +13,11 @@ import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
-import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
-import com.cnc.hcm.cnctracking.dialog.DialogFragment;
+import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.model.ItemTask;
-import com.cnc.hcm.cnctracking.util.CommonMethod;
-import com.cnc.hcm.cnctracking.util.Conts;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by giapmn on 9/27/17.
@@ -35,6 +30,7 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
 
     private RecyclerView rvAllWork;
     private ArrayList<ItemTask> arrTask = new ArrayList<>();
+    private DialogDetailTaskFragment dialogDetailTaskFragment;
 
 
     @Override
@@ -46,6 +42,8 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
     }
 
     private void initObject() {
+        dialogDetailTaskFragment = new DialogDetailTaskFragment();
+
         mainActivity = (MainActivity) getActivity();
         taskListAdapter = new TaskListAdapter(getContext());
         taskListAdapter.notiDataChange(arrTask);
@@ -88,12 +86,12 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
     @Override
     public void onClickItemWork(int position) {
         String idTask = taskListAdapter.getItem(position).getTaskResult()._id;
-        Intent intent = new Intent(getContext(), WorkDetailActivity.class);
-        intent.putExtra(Conts.KEY_ID_TASK, idTask);
-        startActivity(intent);
-//        DialogFragment dialogFragment = new DialogFragment(idTask);
-//        dialogFragment.show(getActivity().getSupportFragmentManager(), dialogFragment.getTag());
-//        dialogFragment.showExpaned();
+//        Intent intent = new Intent(getContext(), WorkDetailActivity.class);
+//        intent.putExtra(Conts.KEY_ID_TASK, idTask);
+//        startActivity(intent);
+        dialogDetailTaskFragment.setIdTask(idTask);
+        dialogDetailTaskFragment.show(getActivity().getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
+        dialogDetailTaskFragment.setExpaned(true);
     }
 
     public void addItem(ItemTask itemTask) {

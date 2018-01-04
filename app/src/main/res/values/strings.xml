@@ -68,6 +68,8 @@
     <string name="hint_name_device">Tên thiết bị</string>
     <string name="edt_hint_manufacture">Hãng sản xuất</string>
     <string name="hint_barcode">Barcode</string>
+    <string name="text_detail">Chi tiết</string>
+    <string name="text_find_way">Dẫn đường</string>
 
 
 </resources>
