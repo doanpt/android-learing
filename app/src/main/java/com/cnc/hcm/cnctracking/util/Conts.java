@@ -123,7 +123,7 @@ public class Conts {
     public static final String PATH_USER_LOGIN = PATH_USER + "/login";
 
     public static final String PATH_TASK_LIST = "/tasks";
-    public static final String PATH_TASK_DETAIL = PATH_TASK_LIST + "/{id}";
+    public static final String PATH_TASK_DETAIL = "/task/{id}";
 
     public static final String PATH_USER_PROFILE = PATH_USER + "/profile";
 

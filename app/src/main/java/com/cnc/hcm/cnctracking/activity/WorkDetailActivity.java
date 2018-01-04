@@ -11,20 +11,30 @@ import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.api.ApiUtils;
+import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
+import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WorkDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,6 +46,16 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     private TextView tvCancel;
     private FloatingActionButton fabCall, fabFindWay, fabScanQR, fabAddProduct;
     private String idTask;
+    private RelativeLayout rlExpandHeaderBill;
+    private LinearLayout ll_content_bill;
+    private ImageView imv_expand_bill;
+    private TextView tv_detail_work_title_work;
+    private TextView tv_detail_work_time_get_work_hour;
+    private TextView tv_detail_work_address;
+    private TextView tv_detail_work_distance;
+    private TextView tv_detail_work_contact_name;
+    private TextView tv_detail_work_contact_phone;
+
     //TOTO
     private GPSService gpsService;
 
@@ -68,16 +88,9 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
         registerBroadcastReciver();
         setContentView(R.layout.activity_work_detail);
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
-        getIdTask();
         initViews();
-
+        loadTaskInfoToUI();
     }
-
-    private void getIdTask() {
-        idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
-        CommonMethod.makeToast(this, "ID: " + idTask);
-    }
-
 
     private void initViews() {
         llViewControl = (LinearLayout) findViewById(R.id.view_control);
@@ -112,8 +125,79 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
         fabScanQR = (FloatingActionButton) findViewById(R.id.fab_scan_qr);
         fabScanQR.setOnClickListener(this);
 
+        rlExpandHeaderBill = (RelativeLayout) findViewById(R.id.rl_expand_header_bill);
+        ll_content_bill = (LinearLayout) findViewById(R.id.ll_content_bill);
+        imv_expand_bill = (ImageView) findViewById(R.id.imv_expand_bill);
+        rlExpandHeaderBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ll_content_bill.getVisibility() == View.GONE) {
+                    ll_content_bill.setVisibility(View.VISIBLE);
+                    imv_expand_bill.setImageResource(R.drawable.ic_expand_task_details);
+                } else {
+                    ll_content_bill.setVisibility(View.GONE);
+                    imv_expand_bill.setImageResource(R.drawable.ic_chevron_right);
+                }
+            }
+        });
+
+        tv_detail_work_title_work = (TextView) findViewById(R.id.tv_detail_work_title_work);
+        tv_detail_work_time_get_work_hour = (TextView) findViewById(R.id.tv_detail_work_time_get_work_hour);
+        tv_detail_work_address = (TextView) findViewById(R.id.tv_detail_work_address);
+        tv_detail_work_distance = (TextView) findViewById(R.id.tv_detail_work_distance);
+        tv_detail_work_contact_name = (TextView) findViewById(R.id.tv_detail_work_contact_name);
+        tv_detail_work_contact_phone = (TextView) findViewById(R.id.tv_detail_work_contact_phone);
     }
 
+    private void loadTaskInfoToUI() {
+        String idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
+        CommonMethod.makeToast(this, "ID: " + idTask);
+        tryGetTaskDetail(UserInfo.getInstance(getApplicationContext()).getAccessToken(), idTask);
+    }
+
+    private void tryGetTaskDetail(String accessToken, String idTask) {
+        Log.e(TAGG, "tryGetTaskDetail(), accessToken: " + accessToken + ", idTask: " + idTask);
+        ApiUtils.getAPIService(accessToken).getTaskDetails(idTask).enqueue(new Callback<GetTaskDetailResult>() {
+            @Override
+            public void onResponse(Call<GetTaskDetailResult> call, Response<GetTaskDetailResult> response) {
+                int statusCode = response.code();
+                Log.e(TAGG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode);
+                if (response.isSuccessful()) {
+                    Log.e(TAGG, "tryGetTaskDetail.onResponse(), --> response: " + response.toString());
+                    GetTaskDetailResult getTaskDetailResult = response.body();
+                    Log.e(TAGG, "tryGetTaskDetail.onResponse(), --> getTaskDetailResult: " + getTaskDetailResult.toString());
+                    onTaskInfoLoaded(getTaskDetailResult);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTaskDetailResult> call, Throwable t) {
+                Log.e(TAGG, "tryGetTaskDetail.onFailure() --> " + t);
+            }
+        });
+    }
+
+    private void onTaskInfoLoaded(GetTaskDetailResult getTaskDetailResult) {
+        try {
+            if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
+                tv_detail_work_title_work.setText(getTaskDetailResult.result.title + "");
+                String date = getTaskDetailResult.result.createdDate;
+                if (!TextUtils.isEmpty(date)) {
+                    tv_detail_work_time_get_work_hour.setText(date.substring(date.indexOf("T") + 1, date.indexOf("T") + 6));
+                }
+                if (getTaskDetailResult.result.address != null) {
+                    tv_detail_work_address.setText(getTaskDetailResult.result.address.street + "");
+                }
+                if (getTaskDetailResult.result.customer != null) {
+                    tv_detail_work_contact_name.setText(getTaskDetailResult.result.customer.fullname + "");
+                    tv_detail_work_contact_phone.setText(getTaskDetailResult.result.customer.phone + "");
+                }
+                tv_detail_work_distance.setText("0 km");
+            }
+        } catch (Exception e) {
+            Log.e(TAGG, "onTaskInfoLoaded() --> Exception occurs.", e);
+        }
+    }
 
     public void myLocationHere(double latitude, double longitude) {
         this.latitude = latitude;

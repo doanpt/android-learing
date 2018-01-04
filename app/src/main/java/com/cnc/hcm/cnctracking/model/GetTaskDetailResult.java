@@ -24,8 +24,9 @@ public final class GetTaskDetailResult {
         public final String process[];
         public final Executive executive[];
         public final String appointmentDate;
+        public final Address address;
 
-        public Result(String _id, String title, Service service, Customer customer, String note, String id, long __v, String createdDate, Status status, String[] process, Executive[] executive, String appointmentDate){
+        public Result(String _id, String title, Service service, Customer customer, String note, String id, long __v, String createdDate, Status status, String[] process, Executive[] executive, String appointmentDate, Address address){
             this._id = _id;
             this.title = title;
             this.service = service;
@@ -38,6 +39,7 @@ public final class GetTaskDetailResult {
             this.process = process;
             this.executive = executive;
             this.appointmentDate = appointmentDate;
+            this.address = address;
         }
 
         public static final class Service {
@@ -168,6 +170,31 @@ public final class GetTaskDetailResult {
                     this.group = group;
                     this.isDriver = isDriver;
                     this.agent = agent;
+                }
+            }
+        }
+
+
+        public static final class Address {
+            public final String street;
+            public final String district;
+            public final String province;
+            public final Location location;
+
+            public Address(String street, String district, String province, Location location){
+                this.street = street;
+                this.district = district;
+                this.province = province;
+                this.location = location;
+            }
+
+            public static final class Location {
+                public final double latitude;
+                public final double longitude;
+
+                public Location(double latitude, double longitude){
+                    this.latitude = latitude;
+                    this.longitude = longitude;
                 }
             }
         }

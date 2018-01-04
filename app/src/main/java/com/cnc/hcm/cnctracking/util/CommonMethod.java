@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import okhttp3.Call;
@@ -53,7 +54,10 @@ public class CommonMethod {
 
     public static String formatTimeToYear(long time) {
         Date date = new Date(time);
-        return new SimpleDateFormat("YYYY").format(date);
+        return new SimpleDateFormat("yyyy").format(date);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(time);
+//        return String.valueOf(calendar.get(Calendar.YEAR));
     }
 
     public static String getDestination(ArrayList<GetTaskListResult> arrayList) {
