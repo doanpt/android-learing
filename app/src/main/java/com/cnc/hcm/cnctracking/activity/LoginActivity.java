@@ -27,7 +27,7 @@ import com.cnc.hcm.cnctracking.model.UserProfile;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,17 +38,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_UPDATE = 12132;
 
-    @Bind(R.id.input_email)
+    @BindView(R.id.input_email)
     EditText _emailText;
-    @Bind(R.id.input_password)
+    @BindView(R.id.input_password)
     EditText _passwordText;
-    @Bind(R.id.btn_login)
+    @BindView(R.id.btn_login)
     TextView _loginButton;
 
-    @Bind(R.id.tv_clear_text_id)
+    @BindView(R.id.tv_clear_text_id)
     TextView tvClearId;
 
-    @Bind(R.id.tv_clear_text_pass)
+    @BindView(R.id.tv_clear_text_pass)
     TextView tvClearPass;
 
 

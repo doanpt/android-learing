@@ -49,6 +49,7 @@ import com.cnc.hcm.cnctracking.fragment.TaskNewFragment;
 import com.cnc.hcm.cnctracking.fragment.YearsViewFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
+import com.cnc.hcm.cnctracking.model.ItemMarkedMap;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
@@ -92,30 +93,28 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private LinearLayout bottomSheetLayout;
     private ViewPagerBottomSheetBehavior bottomSheetBehavior;
 
-    private TextView tvStatusNetwork, tvStatusGPS, tvUsername, tvUserMail, tvMonth, tvYear,
-            tvChangeViewMonthYear, tvToday;
+    private TextView tvStatusNetwork, tvStatusGPS, tvUsername, tvUserMail, tvMonth, tvYear, tvChangeViewMonthYear, tvToday;
+    private TextView tvQuantityNewTask, tvQuantityDoingTask, tvQuantityCompleteTask;
     private Button btnLogout;
     private CircleImageView imvAvatar;
     private ImageView imvMenuDrawer, imvFilterActionBar, imvProfile, imvFilter;
     private DrawerLayout drawer;
-
-    private TextView tvQuantityNewTask, tvQuantityDoingTask, tvQuantityCompleteTask;
-
-
-    private ArrayList<ItemTask> arrItemTask = new ArrayList<>();
+    private ProgressDialog mProgressDialog;
 
     private TaskNewFragment taskNewFragment;
     private TaskDoingFragment taskDoingFragment;
     private TaskCompletedFragment taskCompletedFragment;
     private TaskAllFragment taskAllFragment;
+    private MonthViewFragment monthViewFragment;
 
     private Fragment[] listFrag;
     private GPSService gpsService;
-    private ProgressDialog mProgressDialog;
+    private DialogDetailTaskFragment dialogDetailTaskFragment;
 
+    private ArrayList<ItemTask> arrItemTask = new ArrayList<>();
+    private ArrayList<ItemMarkedMap> arrMarkedTask = new ArrayList<>();
     private boolean isNetworkConnected;
     private int quantityNewTask, quantityDoingTask, quantityCompletedTask;
-    private MonthViewFragment monthViewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +146,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void initObject() {
+        dialogDetailTaskFragment = new DialogDetailTaskFragment();
         taskNewFragment = new TaskNewFragment();
         taskDoingFragment = new TaskDoingFragment();
         taskCompletedFragment = new TaskCompletedFragment();
@@ -322,10 +322,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     break;
             }
             if (task.getTaskResult().address != null) {
-                addMarkerMap(task.getTaskResult().address.location.latitude,
+                addMarkerMap(task.getTaskResult()._id, task.getTaskResult().address.location.latitude,
                         task.getTaskResult().address.location.longitude, task.getTaskResult().address.street, bitmapDescriptor);
             } else {
-                addMarkerMap(task.getTaskResult().customer.address.location.latitude,
+                addMarkerMap(task.getTaskResult()._id, task.getTaskResult().customer.address.location.latitude,
                         task.getTaskResult().customer.address.location.longitude, task.getTaskResult().customer.address.street, bitmapDescriptor);
             }
 
@@ -636,20 +636,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void myLocationHere(double latitude, double longitude, float accuracy, String addName, String cityName) { // TODO did we need accuracy here?
         if (mMap != null) {
-            mMap.clear();
             LatLng myLocation = new LatLng(latitude, longitude);
-            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName).snippet(cityName));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
         }
 
         updateDistanceTo4TabWork();
     }
 
-    public void addMarkerMap(double latitude, double longitude, String addName, BitmapDescriptor bitmapDescriptor) {
+    public void addMarkerMap(String idTask, double latitude, double longitude, String addName, BitmapDescriptor bitmapDescriptor) {
         if (mMap != null) {
             //BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
             LatLng myLocation = new LatLng(latitude, longitude);
-            mMap.addMarker(new MarkerOptions().position(myLocation).title(addName)).setIcon(bitmapDescriptor);
+            Marker marker = mMap.addMarker(new MarkerOptions().position(myLocation).title(addName));
+            marker.setIcon(bitmapDescriptor);
+            arrMarkedTask.add(new ItemMarkedMap(idTask, marker));
         }
     }
 
@@ -801,23 +801,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public boolean onMarkerClick(Marker marker) {
 
 
-        DialogDetailTaskFragment dialogDetailTaskFragment = new DialogDetailTaskFragment();
-        dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
-
-        // Retrieve the data from the marker.
-//        Integer clickCount = (Integer) marker.getTag();
-//
-//        // Check if a click count was set, then display the click count.
-//        if (clickCount != null) {
-//            clickCount = clickCount + 1;
-//            marker.setTag(clickCount);
-//            Toast.makeText(this,
-//                    marker.getTitle() +
-//                            " has been clicked " + clickCount + " times.",
-//                    Toast.LENGTH_SHORT).show();
-//        }
-
+        String idTask = getIDMarked(marker);
+        if (dialogDetailTaskFragment != null) {
+            dialogDetailTaskFragment.setIdTask(idTask);
+            dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
+        }
         return false;
+    }
+
+    private String getIDMarked(Marker marker) {
+        String id = Conts.BLANK;
+        for (int index = 0; index < arrMarkedTask.size(); index++) {
+            if (arrMarkedTask.get(index).getMarker().equals(marker)) {
+                id = arrMarkedTask.get(index).getId();
+                break;
+            }
+        }
+        return id;
     }
 
     public void updateMonthChange(CalendarDay date) {
