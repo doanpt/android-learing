@@ -15,13 +15,13 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.customeview.MySelectorDecorator;
 import com.cnc.hcm.cnctracking.customeview.OneDayDecorator;
-import com.cnc.hcm.cnctracking.util.Conts;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_SINGLE;
@@ -70,7 +70,7 @@ public class MonthViewFragment extends Fragment {
                     mainActivity.updateMonthChange(date);
                 }
 
-                Log.d(TAG, "onMonthChanged: ");
+                Log.d(TAG, "onMonthChanged: " + date.getDay());
 
             }
         });
@@ -79,9 +79,14 @@ public class MonthViewFragment extends Fragment {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 oneDayDecorator.setDate(date.getDate());
                 widget.invalidateDecorators();
-                Log.d(TAG, "onDateSelected: " + date);
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                String dateChoose = format.format(date.getCalendar().getTime());
+                Log.d(TAG, "onDateSelected: " + dateChoose);
+
             }
         });
+
         calendarView.setTopbarVisible(false);
         calendarView.setShowOtherDates(MaterialCalendarView.SHOW_ALL);
         calendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS).commit();

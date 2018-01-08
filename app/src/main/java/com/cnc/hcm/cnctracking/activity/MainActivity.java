@@ -47,7 +47,6 @@ import com.cnc.hcm.cnctracking.fragment.TaskCompletedFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskDoingFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskNewFragment;
 import com.cnc.hcm.cnctracking.fragment.YearsViewFragment;
-import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemMarkedMap;
 import com.cnc.hcm.cnctracking.model.ItemTask;
@@ -133,16 +132,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         checkUserLoginOnOtherDevice();
         initMap();
+    }
 
-
-        //TODO for check api before make UI. START (*)
+    @Override
+    protected void onStart() {
+        super.onStart();
         try {
             tryGetTaskList(UserInfo.getInstance(MainActivity.this).getAccessToken());
         } catch (Exception e) {
             Log.e(TAG, "Exception occurs when tryGetTaskList -> tryGetTaskDetail");
             e.printStackTrace();
         }
-        //TODO for check api before make UI. END (*)
     }
 
     private void initObject() {
@@ -286,28 +286,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         tvQuantityDoingTask.setText(quantityDoingTask + Conts.BLANK);
         tvQuantityCompleteTask.setText(quantityCompletedTask + Conts.BLANK);
-    }
-
-    private void tryGetTaskDetail(String accessToken, String _id) {
-        Log.e(TAG, "tryGetTaskDetail(), _id: " + _id);
-        ApiUtils.getAPIService(accessToken).getTaskDetails(_id).enqueue(new Callback<GetTaskDetailResult>() {
-            @Override
-            public void onResponse(Call<GetTaskDetailResult> call, Response<GetTaskDetailResult> response) {
-                int statusCode = response.code();
-                Log.e(TAG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode);
-                if (response.isSuccessful()) {
-                    Log.e(TAG, "tryGetTaskDetail.onResponse(), --> response: " + response.toString());
-                    GetTaskDetailResult getTaskDetailResult = response.body();
-                    Log.e(TAG, "tryGetTaskDetail.onResponse(), --> getTaskDetailResult: " + getTaskDetailResult.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetTaskDetailResult> call, Throwable t) {
-                Log.e(TAG, "tryGetTaskDetail.onFailure() --> " + t);
-                t.printStackTrace();
-            }
-        });
     }
 
     private void initMarkerOnMap() {

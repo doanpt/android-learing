@@ -22,14 +22,10 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.FragmentAdapter;
 import com.cnc.hcm.cnctracking.fragment.ProductRepairFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskDetailFragment;
-import com.cnc.hcm.cnctracking.fragment.YearsViewFragment;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 
-import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetDialogFragment;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 @SuppressLint("ValidFragment")
 public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment implements View.OnClickListener {

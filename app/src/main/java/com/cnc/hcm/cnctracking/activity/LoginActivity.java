@@ -27,8 +27,6 @@ import com.cnc.hcm.cnctracking.model.UserProfile;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,18 +36,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_UPDATE = 12132;
 
-    @BindView(R.id.input_email)
-    EditText _emailText;
-    @BindView(R.id.input_password)
-    EditText _passwordText;
-    @BindView(R.id.btn_login)
-    TextView _loginButton;
-
-    @BindView(R.id.tv_clear_text_id)
-    TextView tvClearId;
-
-    @BindView(R.id.tv_clear_text_pass)
-    TextView tvClearPass;
+    private EditText edtEmail;
+    private EditText edtPassword;
+    private TextView btnLogin;
+    private TextView tvClearId;
+    private TextView tvClearPass;
 
 
     private APIService mService;
@@ -98,9 +89,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     private void initView() {
-        ButterKnife.bind(this);
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
+        edtEmail = (EditText) findViewById(R.id.edt_input_email);
+        edtPassword = (EditText) findViewById(R.id.edt_input_password);
+        tvClearId = (TextView) findViewById(R.id.tv_clear_text_id);
+        tvClearPass = (TextView) findViewById(R.id.tv_clear_text_pass);
+        btnLogin = (TextView) findViewById(R.id.btn_login);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login(false);
@@ -123,8 +118,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mProgressDialog.setMessage(getResources().getString(R.string.logging_please_wait));
         mProgressDialog.show();
 
-        final String email = _emailText.getText().toString().trim();
-        final String password = _passwordText.getText().toString().trim();
+        final String email = edtEmail.getText().toString().trim();
+        final String password = edtPassword.getText().toString().trim();
 
         checkCredential(email, password, isLoginAuto);
     }
@@ -171,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void onLoginSuccess(String accessToken, String message) {
 //        mProgressDialog.dismiss();
-        _loginButton.setEnabled(true);
+        btnLogin.setEnabled(true);
 
         UserInfo.getInstance(LoginActivity.this).setUserInfoLogin(accessToken);
         Log.e(TAG, "onLoginSuccess, accessToken: " + accessToken);
@@ -183,29 +178,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onLoginFailed(boolean isLoginAuto, String message) {
         mProgressDialog.dismiss();
         if (!isLoginAuto) {
-            _loginButton.setEnabled(true);
-            Snackbar.make(_loginButton, "Login fail: " + message, Snackbar.LENGTH_LONG).show();
+            btnLogin.setEnabled(true);
+            Snackbar.make(btnLogin, "Login fail: " + message, Snackbar.LENGTH_LONG).show();
         }
     }
 
     public boolean validate() {
         boolean valid = true;
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        String email = edtEmail.getText().toString();
+        String password = edtPassword.getText().toString();
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("*");
+            edtEmail.setError("*");
             valid = false;
         } else {
-            _emailText.setError(null);
+            edtEmail.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("*");
+            edtPassword.setError("*");
             valid = false;
         } else {
-            _passwordText.setError(null);
+            edtPassword.setError(null);
         }
 
         return valid;
@@ -278,10 +273,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_clear_text_id:
-                _emailText.setText(Conts.BLANK);
+                edtEmail.setText(Conts.BLANK);
                 break;
             case R.id.tv_clear_text_pass:
-                _passwordText.setText(Conts.BLANK);
+                edtPassword.setText(Conts.BLANK);
                 break;
         }
     }
