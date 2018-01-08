@@ -1,6 +1,8 @@
 package com.cnc.hcm.cnctracking.api;
 
 
+import com.cnc.hcm.cnctracking.model.AddProductResult;
+import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.GetUserProfileResponseStatus;
@@ -13,6 +15,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface APIService {
@@ -31,5 +34,11 @@ public interface APIService {
 
     @GET(Conts.PATH_TASK_DETAIL)
     Call<GetTaskDetailResult> getTaskDetails(@Path("id") String taskId);
+
+    @GET(Conts.PATH_GET_PRODUCT_BY_ID)
+    Call<CheckContainProductResult> getProductById(@Path("id") String productID);
+
+    @POST(Conts.PATH_ADD_CUSTOMER_PRODUCTS)
+    Call<AddProductResult> addCustomerProduct();
 
 }

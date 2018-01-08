@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
+import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
@@ -32,6 +33,9 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -165,7 +169,9 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void tryGetTaskDetail(String accessToken, String idTask) {
         Log.e(TAGG, "tryGetTaskDetail(), accessToken: " + accessToken + ", idTask: " + idTask);
-        ApiUtils.getAPIService(accessToken).getTaskDetails(idTask).enqueue(new Callback<GetTaskDetailResult>() {
+        List<MHead> arrHeads = new ArrayList<>();
+        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+        ApiUtils.getAPIService(arrHeads).getTaskDetails(idTask).enqueue(new Callback<GetTaskDetailResult>() {
             @Override
             public void onResponse(Call<GetTaskDetailResult> call, Response<GetTaskDetailResult> response) {
                 int statusCode = response.code();

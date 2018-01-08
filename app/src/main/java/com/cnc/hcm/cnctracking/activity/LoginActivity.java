@@ -21,12 +21,18 @@ import android.widget.Toast;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.api.APIService;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
+import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.model.GetUserProfileResponseStatus;
 import com.cnc.hcm.cnctracking.model.LoginResponseStatus;
 import com.cnc.hcm.cnctracking.model.UserProfile;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Credentials;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,12 +51,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private APIService mService;
     private ProgressDialog mProgressDialog;
+    private List<MHead> arrHead;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         checkPermistion();
+        arrHead = new ArrayList<>();
     }
 
     private void checkPermistion() {
@@ -125,7 +133,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void checkCredential(final String email, String password, final boolean isLoginAuto) {
-        mService = ApiUtils.getAPIService(email, password);
+        String accessAuthen = Credentials.basic(email, password);
+        arrHead.clear();
+        arrHead.add(new MHead(Conts.KEY_AUTHORIZATION, accessAuthen));
+        mService = ApiUtils.getAPIService(arrHead);
         mService.login().enqueue(new Callback<LoginResponseStatus>() {
             @Override
             public void onResponse(Call<LoginResponseStatus> call, Response<LoginResponseStatus> response) {
@@ -207,8 +218,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getDataUserProfile(String accessToken) {
-
-        mService = ApiUtils.getAPIService(accessToken);
+        arrHead.clear();
+        arrHead.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+        mService = ApiUtils.getAPIService(arrHead);
         mService.getUserProfile().enqueue(new Callback<GetUserProfileResponseStatus>() {
             @Override
             public void onResponse(Call<GetUserProfileResponseStatus> call, Response<GetUserProfileResponseStatus> response) {

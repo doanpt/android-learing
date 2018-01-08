@@ -113,6 +113,8 @@ public class Conts {
 
     public static final Integer RESPONSE_STATUS_OK = 200;
     public static final Integer RESPONSE_STATUS_TOKEN_WRONG = 403;
+    public static final int RESPONSE_STATUS_404 = 404;
+    public static final int RESPONSE_STATUS_500 = 500;
 
     public static final String BASE_URL = "http://35.198.195.55:3001/";
     public static final String URL_BASE = "http://35.198.195.55:3001";
@@ -125,6 +127,8 @@ public class Conts {
     public static final String PATH_TASK_LIST = "/tasks";
     public static final String PATH_TASK_DETAIL = "/task/{id}";
 
+    public static final String PATH_GET_PRODUCT_BY_ID = "/customer-product/{id}";
+    public static final String PATH_ADD_CUSTOMER_PRODUCTS = "/customer-products";
     public static final String PATH_USER_PROFILE = PATH_USER + "/profile";
 
     public static final String KEY_AUTHORIZATION = "Authorization";
@@ -132,6 +136,9 @@ public class Conts {
 
     public static final String KEY_CONTENT_TYPE = "Content-Type";
     public static final String VALUE_CONTENT_TYPE = "application/json";
+
+
+    public static final String KEY_CUSTOMER_ID = "customerId";
 
     public static final String KEY_ACCESS_TOKEN = "accessToken";
     public static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";

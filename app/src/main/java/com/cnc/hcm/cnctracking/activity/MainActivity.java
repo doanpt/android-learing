@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.FragmentAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
+import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
@@ -71,6 +72,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
@@ -213,7 +215,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         quantityDoingTask = 0;
         quantityCompletedTask = 0;
         showDialogLoadding();
-        ApiUtils.getAPIService(accessToken).getTaskList().enqueue(new Callback<GetTaskListResult>() {
+        List<MHead> arrHeads = new ArrayList<>();
+        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+        ApiUtils.getAPIService(arrHeads).getTaskList().enqueue(new Callback<GetTaskListResult>() {
             @Override
             public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
                 int statusCode = response.code();

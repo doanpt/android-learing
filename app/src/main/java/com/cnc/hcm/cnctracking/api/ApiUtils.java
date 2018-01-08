@@ -1,15 +1,14 @@
 package com.cnc.hcm.cnctracking.api;
 
+import java.util.List;
+
 public class ApiUtils {
 
-    private ApiUtils() {}
-
-    public static APIService getAPIService(String accessToken) {
-        return RetrofitClient.getClientToken(accessToken).create(APIService.class);
+    private ApiUtils() {
     }
 
-    public static APIService getAPIService(String username, String password) {
-        return RetrofitClient.getClientLogin(username, password).create(APIService.class);
+    public static APIService getAPIService(final List<MHead> arrHead) {
+        return RetrofitClient.getClientToken(arrHead).create(APIService.class);
     }
 
 }
