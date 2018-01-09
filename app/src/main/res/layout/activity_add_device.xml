@@ -54,9 +54,9 @@
             android:id="@+id/edt_device_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:textSize="20sp"
             android:layout_weight="1"
-            android:hint="@string/hint_name_device" />
+            android:hint="@string/hint_name_device"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -73,26 +73,73 @@
             android:padding="12dp"
             android:src="@drawable/factory" />
 
-        <FrameLayout
-            android:layout_width="0dp"
+        <Spinner
+            android:id="@+id/edt_category"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/frame_manufacture"
-            android:layout_weight="1">
+            android:hint="@string/edt_hint_category"
+            android:textSize="20sp" />
+        <!--<FrameLayout-->
+        <!--android:id="@+id/frame_category"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1">-->
 
-            <AutoCompleteTextView
-                android:id="@+id/edt_manufacture"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="20sp"
-                android:hint="@string/edt_hint_manufacture" />
+        <!--<Spinner-->
+        <!--android:id="@+id/edt_category"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:hint="@string/edt_hint_category"-->
+        <!--android:textSize="20sp" />-->
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/drop_down_arrow" />
-        </FrameLayout>
+        <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="20dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="20dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_gravity="right|center_vertical"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_marginRight="10dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:src="@drawable/drop_down_arrow" />&ndash;&gt;-->
+        <!--</FrameLayout>-->
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="12dp"
+            android:src="@drawable/factory" />
+
+        <Spinner
+            android:id="@+id/edt_manufacture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20sp" />
+        <!--<FrameLayout-->
+        <!--android:id="@+id/frame_manufacture"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1">-->
+
+        <!--<Spinner-->
+        <!--android:id="@+id/edt_manufacture"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:hint="@string/edt_hint_manufacture"-->
+        <!--android:textSize="20sp" />-->
+
+        <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="20dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="20dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_gravity="right|center_vertical"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_marginRight="10dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:src="@drawable/drop_down_arrow" />&ndash;&gt;-->
+        <!--</FrameLayout>-->
     </LinearLayout>
 
     <LinearLayout
@@ -118,8 +165,8 @@
                 android:id="@+id/edt_barcode"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="20sp"
-                android:hint="@string/hint_barcode" />
+                android:hint="@string/hint_barcode"
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/img_scan_barcode"

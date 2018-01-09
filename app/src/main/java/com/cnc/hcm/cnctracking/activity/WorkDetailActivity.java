@@ -50,7 +50,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     private TextView tvComplete;
     private TextView tvCancel;
     private FloatingActionButton fabCall, fabFindWay, fabScanQR, fabAddProduct;
-    private String idTask;
+    private String idTask,customerId;
     private RelativeLayout rlExpandHeaderBill;
     private LinearLayout ll_content_bill;
     private LinearLayout tv_detail_work_call_action;
@@ -162,7 +162,8 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void loadTaskInfoToUI() {
-        String idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
+        idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
+        customerId = getIntent().getStringExtra(Conts.KEY_CUSTOMER_ID);
         CommonMethod.makeToast(this, "ID: " + idTask);
         tryGetTaskDetail(UserInfo.getInstance(getApplicationContext()).getAccessToken(), idTask);
     }
@@ -298,7 +299,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.fab_add_product:
                 Intent intent = new Intent(this, AddProductActivity.class);
-                intent.putExtra(Conts.KEY_ID_TASK, idTask);
+                intent.putExtra(Conts.KEY_CUSTOMER_ID, customerId);
                 startActivity(intent);
 //                CommonMethod.makeToast(WorkDetailActivity.this, "fab_add_product");
                 fabMenu.collapse();

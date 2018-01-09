@@ -70,6 +70,7 @@
     <string name="hint_barcode">Barcode</string>
     <string name="text_detail">Chi tiết</string>
     <string name="text_find_way">Dẫn đường</string>
+    <string name="edt_hint_category">Thể loại</string>
 
 
 </resources>

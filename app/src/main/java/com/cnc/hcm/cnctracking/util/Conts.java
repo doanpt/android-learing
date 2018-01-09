@@ -111,8 +111,8 @@ public class Conts {
     public static final int DEFAULT_VALUE_INT_98 = 98;
     public static final int DEFAULT_VALUE_INT_99 = 99;
 
-    public static final Integer RESPONSE_STATUS_OK = 200;
-    public static final Integer RESPONSE_STATUS_TOKEN_WRONG = 403;
+    public static final long RESPONSE_STATUS_OK = 200;
+    public static final long RESPONSE_STATUS_TOKEN_WRONG = 403;
     public static final int RESPONSE_STATUS_404 = 404;
     public static final int RESPONSE_STATUS_500 = 500;
 
@@ -126,6 +126,8 @@ public class Conts {
 
     public static final String PATH_TASK_LIST = "/tasks";
     public static final String PATH_TASK_DETAIL = "/task/{id}";
+    public static final String PATH_PRODUCTS_BRAND = "/product-brands";
+    public static final String PATH_PRODUCTS_CATEGORY = "/product-categories";
 
     public static final String PATH_GET_PRODUCT_BY_ID = "/customer-product/{id}";
     public static final String PATH_ADD_CUSTOMER_PRODUCTS = "/customer-products";

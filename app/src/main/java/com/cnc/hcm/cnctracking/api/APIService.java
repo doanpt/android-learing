@@ -1,13 +1,16 @@
 package com.cnc.hcm.cnctracking.api;
 
 
+import com.cnc.hcm.cnctracking.model.AddProductItem;
 import com.cnc.hcm.cnctracking.model.AddProductResult;
+import com.cnc.hcm.cnctracking.model.CategoryListResult;
 import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.GetUserProfileResponseStatus;
 import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LoginResponseStatus;
+import com.cnc.hcm.cnctracking.model.ProductListResult;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctracking.util.Conts;
 
@@ -39,6 +42,12 @@ public interface APIService {
     Call<CheckContainProductResult> getProductById(@Path("id") String productID);
 
     @POST(Conts.PATH_ADD_CUSTOMER_PRODUCTS)
-    Call<AddProductResult> addCustomerProduct();
+    Call<AddProductResult> addCustomerProduct(@Body AddProductItem product);
+
+    @GET(Conts.PATH_PRODUCTS_BRAND)
+    Call<ProductListResult> getListManufactures();
+
+    @GET(Conts.PATH_PRODUCTS_CATEGORY)
+    Call<CategoryListResult> getListCategory();
 
 }
