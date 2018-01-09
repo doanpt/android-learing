@@ -21,12 +21,12 @@ public final class GetTaskDetailResult {
         public final long __v;
         public final String createdDate;
         public final Status status;
-        public final String process[];
-        public final Executive executive[];
+        public final Process[] process;
+        public final Executive[] executive;
         public final String appointmentDate;
         public final Address address;
 
-        public Result(String _id, String title, Service service, Customer customer, String note, String id, long __v, String createdDate, Status status, String[] process, Executive[] executive, String appointmentDate, Address address){
+        public Result(String _id, String title, Service service, Customer customer, String note, String id, long __v, String createdDate, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address){
             this._id = _id;
             this.title = title;
             this.service = service;
@@ -124,6 +124,59 @@ public final class GetTaskDetailResult {
             }
         }
 
+        public static final class Process {
+            public final String user;
+            public final String device;
+            public final String before;
+            public final ProcessDetail process;
+            public final String after;
+            public final int status;
+            public final String date;
+            public final Location location;
+
+            public Process(String user, String device, String before, ProcessDetail process, String after, int status, String date, Location location) {
+                this.user = user;
+                this.device = device;
+                this.before = before;
+                this.process = process;
+                this.after = after;
+                this.status = status;
+                this.date = date;
+                this.location = location;
+            }
+
+            public static final class ProcessDetail {
+                public final String photos;
+                public final Product[] products;
+
+                public ProcessDetail(String photos, Product[] products) {
+                    this.photos = photos;
+                    this.products = products;
+                }
+
+                public static final class Product {
+                    public final String product;
+                    public final int quantity;
+
+                    public Product(String product, int quantity){
+                        this.product = product;
+                        this.quantity = quantity;
+                    }
+                }
+            }
+
+            public static final class Location {
+                public final double latitude;
+                public final double longitude;
+
+                public Location(double latitude, double longitude){
+                    this.latitude = latitude;
+                    this.longitude = longitude;
+                }
+            }
+        }
+
+
         public static final class Executive {
             public final User user;
             public final String _id;
@@ -173,7 +226,6 @@ public final class GetTaskDetailResult {
                 }
             }
         }
-
 
         public static final class Address {
             public final String street;

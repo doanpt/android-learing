@@ -10,6 +10,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.IBinder;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,12 +20,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.adapter.WorkDetailPageAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.fragment.WorkDetailDeviceFragment;
+import com.cnc.hcm.cnctracking.fragment.WorkDetailServiceFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
@@ -50,19 +54,12 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     private TextView tvComplete;
     private TextView tvCancel;
     private FloatingActionButton fabCall, fabFindWay, fabScanQR, fabAddProduct;
-    private String idTask,customerId;
-    private RelativeLayout rlExpandHeaderBill;
-    private LinearLayout ll_content_bill;
-    private LinearLayout tv_detail_work_call_action;
-    private LinearLayout tv_detail_work_sms_action;
-    private LinearLayout tv_detail_work_address_action;
-    private ImageView imv_expand_bill;
+
+    private ImageView iv_back;
     private TextView tv_detail_work_title_work;
-    private TextView tv_detail_work_time_get_work_hour;
+    private TextView tv_detail_work_time;
     private TextView tv_detail_work_address;
     private TextView tv_detail_work_distance;
-    private TextView tv_detail_work_contact_name;
-    private TextView tv_detail_work_contact_phone;
 
     //TOTO
     private GPSService gpsService;
@@ -70,7 +67,22 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     private double latitude;
     private double longitude;
     private boolean isNetworkConnected;
+    private String idTask;
+    private String customerId;
 
+    private ViewPager vp_body;
+
+    private TaskDetailLoadedListener mTaskDetailLoadedListener;
+
+    private GetTaskDetailResult getTaskDetailResult;
+
+    private WorkDetailPageAdapter mWorkDetailPageAdapter;
+
+    public void setTaskDetailLoadedListener(TaskDetailLoadedListener mTaskDetailLoadedListener) {
+        this.mTaskDetailLoadedListener = mTaskDetailLoadedListener;
+        mTaskDetailLoadedListener.onTaskDetailLoaded(getTaskDetailResult);
+        mTaskDetailLoadedListener.onLocationUpdate(latitude, longitude);
+    }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -101,6 +113,8 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initViews() {
+        iv_back = findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(this);
         llViewControl = (LinearLayout) findViewById(R.id.view_control);
         flBlurView = (FrameLayout) findViewById(R.id.blurView);
         fabMenu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
@@ -118,7 +132,6 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-
         tvCancel = (TextView) findViewById(R.id.tv_cancel_work);
         tvCancel.setOnClickListener(this);
         tvComplete = (TextView) findViewById(R.id.tv_complete_work);
@@ -133,32 +146,16 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
         fabScanQR = (FloatingActionButton) findViewById(R.id.fab_scan_qr);
         fabScanQR.setOnClickListener(this);
 
-        rlExpandHeaderBill = (RelativeLayout) findViewById(R.id.rl_expand_header_bill);
-        ll_content_bill = (LinearLayout) findViewById(R.id.ll_content_bill);
-        imv_expand_bill = (ImageView) findViewById(R.id.imv_expand_bill);
-        rlExpandHeaderBill.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ll_content_bill.getVisibility() == View.GONE) {
-                    ll_content_bill.setVisibility(View.VISIBLE);
-                    imv_expand_bill.setImageResource(R.drawable.ic_expand_task_details);
-                } else {
-                    ll_content_bill.setVisibility(View.GONE);
-                    imv_expand_bill.setImageResource(R.drawable.ic_chevron_right);
-                }
-            }
-        });
-
         tv_detail_work_title_work = (TextView) findViewById(R.id.tv_detail_work_title_work);
-        tv_detail_work_time_get_work_hour = (TextView) findViewById(R.id.tv_detail_work_time_get_work_hour);
+        tv_detail_work_time = (TextView) findViewById(R.id.tv_detail_work_time);
         tv_detail_work_address = (TextView) findViewById(R.id.tv_detail_work_address);
         tv_detail_work_distance = (TextView) findViewById(R.id.tv_detail_work_distance);
-        tv_detail_work_contact_name = (TextView) findViewById(R.id.tv_detail_work_contact_name);
-        tv_detail_work_contact_phone = (TextView) findViewById(R.id.tv_detail_work_contact_phone);
 
-        tv_detail_work_call_action = (LinearLayout) findViewById(R.id.tv_detail_work_call_action);
-        tv_detail_work_sms_action = (LinearLayout) findViewById(R.id.tv_detail_work_sms_action);
-        tv_detail_work_address_action = (LinearLayout) findViewById(R.id.tv_detail_work_address_action);
+        vp_body = findViewById(R.id.vp_body);
+        mWorkDetailPageAdapter = new WorkDetailPageAdapter(getSupportFragmentManager());
+        mWorkDetailPageAdapter.addFragment(new WorkDetailServiceFragment());
+        mWorkDetailPageAdapter.addFragment(new WorkDetailDeviceFragment());
+        vp_body.setAdapter(mWorkDetailPageAdapter);
     }
 
     private void loadTaskInfoToUI() {
@@ -179,7 +176,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
                 Log.e(TAGG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode);
                 if (response.isSuccessful()) {
                     Log.e(TAGG, "tryGetTaskDetail.onResponse(), --> response: " + response.toString());
-                    GetTaskDetailResult getTaskDetailResult = response.body();
+                    getTaskDetailResult = response.body();
                     Log.e(TAGG, "tryGetTaskDetail.onResponse(), --> getTaskDetailResult: " + getTaskDetailResult.toString());
                     onTaskInfoLoaded(getTaskDetailResult);
                 }
@@ -198,62 +195,27 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
                 tv_detail_work_title_work.setText(getTaskDetailResult.result.title + "");
                 String date = getTaskDetailResult.result.createdDate;
                 if (!TextUtils.isEmpty(date)) {
-                    tv_detail_work_time_get_work_hour.setText(date.substring(date.indexOf("T") + 1, date.indexOf("T") + 6));
+                    tv_detail_work_time.setText(date.substring(date.indexOf("T") + 1, date.indexOf("T") + 6));
                 }
                 if (getTaskDetailResult.result.address != null) {
                     tv_detail_work_address.setText(getTaskDetailResult.result.address.street + "");
-                    handleActions(getTaskDetailResult.result.address);
-                }
-                if (getTaskDetailResult.result.customer != null) {
-                    tv_detail_work_contact_name.setText(getTaskDetailResult.result.customer.fullname + "");
-                    tv_detail_work_contact_phone.setText(getTaskDetailResult.result.customer.phone + "");
-
-                    handleActions(getTaskDetailResult.result.customer);
                 }
                 tv_detail_work_distance.setText("0 km");
+                if (mTaskDetailLoadedListener != null) {
+                    mTaskDetailLoadedListener.onTaskDetailLoaded(getTaskDetailResult);
+                }
             }
         } catch (Exception e) {
             Log.e(TAGG, "onTaskInfoLoaded() --> Exception occurs.", e);
         }
     }
 
-    private void handleActions(final GetTaskDetailResult.Result.Address address) {
-        tv_detail_work_address_action.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?saddr=" + latitude + "," + longitude
-                                + "&daddr=" + address.location.latitude + "," + address.location.longitude));
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void handleActions(final GetTaskDetailResult.Result.Customer customer) {
-        tv_detail_work_call_action.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", customer.phone, null)));
-            }
-        });
-        tv_detail_work_sms_action.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Uri uri = Uri.parse("smsto:" + customer.phone);
-                    Intent smsIntent = new Intent(Intent.ACTION_SENDTO, uri);
-                    smsIntent.putExtra("sms_body", "sms content");
-                    startActivity(smsIntent);
-                } catch (Exception e) {
-                    Log.e(TAGG, "send sms --> Exception occurs.", e);
-                }
-            }
-        });
-    }
-
     public void myLocationHere(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+        if (mTaskDetailLoadedListener != null) {
+            mTaskDetailLoadedListener.onLocationUpdate(latitude, longitude);
+        }
     }
 
     private void registerBroadcastReciver() {
@@ -283,6 +245,9 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
             case R.id.tv_cancel_work:
                 CommonMethod.makeToast(WorkDetailActivity.this, "Cancel Work");
                 fabMenu.collapse();
@@ -346,4 +311,8 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
         super.onBackPressed();
     }
 
+    public interface TaskDetailLoadedListener {
+        void onTaskDetailLoaded(GetTaskDetailResult getTaskDetailResult);
+        void onLocationUpdate(double latitude, double longitude);
+    }
 }
