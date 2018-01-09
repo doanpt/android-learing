@@ -134,11 +134,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         checkUserLoginOnOtherDevice();
         initMap();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         try {
             tryGetTaskList(UserInfo.getInstance(MainActivity.this).getAccessToken());
         } catch (Exception e) {

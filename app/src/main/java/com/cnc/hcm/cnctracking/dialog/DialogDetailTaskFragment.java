@@ -129,7 +129,9 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 dismiss();
                 break;
             case R.id.tv_detail_task:
+                setExpaned(true);
                 showExpaned();
+                setExpaned(false);
                 break;
             case R.id.ll_find_way:
                 CommonMethod.actionFindWayInMapApp(getContext(), 0, 0, 0, 0);
