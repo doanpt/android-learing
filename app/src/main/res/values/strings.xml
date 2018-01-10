@@ -60,7 +60,7 @@
     <string name="type_all_work">Tất cả</string>
     <string name="text_month">Tháng</string>
     <string name="text_year">Năm</string>
-    <string name="loadding">Chờ tý nhé...</string>
+    <string name="loadding">Đợi xíu...</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -71,6 +71,11 @@
     <string name="text_detail">Chi tiết</string>
     <string name="text_find_way">Dẫn đường</string>
     <string name="edt_hint_category">Thể loại</string>
+    <string name="add_new_product">Thêm mới thiết bị</string>
+    <string name="scan_qr_product">Scan QR thiết bị</string>
+    <string name="text_complete">Hoàn thành</string>
+    <string name="text_zero">0</string>
+    <string name="account_login_on_other_device">Tài khoản này đã được đăng nhập trên thiết bị khác</string>
 
 
 </resources>

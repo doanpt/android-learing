@@ -164,7 +164,7 @@
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
-                        android:background="?android:selectableItemBackground"
+                        android:background="@drawable/bg_view_hover"
                         android:padding="10dp"
                         android:src="@drawable/ic_filter_list"/>
 

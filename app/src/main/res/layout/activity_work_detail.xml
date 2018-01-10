@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.WorkDetailActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".activity.WorkDetailActivity">
 
     <!-- header -->
     <LinearLayout
@@ -14,9 +14,9 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
-        android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:paddingRight="8dp">
+        android:paddingRight="8dp"
+        android:paddingTop="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,15 +31,17 @@
                 android:layout_gravity="center_vertical"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_back"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_detail_work_title_work"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:maxLines="2"
                     android:text="Work title"
                     android:textColor="@android:color/white"
@@ -52,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="Time"
-                    android:textColor="#F5F5F5" />
+                    android:textColor="#F5F5F5"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -61,11 +63,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="48dp"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/tv_detail_work_address"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:maxLines="2"
                 android:text="Work address"
                 android:textColor="#F5F5F5"/>
@@ -73,8 +76,8 @@
             <TextView
                 android:id="@+id/tv_detail_work_distance"
                 android:layout_width="60dp"
-                android:layout_marginLeft="10dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="Distance"
                 android:textColor="#F5F5F5"/>
 
@@ -109,23 +112,6 @@
             app:fab_addButtonColorNormal="@color/colorPrimary"
             app:fab_labelStyle="@style/menu_labels_style">
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_find_way"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:fab_colorNormal="@color/colorPrimary"
-                app:fab_icon="@drawable/ic_fab_map"
-                app:fab_size="mini"
-                app:fab_title="Dẫn đường"/>
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_call"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:fab_colorNormal="@color/colorPrimary"
-                app:fab_icon="@drawable/ic_fab_call"
-                app:fab_size="mini"
-                app:fab_title="Gọi điện"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_product"
@@ -134,7 +120,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_fab_add_product"
                 app:fab_size="mini"
-                app:fab_title="Thêm thiết bị"/>
+                app:fab_title="@string/add_new_product"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_scan_qr"
@@ -143,7 +129,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_fab_qrcode"
                 app:fab_size="mini"
-                app:fab_title="Scan QR"/>
+                app:fab_title="@string/scan_qr_product"/>
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
         <LinearLayout
@@ -151,7 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentRight="true"
             android:layout_margin="16dp"
             android:orientation="horizontal"
             android:visibility="gone">
@@ -160,25 +146,13 @@
                 android:id="@+id/tv_complete_work"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="70dp"
                 android:background="@drawable/bg_border_button_ok"
                 android:paddingBottom="4dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="4dp"
-                android:text="Hoàn thành"
-                android:textColor="@android:color/white"/>
-
-            <TextView
-                android:id="@+id/tv_cancel_work"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:background="@drawable/bg_border_button_ok"
-                android:paddingBottom="4dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:text="Hủy"
+                android:text="@string/text_complete"
                 android:textColor="@android:color/white"/>
         </LinearLayout>
     </RelativeLayout>

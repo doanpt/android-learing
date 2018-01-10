@@ -256,7 +256,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 if (isPushServerFirstTime) {
                     arrTrackLocation.clear();
                     for (int i = 0; i < Conts.DEFAULT_VALUE_INT_5; i++) {
-                        arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), accuracy));
+                        arrTrackLocation.add(new TrackLocation(latitude, longitude, System.currentTimeMillis(), 10.0f));
                     }
                     UserInfo.getInstance(GPSService.this).setUploadFirstTime(false);
                 }
@@ -345,7 +345,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                         } else if (updateLocationCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
                             isUploading = false;
                             UserInfo.getInstance(GPSService.this).setUserLoginOnOtherDevice(true);
-                            updateNotification("Tài khoản này đã được đăng nhập trên thiết bị khác");
+                            updateNotification(getString(R.string.account_login_on_other_device));
                             if (mainActivity != null && UserInfo.getInstance(GPSService.this).getMainActivityActive()) {
                                 mainActivity.showMessageRequestLogout();
                             }

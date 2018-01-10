@@ -115,7 +115,7 @@
 
             <TextView
                 style="@style/StyleQuantityTask"
-                android:text="2320"/>
+                android:text="64"/>
         </LinearLayout>
 
         <LinearLayout
@@ -123,15 +123,7 @@
 
             <TextView
                 style="@style/StyleQuantityTask"
-                android:text="0434"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/StyleLinnerLayoutQuantityTask">
-
-            <TextView
-                style="@style/StyleQuantityTask"
-                android:text="0"/>
+                android:text="87"/>
         </LinearLayout>
 
         <LinearLayout
@@ -140,6 +132,14 @@
             <TextView
                 style="@style/StyleQuantityTask"
                 android:text="0"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/StyleLinnerLayoutQuantityTask">
+
+            <TextView
+                style="@style/StyleQuantityTask"
+                android:text="24"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

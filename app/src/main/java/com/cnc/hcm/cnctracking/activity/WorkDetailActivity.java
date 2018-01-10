@@ -1,5 +1,6 @@
 package com.cnc.hcm.cnctracking.activity;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -52,8 +53,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     private FrameLayout flBlurView;
     private FloatingActionsMenu fabMenu;
     private TextView tvComplete;
-    private TextView tvCancel;
-    private FloatingActionButton fabCall, fabFindWay, fabScanQR, fabAddProduct;
+    private FloatingActionButton fabScanQR, fabAddProduct;
 
     private ImageView iv_back;
     private TextView tv_detail_work_title_work;
@@ -63,6 +63,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
 
     //TOTO
     private GPSService gpsService;
+    private ProgressDialog mProgressDialog;
 
     private double latitude;
     private double longitude;
@@ -132,15 +133,9 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        tvCancel = (TextView) findViewById(R.id.tv_cancel_work);
-        tvCancel.setOnClickListener(this);
         tvComplete = (TextView) findViewById(R.id.tv_complete_work);
         tvComplete.setOnClickListener(this);
 
-        fabFindWay = (FloatingActionButton) findViewById(R.id.fab_find_way);
-        fabFindWay.setOnClickListener(this);
-        fabCall = (FloatingActionButton) findViewById(R.id.fab_call);
-        fabCall.setOnClickListener(this);
         fabAddProduct = (FloatingActionButton) findViewById(R.id.fab_add_product);
         fabAddProduct.setOnClickListener(this);
         fabScanQR = (FloatingActionButton) findViewById(R.id.fab_scan_qr);
@@ -161,11 +156,11 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     private void loadTaskInfoToUI() {
         idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
         customerId = getIntent().getStringExtra(Conts.KEY_CUSTOMER_ID);
-        CommonMethod.makeToast(this, "ID: " + idTask);
         tryGetTaskDetail(UserInfo.getInstance(getApplicationContext()).getAccessToken(), idTask);
     }
 
     private void tryGetTaskDetail(String accessToken, String idTask) {
+        showDialogLoadding();
         Log.e(TAGG, "tryGetTaskDetail(), accessToken: " + accessToken + ", idTask: " + idTask);
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
@@ -179,11 +174,13 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
                     getTaskDetailResult = response.body();
                     Log.e(TAGG, "tryGetTaskDetail.onResponse(), --> getTaskDetailResult: " + getTaskDetailResult.toString());
                     onTaskInfoLoaded(getTaskDetailResult);
+                    dismisDialogLoading();
                 }
             }
 
             @Override
             public void onFailure(Call<GetTaskDetailResult> call, Throwable t) {
+                dismisDialogLoading();
                 Log.e(TAGG, "tryGetTaskDetail.onFailure() --> " + t);
             }
         });
@@ -242,31 +239,33 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
         }
     };
 
+    private void showDialogLoadding() {
+        mProgressDialog = new ProgressDialog(WorkDetailActivity.this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
+        mProgressDialog.show();
+    }
+
+    private void dismisDialogLoading() {
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.tv_cancel_work:
-                CommonMethod.makeToast(WorkDetailActivity.this, "Cancel Work");
-                fabMenu.collapse();
-                break;
             case R.id.tv_complete_work:
                 CommonMethod.makeToast(WorkDetailActivity.this, "Completed Work");
-                fabMenu.collapse();
-                break;
-            case R.id.fab_find_way:
-                fabMenu.collapse();
-                break;
-            case R.id.fab_call:
                 fabMenu.collapse();
                 break;
             case R.id.fab_add_product:
                 Intent intent = new Intent(this, AddProductActivity.class);
                 intent.putExtra(Conts.KEY_CUSTOMER_ID, customerId);
                 startActivity(intent);
-//                CommonMethod.makeToast(WorkDetailActivity.this, "fab_add_product");
                 fabMenu.collapse();
                 break;
             case R.id.fab_scan_qr:
