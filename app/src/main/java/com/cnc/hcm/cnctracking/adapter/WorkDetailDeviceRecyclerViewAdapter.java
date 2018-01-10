@@ -27,10 +27,10 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
     }
 
     private void initProcesses() {
-        processes.add(new GetTaskDetailResult.Result.Process(null, "Device1", null, null, null, 1, null, null));
-        processes.add(new GetTaskDetailResult.Result.Process(null, "Device2", null, null, null, 2, null, null));
-        processes.add(new GetTaskDetailResult.Result.Process(null, "Device3", null, null, null, 2, null, null));
-        processes.add(new GetTaskDetailResult.Result.Process(null, "Device4", null, null, null, 3, null, null));
+//        processes.add(new GetTaskDetailResult.Result.Process("Device1", null, null, "1", null, null, null));
+//        processes.add(new GetTaskDetailResult.Result.Process("Device2", null, null, "3", null, null, null));
+//        processes.add(new GetTaskDetailResult.Result.Process("Device3", null, null, "1", null, null, null));
+//        processes.add(new GetTaskDetailResult.Result.Process("Device4", null, null, "2", null, null, null));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         GetTaskDetailResult.Result.Process process = processes.get(position);
         holder.tv_title.setText(process.device + "");
         holder.tv_status.setText("Hoàn thành bước " + process.status);
-        holder.iv_status.setImageResource(process.status == 1 ? R.drawable.step_1_complete : (process.status == 2 ? R.drawable.step_2_complete : R.drawable.step_3_complete));
+        holder.iv_status.setImageResource("1".equals(process.status) ? R.drawable.step_1_complete : ("2".equals(process.status) ? R.drawable.step_2_complete : R.drawable.step_3_complete));
     }
 
     @Override

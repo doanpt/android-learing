@@ -50,15 +50,16 @@ public class WorkDetailDeviceFragment extends Fragment implements WorkDetailActi
     public void onTaskDetailLoaded(GetTaskDetailResult getTaskDetailResult) {
         try {
             if (getTaskDetailResult.result.process != null) {
+                Log.e(TAG, "onTaskDetailLoaded, process.length: " + getTaskDetailResult.result.process.length);
                 mWorkDetailDeviceRecyclerViewAdapter.updateDeviceList(Arrays.asList(getTaskDetailResult.result.process));
             }
         } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e);
+            Log.e(TAG, "onTaskDetailLoaded, Exception: " + e);
         }
     }
 
     @Override
     public void onLocationUpdate(double latitude, double longitude) {
-
+        Log.e(TAG, "onLocationUpdate, latitude: " + latitude + ", longitude: " + longitude);
     }
 }

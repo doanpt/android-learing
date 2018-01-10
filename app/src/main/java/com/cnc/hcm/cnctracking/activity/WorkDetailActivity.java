@@ -73,16 +73,16 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
 
     private ViewPager vp_body;
 
-    private TaskDetailLoadedListener mTaskDetailLoadedListener;
+    private List<TaskDetailLoadedListener> mTaskDetailLoadedListener = new ArrayList<>();
 
     private GetTaskDetailResult getTaskDetailResult;
 
     private WorkDetailPageAdapter mWorkDetailPageAdapter;
 
-    public void setTaskDetailLoadedListener(TaskDetailLoadedListener mTaskDetailLoadedListener) {
-        this.mTaskDetailLoadedListener = mTaskDetailLoadedListener;
-        mTaskDetailLoadedListener.onTaskDetailLoaded(getTaskDetailResult);
-        mTaskDetailLoadedListener.onLocationUpdate(latitude, longitude);
+    public void setTaskDetailLoadedListener(TaskDetailLoadedListener taskDetailLoadedListener) {
+        mTaskDetailLoadedListener.add(taskDetailLoadedListener);
+        taskDetailLoadedListener.onTaskDetailLoaded(getTaskDetailResult);
+        taskDetailLoadedListener.onLocationUpdate(latitude, longitude);
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -106,6 +106,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTaskDetailLoadedListener.clear();
         registerBroadcastReciver();
         setContentView(R.layout.activity_work_detail);
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
@@ -155,8 +156,10 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void loadTaskInfoToUI() {
         idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
-        customerId = getIntent().getStringExtra(Conts.KEY_CUSTOMER_ID);
-        tryGetTaskDetail(UserInfo.getInstance(getApplicationContext()).getAccessToken(), idTask);
+//        customerId = getIntent().getStringExtra(Conts.KEY_CUSTOMER_ID);
+        if (idTask != null) {
+            tryGetTaskDetail(UserInfo.getInstance(getApplicationContext()).getAccessToken(), idTask);
+        }
     }
 
     private void tryGetTaskDetail(String accessToken, String idTask) {
@@ -197,9 +200,14 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
                 if (getTaskDetailResult.result.address != null) {
                     tv_detail_work_address.setText(getTaskDetailResult.result.address.street + "");
                 }
-                tv_detail_work_distance.setText("0 km");
-                if (mTaskDetailLoadedListener != null) {
-                    mTaskDetailLoadedListener.onTaskDetailLoaded(getTaskDetailResult);
+                tv_detail_work_distance.setText("0 km");    //TODO update distance later
+                if (getTaskDetailResult.result.customer != null) {
+                    customerId = getTaskDetailResult.result.customer._id;
+                }
+                for (TaskDetailLoadedListener taskDetailLoadedListener : mTaskDetailLoadedListener) {
+                    if (taskDetailLoadedListener != null) {
+                        taskDetailLoadedListener.onTaskDetailLoaded(getTaskDetailResult);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -210,8 +218,10 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     public void myLocationHere(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-        if (mTaskDetailLoadedListener != null) {
-            mTaskDetailLoadedListener.onLocationUpdate(latitude, longitude);
+        for (TaskDetailLoadedListener taskDetailLoadedListener : mTaskDetailLoadedListener) {
+            if (taskDetailLoadedListener != null) {
+                taskDetailLoadedListener.onLocationUpdate(latitude, longitude);
+            }
         }
     }
 

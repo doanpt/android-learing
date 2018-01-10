@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.event.OnResultTimeDistance;
+import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 
 import org.json.JSONArray;
@@ -65,7 +66,7 @@ public class CommonMethod {
         if (arrayList.size() > Conts.DEFAULT_VALUE_INT_0) {
             StringBuilder builder = new StringBuilder();
             for (GetTaskListResult itemWork : arrayList) {
-                GetTaskListResult.Result result1 = itemWork.result[0];
+                GetTaskDetailResult.Result result1 = itemWork.result[0];
                 builder.append(result1.customer.address.location.latitude + "," + result1.customer.address.location.longitude + "|");
             }
             result = builder.toString().substring(Conts.DEFAULT_VALUE_INT_0, builder.toString().lastIndexOf("|"));

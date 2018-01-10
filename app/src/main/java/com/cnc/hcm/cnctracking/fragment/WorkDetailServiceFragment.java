@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,11 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
+import com.cnc.hcm.cnctracking.adapter.WorkDetailServiceRecyclerViewAdapter;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class WorkDetailServiceFragment extends Fragment implements View.OnClickListener, WorkDetailActivity.TaskDetailLoadedListener {
 
@@ -30,10 +36,16 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
     private ImageView imv_expand_bill;
     private TextView tv_detail_work_contact_name;
     private TextView tv_detail_work_contact_phone;
+    private TextView tv_total_value;
+    private TextView tv_vat;
+    private TextView tv_have_to_pay;
+    private TextView tv_detail_work_total_payment;
     private double latitude;
     private double longitude;
 
-//    private RecyclerView rv_service;
+    private RecyclerView rv_service;
+
+    private WorkDetailServiceRecyclerViewAdapter mWorkDetailServiceRecyclerViewAdapter;
 
     public WorkDetailServiceFragment() {
     }
@@ -57,8 +69,16 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
         tv_detail_work_call_action = (LinearLayout) view.findViewById(R.id.tv_detail_work_call_action);
         tv_detail_work_sms_action = (LinearLayout) view.findViewById(R.id.tv_detail_work_sms_action);
         tv_detail_work_address_action = (LinearLayout) view.findViewById(R.id.tv_detail_work_address_action);
-//        rv_service = view.findViewById(R.id.rv_service);
-//        rv_service.setAdapter(new WorkDetailDeviceRecyclerViewAdapter(getContext()));
+
+        tv_total_value = (TextView) view.findViewById(R.id.tv_total_value);
+        tv_vat = (TextView) view.findViewById(R.id.tv_vat);
+        tv_have_to_pay = (TextView) view.findViewById(R.id.tv_have_to_pay);
+        tv_detail_work_total_payment = (TextView) view.findViewById(R.id.tv_detail_work_total_payment);
+
+        rv_service = (RecyclerView) view.findViewById(R.id.rv_service);
+        rv_service.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        mWorkDetailServiceRecyclerViewAdapter = new WorkDetailServiceRecyclerViewAdapter(getContext());
+        rv_service.setAdapter(mWorkDetailServiceRecyclerViewAdapter);
 
         ((WorkDetailActivity)getActivity()).setTaskDetailLoadedListener(this);
         return view;
@@ -82,6 +102,7 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
     @Override
     public void onTaskDetailLoaded(GetTaskDetailResult getTaskDetailResult) {
         try {
+            Log.e(TAG, "onTaskDetailLoaded, customer.fullname: " + getTaskDetailResult.result.customer.fullname);
             if (getTaskDetailResult.result.address != null) {
                 handleActions(getTaskDetailResult.result.address);
             }
@@ -90,6 +111,15 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
                 tv_detail_work_contact_phone.setText(getTaskDetailResult.result.customer.phone + "");
                 handleActions(getTaskDetailResult.result.customer);
             }
+            if (getTaskDetailResult.result.service != null) {
+                long totalValue = Integer.parseInt(getTaskDetailResult.result.service.price) * getTaskDetailResult.result.service.__v;
+                tv_total_value.setText("" + totalValue);
+                long vat = totalValue/10;
+                tv_vat.setText("" + vat);
+                tv_have_to_pay.setText("" + (totalValue - vat));
+                tv_detail_work_total_payment.setText("" + (totalValue - vat));
+                mWorkDetailServiceRecyclerViewAdapter.updateDeviceList(Arrays.asList(getTaskDetailResult.result.service));
+            }
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e);
         }
@@ -97,6 +127,7 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onLocationUpdate(double latitude, double longitude) {
+        Log.e(TAG, "onLocationUpdate, latitude: " + latitude + ", longitude: " + longitude);
         this.latitude = latitude;
         this.longitude = longitude;
     }

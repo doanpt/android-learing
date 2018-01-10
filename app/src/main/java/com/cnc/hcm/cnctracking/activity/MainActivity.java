@@ -48,6 +48,7 @@ import com.cnc.hcm.cnctracking.fragment.TaskCompletedFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskDoingFragment;
 import com.cnc.hcm.cnctracking.fragment.TaskNewFragment;
 import com.cnc.hcm.cnctracking.fragment.YearsViewFragment;
+import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemMarkedMap;
 import com.cnc.hcm.cnctracking.model.ItemTask;
@@ -225,7 +226,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
 
                     if (getTaskListResult != null) {
-                        GetTaskListResult.Result[] result1 = getTaskListResult.result;
+                        GetTaskDetailResult.Result[] result1 = getTaskListResult.result;
                         if (result1 != null && result1.length > 0) {
                             arrItemTask.clear();
                             for (int index = 0; index < result1.length; index++) {

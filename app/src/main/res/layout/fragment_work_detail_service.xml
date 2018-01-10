@@ -369,7 +369,15 @@
                 android:paddingRight="32dp"
                 android:visibility="gone">
 
-                <include
+                <!--list dịch vụ-->
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_service"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </android.support.v7.widget.RecyclerView>
+                <!--<include
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     layout="@layout/item_work_detail_service"/>
@@ -380,7 +388,8 @@
                 <include
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    layout="@layout/item_work_detail_service"/>
+                    layout="@layout/item_work_detail_service"/>-->
+
                 <!-- TODO replace by recycleview
 
                                     <LinearLayout
@@ -604,6 +613,7 @@
                         android:layout_width="1dp"
                         android:layout_height="match_parent"/>
 
+                    <!-- tổng label -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -618,7 +628,9 @@
                         android:layout_height="match_parent"
                         android:background="#1A000000"/>
 
+                    <!-- tổng value -->
                     <TextView
+                        android:id="@+id/tv_total_value"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -626,6 +638,7 @@
                         android:padding="4dp"
                         android:text="180.000"
                         android:textColor="@color/text_color"/>
+
                 </LinearLayout>
 
                 <FrameLayout
@@ -649,7 +662,7 @@
                     <FrameLayout
                         android:layout_width="1dp"
                         android:layout_height="match_parent"/>
-
+                    <!-- thuế vat label -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -664,7 +677,9 @@
                         android:layout_height="match_parent"
                         android:background="#1A000000"/>
 
+                    <!-- thuế vat value -->
                     <TextView
+                        android:id="@+id/tv_vat"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -672,6 +687,7 @@
                         android:padding="4dp"
                         android:text="18.000"
                         android:textColor="@color/text_color"/>
+
                 </LinearLayout>
 
                 <FrameLayout
@@ -696,6 +712,7 @@
                         android:layout_width="1dp"
                         android:layout_height="match_parent"/>
 
+                    <!--giảm giá label-->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -710,6 +727,7 @@
                         android:layout_height="match_parent"
                         android:background="#1A000000"/>
 
+                    <!--giảm giá value-->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -718,6 +736,7 @@
                         android:padding="4dp"
                         android:text="0"
                         android:textColor="@color/text_color"/>
+
                 </LinearLayout>
 
                 <FrameLayout
@@ -742,6 +761,7 @@
                         android:layout_width="1dp"
                         android:layout_height="match_parent"/>
 
+                    <!--thanh toan label-->
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="match_parent"
@@ -756,13 +776,16 @@
                         android:layout_height="match_parent"
                         android:background="#1A000000"/>
 
+                    <!--thanh toan value-->
                     <TextView
+                        android:id="@+id/tv_have_to_pay"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="right"
                         android:padding="4dp"
                         android:text="198.000"/>
+
                 </LinearLayout>
 
                 <FrameLayout
