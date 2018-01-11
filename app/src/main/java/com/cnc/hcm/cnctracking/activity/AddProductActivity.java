@@ -2,8 +2,12 @@ package com.cnc.hcm.cnctracking.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -18,11 +22,14 @@ import android.widget.SpinnerAdapter;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
+import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
 import com.cnc.hcm.cnctracking.model.AddProductItem;
 import com.cnc.hcm.cnctracking.model.AddProductResult;
 import com.cnc.hcm.cnctracking.model.CategoryListResult;
 import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
 import com.cnc.hcm.cnctracking.model.ProductListResult;
+import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
@@ -42,6 +49,7 @@ import retrofit2.Response;
  */
 
 public class AddProductActivity extends Activity implements View.OnClickListener {
+    private static final String TAGG = AddProductActivity.class.getSimpleName();
     private EditText edtDeviceName;
     private Spinner edtManufacture, edtCategory;
     private EditText edtBarcode;
@@ -56,17 +64,50 @@ public class AddProductActivity extends Activity implements View.OnClickListener
     private ArrayList<String> arrCategory;
     private ArrayList<ProductListResult.Product> listProduct;
     private ArrayList<CategoryListResult.Category> listCategory;
+    private DialogGPSSetting dialogGPSSetting;
+    private DialogNetworkSetting dialogNetworkSetting;
+    private GPSService gpsService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
+        //11/01/2017 ADD by HoangIT START
+        bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        initObject();
+        //11/01/2017 ADD by HoangIT END
         arrManufactures = new ArrayList<>();
         arrCategory = new ArrayList<>();
         arrHeads = new ArrayList<>();
         initView();
         getInformation();
     }
+
+    //11/01/2017 ADD by HoangIT START
+    private void initObject() {
+        dialogGPSSetting = new DialogGPSSetting(this);
+        dialogNetworkSetting = new DialogNetworkSetting(this);
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+            gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
+            if (gpsService != null) {
+                gpsService.setAddProductActivity(AddProductActivity.this);
+            }
+
+            Log.d(TAGG, "ServiceConnection at AddProductActivity, gpsService:= " + gpsService);
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.d(TAGG, "onServiceDisconnected at AddProductActivity");
+        }
+    };
+    //11/01/2017 ADD by HoangIT END
 
     private void getInformation() {
         customerId = getIntent().getStringExtra(Conts.KEY_CUSTOMER_ID);
@@ -168,7 +209,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
         if ("".equals(productName) || "".equals(manufacture) || "".equals(qrCode)) {
             CommonMethod.makeToast(this, "Param invalid");
         } else {
-            final ProgressDialog mDialog=new ProgressDialog(AddProductActivity.this);
+            final ProgressDialog mDialog = new ProgressDialog(AddProductActivity.this);
             mDialog.setMessage("Adding product");
             mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mDialog.setCancelable(false);
@@ -267,4 +308,52 @@ public class AddProductActivity extends Activity implements View.OnClickListener
         }
 
     }
+
+    //11/01/2017 ADD by HoangIT START
+    private void showDialogNetworkSetting() {
+        if (dialogNetworkSetting != null && !dialogNetworkSetting.isShowing() && !AddProductActivity.this.isDestroyed()) {
+            dialogNetworkSetting.show();
+        }
+    }
+
+    private void dismisDialogNetworkSetting() {
+        if (dialogNetworkSetting != null && dialogNetworkSetting.isShowing() && !AddProductActivity.this.isDestroyed()) {
+            dialogNetworkSetting.dismiss();
+        }
+    }
+
+    public void handleNetworkSetting(boolean isNetworkConnected) {
+        if (isNetworkConnected) {
+            dismisDialogNetworkSetting();
+        } else {
+            showDialogNetworkSetting();
+        }
+    }
+
+    private void showDialogGPSSetting() {
+        if (dialogGPSSetting != null && !dialogGPSSetting.isShowing() && !AddProductActivity.this.isDestroyed()) {
+            dialogGPSSetting.show();
+        }
+    }
+
+    private void dismisDialogGPSSetting() {
+        if (dialogGPSSetting != null && dialogGPSSetting.isShowing() && !AddProductActivity.this.isDestroyed()) {
+            dialogGPSSetting.dismiss();
+        }
+    }
+
+    public void handleGPSSetting(boolean statusGPS) {
+        if (statusGPS) {
+            dismisDialogGPSSetting();
+        } else {
+            showDialogGPSSetting();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(serviceConnection);
+    }
+    //11/01/2017 ADD by HoangIT END
 }

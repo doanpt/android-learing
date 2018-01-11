@@ -1,7 +1,13 @@
 package com.cnc.hcm.cnctracking.activity;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -10,6 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
+import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
+import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.BarcodeUtils;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -18,6 +27,7 @@ import com.google.zxing.WriterException;
 
 public class ProductDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAGG = ProductDetailActivity.class.getSimpleName();
     private LinearLayout llViewControl;
     private FrameLayout flBlurView;
     private FloatingActionsMenu fabMenu;
@@ -28,12 +38,19 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private TextView tvCompleteWork;
 
     private FloatingActionButton fabNote, fabProduct, fabStep1, fabStep2, fabStep3;
+    private DialogNetworkSetting dialogNetworkSetting;
+    private DialogGPSSetting dialogGPSSetting;
+    private GPSService gpsService;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+        //11/01/2017 ADD by HoangIT START
+        bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        initObject();
+        //11/01/2017 ADD by HoangIT END
         initViews();
         try {
             imvQRCode.setImageBitmap(BarcodeUtils.encodeAsBitmap("1234567890123", BarcodeFormat.QR_CODE, 512, 512));
@@ -42,6 +59,32 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             e.printStackTrace();
         }
     }
+
+    //11/01/2017 ADD by HoangIT START
+    private void initObject() {
+        dialogGPSSetting = new DialogGPSSetting(this);
+        dialogNetworkSetting = new DialogNetworkSetting(this);
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+            gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
+            if (gpsService != null) {
+                gpsService.setProductDetailActivity(ProductDetailActivity.this);
+            }
+
+            Log.d(TAGG, "ServiceConnection at ProductDetailActivity, gpsService:= " + gpsService);
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.d(TAGG, "onServiceDisconnected at ProductDetailActivity");
+        }
+    };
+    //11/01/2017 ADD by HoangIT END
 
     private void initViews() {
         llViewControl = (LinearLayout) findViewById(R.id.view_control);
@@ -132,4 +175,52 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private void closeFabMenu() {
         fabMenu.collapse();
     }
+
+    //11/01/2017 ADD by HoangIT START
+    private void showDialogNetworkSetting() {
+        if (dialogNetworkSetting != null && !dialogNetworkSetting.isShowing() && !ProductDetailActivity.this.isDestroyed()) {
+            dialogNetworkSetting.show();
+        }
+    }
+
+    private void dismisDialogNetworkSetting() {
+        if (dialogNetworkSetting != null && dialogNetworkSetting.isShowing() && !ProductDetailActivity.this.isDestroyed()) {
+            dialogNetworkSetting.dismiss();
+        }
+    }
+
+    public void handleNetworkSetting(boolean isNetworkConnected) {
+        if (isNetworkConnected) {
+            dismisDialogNetworkSetting();
+        } else {
+            showDialogNetworkSetting();
+        }
+    }
+
+    private void showDialogGPSSetting() {
+        if (dialogGPSSetting != null && !dialogGPSSetting.isShowing() && !ProductDetailActivity.this.isDestroyed()) {
+            dialogGPSSetting.show();
+        }
+    }
+
+    private void dismisDialogGPSSetting() {
+        if (dialogGPSSetting != null && dialogGPSSetting.isShowing() && !ProductDetailActivity.this.isDestroyed()) {
+            dialogGPSSetting.dismiss();
+        }
+    }
+
+    public void handleGPSSetting(boolean statusGPS) {
+        if (statusGPS) {
+            dismisDialogGPSSetting();
+        } else {
+            showDialogGPSSetting();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(serviceConnection);
+    }
+    //11/01/2017 ADD by HoangIT END
 }

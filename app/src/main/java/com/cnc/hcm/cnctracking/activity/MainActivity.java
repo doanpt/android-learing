@@ -40,6 +40,8 @@ import com.cnc.hcm.cnctracking.adapter.FragmentAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
+import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
+import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
 import com.cnc.hcm.cnctracking.fragment.MonthViewFragment;
@@ -112,6 +114,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Fragment[] listFrag;
     private GPSService gpsService;
     private DialogDetailTaskFragment dialogDetailTaskFragment;
+    private DialogNetworkSetting dialogNetworkSetting;
+    private DialogGPSSetting dialogGPSSetting;
 
     private ArrayList<ItemTask> arrItemTask = new ArrayList<>();
     private ArrayList<ItemMarkedMap> arrMarkedTask = new ArrayList<>();
@@ -145,7 +149,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void initObject() {
+        dialogNetworkSetting = new DialogNetworkSetting(this);
+        dialogGPSSetting = new DialogGPSSetting(this);
         dialogDetailTaskFragment = new DialogDetailTaskFragment();
+
         taskNewFragment = new TaskNewFragment();
         taskDoingFragment = new TaskDoingFragment();
         taskCompletedFragment = new TaskCompletedFragment();
@@ -164,12 +171,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 //                Log.d("GPSService","Call connect in MainActivity");
 //                gpsService.connectSocket(token);
 //            }
-            Log.d(TAG, "ServiceConnection, onServiceConnected");
+            Log.d(TAG, "ServiceConnection at MainActivity");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            Log.d(TAG, "ServiceConnection, onServiceDisconnected");
+            Log.d(TAG, "onServiceDisconnected at MainActivity");
         }
     };
 
@@ -211,7 +218,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         quantityNewTask = 0;
         quantityDoingTask = 0;
         quantityCompletedTask = 0;
-        showDialogLoadding();
+        showProgressLoadding();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
         ApiUtils.getAPIService(arrHeads).getTaskList().enqueue(new Callback<GetTaskListResult>() {
@@ -257,7 +264,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     } else {
                         CommonMethod.makeToast(MainActivity.this, "Không có công việc nào cả");
                     }
-                    dismisDialogLoading();
+                    dismisProgressLoading();
                 } else {
                     CommonMethod.makeToast(MainActivity.this, response.toString());
                 }
@@ -269,7 +276,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 Log.e(TAG, "tryGetTaskList.onFailure() --> " + t);
                 t.printStackTrace();
                 CommonMethod.makeToast(MainActivity.this, t.getMessage() != null ? t.getMessage().toString() : "onFailure");
-                dismisDialogLoading();
+                dismisProgressLoading();
             }
         });
     }
@@ -501,6 +508,50 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
+    private void showDialogNetworkSetting() {
+        if (dialogNetworkSetting != null && !dialogNetworkSetting.isShowing() && !MainActivity.this.isDestroyed()) {
+            dialogNetworkSetting.show();
+        }
+    }
+
+    private void dismisDialogNetworkSetting() {
+        if (dialogNetworkSetting != null && dialogNetworkSetting.isShowing() && !MainActivity.this.isDestroyed()) {
+            dialogNetworkSetting.dismiss();
+        }
+    }
+
+    public void handleNetworkSetting(boolean isNetworkConnected) {
+        if (isNetworkConnected) {
+            dismisDialogNetworkSetting();
+        } else {
+            showDialogNetworkSetting();
+        }
+    }
+
+    private void showDialogGPSSetting() {
+        if (dialogGPSSetting != null && !dialogGPSSetting.isShowing() && !MainActivity.this.isDestroyed()) {
+            dialogGPSSetting.show();
+        }
+    }
+
+    private void dismisDialogGPSSetting() {
+        if (dialogGPSSetting != null && dialogGPSSetting.isShowing() && !MainActivity.this.isDestroyed()) {
+            dialogGPSSetting.dismiss();
+        }
+    }
+
+    public void handleGPSSetting(boolean statusGPS) {
+        if (statusGPS) {
+            tvStatusGPS.setTextColor(getResources().getColor(R.color.color_text_status));
+            tvStatusGPS.setText(getResources().getString(R.string.On));
+            dismisDialogGPSSetting();
+        } else {
+            tvStatusGPS.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            tvStatusGPS.setText(getResources().getString(R.string.Off));
+            showDialogGPSSetting();
+        }
+    }
+
 
     private void showPopupMenu(View view) {
         PopupMenu popup = new PopupMenu(MainActivity.this, view);
@@ -579,6 +630,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
         dialog.show();
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -737,13 +789,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void setTitleStatusGPS(boolean status) {
-        if (status) {
-            tvStatusGPS.setTextColor(getResources().getColor(R.color.color_text_status));
-            tvStatusGPS.setText(getResources().getString(R.string.On));
-        } else {
-            tvStatusGPS.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            tvStatusGPS.setText(getResources().getString(R.string.Off));
-        }
+
     }
 
     private void checkUserLoginOnOtherDevice() {
@@ -759,14 +805,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         fragmentTransaction.commit();
     }
 
-    private void showDialogLoadding() {
+    private void showProgressLoadding() {
         mProgressDialog = new ProgressDialog(MainActivity.this);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage(getResources().getString(R.string.loadding));
         mProgressDialog.show();
     }
 
-    private void dismisDialogLoading() {
+    private void dismisProgressLoading() {
         if (mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }

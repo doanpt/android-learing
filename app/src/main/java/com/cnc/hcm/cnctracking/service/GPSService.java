@@ -25,7 +25,9 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.activity.AddProductActivity;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
+import com.cnc.hcm.cnctracking.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.api.APIService;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
@@ -33,7 +35,6 @@ import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LocationBackupFile;
 import com.cnc.hcm.cnctracking.model.LocationResponseUpload;
-import com.cnc.hcm.cnctracking.model.LocationUploadSize;
 import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -41,14 +42,12 @@ import com.cnc.hcm.cnctracking.util.UserInfo;
 //import com.github.nkzawa.socketio.client.Ack;
 //import com.github.nkzawa.socketio.client.IO;
 //import com.github.nkzawa.socketio.client.Socket;
-import com.google.android.gms.internal.bo;
 import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -94,6 +93,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private APIService mService;
     private MainActivity mainActivity;
     private WorkDetailActivity workDetailActivity;
+    private AddProductActivity addProductActivity;
+    private ProductDetailActivity productDetailActivity;
     //private LocationGooglePlayServicesProvider provider;
 
     private double longitude;
@@ -106,7 +107,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private Socket mSocket;
     private String addressName;
     private String cityName;
-    private Thread mThreadUpload;
     private boolean isUploading;
 
     {
@@ -116,6 +116,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             e.printStackTrace();
         }
     }
+
+    private Handler handler = new Handler();
 
     @Nullable
     @Override
@@ -448,7 +450,33 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         mService = ApiUtils.getAPIService(arrHeads);
         Log.d(TAGG, "Call connect in Service");
         connectSocket(token);
+        handler.post(runnableUpdateUI);
     }
+
+    Runnable runnableUpdateUI = new Runnable() {
+        @Override
+        public void run() {
+
+            boolean statusGPS = SmartLocation.with(GPSService.this).location().state().isAnyProviderAvailable();
+
+            //Check network connection
+            if (mainActivity != null) {
+                mainActivity.handleNetworkSetting(isNetworkConnected);
+                mainActivity.handleGPSSetting(statusGPS);
+            }
+            if (addProductActivity != null) {
+                addProductActivity.handleNetworkSetting(isNetworkConnected);
+                addProductActivity.handleGPSSetting(statusGPS);
+            }
+
+            if (productDetailActivity != null) {
+                productDetailActivity.handleNetworkSetting(isNetworkConnected);
+                productDetailActivity.handleGPSSetting(statusGPS);
+            }
+
+            handler.postDelayed(runnableUpdateUI, 500);
+        }
+    };
 
     public Socket getmSocket() {
         return mSocket;
@@ -580,5 +608,13 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     public void setWorkDetailActivity(WorkDetailActivity workDetailActivity) {
         this.workDetailActivity = workDetailActivity;
         workDetailActivity.myLocationHere(latitude, longitude);
+    }
+
+    public void setAddProductActivity(AddProductActivity addProductActivity) {
+        this.addProductActivity = addProductActivity;
+    }
+
+    public void setProductDetailActivity(ProductDetailActivity productDetailActivity) {
+        this.productDetailActivity = productDetailActivity;
     }
 }
