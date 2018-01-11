@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".activity.ProductDetailActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.ProductDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="16dp"
-            android:src="@drawable/ic_arrow"/>
+            android:src="@drawable/ic_arrow" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,14 +31,14 @@
                 android:layout_height="wrap_content"
                 android:text="Tủ lạnh samsung e234f23424"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Công việc: 2"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -64,14 +64,14 @@
                     android:text="1234567890123"
                     android:textColor="@color/colorPrimary"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/imv_expand_barcode"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_chevron_right"/>
+                    android:src="@drawable/ic_chevron_right" />
             </RelativeLayout>
 
             <LinearLayout
@@ -85,14 +85,14 @@
                     android:id="@+id/imv_qrcode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center" />
 
                 <ImageView
                     android:id="@+id/imv_code_128"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="16dp" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    android:text="12:20 22/02/2017"/>
+                    android:text="12:20 22/02/2017" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,13 +130,13 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/step_1_complete"/>
+                            android:src="@drawable/step_1_complete" />
 
                         <FrameLayout
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:background="#1A000000"/>
+                            android:background="#1A000000" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -151,42 +151,24 @@
                             android:layout_height="wrap_content"
                             android:text="Hiện trang ban đầu"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rv_initial_condition"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:padding="5dp"></android.support.v7.widget.RecyclerView>
                         </LinearLayout>
 
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000"/>
+                            android:background="#1A000000" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -203,13 +185,13 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/step_2_complete"/>
+                            android:src="@drawable/step_2_complete" />
 
                         <FrameLayout
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:background="#1A000000"/>
+                            android:background="#1A000000" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -224,75 +206,56 @@
                             android:layout_height="wrap_content"
                             android:text="Quá trình thực hiện"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Ảnh trạng thái hư"
-                            android:textColor="#33000000"/>
+                            android:textColor="#33000000" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rv_process_condition"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"></android.support.v7.widget.RecyclerView>
                         </LinearLayout>
 
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000"/>
+                            android:background="#1A000000" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Ghi chú"
-                            android:textColor="#33000000"/>
+                            android:textColor="#33000000" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:layout_marginTop="4dp"
-                            android:text="Máy lạnh k                          hông hoạt động, chuột cắn dây điện"/>
+                            android:text="Máy lạnh k                          hông hoạt động, chuột cắn dây điện" />
 
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000"/>
+                            android:background="#1A000000" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Sản phẩm cộng thêm"
-                            android:textColor="#33000000"/>
+                            android:textColor="#33000000" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -303,14 +266,14 @@
                             <ImageView
                                 android:layout_width="18dp"
                                 android:layout_height="18dp"
-                                android:src="@drawable/ic_product"/>
+                                android:src="@drawable/ic_product" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="8dp"
-                                android:text="Thay gas"/>
+                                android:text="Thay gas" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -326,12 +289,12 @@
                                 android:layout_weight="1"
                                 android:gravity="right"
                                 android:padding="4dp"
-                                android:text="5.000"/>
+                                android:text="5.000" />
 
                             <FrameLayout
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#1A000000"/>
+                                android:background="#1A000000" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -339,12 +302,12 @@
                                 android:layout_weight="1"
                                 android:gravity="right"
                                 android:padding="4dp"
-                                android:text="3"/>
+                                android:text="3" />
 
                             <FrameLayout
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#1A000000"/>
+                                android:background="#1A000000" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -352,13 +315,13 @@
                                 android:layout_weight="1"
                                 android:gravity="right"
                                 android:padding="4dp"
-                                android:text="15.000"/>
+                                android:text="15.000" />
                         </LinearLayout>
 
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000"/>
+                            android:background="#1A000000" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -375,13 +338,13 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/step_3_complete"/>
+                            android:src="@drawable/step_3_complete" />
 
                         <FrameLayout
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:background="#1A000000"/>
+                            android:background="#1A000000" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -396,42 +359,25 @@
                             android:layout_height="wrap_content"
                             android:text="Hoàn thành"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rv_finish_condition"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:padding="5dp"></android.support.v7.widget.RecyclerView>
 
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
-
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_margin="4dp"
-                                android:src="@mipmap/ic_launcher"/>
                         </LinearLayout>
 
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000"/>
+                            android:background="#1A000000" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -442,7 +388,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#40000000"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/fab_menu"
@@ -460,7 +406,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_brush"
                 app:fab_size="mini"
-                app:fab_title="Ghi chú"/>
+                app:fab_title="Ghi chú" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_product"
@@ -469,7 +415,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_fab_map"
                 app:fab_size="mini"
-                app:fab_title="Sản phẩm"/>
+                app:fab_title="Sản phẩm" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_step_three"
@@ -478,7 +424,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_camera"
                 app:fab_size="mini"
-                app:fab_title="Bước 3"/>
+                app:fab_title="Bước 3" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_step_two"
@@ -487,7 +433,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_camera"
                 app:fab_size="mini"
-                app:fab_title="Bước 2"/>
+                app:fab_title="Bước 2" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_step_one"
@@ -496,7 +442,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_camera"
                 app:fab_size="mini"
-                app:fab_title="Bước 1"/>
+                app:fab_title="Bước 1" />
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
         <LinearLayout
@@ -511,7 +457,7 @@
 
             <TextView
                 android:layout_width="100dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/tv_complete_work"
@@ -523,7 +469,7 @@
                 android:paddingRight="8dp"
                 android:paddingTop="4dp"
                 android:text="Hoàn thành"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

@@ -7,6 +7,8 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -16,14 +18,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.adapter.ProductDetailAdapter;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.BarcodeUtils;
+import com.cnc.hcm.cnctracking.util.Conts;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
+
+import java.util.ArrayList;
 
 public class ProductDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,7 +47,15 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
     private GPSService gpsService;
-
+    private ArrayList<String> arrInit;
+    private ArrayList<String> arrProcess;
+    private ArrayList<String> arrFinish;
+    private ProductDetailAdapter initAdapter;
+    private ProductDetailAdapter processAdapter;
+    private ProductDetailAdapter finishAdapter;
+    private RecyclerView initRecycler;
+    private RecyclerView processRecycler;
+    private RecyclerView finishRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +76,11 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
     //11/01/2017 ADD by HoangIT START
     private void initObject() {
+        Intent passData = getIntent();
+        boolean isOldProduct = passData.getStringExtra(Conts.KEY_TYPE_CHECK_PRODUCT).equals(Conts.KEY_OLD_PRODUCT) ? true : false;
+        if(isOldProduct){
+            //load data to display
+        }
         dialogGPSSetting = new DialogGPSSetting(this);
         dialogNetworkSetting = new DialogNetworkSetting(this);
     }
@@ -120,13 +139,53 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         fabStep1 = (FloatingActionButton) findViewById(R.id.fab_step_one);
         fabStep2 = (FloatingActionButton) findViewById(R.id.fab_step_two);
         fabStep3 = (FloatingActionButton) findViewById(R.id.fab_step_three);
+        String url="http://35.198.195.55:3001/uploads/user/image/12694730_1027043980685790_4855700393915351375.jpg";
+        arrInit = new ArrayList<>();
+        arrProcess = new ArrayList<>();
+        arrFinish = new ArrayList<>();
+        arrFinish.add(url);
+        arrFinish.add(url);
+        arrFinish.add(url);
+        arrFinish.add(url);
+        arrFinish.add(url);
+        arrInit.add(url);
+        arrInit.add(url);
+        arrInit.add(url);
+        arrInit.add(url);
+        arrInit.add(url);
+
+        arrProcess.add(url);
+        arrProcess.add(url);
+        arrProcess.add(url);
+        arrProcess.add(url);
+        arrProcess.add(url);
+        arrProcess.add(url);
+        initAdapter = new ProductDetailAdapter(this, arrInit);
+        processAdapter = new ProductDetailAdapter(this, arrProcess);
+        finishAdapter = new ProductDetailAdapter(this, arrFinish);
+        initRecycler = findViewById(R.id.rv_initial_condition);
+        processRecycler = findViewById(R.id.rv_process_condition);
+        finishRecycler = findViewById(R.id.rv_finish_condition);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        layoutManager.scrollToPosition(0);
+        initRecycler.setLayoutManager(layoutManager);
+        LinearLayoutManager layoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        layoutManager1.scrollToPosition(0);
+        processRecycler.setLayoutManager(layoutManager1);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        layoutManager2.scrollToPosition(0);
+        finishRecycler.setLayoutManager(layoutManager2);
+
+        initRecycler.setAdapter(initAdapter);
+        processRecycler.setAdapter(processAdapter);
+        finishRecycler.setAdapter(finishAdapter);
+
         fabNote.setOnClickListener(this);
         fabProduct.setOnClickListener(this);
         fabStep1.setOnClickListener(this);
         fabStep2.setOnClickListener(this);
         fabStep3.setOnClickListener(this);
-
-
     }
 
     @Override

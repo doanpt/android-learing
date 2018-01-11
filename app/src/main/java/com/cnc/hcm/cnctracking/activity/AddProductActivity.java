@@ -205,7 +205,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
         }
     }
 
-    private void addProduct(String productName, String category, String manufacture, String qrCode) {
+    private void addProduct(String productName, String category, String manufacture, final String qrCode) {
         if ("".equals(productName) || "".equals(manufacture) || "".equals(qrCode)) {
             CommonMethod.makeToast(this, "Param invalid");
         } else {
@@ -249,6 +249,8 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                     if (status == Conts.RESPONSE_STATUS_OK) {
                         CommonMethod.makeToast(AddProductActivity.this, "Add product success!");
                         Intent productDetail = new Intent(AddProductActivity.this, ProductDetailActivity.class);
+                        productDetail.putExtra(Conts.KEY_TYPE_CHECK_PRODUCT,Conts.KEY_OLD_PRODUCT);
+                        productDetail.putExtra(Conts.KEY_PRODUCT_ID,qrCode);
                         startActivity(productDetail);
                     } else {
                         CommonMethod.makeToast(AddProductActivity.this, "Add product error!");
@@ -284,6 +286,8 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                         Log.d("ABD", status + "   ");
                         if (status == Conts.RESPONSE_STATUS_OK) {
                             Intent productDetail = new Intent(AddProductActivity.this, ProductDetailActivity.class);
+                            productDetail.putExtra(Conts.KEY_TYPE_CHECK_PRODUCT,Conts.KEY_OLD_PRODUCT);
+                            productDetail.putExtra(Conts.KEY_PRODUCT_ID,content);
                             startActivity(productDetail);
                             CommonMethod.makeToast(AddProductActivity.this, "add product name:" + productName + " manufacture:" + manufacture + " QR code:" + qrCode);
                             Log.d("ABDonResponse", status + "  200 ");

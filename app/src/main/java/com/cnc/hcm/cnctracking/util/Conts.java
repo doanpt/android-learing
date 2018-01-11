@@ -171,4 +171,8 @@ public class Conts {
 
     public static final String KEY_OBJECT_ITEM_WORK = "KEY_OBJECT_ITEM_WORK";
     public static final String KEY_ID_TASK = "KEY_ID_TASK";
+    public static final String KEY_TYPE_CHECK_PRODUCT = "KEY_TYPE_CHECK_PRODUCT";
+    public static final String KEY_NEW_PRODUCT = "KEY_NEW_PRODUCT";
+    public static final String KEY_OLD_PRODUCT = "KEY_OLD_PRODUCT";
+    public static final String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
 }
