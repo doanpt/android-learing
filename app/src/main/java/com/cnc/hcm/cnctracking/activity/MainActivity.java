@@ -807,6 +807,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void showProgressLoadding() {
         mProgressDialog = new ProgressDialog(MainActivity.this);
+        mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage(getResources().getString(R.string.loadding));
         mProgressDialog.show();

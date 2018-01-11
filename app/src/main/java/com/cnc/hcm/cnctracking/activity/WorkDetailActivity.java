@@ -251,6 +251,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void showDialogLoadding() {
         mProgressDialog = new ProgressDialog(WorkDetailActivity.this);
+        mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage(getResources().getString(R.string.loadding));
         mProgressDialog.show();
