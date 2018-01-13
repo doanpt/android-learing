@@ -307,14 +307,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_done);
                     break;
             }
-            if (task.getTaskResult().address != null) {
-                addMarkerMap(task.getTaskResult()._id, task.getTaskResult().address.location.latitude,
-                        task.getTaskResult().address.location.longitude, task.getTaskResult().address.street, bitmapDescriptor);
-            } else {
-                addMarkerMap(task.getTaskResult()._id, task.getTaskResult().customer.address.location.latitude,
-                        task.getTaskResult().customer.address.location.longitude, task.getTaskResult().customer.address.street, bitmapDescriptor);
+            try {
+                if (task.getTaskResult().address != null) {
+                    addMarkerMap(task.getTaskResult()._id, task.getTaskResult().address.location.latitude,
+                            task.getTaskResult().address.location.longitude, task.getTaskResult().address.street, bitmapDescriptor);
+                } else {
+                    addMarkerMap(task.getTaskResult()._id, task.getTaskResult().customer.address.location.latitude,
+                            task.getTaskResult().customer.address.location.longitude, task.getTaskResult().customer.address.street, bitmapDescriptor);
+                }
+            }catch (Exception e){
+                Toast.makeText(this,"Error:"+task.getTaskResult().title,Toast.LENGTH_SHORT).show();
+                Log.e(TAG,"Error in addMarkerMap and task.getTaskResult().address");
             }
-
         }
     }
 
