@@ -67,7 +67,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_noti_work_complete);
         }
         holder.tvDistance.setText(itemTask.getDistanceToMyLocation());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         String createDate = itemTask.getTaskResult().createdDate.substring(0, itemTask.getTaskResult().createdDate.lastIndexOf(".")) + "Z";
         try {
             Date date = format.parse(createDate);

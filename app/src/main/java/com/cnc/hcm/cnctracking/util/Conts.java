@@ -133,6 +133,9 @@ public class Conts {
     public static final String PATH_ADD_CUSTOMER_PRODUCTS = "/customer-products";
     public static final String PATH_USER_PROFILE = PATH_USER + "/profile";
 
+    public static final String PATH_COUNT_TASK = "/tasks/statistics";
+
+
     public static final String KEY_AUTHORIZATION = "Authorization";
     public static final String VALUE_AUTHORIZATION = "Basic ZGVtbzI6MTIzNDU2";
 
@@ -175,4 +178,9 @@ public class Conts {
     public static final String KEY_NEW_PRODUCT = "KEY_NEW_PRODUCT";
     public static final String KEY_OLD_PRODUCT = "KEY_OLD_PRODUCT";
     public static final String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
+    public static final String FORMAT_DATE_FULL = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String FORMAT_TIME_FULL = "T00:00:00Z";
+    public static final String KEY_START_DATE = "startDate";
+    public static final String KEY_END_DATE = "endDate";
+
 }

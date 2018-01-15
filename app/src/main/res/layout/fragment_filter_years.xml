@@ -33,7 +33,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t1"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -61,7 +61,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t2"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -89,7 +89,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t3"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -117,7 +117,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t4"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -145,7 +145,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t5"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -173,7 +173,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t6"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -201,7 +201,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t7"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -229,7 +229,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t8"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -257,7 +257,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t9"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -285,7 +285,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t10"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -313,7 +313,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t11"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -341,7 +341,7 @@
                 <TextView
                     android:id="@+id/tv_number_task_t12"
                     style="@style/StyleQuantityTask"
-                    android:text="@string/text_zero"/>
+                    android:text="@string/text_am_1"/>
             </LinearLayout>
 
         </LinearLayout>

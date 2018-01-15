@@ -5,6 +5,7 @@ import com.cnc.hcm.cnctracking.model.AddProductItem;
 import com.cnc.hcm.cnctracking.model.AddProductResult;
 import com.cnc.hcm.cnctracking.model.CategoryListResult;
 import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
+import com.cnc.hcm.cnctracking.model.CountTaskResult;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.GetUserProfileResponseStatus;
@@ -49,5 +50,8 @@ public interface APIService {
 
     @GET(Conts.PATH_PRODUCTS_CATEGORY)
     Call<CategoryListResult> getListCategory();
+
+    @GET(Conts.PATH_COUNT_TASK)
+    Call<CountTaskResult> getCountTask();
 
 }

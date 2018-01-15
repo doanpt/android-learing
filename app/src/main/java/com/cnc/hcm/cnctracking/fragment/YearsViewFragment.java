@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 
 import java.text.ParseException;
@@ -126,7 +127,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
 
     private void handleActionGetTaskByFilterDate(int position) {
         setSelected(position);
-        String[] arrayDate = getStartEndDate(position);
+        String[] arrayDate = CommonMethod.getStartEndDate(position);
         String startDate = arrayDate[0];
         String endDate = arrayDate[1];
 
@@ -146,34 +147,5 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    private String[] getStartEndDate(int position) {
-        String[] arr = new String[2];
-        Calendar calendar = Calendar.getInstance();
-        int years = calendar.get(Calendar.YEAR);
-        String month = position < 9 ? ("0" + (position + 1)) : ((position + 1) + Conts.BLANK);
-        String dateFirstOfMonthTemp = years + "-" + month + "-01T00:01:00Z";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        Date dateFirstOfMonth = null;
-        try {
-            dateFirstOfMonth = format.parse(dateFirstOfMonthTemp);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (dateFirstOfMonth != null) {
-            ArrayList<String> arrDateOfMonth = new ArrayList<>();
-            calendar.setTime(dateFirstOfMonth);
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            int myMonth = calendar.get(Calendar.MONTH);
-            while (myMonth == calendar.get(Calendar.MONTH)) {
-                arrDateOfMonth.add(format.format(calendar.getTime()));
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-            }
 
-            String startDate = arrDateOfMonth.get(0);
-            String endDate = arrDateOfMonth.get(arrDateOfMonth.size() - 1);
-            arr[0] = startDate;
-            arr[1] = endDate;
-        }
-        return arr;
-    }
 }

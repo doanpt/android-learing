@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,6 +36,10 @@ public class CommonMethod {
     public static String formatTimeToString(long time) {
         Date date = new Date(time);
         return new SimpleDateFormat("dd/MM/yy HH:mm:ss").format(date);
+    }
+
+    public static String formatFullTimeToString(Date date) {
+        return new SimpleDateFormat(Conts.FORMAT_DATE_FULL).format(date);
     }
 
     public static String formatDateToString(long time) {
@@ -145,6 +150,37 @@ public class CommonMethod {
 
     public static void makeToast(Context context, String title) {
         Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+    }
+
+    public static String[] getStartEndDate(int currentMonth) {
+        String[] arr = new String[2];
+        Calendar calendar = Calendar.getInstance();
+        int years = calendar.get(Calendar.YEAR);
+        String month = currentMonth < 9 ? ("0" + (currentMonth + 1)) : ((currentMonth + 1) + Conts.BLANK);
+        String dateFirstOfMonthTemp = years + "-" + month + "-01" + Conts.FORMAT_TIME_FULL;
+        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        Date dateFirstOfMonth = null;
+        try {
+            dateFirstOfMonth = format.parse(dateFirstOfMonthTemp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (dateFirstOfMonth != null) {
+            ArrayList<String> arrDateOfMonth = new ArrayList<>();
+            calendar.setTime(dateFirstOfMonth);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            int myMonth = calendar.get(Calendar.MONTH);
+            while (myMonth == calendar.get(Calendar.MONTH)) {
+                arrDateOfMonth.add(format.format(calendar.getTime()));
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
+            String startDate = arrDateOfMonth.get(0);
+            String endDate = arrDateOfMonth.get(arrDateOfMonth.size() - 1);
+            arr[0] = startDate;
+            arr[1] = endDate;
+        }
+        return arr;
     }
 
 

@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -68,6 +70,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.squareup.picasso.Picasso;
 
@@ -159,6 +162,106 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         taskAllFragment = new TaskAllFragment();
         listFrag = new Fragment[]{taskNewFragment, taskDoingFragment, taskCompletedFragment, taskAllFragment};
     }
+
+    private void initViews() {
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        imvMenuDrawer = (ImageView) findViewById(R.id.imv_menu);
+        imvFilterActionBar = (ImageView) findViewById(R.id.imv_filter_list_on_action_bar);
+        imvProfile = (ImageView) findViewById(R.id.imv_profile);
+        imvFilter = (ImageView) findViewById(R.id.imv_filter_list);
+
+        imvProfile.setOnClickListener(this);
+        imvMenuDrawer.setOnClickListener(this);
+        imvFilterActionBar.setOnClickListener(this);
+        imvFilter.setOnClickListener(this);
+
+        llClickNetwork = (LinearLayout) findViewById(R.id.ll_click_network);
+        llClickGPS = (LinearLayout) findViewById(R.id.ll_click_gps);
+        llClickSetting = (LinearLayout) findViewById(R.id.ll_click_setting);
+        llClickHelp = (LinearLayout) findViewById(R.id.ll_click_help);
+        llTabs = (LinearLayout) findViewById(R.id.tabs);
+        llTabNewWork = (LinearLayout) findViewById(R.id.ll_tab_work_new_not_read);
+        llTabDoingWork = (LinearLayout) findViewById(R.id.ll_tab_work_doing);
+        llTabCompleteWork = (LinearLayout) findViewById(R.id.ll_tab_work_complete);
+
+        llTabs.setOnClickListener(this);
+        llClickNetwork.setOnClickListener(this);
+        llClickGPS.setOnClickListener(this);
+        llClickSetting.setOnClickListener(this);
+        llClickHelp.setOnClickListener(this);
+        llTabNewWork.setOnClickListener(this);
+        llTabDoingWork.setOnClickListener(this);
+        llTabCompleteWork.setOnClickListener(this);
+
+        tvStatusNetwork = (TextView) findViewById(R.id.tv_status_network);
+        tvStatusGPS = (TextView) findViewById(R.id.tv_status_gps);
+        tvMonth = (TextView) findViewById(R.id.tv_month_calendar);
+        tvYear = (TextView) findViewById(R.id.tv_year_calendar);
+        tvUsername = (TextView) findViewById(R.id.tv_username_profile);
+        tvUserMail = (TextView) findViewById(R.id.tv_user_email_profile);
+        tvUsername.setText(UserInfo.getInstance(this).getUsername());
+        tvUserMail.setText(UserInfo.getInstance(this).getUserEmail());
+        tvChangeViewMonthYear = (TextView) findViewById(R.id.tv_change_view_month_year);
+        tvChangeViewMonthYear.setOnClickListener(this);
+        tvToday = (TextView) findViewById(R.id.tv_today);
+        tvToday.setOnClickListener(this);
+        tvQuantityNewTask = (TextView) findViewById(R.id.tv_quantity_new_task);
+        tvQuantityDoingTask = (TextView) findViewById(R.id.tv_quantity_doing_task);
+        tvQuantityCompleteTask = (TextView) findViewById(R.id.tv_quantity_done_task);
+
+
+        btnLogout = (Button) findViewById(R.id.btn_logout);
+        btnLogout.setOnClickListener(this);
+
+        imvAvatar = (CircleImageView) findViewById(R.id.imv_avatar_profile);
+        imvAvatar.setOnClickListener(this);
+
+
+        Picasso.with(this).load(Conts.URL_BASE + UserInfo.getInstance(this).getUserUrlImage())
+                .placeholder(R.drawable.ic_account)
+                .error(R.drawable.ic_account).into(imvAvatar);
+
+
+        bottomSheetLayout = (LinearLayout) findViewById(R.id.linear_layout_bottom_sheet);
+        bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(bottomSheetLayout);
+        bottomSheetBehavior.setBottomSheetCallback(new ViewPagerBottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int i) {
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+                if (v < 0) {
+                    llTabs.setVisibility(View.VISIBLE);
+                } else if (v > 0) {
+                    llTabs.setVisibility(View.GONE);
+                } else if (v == 0) {
+                    llTabs.setVisibility(View.VISIBLE);
+                    viewPager.setCurrentItem(SettingApp.getInstance(MainActivity.this).getTypeFilterList());
+                }
+
+            }
+        });
+
+        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), listFrag);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapter);
+        BottomSheetUtils.setupViewPager(viewPager);
+        viewPager.setCurrentItem(SettingApp.getInstance(this).getTypeFilterList());
+
+        int typeView = SettingApp.getInstance(this).getTypeView();
+        callViewCalendar(typeView);
+
+
+    }
+
+    private void initMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -267,6 +370,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     dismisProgressLoading();
                 } else {
                     CommonMethod.makeToast(MainActivity.this, response.toString());
+                    dismisProgressLoading();
                 }
 
             }
@@ -307,120 +411,45 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_done);
                     break;
             }
-            try {
-                if (task.getTaskResult().address != null) {
-                    addMarkerMap(task.getTaskResult()._id, task.getTaskResult().address.location.latitude,
-                            task.getTaskResult().address.location.longitude, task.getTaskResult().address.street, bitmapDescriptor);
+            GetTaskDetailResult.Result result = task.getTaskResult();
+            if (result.address != null) {
+                if (result.address.location != null) {
+                    addMarkerMap(result._id, result.address.location.latitude,
+                            result.address.location.longitude, result.address.street, bitmapDescriptor);
                 } else {
-                    addMarkerMap(task.getTaskResult()._id, task.getTaskResult().customer.address.location.latitude,
-                            task.getTaskResult().customer.address.location.longitude, task.getTaskResult().customer.address.street, bitmapDescriptor);
+                    String locationName = result.address.street;
+                    Address address = getLocationFromLocationName(locationName);
+                    if (address != null) {
+                        addMarkerMap(result._id, address.getLatitude(), address.getLongitude(), locationName, bitmapDescriptor);
+                    } else {
+                        Toast.makeText(this, "Error Address null :" + result.title, Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Error in addMarkerMap and task.getTaskResult().address = null");
+                    }
                 }
-            }catch (Exception e){
-                Toast.makeText(this,"Error:"+task.getTaskResult().title,Toast.LENGTH_SHORT).show();
-                Log.e(TAG,"Error in addMarkerMap and task.getTaskResult().address");
+            } else {
+                if (result.customer != null && result.customer.address != null && result.customer.address.location != null) {
+                    addMarkerMap(result._id, result.customer.address.location.latitude,
+                            result.customer.address.location.longitude, result.customer.address.street, bitmapDescriptor);
+                } else {
+                    Toast.makeText(this, "Error Address CUSTOMER null :" + result.title, Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Error in addMarkerMap and task.getTaskResult().address CUSTOMER = null");
+                }
             }
         }
     }
 
-
-    private void initMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
-
-    private void initViews() {
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        imvMenuDrawer = (ImageView) findViewById(R.id.imv_menu);
-        imvFilterActionBar = (ImageView) findViewById(R.id.imv_filter_list_on_action_bar);
-        imvProfile = (ImageView) findViewById(R.id.imv_profile);
-        imvFilter = (ImageView) findViewById(R.id.imv_filter_list);
-
-        imvProfile.setOnClickListener(this);
-        imvMenuDrawer.setOnClickListener(this);
-        imvFilterActionBar.setOnClickListener(this);
-        imvFilter.setOnClickListener(this);
-
-        llClickNetwork = (LinearLayout) findViewById(R.id.ll_click_network);
-        llClickGPS = (LinearLayout) findViewById(R.id.ll_click_gps);
-        llClickSetting = (LinearLayout) findViewById(R.id.ll_click_setting);
-        llClickHelp = (LinearLayout) findViewById(R.id.ll_click_help);
-        llTabs = (LinearLayout) findViewById(R.id.tabs);
-        llTabNewWork = (LinearLayout) findViewById(R.id.ll_tab_work_new_not_read);
-        llTabDoingWork = (LinearLayout) findViewById(R.id.ll_tab_work_doing);
-        llTabCompleteWork = (LinearLayout) findViewById(R.id.ll_tab_work_complete);
-
-        llTabs.setOnClickListener(this);
-        llClickNetwork.setOnClickListener(this);
-        llClickGPS.setOnClickListener(this);
-        llClickSetting.setOnClickListener(this);
-        llClickHelp.setOnClickListener(this);
-        llTabNewWork.setOnClickListener(this);
-        llTabDoingWork.setOnClickListener(this);
-        llTabCompleteWork.setOnClickListener(this);
-
-        tvStatusNetwork = (TextView) findViewById(R.id.tv_status_network);
-        tvStatusGPS = (TextView) findViewById(R.id.tv_status_gps);
-        tvMonth = (TextView) findViewById(R.id.tv_month_calendar);
-        tvYear = (TextView) findViewById(R.id.tv_year_calendar);
-        tvUsername = (TextView) findViewById(R.id.tv_username_profile);
-        tvUserMail = (TextView) findViewById(R.id.tv_user_email_profile);
-        tvUsername.setText(UserInfo.getInstance(this).getUsername());
-        tvUserMail.setText(UserInfo.getInstance(this).getUserEmail());
-        tvChangeViewMonthYear = (TextView) findViewById(R.id.tv_change_view_month_year);
-        tvChangeViewMonthYear.setOnClickListener(this);
-        tvToday = (TextView) findViewById(R.id.tv_today);
-        tvToday.setOnClickListener(this);
-        tvQuantityNewTask = (TextView) findViewById(R.id.tv_quantity_new_task);
-        tvQuantityDoingTask = (TextView) findViewById(R.id.tv_quantity_doing_task);
-        tvQuantityCompleteTask = (TextView) findViewById(R.id.tv_quantity_done_task);
-
-
-        btnLogout = (Button) findViewById(R.id.btn_logout);
-        btnLogout.setOnClickListener(this);
-
-        imvAvatar = (CircleImageView) findViewById(R.id.imv_avatar_profile);
-        imvAvatar.setOnClickListener(this);
-
-
-        Picasso.with(this).load(Conts.URL_BASE + UserInfo.getInstance(this).getUserUrlImage())
-                .placeholder(R.drawable.ic_account)
-                .error(R.drawable.ic_account).into(imvAvatar);
-
-
-        bottomSheetLayout = (LinearLayout) findViewById(R.id.linear_layout_bottom_sheet);
-        bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(bottomSheetLayout);
-        bottomSheetBehavior.setBottomSheetCallback(new ViewPagerBottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View view, int i) {
-            }
-
-            @Override
-            public void onSlide(@NonNull View view, float v) {
-                if (v < 0) {
-                    llTabs.setVisibility(View.VISIBLE);
-                } else if (v > 0) {
-                    llTabs.setVisibility(View.GONE);
-                } else if (v == 0) {
-                    llTabs.setVisibility(View.VISIBLE);
-                    viewPager.setCurrentItem(SettingApp.getInstance(MainActivity.this).getTypeFilterList());
-                }
-
-            }
-        });
-
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), listFrag);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(adapter);
-        BottomSheetUtils.setupViewPager(viewPager);
-        viewPager.setCurrentItem(SettingApp.getInstance(this).getTypeFilterList());
-
-        int typeView = SettingApp.getInstance(this).getTypeView();
-        callViewCalendar(typeView);
-
-
+    private Address getLocationFromLocationName(String locationName) {
+        Geocoder geocoder = new Geocoder(this);
+        List<Address> addressList = null;
+        try {
+            addressList = geocoder.getFromLocationName(locationName, 5);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addressList != null && addressList.size() > 0) {
+            return addressList.get(0);
+        }
+        return null;
     }
 
     public void callViewCalendar(int typeView) {
