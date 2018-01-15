@@ -11,6 +11,7 @@ import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.GetUserProfileResponseStatus;
 import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LoginResponseStatus;
+import com.cnc.hcm.cnctracking.model.ProcessDeviceResult;
 import com.cnc.hcm.cnctracking.model.ProductListResult;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -38,6 +39,9 @@ public interface APIService {
 
     @GET(Conts.PATH_TASK_DETAIL)
     Call<GetTaskDetailResult> getTaskDetails(@Path("id") String taskId);
+
+    @PATCH(Conts.PATH_TASK_DETAIL_PROCESS_DEVICE)
+    Call<ProcessDeviceResult> processDevice(@Path("id") String taskId);
 
     @GET(Conts.PATH_GET_PRODUCT_BY_ID)
     Call<CheckContainProductResult> getProductById(@Path("id") String productID);

@@ -20,8 +20,8 @@ public final class GetTaskDetailResult {
         public final long __v;
         public final String createdDate;
         public final Status status;
-        public final Process[] process;
-        public final Executive[] executive;
+        public final Process process[];
+        public final Executive executive[];
         public final String appointmentDate;
         public final Address address;
 
@@ -123,15 +123,15 @@ public final class GetTaskDetailResult {
         }
 
         public static final class Process {
-            public final String device;
+            public final Device device;
             public final User user;
             public final String _id;
-            public final String status;
-            public final String[] after;
+            public final Status status;
+            public final After after;
             public final ProcessDetail process;
-            public final String[] before;
+            public final Before before;
 
-            public Process(String device, User user, String _id, String status, String[] after, ProcessDetail process, String[] before) {
+            public Process(Device device, User user, String _id, Status status, After after, ProcessDetail process, Before before){
                 this.device = device;
                 this.user = user;
                 this._id = _id;
@@ -141,35 +141,111 @@ public final class GetTaskDetailResult {
                 this.before = before;
             }
 
+            public static final class Device {
+                public final String _id;
+                public final Detail detail;
+                public final String customer;
+                public final long __v;
+                public final String createdDate;
+
+                public Device(String _id, Detail detail, String customer, long __v, String createdDate){
+                    this._id = _id;
+                    this.detail = detail;
+                    this.customer = customer;
+                    this.__v = __v;
+                    this.createdDate = createdDate;
+                }
+
+                public static final class Detail {
+                    public final String _id;
+                    public final Brand brand;
+                    public final Category category;
+                    public final String name;
+                    public final Photo photo;
+                    public final long __v;
+                    public final String createdDate;
+
+                    public Detail(String _id, Brand brand, Category category, String name, Photo photo, long __v, String createdDate){
+                        this._id = _id;
+                        this.brand = brand;
+                        this.category = category;
+                        this.name = name;
+                        this.photo = photo;
+                        this.__v = __v;
+                        this.createdDate = createdDate;
+                    }
+
+                    public static final class Brand {
+                        public final String _id;
+                        public final String name;
+                        public final String photo;
+                        public final long __v;
+                        public final String createdDate;
+                        public final String description;
+
+                        public Brand(String _id, String name, String photo, long __v, String createdDate, String description){
+                            this._id = _id;
+                            this.name = name;
+                            this.photo = photo;
+                            this.__v = __v;
+                            this.createdDate = createdDate;
+                            this.description = description;
+                        }
+                    }
+
+                    public static final class Category {
+                        public final String _id;
+                        public final String title;
+                        public final String photo;
+                        public final long __v;
+                        public final String createdDate;
+                        public final String description;
+
+                        public Category(String _id, String title, String photo, long __v, String createdDate, String description){
+                            this._id = _id;
+                            this.title = title;
+                            this.photo = photo;
+                            this.__v = __v;
+                            this.createdDate = createdDate;
+                            this.description = description;
+                        }
+                    }
+
+                    public static final class Photo {
+
+                        public Photo(){
+                        }
+                    }
+                }
+            }
+
             public static final class User {
                 public final String _id;
                 public final String fullname;
                 public final String email;
-                public final String dateOfBirth;
-                public final String address;
                 public final String phone;
                 public final long position;
                 public final long skill;
                 public final String photo;
                 public final long __v;
-                public final String accessToken;
+                public final String dateOfBirth;
+                public final String address;
                 public final String createdDate;
                 public final long group;
                 public final boolean isDriver;
                 public final String agent;
 
-                public User(String _id, String fullname, String email, String dateOfBirth, String address, String phone, long position, long skill, String photo, long __v, String accessToken, String createdDate, long group, boolean isDriver, String agent){
+                public User(String _id, String fullname, String email, String phone, long position, long skill, String photo, long __v, String dateOfBirth, String address, String createdDate, long group, boolean isDriver, String agent){
                     this._id = _id;
                     this.fullname = fullname;
                     this.email = email;
-                    this.dateOfBirth = dateOfBirth;
-                    this.address = address;
                     this.phone = phone;
                     this.position = position;
                     this.skill = skill;
                     this.photo = photo;
                     this.__v = __v;
-                    this.accessToken = accessToken;
+                    this.dateOfBirth = dateOfBirth;
+                    this.address = address;
                     this.createdDate = createdDate;
                     this.group = group;
                     this.isDriver = isDriver;
@@ -177,23 +253,111 @@ public final class GetTaskDetailResult {
                 }
             }
 
-            public static final class ProcessDetail {
-                public final Product[] products;
+            public static final class Status {
+                public final long _id;
+                public final String title;
+                public final String description;
+
+                public Status(long _id, String title, String description){
+                    this._id = _id;
+                    this.title = title;
+                    this.description = description;
+                }
+            }
+
+            public static final class After {
                 public final String[] photos;
 
-                public ProcessDetail(Product[] products, String[] photos) {
+                public After(String[] photos){
+                    this.photos = photos;
+                }
+            }
+
+            public static final class ProcessDetail {
+                public final Service services[];
+                public final Product products[];
+                public final String[] photos;
+
+                public ProcessDetail(Service[] services, Product[] products, String[] photos){
+                    this.services = services;
                     this.products = products;
                     this.photos = photos;
                 }
 
-                public static final class Product {
-                    public final String product;
-                    public final int quantity;
+                public static final class Service {
+                    public final Product product;
+                    public final String _id;
+                    public final long quantity;
 
-                    public Product(String product, int quantity){
+                    public Service(Product product, String _id, long quantity){
                         this.product = product;
+                        this._id = _id;
                         this.quantity = quantity;
                     }
+
+                    public static final class Product {
+                        public final String _id;
+                        public final String name;
+                        public final String price;
+                        public final String photo;
+                        public final long __v;
+                        public final String createdDate;
+                        public final long tax;
+
+                        public Product(String _id, String name, String price, String photo, long __v, String createdDate, long tax){
+                            this._id = _id;
+                            this.name = name;
+                            this.price = price;
+                            this.photo = photo;
+                            this.__v = __v;
+                            this.createdDate = createdDate;
+                            this.tax = tax;
+                        }
+                    }
+                }
+
+                public static final class Product {
+                    public final ProductDetail product;
+                    public final String _id;
+                    public final long quantity;
+
+                    public Product(ProductDetail product, String _id, long quantity){
+                        this.product = product;
+                        this._id = _id;
+                        this.quantity = quantity;
+                    }
+
+                    public static final class ProductDetail {
+                        public final String _id;
+                        public final String name;
+                        public final String brand;
+                        public final String category;
+                        public final String photo;
+                        public final long __v;
+                        public final String createdDate;
+                        public final long tax;
+                        public final long quantity;
+
+                        public ProductDetail(String _id, String name, String brand, String category, String photo, long __v, String createdDate, long tax, long quantity){
+                            this._id = _id;
+                            this.name = name;
+                            this.brand = brand;
+                            this.category = category;
+                            this.photo = photo;
+                            this.__v = __v;
+                            this.createdDate = createdDate;
+                            this.tax = tax;
+                            this.quantity = quantity;
+                        }
+                    }
+                }
+            }
+
+            public static final class Before {
+                public final String[] photos;
+
+                public Before(String[] photos){
+                    this.photos = photos;
                 }
             }
         }
@@ -202,42 +366,42 @@ public final class GetTaskDetailResult {
             public final User user;
             public final String _id;
             public final String joinedDate;
+            public final Boolean isLeader;
 
-            public Executive(User user, String _id, String joinedDate){
+            public Executive(User user, String _id, String joinedDate, Boolean isLeader){
                 this.user = user;
                 this._id = _id;
                 this.joinedDate = joinedDate;
+                this.isLeader = isLeader;
             }
 
             public static final class User {
                 public final String _id;
                 public final String fullname;
                 public final String email;
-                public final String dateOfBirth;
-                public final String address;
                 public final String phone;
                 public final long position;
                 public final long skill;
                 public final String photo;
                 public final long __v;
-                public final String accessToken;
+                public final String dateOfBirth;
+                public final String address;
                 public final String createdDate;
                 public final long group;
                 public final boolean isDriver;
                 public final String agent;
 
-                public User(String _id, String fullname, String email, String dateOfBirth, String address, String phone, long position, long skill, String photo, long __v, String accessToken, String createdDate, long group, boolean isDriver, String agent){
+                public User(String _id, String fullname, String email, String phone, long position, long skill, String photo, long __v, String dateOfBirth, String address, String createdDate, long group, boolean isDriver, String agent){
                     this._id = _id;
                     this.fullname = fullname;
                     this.email = email;
-                    this.dateOfBirth = dateOfBirth;
-                    this.address = address;
                     this.phone = phone;
                     this.position = position;
                     this.skill = skill;
                     this.photo = photo;
                     this.__v = __v;
-                    this.accessToken = accessToken;
+                    this.dateOfBirth = dateOfBirth;
+                    this.address = address;
                     this.createdDate = createdDate;
                     this.group = group;
                     this.isDriver = isDriver;

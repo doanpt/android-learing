@@ -9,9 +9,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.IBinder;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -68,7 +66,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     private double latitude;
     private double longitude;
     private boolean isNetworkConnected;
-    private String idTask;
+    private String savedIdTask;
     private String customerId;
 
     private ViewPager vp_body;
@@ -111,6 +109,11 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_work_detail);
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         initViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         loadTaskInfoToUI();
     }
 
@@ -155,10 +158,10 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void loadTaskInfoToUI() {
-        idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
-//        customerId = getIntent().getStringExtra(Conts.KEY_CUSTOMER_ID);
-        if (idTask != null) {
-            tryGetTaskDetail(UserInfo.getInstance(getApplicationContext()).getAccessToken(), idTask);
+        String idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
+        savedIdTask = idTask != null ? idTask : savedIdTask;
+        if (savedIdTask != null) {
+            tryGetTaskDetail(UserInfo.getInstance(getApplicationContext()).getAccessToken(), savedIdTask);
         }
     }
 
@@ -171,11 +174,9 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onResponse(Call<GetTaskDetailResult> call, Response<GetTaskDetailResult> response) {
                 int statusCode = response.code();
-                Log.e(TAGG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode);
                 if (response.isSuccessful()) {
-                    Log.e(TAGG, "tryGetTaskDetail.onResponse(), --> response: " + response.toString());
                     getTaskDetailResult = response.body();
-                    Log.e(TAGG, "tryGetTaskDetail.onResponse(), --> getTaskDetailResult: " + getTaskDetailResult.toString());
+                    Log.e(TAGG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode + ", getTaskDetailResult: " + getTaskDetailResult);
                     onTaskInfoLoaded(getTaskDetailResult);
                     dismisDialogLoading();
                 }

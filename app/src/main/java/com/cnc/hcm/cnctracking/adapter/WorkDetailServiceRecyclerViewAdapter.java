@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
-import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,23 +17,16 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
 
     private static final String TAG = WorkDetailServiceRecyclerViewAdapter.class.getSimpleName();
 
-    private List<GetTaskDetailResult.Result.Service> services = new ArrayList<>();
+    private List<DetailService> services = new ArrayList<>();
 
     private Context context;
 
     public WorkDetailServiceRecyclerViewAdapter(Context context) {
         this.context = context;
-
-        initProcesses();
     }
 
-    public List<GetTaskDetailResult.Result.Service> getServices() {
+    public List<DetailService> getServices() {
         return services;
-    }
-
-    private void initProcesses() {
-        services.add(new GetTaskDetailResult.Result.Service("123", "Sửa tủ lạnh", "50000", null, 2, null, 2));
-        services.add(new GetTaskDetailResult.Result.Service("345", "Mát xa", "150000", null, 3, null, 2));
     }
 
     @Override
@@ -45,13 +37,12 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
 
     @Override
     public void onBindViewHolder(WorkDetailServiceRecyclerViewAdapter.ViewHolder holder, int position) {
-        GetTaskDetailResult.Result.Service service = this.services.get(position);
+        DetailService service = this.services.get(position);
         try {
             holder.tv_service_name.setText("" + service.name);
             holder.tv_single_price.setText("" + service.price);
-            holder.tv_volume.setText("" + service.__v);
-            long servicePrice = Integer.parseInt(service.price) * service.__v;
-            holder.tv_service_price.setText("" + servicePrice);
+            holder.tv_volume.setText("" + service.quantity);
+            holder.tv_service_price.setText("" + service.totalPrice());
         } catch (Exception e) {
             Log.e(TAG, "onBindViewHolder, Exception: " + e);
         }
@@ -62,7 +53,7 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
         return services.size();
     }
 
-    public void updateDeviceList(List<GetTaskDetailResult.Result.Service> services) {
+    public void updateDeviceList(List<DetailService> services) {
         if (services != null && !services.isEmpty()) {
             this.services = services;
             notifyDataSetChanged();
@@ -82,6 +73,28 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
             tv_single_price = itemView.findViewById(R.id.tv_single_price);
             tv_volume = itemView.findViewById(R.id.tv_volume);
             tv_service_price = itemView.findViewById(R.id.tv_service_price);
+        }
+    }
+
+    public static final class DetailService {
+        private String name;
+        private String price;
+        private long quantity;
+
+        public DetailService(String name, String price, long quantity) {
+            this.name = name;
+            this.price = price;
+            this.quantity = quantity;
+        }
+
+        public long totalPrice() {
+            long totalPrice = 0;
+            try {
+                totalPrice = Integer.parseInt(price) * quantity;
+            } catch (Exception e) {
+                Log.e(TAG, "totalPrice(), Exception: " + e.getMessage(), e);
+            }
+            return totalPrice;
         }
     }
 }

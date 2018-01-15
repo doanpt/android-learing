@@ -126,6 +126,7 @@ public class Conts {
 
     public static final String PATH_TASK_LIST = "/tasks";
     public static final String PATH_TASK_DETAIL = "/task/{id}";
+    public static final String PATH_TASK_DETAIL_PROCESS_DEVICE = PATH_TASK_DETAIL + "/process-device";
     public static final String PATH_PRODUCTS_BRAND = "/product-brands";
     public static final String PATH_PRODUCTS_CATEGORY = "/product-categories";
 
@@ -144,6 +145,8 @@ public class Conts {
 
 
     public static final String KEY_CUSTOMER_ID = "customerId";
+
+    public static final String KEY_DEVICE_ID = "deviceId";
 
     public static final String KEY_ACCESS_TOKEN = "accessToken";
     public static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";

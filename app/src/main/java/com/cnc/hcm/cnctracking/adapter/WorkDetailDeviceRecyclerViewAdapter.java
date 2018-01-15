@@ -2,6 +2,7 @@ package com.cnc.hcm.cnctracking.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.event.RecyclerViewItemClickListener;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 
 import java.util.ArrayList;
@@ -16,21 +18,18 @@ import java.util.List;
 
 public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<WorkDetailDeviceRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG = WorkDetailDeviceRecyclerViewAdapter.class.getSimpleName();
+
     private List<GetTaskDetailResult.Result.Process> processes = new ArrayList<>();
 
-    private Context context;
-
-    public WorkDetailDeviceRecyclerViewAdapter(Context context) {
-        this.context = context;
-
-        initProcesses();
+    public List<GetTaskDetailResult.Result.Process> getProcesses() {
+        return processes;
     }
 
-    private void initProcesses() {
-//        processes.add(new GetTaskDetailResult.Result.Process("Device1", null, null, "1", null, null, null));
-//        processes.add(new GetTaskDetailResult.Result.Process("Device2", null, null, "3", null, null, null));
-//        processes.add(new GetTaskDetailResult.Result.Process("Device3", null, null, "1", null, null, null));
-//        processes.add(new GetTaskDetailResult.Result.Process("Device4", null, null, "2", null, null, null));
+    private final RecyclerViewItemClickListener mListener;
+
+    public WorkDetailDeviceRecyclerViewAdapter(RecyclerViewItemClickListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -40,11 +39,21 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
     }
 
     @Override
-    public void onBindViewHolder(WorkDetailDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(WorkDetailDeviceRecyclerViewAdapter.ViewHolder holder, final int position) {
         GetTaskDetailResult.Result.Process process = processes.get(position);
-        holder.tv_title.setText(process.device + "");
-        holder.tv_status.setText("Hoàn thành bước " + process.status);
-        holder.iv_status.setImageResource("1".equals(process.status) ? R.drawable.step_1_complete : ("2".equals(process.status) ? R.drawable.step_2_complete : R.drawable.step_3_complete));
+        try {
+            holder.tv_title.setText(process.device.detail.name + "");
+            holder.tv_status.setText("Hoàn thành bước " + process.status._id);
+            holder.iv_status.setImageResource("1".equals(process.status._id) ? R.drawable.step_1_complete : ("2".equals(process.status._id) ? R.drawable.step_2_complete : R.drawable.step_3_complete));
+            holder.iv_fix.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onClick(v, position);
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "", e);
+        }
     }
 
     @Override

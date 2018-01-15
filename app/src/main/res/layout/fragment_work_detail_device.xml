@@ -12,8 +12,7 @@
         android:gravity="center"
         android:padding="8dp"
         android:text="Thiết bị bảo trì"
-        android:textSize="23sp"
-        android:textStyle="bold"
+        android:textSize="18sp"
         android:textColor="@color/colorPrimary" />
 
     <android.support.v7.widget.RecyclerView

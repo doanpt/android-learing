@@ -21,6 +21,7 @@ import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailServiceRecyclerViewAdapter;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
     @Override
     public void onTaskDetailLoaded(GetTaskDetailResult getTaskDetailResult) {
         try {
-            Log.e(TAG, "onTaskDetailLoaded, customer.fullname: " + getTaskDetailResult.result.customer.fullname);
+            Log.d(TAG, "onTaskDetailLoaded");
             if (getTaskDetailResult.result.address != null) {
                 handleActions(getTaskDetailResult.result.address);
             }
@@ -111,23 +112,49 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
                 tv_detail_work_contact_phone.setText(getTaskDetailResult.result.customer.phone + "");
                 handleActions(getTaskDetailResult.result.customer);
             }
+
+            List<WorkDetailServiceRecyclerViewAdapter.DetailService> detailServices = new ArrayList<>();
             if (getTaskDetailResult.result.service != null) {
-                long totalValue = Integer.parseInt(getTaskDetailResult.result.service.price) * getTaskDetailResult.result.service.__v;
-                tv_total_value.setText("" + totalValue);
-                long vat = totalValue/10;
-                tv_vat.setText("" + vat);
-                tv_have_to_pay.setText("" + (totalValue - vat));
-                tv_detail_work_total_payment.setText("" + (totalValue - vat));
-                mWorkDetailServiceRecyclerViewAdapter.updateDeviceList(Arrays.asList(getTaskDetailResult.result.service));
+                detailServices.add(new WorkDetailServiceRecyclerViewAdapter.DetailService(getTaskDetailResult.result.service.name, getTaskDetailResult.result.service.price, 1));
             }
+            if (getTaskDetailResult.result.process != null) {
+                for (int i = 0; i < getTaskDetailResult.result.process.length; i++) {
+                    GetTaskDetailResult.Result.Process process = getTaskDetailResult.result.process[i];
+                    if (process != null && process.process != null) {
+                        GetTaskDetailResult.Result.Process.ProcessDetail.Service[] services = process.process.services;
+                        if (services != null) {
+                            for (GetTaskDetailResult.Result.Process.ProcessDetail.Service service : services){
+                                if (service != null) {
+                                    detailServices.add(new WorkDetailServiceRecyclerViewAdapter.DetailService(service.product.name, service.product.price, service.quantity));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            long totalValue = 0;
+            for (WorkDetailServiceRecyclerViewAdapter.DetailService detailService : detailServices) {
+                if (detailService != null) {
+                    totalValue += detailService.totalPrice();
+                }
+            }
+
+            tv_total_value.setText("" + totalValue);
+            long vat = totalValue/10;
+            tv_vat.setText("" + vat);
+            tv_have_to_pay.setText("" + (totalValue - vat));
+            tv_detail_work_total_payment.setText("" + (totalValue - vat));
+            mWorkDetailServiceRecyclerViewAdapter.updateDeviceList(detailServices);
+
         } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e);
+            Log.e(TAG, "onTaskDetailLoaded(), Exception: " + e);
         }
     }
 
     @Override
     public void onLocationUpdate(double latitude, double longitude) {
-        Log.e(TAG, "onLocationUpdate, latitude: " + latitude + ", longitude: " + longitude);
+        Log.d(TAG, "onLocationUpdate, latitude: " + latitude + ", longitude: " + longitude);
         this.latitude = latitude;
         this.longitude = longitude;
     }
