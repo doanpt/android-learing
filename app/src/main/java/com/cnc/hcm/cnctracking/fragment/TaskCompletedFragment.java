@@ -94,6 +94,11 @@ public class TaskCompletedFragment extends Fragment implements TaskListAdapter.O
         arrTask.add(itemTask);
     }
 
+    public void clearData() {
+        if (arrTask != null)
+            arrTask.clear();
+    }
+
     @Override
     public void onClickItemWork(int position) {
         String idTask = taskListAdapter.getItem(position).getTaskResult()._id;
@@ -104,4 +109,5 @@ public class TaskCompletedFragment extends Fragment implements TaskListAdapter.O
         dialogDetailTaskFragment.show(getActivity().getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
         dialogDetailTaskFragment.setExpaned(true);
     }
+
 }

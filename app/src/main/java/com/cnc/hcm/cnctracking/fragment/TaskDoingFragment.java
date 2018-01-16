@@ -86,6 +86,10 @@ public class TaskDoingFragment extends Fragment implements TaskListAdapter.OnIte
         arrTask.add(itemTask);
     }
 
+    public void clearData() {
+        if (arrTask != null)
+            arrTask.clear();
+    }
     @Override
     public void onClickItemWork(int position) {
         String idTask = taskListAdapter.getItem(position).getTaskResult()._id;

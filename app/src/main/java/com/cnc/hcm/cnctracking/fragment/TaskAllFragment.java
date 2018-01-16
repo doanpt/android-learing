@@ -89,10 +89,10 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
     @Override
     public void onClickItemWork(int position) {
         String idTask = taskListAdapter.getItem(position).getTaskResult()._id;
-        String customerID=taskListAdapter.getItem(position).getTaskResult().customer._id;
+        String customerID = taskListAdapter.getItem(position).getTaskResult().customer._id;
         Intent intent = new Intent(getContext(), WorkDetailActivity.class);
         intent.putExtra(Conts.KEY_ID_TASK, idTask);
-        intent.putExtra(Conts.KEY_CUSTOMER_ID,customerID);
+        intent.putExtra(Conts.KEY_CUSTOMER_ID, customerID);
         startActivity(intent);
 //        dialogDetailTaskFragment.setIdTask(idTask);
 //        dialogDetailTaskFragment.show(getActivity().getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
@@ -107,5 +107,10 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
         if (taskListAdapter != null) {
             taskListAdapter.notiDataChange(arrTask);
         }
+    }
+
+    public void clearData() {
+        if (arrTask != null)
+            arrTask.clear();
     }
 }

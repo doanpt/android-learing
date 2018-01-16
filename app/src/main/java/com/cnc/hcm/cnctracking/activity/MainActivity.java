@@ -70,7 +70,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.barcode.Barcode;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.squareup.picasso.Picasso;
 
@@ -142,13 +141,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         checkUserLoginOnOtherDevice();
         initMap();
-
-        try {
-            tryGetTaskList(UserInfo.getInstance(MainActivity.this).getAccessToken());
-        } catch (Exception e) {
-            Log.e(TAG, "Exception occurs when tryGetTaskList -> tryGetTaskDetail");
-            e.printStackTrace();
-        }
     }
 
     private void initObject() {
@@ -317,13 +309,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     };
 
 
-    private void tryGetTaskList(final String accessToken) {
-        quantityNewTask = 0;
-        quantityDoingTask = 0;
-        quantityCompletedTask = 0;
+    public void tryGetTaskList(String accessToken, String startDate, String endDate) {
         showProgressLoadding();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+//        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
+//        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
         ApiUtils.getAPIService(arrHeads).getTaskList().enqueue(new Callback<GetTaskListResult>() {
             @Override
             public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
@@ -331,12 +322,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 Log.e(TAG, "tryGetTaskList.onResponse(), statusCode: " + statusCode);
 
                 if (response.isSuccessful()) {
+                    quantityNewTask = 0;
+                    quantityDoingTask = 0;
+                    quantityCompletedTask = 0;
+                    clearData();
                     Log.e(TAG, "tryGetTaskList.onResponse(), --> response: " + response.toString());
                     GetTaskListResult getTaskListResult = response.body();
                     Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
 
                     if (getTaskListResult != null) {
                         GetTaskDetailResult.Result[] result1 = getTaskListResult.result;
+                        CommonMethod.makeToast(MainActivity.this, "CountTask: " + result1.length);
                         if (result1 != null && result1.length > 0) {
                             arrItemTask.clear();
                             for (int index = 0; index < result1.length; index++) {
@@ -360,10 +356,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                         break;
                                 }
                             }
-
-                            notiDataChange();
                             initMarkerOnMap();
                         }
+                        notiDataChange();
                     } else {
                         CommonMethod.makeToast(MainActivity.this, "Không có công việc nào cả");
                     }
@@ -385,6 +380,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
     }
 
+    private void clearData() {
+        if (taskAllFragment != null) {
+            taskAllFragment.clearData();
+        }
+        if (taskDoingFragment != null) {
+            taskDoingFragment.clearData();
+        }
+        if (taskCompletedFragment != null) {
+            taskCompletedFragment.clearData();
+        }
+    }
+
     private void notiDataChange() {
         if (taskAllFragment != null) {
             taskAllFragment.notiDataChange();
@@ -395,7 +402,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (taskCompletedFragment != null) {
             taskCompletedFragment.notiDataChange();
         }
+        updateQuantityTask();
+    }
 
+    private void updateQuantityTask() {
+        tvQuantityNewTask.setText(quantityNewTask + Conts.BLANK);
         tvQuantityDoingTask.setText(quantityDoingTask + Conts.BLANK);
         tvQuantityCompleteTask.setText(quantityCompletedTask + Conts.BLANK);
     }
