@@ -112,6 +112,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private TaskCompletedFragment taskCompletedFragment;
     private TaskAllFragment taskAllFragment;
     private MonthViewFragment monthViewFragment;
+    private YearsViewFragment yearsViewFragment;
 
     private Fragment[] listFrag;
     private GPSService gpsService;
@@ -189,6 +190,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tvStatusNetwork = (TextView) findViewById(R.id.tv_status_network);
         tvStatusGPS = (TextView) findViewById(R.id.tv_status_gps);
         tvMonth = (TextView) findViewById(R.id.tv_month_calendar);
+        tvMonth.setOnClickListener(this);
         tvYear = (TextView) findViewById(R.id.tv_year_calendar);
         tvUsername = (TextView) findViewById(R.id.tv_username_profile);
         tvUserMail = (TextView) findViewById(R.id.tv_user_email_profile);
@@ -313,8 +315,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         showProgressLoadding();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-//        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
-//        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
+        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
+        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
         ApiUtils.getAPIService(arrHeads).getTaskList().enqueue(new Callback<GetTaskListResult>() {
             @Override
             public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
@@ -471,6 +473,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 callFragment(new MonthViewFragment());
                 tvToday.setVisibility(View.VISIBLE);
                 tvYear.setVisibility(View.VISIBLE);
+                tvMonth.setClickable(false);
                 tvMonth.setText(CommonMethod.formatTimeToMonth(time));
                 tvYear.setText(CommonMethod.formatTimeToYear(time));
                 tvMonth.setTextSize(40);
@@ -482,6 +485,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 tvToday.setVisibility(View.INVISIBLE);
                 tvYear.setVisibility(View.GONE);
                 tvMonth.setText(CommonMethod.formatTimeToYear(time));
+                tvMonth.setClickable(true);
                 tvMonth.setTextSize(30);
                 tvChangeViewMonthYear.setText(getResources().getString(R.string.text_year));
                 break;
@@ -527,15 +531,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 setCurrentItemViewPager(SettingApp.getInstance(this).getTypeFilterList());
                 break;
             case R.id.ll_tab_work_new_not_read:
-                setCurrentItemViewPager(0);
+                setCurrentItemViewPager(Conts.DEFAULT_VALUE_INT_0);
                 break;
             case R.id.ll_tab_work_doing:
-                setCurrentItemViewPager(1);
+                setCurrentItemViewPager(Conts.DEFAULT_VALUE_INT_1);
                 break;
             case R.id.ll_tab_work_complete:
-                setCurrentItemViewPager(2);
+                setCurrentItemViewPager(Conts.DEFAULT_VALUE_INT_2);
                 break;
-
             case R.id.tv_change_view_month_year:
                 showPopupMenu(view);
                 break;
@@ -543,6 +546,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 if (monthViewFragment != null) {
                     monthViewFragment.gotoCurrentDate();
                 }
+                break;
+            case R.id.tv_month_calendar:
+                showPopupMenuSelectYears(view);
                 break;
             case R.id.btn_logout:
                 actionLogout();
@@ -600,7 +606,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void showPopupMenu(View view) {
         PopupMenu popup = new PopupMenu(MainActivity.this, view);
         popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 int viewType = -1;
@@ -614,6 +619,30 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 }
                 if (viewType != -1) {
                     callViewCalendar(viewType);
+                }
+                return true;
+            }
+        });
+        popup.show();
+    }
+
+    private void showPopupMenuSelectYears(View view) {
+        PopupMenu popup = new PopupMenu(MainActivity.this, view);
+        popup.getMenuInflater().inflate(R.menu.years_menu, popup.getMenu());
+
+        int currentYears = Calendar.getInstance().get(Calendar.YEAR);
+        int previousYears = currentYears - Conts.DEFAULT_VALUE_INT_1;
+        int nextYears = currentYears + Conts.DEFAULT_VALUE_INT_1;
+
+        popup.getMenu().getItem(Conts.DEFAULT_VALUE_INT_0).setTitle(previousYears + Conts.BLANK);
+        popup.getMenu().getItem(Conts.DEFAULT_VALUE_INT_1).setTitle(currentYears + Conts.BLANK);
+        popup.getMenu().getItem(Conts.DEFAULT_VALUE_INT_2).setTitle(nextYears + Conts.BLANK);
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                int years = Integer.parseInt(item.getTitle().toString());
+                if (yearsViewFragment != null) {
+                    yearsViewFragment.getCountTask(years);
                 }
                 return true;
             }
@@ -849,7 +878,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         fragmentTransaction.commit();
     }
 
-    private void showProgressLoadding() {
+    public void showProgressLoadding() {
         mProgressDialog = new ProgressDialog(MainActivity.this);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
@@ -857,8 +886,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mProgressDialog.show();
     }
 
-    private void dismisProgressLoading() {
-        if (mProgressDialog.isShowing()) {
+    public void dismisProgressLoading() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
     }
@@ -898,5 +927,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void setMonthViewFragment(MonthViewFragment monthViewFragment) {
         this.monthViewFragment = monthViewFragment;
+    }
+
+    public void setYearsViewFragment(YearsViewFragment yearsViewFragment) {
+        this.yearsViewFragment = yearsViewFragment;
     }
 }

@@ -104,7 +104,6 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         calendarView.setOnDateChangedListener(this);
         calendarView.setTopbarVisible(false);
         calendarView.setShowOtherDates(MaterialCalendarView.SHOW_ALL);
-        calendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS).commit();
         calendarView.setSelectionMode(SELECTION_MODE_SINGLE);
         Calendar instance1 = Calendar.getInstance();
         instance1.set(instance1.get(Calendar.YEAR) - 1, Calendar.JANUARY, 1);
@@ -113,6 +112,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         calendarView.state().edit()
                 .setMinimumDate(instance1.getTime())
                 .setMaximumDate(instance2.getTime())
+                .setCalendarDisplayMode(CalendarMode.WEEKS)
                 .commit();
         calendarView.addDecorators(
                 new MySelectorDecorator(getActivity()),
@@ -134,16 +134,19 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
     public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
         if (mainActivity != null) {
             mainActivity.updateMonthChange(date);
+            mainActivity.showProgressLoadding();
         }
         String dateOfWeek = CommonMethod.formatFullTimeToString(date.getDate());
+        Log.d(TAG, "DateOfWeek: -------------------- " + dateOfWeek);
         List<String> listWeek = null;
+
         for (int i = 0; i < arrAllDate.size(); i++) {
             if (arrAllDate.get(i).toString().equals(dateOfWeek)) {
                 listWeek = new ArrayList<>();
-                Log.d(TAG, "DateOfWeek: --------------------");
                 for (int j = 0; j < 7; j++) {
                     listWeek.add(arrAllDate.get(i + j));
                     Log.d(TAG, "DateOfWeek: " + arrAllDate.get(i + j).toString());
+                    listTextView[j].setText(getContext().getResources().getString(R.string.text_am_1));
                 }
                 break;
             }
@@ -151,6 +154,8 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         if (listWeek != null && listWeek.size() > 0) {
             String startDate = listWeek.get(0).toString();
             String endDate = listWeek.get(listWeek.size() - 1).toString();
+            Log.d(TAG, "DateOfWeek: StartDate" + startDate);
+            Log.d(TAG, "DateOfWeek: EndDate" + endDate);
 
             List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getContext()).getAccessToken()));
@@ -162,7 +167,6 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
                 public void onResponse(Call<CountTaskResult> call, Response<CountTaskResult> response) {
                     int statusCode = response.code();
                     Log.e(TAG, "tryGetCountTask.onResponse(), statusCode: " + statusCode);
-
                     if (response.isSuccessful()) {
                         Log.e(TAG, "tryGetCountTask.onResponse(), --> response: " + response.toString());
 
@@ -173,7 +177,8 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
                             if (results != null && results.size() > 0) {
                                 Log.d(TAG, "CountResult -------------------");
                                 for (int i = 0; i < results.size(); i++) {
-                                    Log.d(TAG, "CountResult: " + results.get(i).getDate().getDay() + "/" + results.get(i).getDate().getMonth() + " -  " + results.get(i).getCount());
+                                    Log.d(TAG, "CountResult: " + results.get(i).getDate().getDay() + "/" + results.get(i).getDate().getMonth() + "/" + results.get(i).getDate().getYear() + " -  " + results.get(i).getCount());
+                                    listTextView[i].setText(results.get(i).getCount() + Conts.BLANK);
                                 }
                             }
                         } else {
@@ -181,6 +186,11 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
                         }
                     } else {
                         CommonMethod.makeToast(getContext(), response.toString());
+
+                    }
+
+                    if (mainActivity != null) {
+                        mainActivity.dismisProgressLoading();
                     }
                 }
 
@@ -189,8 +199,16 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
                     Log.e(TAG, "tryGetCountTask.onFailure() --> " + t);
                     t.printStackTrace();
                     CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage().toString() : "onFailure");
+                    if (mainActivity != null) {
+                        mainActivity.dismisProgressLoading();
+                    }
                 }
             });
+        } else {
+            if (mainActivity != null) {
+                mainActivity.dismisProgressLoading();
+            }
+            CommonMethod.makeToast(getContext(), "listWeek " + listWeek);
         }
     }
 

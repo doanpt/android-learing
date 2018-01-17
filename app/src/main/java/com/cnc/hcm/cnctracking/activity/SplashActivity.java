@@ -45,28 +45,35 @@ public class SplashActivity extends AppCompatActivity {
 
     public List<String> getAllDateInYear() {
         List<String> allDate = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        int years = calendar.get(Calendar.YEAR);
-        for (int index = 0; index < 12; index++) {
-            String month = index < 9 ? ("0" + (index + 1)) : ((index + 1) + Conts.BLANK);
-            String dateFirstOfMonthTemp = years + "-" + month + "-01" + Conts.FORMAT_TIME_FULL;
-            SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
-            Date dateFirstOfMonth = null;
-            try {
-                dateFirstOfMonth = format.parse(dateFirstOfMonthTemp);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if (dateFirstOfMonth != null) {
-                calendar.setTime(dateFirstOfMonth);
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                int myMonth = calendar.get(Calendar.MONTH);
-                while (myMonth == calendar.get(Calendar.MONTH)) {
-                    allDate.add(format.format(calendar.getTime()));
-                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+        for (int i = -1; i < 2; i++) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DATE, 01);
+            calendar.set(Calendar.MONTH, 01);
+            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) +  i);
+
+            int years = calendar.get(Calendar.YEAR);
+            for (int index = 0; index < 12; index++) {
+                String month = index < 9 ? ("0" + (index + 1)) : ((index + 1) + Conts.BLANK);
+                String dateFirstOfMonthTemp = years + "-" + month + "-01" + Conts.FORMAT_TIME_FULL;
+                SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+                Date dateFirstOfMonth = null;
+                try {
+                    dateFirstOfMonth = format.parse(dateFirstOfMonthTemp);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (dateFirstOfMonth != null) {
+                    calendar.setTime(dateFirstOfMonth);
+                    calendar.set(Calendar.DAY_OF_MONTH, 1);
+                    int myMonth = calendar.get(Calendar.MONTH);
+                    while (myMonth == calendar.get(Calendar.MONTH)) {
+                        allDate.add(format.format(calendar.getTime()));
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    }
                 }
             }
         }
+
         return allDate;
     }
 }

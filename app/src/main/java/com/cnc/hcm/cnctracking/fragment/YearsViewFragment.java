@@ -22,8 +22,11 @@ import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -69,6 +72,9 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mainActivity = (MainActivity) getActivity();
+        if (mainActivity != null) {
+            mainActivity.setYearsViewFragment(YearsViewFragment.this);
+        }
     }
 
 
@@ -77,7 +83,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filter_years, container, false);
         initViews(view);
-        getCountTask();
+        getCountTask(Calendar.getInstance().get(Calendar.YEAR));
         return view;
     }
 
@@ -174,96 +180,152 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    private void getCountTask() {
-        String startDate = SplashActivity.allDateInYears.get(0).toString();
-        String endDate = SplashActivity.allDateInYears.get(SplashActivity.allDateInYears.size() - 1).toString();
+    public void getCountTask(int years) {
+        if (mainActivity != null) {
+            mainActivity.showProgressLoadding();
+        }
+        List<String> listDateInYears = getAllDateInYear(years);
+        if (listDateInYears != null && listDateInYears.size() > 0) {
+            String startDate = listDateInYears.get(0).toString();
+            String endDate = listDateInYears.get(listDateInYears.size() - 1).toString();
 
-        List<MHead> arrHeads = new ArrayList<>();
-        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getContext()).getAccessToken()));
-        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
-        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
+            List<MHead> arrHeads = new ArrayList<>();
+            arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getContext()).getAccessToken()));
+            arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
+            arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
 
-        ApiUtils.getAPIService(arrHeads).getCountTask().enqueue(new Callback<CountTaskResult>() {
-            @Override
-            public void onResponse(Call<CountTaskResult> call, Response<CountTaskResult> response) {
-                int statusCode = response.code();
-                Log.e(TAG, "tryGetCountTask.onResponse(), statusCode: " + statusCode);
+            ApiUtils.getAPIService(arrHeads).getCountTask().enqueue(new Callback<CountTaskResult>() {
+                @Override
+                public void onResponse(Call<CountTaskResult> call, Response<CountTaskResult> response) {
+                    int statusCode = response.code();
+                    Log.e(TAG, "tryGetCountTask.onResponse(), statusCode: " + statusCode);
 
-                if (response.isSuccessful()) {
-                    Log.e(TAG, "tryGetCountTask.onResponse(), --> response: " + response.toString());
+                    if (response.isSuccessful()) {
+                        clearData();
+                        Log.e(TAG, "tryGetCountTask.onResponse(), --> response: " + response.toString());
 
-                    CountTaskResult countTaskResult = response.body();
-                    if (countTaskResult != null) {
-                        List<CountTaskResult.Result> results = countTaskResult.getResult();
+                        CountTaskResult countTaskResult = response.body();
+                        if (countTaskResult != null) {
+                            List<CountTaskResult.Result> results = countTaskResult.getResult();
 
-                        if (results != null && results.size() > 0) {
-                            Log.d(TAG, "CountResult -------------------");
-                            for (int i = 0; i < results.size(); i++) {
-                                Log.d(TAG, "CountResult: " + results.get(i).getDate().getDay() + "/" + results.get(i).getDate().getMonth() + " -  " + results.get(i).getCount());
-                                switch (results.get(i).getDate().getMonth()) {
-                                    case Conts.DEFAULT_VALUE_INT_1:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_0, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_2:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_1, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_3:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_2, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_4:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_3, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_5:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_4, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_6:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_5, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_7:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_6, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_8:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_7, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_9:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_8, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_10:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_9, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_11:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_10, results.get(i).getCount());
-                                        break;
-                                    case Conts.DEFAULT_VALUE_INT_12:
-                                        updateCountTask(Conts.DEFAULT_VALUE_INT_11, results.get(i).getCount());
+                            if (results != null && results.size() > 0) {
+                                Log.d(TAG, "CountResult -------------------");
+                                for (int i = 0; i < results.size(); i++) {
+                                    Log.d(TAG, "CountResult: " + results.get(i).getDate().getDay() + "/" + results.get(i).getDate().getMonth() + " -  " + results.get(i).getCount());
+                                    switch (results.get(i).getDate().getMonth()) {
+                                        case Conts.DEFAULT_VALUE_INT_1:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_0, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_2:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_1, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_3:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_2, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_4:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_3, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_5:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_4, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_6:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_5, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_7:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_6, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_8:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_7, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_9:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_8, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_10:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_9, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_11:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_10, results.get(i).getCount());
+                                            break;
+                                        case Conts.DEFAULT_VALUE_INT_12:
+                                            updateCountTask(Conts.DEFAULT_VALUE_INT_11, results.get(i).getCount());
 
-                                        break;
+                                            break;
+                                    }
+                                }
+
+                                for (int j = 0; j < arrTextView.length; j++) {
+                                    arrTextView[j].setText(countTask[j] + Conts.BLANK);
                                 }
                             }
-
-                            for (int j = 0; j < arrTextView.length; j++) {
-                                arrTextView[j].setText(countTask[j] + Conts.BLANK);
-                            }
+                        } else {
+                            CommonMethod.makeToast(getContext(), "Không count dc task nao");
                         }
                     } else {
-                        CommonMethod.makeToast(getContext(), "Không count dc task nao");
+                        CommonMethod.makeToast(getContext(), response.toString());
                     }
-                } else {
-                    CommonMethod.makeToast(getContext(), response.toString());
+
+                    if (mainActivity != null) {
+                        mainActivity.dismisProgressLoading();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<CountTaskResult> call, Throwable t) {
-                Log.e(TAG, "tryGetCountTask.onFailure() --> " + t);
-                t.printStackTrace();
-                CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage().toString() : "onFailure");
-            }
-        });
+                @Override
+                public void onFailure(Call<CountTaskResult> call, Throwable t) {
+                    Log.e(TAG, "tryGetCountTask.onFailure() --> " + t);
+                    t.printStackTrace();
+                    CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage().toString() : "onFailure");
+                    if (mainActivity != null) {
+                        mainActivity.dismisProgressLoading();
+                    }
+                }
+            });
 
+        } else {
+            CommonMethod.makeToast(getContext(), "K count dc task trong nam: " + years);
+            if (mainActivity != null) {
+                mainActivity.dismisProgressLoading();
+            }
+        }
+    }
+
+    private void clearData() {
+        for (int i = 0; i < countTask.length; i++) {
+            countTask[i] = 0;
+        }
     }
 
     private void updateCountTask(int index, int count) {
         countTask[index] = countTask[index] + count;
+    }
+
+    private List<String> getAllDateInYear(int inputYears) {
+        List<String> allDate = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DATE, 01);
+        calendar.set(Calendar.MONTH, 01);
+        calendar.set(Calendar.YEAR, inputYears);
+
+        int years = calendar.get(Calendar.YEAR);
+        for (int index = 0; index < 12; index++) {
+            String month = index < 9 ? ("0" + (index + 1)) : ((index + 1) + Conts.BLANK);
+            String dateFirstOfMonthTemp = years + "-" + month + "-01" + Conts.FORMAT_TIME_FULL;
+            SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+            Date dateFirstOfMonth = null;
+            try {
+                dateFirstOfMonth = format.parse(dateFirstOfMonthTemp);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (dateFirstOfMonth != null) {
+                calendar.setTime(dateFirstOfMonth);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                int myMonth = calendar.get(Calendar.MONTH);
+                while (myMonth == calendar.get(Calendar.MONTH)) {
+                    allDate.add(format.format(calendar.getTime()));
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                }
+            }
+        }
+        return allDate;
     }
 }
