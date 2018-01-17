@@ -144,8 +144,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
     @Override
     public void editData(int index, String distance, String duration) {
-        arrTask.get(index).setDistanceToMyLocation(distance);
-        arrTask.get(index).setTimeGoToMyLocation(duration);
+        if (arrTask != null && arrTask.size() > 0) {
+            arrTask.get(index).setDistanceToMyLocation(distance);
+            arrTask.get(index).setTimeGoToMyLocation(duration);
+        }
     }
 
     @Override
