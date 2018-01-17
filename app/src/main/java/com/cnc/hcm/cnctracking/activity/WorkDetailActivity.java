@@ -277,6 +277,7 @@ public class WorkDetailActivity extends AppCompatActivity implements View.OnClic
             case R.id.fab_add_product:
                 Intent intent = new Intent(this, AddProductActivity.class);
                 intent.putExtra(Conts.KEY_CUSTOMER_ID, customerId);
+                intent.putExtra(Conts.KEY_ID_TASK,savedIdTask);
                 startActivity(intent);
                 fabMenu.collapse();
                 break;

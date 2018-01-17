@@ -12,18 +12,18 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
+import com.cnc.hcm.cnctracking.model.AddContainProductResult;
 import com.cnc.hcm.cnctracking.model.AddProductItem;
 import com.cnc.hcm.cnctracking.model.AddProductResult;
 import com.cnc.hcm.cnctracking.model.CategoryListResult;
@@ -58,6 +58,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
     private String customerId, qrCode, manufacture, productName, category;
     private List<MHead> arrHeads;
     private String accessToken;
+    private String idTask;
     private ArrayAdapter manufactureAdapter;
     private ArrayAdapter categoryAdapter;
     private ArrayList<String> arrManufactures;
@@ -111,6 +112,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
 
     private void getInformation() {
         customerId = getIntent().getStringExtra(Conts.KEY_CUSTOMER_ID);
+        idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
         Log.d("ABD", customerId + " ");
         CommonMethod.makeToast(this, customerId);
         accessToken = UserInfo.getInstance(getApplicationContext()).getAccessToken();
@@ -190,7 +192,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                 manufacture = edtManufacture.getSelectedItem().toString();
                 qrCode = edtBarcode.getText().toString();
                 productName = edtDeviceName.getText().toString();
-
+                category=edtCategory.getSelectedItem().toString();
                 addProduct(productName, category, manufacture, qrCode);
                 break;
             case R.id.img_scan_barcode:
@@ -221,37 +223,31 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                 }
             }
             for (ProductListResult.Product c : listProduct) {
-                if (c.getId().equals(manufacture)) {
+                if (c.getName().equals(manufacture)) {
                     manufacture = c.getId();
                     break;
                 }
             }
             List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-
+            arrHeads.add(new MHead(Conts.KEY_CUSTOMER_ID,customerId));
             AddProductItem productItem = new AddProductItem();
-            productItem.setCustomer(customerId);
-            productItem.setBarcode(qrCode);
-
-            AddProductItem.Detail detail = new AddProductItem.Detail();
-            detail.setName(productName);
-            detail.setBrand(manufacture);
-            detail.setCategory(category);
-
-            productItem.setDetail(new AddProductItem.Detail());
-
+            productItem.setBrand(manufacture);
+            productItem.setCategory(category);
+            productItem.setName(productName);
+            Log.d("HEAD_ITEM",productItem.toString());
             //sử dụng API: https://recode.atlassian.net/wiki/spaces/CNC/pages/158433284/Th+m+thi+t+b+c+a+kh+ch+h+ng
             ApiUtils.getAPIService(arrHeads).addCustomerProduct(productItem).enqueue(new Callback<AddProductResult>() {
                 @Override
                 public void onResponse(Call<AddProductResult> call, Response<AddProductResult> response) {
+                    //TODO :FIX ERROR ADD
                     Long status = response.body().getStatusCode();
                     mDialog.dismiss();
                     if (status == Conts.RESPONSE_STATUS_OK) {
-                        CommonMethod.makeToast(AddProductActivity.this, "Add product success!");
-                        Intent productDetail = new Intent(AddProductActivity.this, ProductDetailActivity.class);
-                        productDetail.putExtra(Conts.KEY_TYPE_CHECK_PRODUCT,Conts.KEY_OLD_PRODUCT);
-                        productDetail.putExtra(Conts.KEY_PRODUCT_ID,qrCode);
-                        startActivity(productDetail);
+                        List<MHead> arrHeads = new ArrayList<>();
+                        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+                        arrHeads.add(new MHead(Conts.KEY_DEVICE_ID,qrCode));
+                        addProduct2_4(arrHeads,qrCode);
                     } else {
                         CommonMethod.makeToast(AddProductActivity.this, "Add product error!");
                     }
@@ -285,12 +281,12 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                         Long status = response.body().getStatusCode();
                         Log.d("ABD", status + "   ");
                         if (status == Conts.RESPONSE_STATUS_OK) {
-                            Intent productDetail = new Intent(AddProductActivity.this, ProductDetailActivity.class);
-                            productDetail.putExtra(Conts.KEY_TYPE_CHECK_PRODUCT,Conts.KEY_OLD_PRODUCT);
-                            productDetail.putExtra(Conts.KEY_PRODUCT_ID,content);
-                            startActivity(productDetail);
-                            CommonMethod.makeToast(AddProductActivity.this, "add product name:" + productName + " manufacture:" + manufacture + " QR code:" + qrCode);
-                            Log.d("ABDonResponse", status + "  200 ");
+                            arrHeads.clear();
+                            arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+                            Log.d("HEAD", "ac:" + accessToken);
+                            Log.d("HEAD", "cs:" + customerId);
+                            arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, qrCode));
+                            addProduct2_4(arrHeads,qrCode);
                         } else if (status == Conts.RESPONSE_STATUS_404) {
                             edtBarcode.setText(content);
                             Log.d("ABDonResponse", status + "  404 ");
@@ -311,6 +307,30 @@ public class AddProductActivity extends Activity implements View.OnClickListener
             super.onActivityResult(requestCode, resultCode, data);
         }
 
+    }
+
+    private void addProduct2_4(List<MHead> arrHeads, final String qr) {
+        ApiUtils.getAPIService(arrHeads).addPructContain(idTask).enqueue(new Callback<AddContainProductResult>() {
+            @Override
+            public void onResponse(Call<AddContainProductResult> call, Response<AddContainProductResult> response) {
+                //TODO fix code
+                int status = response.code();
+                if (status == Conts.RESPONSE_STATUS_OK) {
+                    Intent productDetail = new Intent(AddProductActivity.this, ProductDetailActivity.class);
+                    productDetail.putExtra(Conts.KEY_PRODUCT_ID, qr);
+                    startActivity(productDetail);
+                    CommonMethod.makeToast(AddProductActivity.this, "add product name:" + productName + " manufacture:" + manufacture + " QR code:" + qrCode);
+                    Log.d("ABDonResponse", status + "  200 ");
+                } else {
+                    Toast.makeText(AddProductActivity.this, "Add contain product error", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddContainProductResult> call, Throwable t) {
+
+            }
+        });
     }
 
     //11/01/2017 ADD by HoangIT START

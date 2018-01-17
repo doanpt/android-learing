@@ -9,75 +9,58 @@ import com.google.gson.annotations.SerializedName;
 
 public class AddProductItem {
 
-    @SerializedName("barcode")
+    @SerializedName("name")
     @Expose
-    private String barcode;
-    @SerializedName("detail")
+    private String name;
+    @SerializedName("brand")
     @Expose
-    private Detail detail;
-    @SerializedName("customer")
+    private String brand;
+    @SerializedName("category")
     @Expose
-    private String customer;
+    private String category;
+    @SerializedName("photo")
+    @Expose
+    private String photo;
 
-    public String getBarcode() {
-        return barcode;
+    public String getName() {
+        return name;
     }
 
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Detail getDetail() {
-        return detail;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setDetail(Detail detail) {
-        this.detail = detail;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
-    public String getCustomer() {
-        return customer;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public static class Detail {
+    public String getPhoto() {
+        return photo;
+    }
 
-        @SerializedName("name")
-        @Expose
-        private String name;
-        @SerializedName("brand")
-        @Expose
-        private String brand;
-        @SerializedName("category")
-        @Expose
-        private String category;
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getBrand() {
-            return brand;
-        }
-
-        public void setBrand(String brand) {
-            this.brand = brand;
-        }
-
-        public String getCategory() {
-            return category;
-        }
-
-        public void setCategory(String category) {
-            this.category = category;
-        }
-
+    @Override
+    public String toString() {
+        return "AddProductItem{" +
+                "name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                ", category='" + category + '\'' +
+                ", photo='" + photo + '\'' +
+                '}';
     }
 }

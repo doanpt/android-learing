@@ -1,6 +1,7 @@
 package com.cnc.hcm.cnctracking.api;
 
 
+import com.cnc.hcm.cnctracking.model.AddContainProductResult;
 import com.cnc.hcm.cnctracking.model.AddProductItem;
 import com.cnc.hcm.cnctracking.model.AddProductResult;
 import com.cnc.hcm.cnctracking.model.CategoryListResult;
@@ -45,6 +46,9 @@ public interface APIService {
 
     @GET(Conts.PATH_GET_PRODUCT_BY_ID)
     Call<CheckContainProductResult> getProductById(@Path("id") String productID);
+
+    @PATCH(Conts.PATH_ADD_DEVICE_CONTAIN)
+    Call<AddContainProductResult> addPructContain(@Path("id") String productID);
 
     @POST(Conts.PATH_ADD_CUSTOMER_PRODUCTS)
     Call<AddProductResult> addCustomerProduct(@Body AddProductItem product);

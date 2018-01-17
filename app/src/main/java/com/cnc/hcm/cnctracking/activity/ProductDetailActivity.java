@@ -77,10 +77,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     //11/01/2017 ADD by HoangIT START
     private void initObject() {
         Intent passData = getIntent();
-        boolean isOldProduct = passData.getStringExtra(Conts.KEY_TYPE_CHECK_PRODUCT).equals(Conts.KEY_OLD_PRODUCT) ? true : false;
-        if(isOldProduct){
-            //load data to display
-        }
         dialogGPSSetting = new DialogGPSSetting(this);
         dialogNetworkSetting = new DialogNetworkSetting(this);
     }
