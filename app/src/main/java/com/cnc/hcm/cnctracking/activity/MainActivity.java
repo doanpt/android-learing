@@ -642,7 +642,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public boolean onMenuItemClick(MenuItem item) {
                 int years = Integer.parseInt(item.getTitle().toString());
                 if (yearsViewFragment != null) {
+                    yearsViewFragment.setYears(years);
                     yearsViewFragment.getCountTask(years);
+                    tvMonth.setText(years + Conts.BLANK);
                 }
                 return true;
             }

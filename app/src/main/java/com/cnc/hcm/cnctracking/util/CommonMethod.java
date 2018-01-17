@@ -152,10 +152,9 @@ public class CommonMethod {
         Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
     }
 
-    public static String[] getStartEndDate(int currentMonth) {
+    public static String[] getStartEndDate(int currentMonth, int years) {
         String[] arr = new String[2];
         Calendar calendar = Calendar.getInstance();
-        int years = calendar.get(Calendar.YEAR);
         String month = currentMonth < 9 ? ("0" + (currentMonth + 1)) : ((currentMonth + 1) + Conts.BLANK);
         String dateFirstOfMonthTemp = years + "-" + month + "-01" + Conts.FORMAT_TIME_FULL;
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
