@@ -95,6 +95,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     private void initViews(View view) {
         for (int index = 0; index < arrLinear.length; index++) {
             arrTextView[index] = (TextView) view.findViewById(idTextView[index]);
+            arrTextView[index].setVisibility(View.INVISIBLE);
             arrLinear[index] = (LinearLayout) view.findViewById(idLinear[index]);
             arrLinear[index].setOnClickListener(this);
         }
@@ -186,7 +187,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
             String startDate = listDateInYears.get(0).toString();
             String endDate = listDateInYears.get(listDateInYears.size() - 1).toString();
 
-            List<MHead> arrHeads = new ArrayList<>();
+            final List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getContext()).getAccessToken()));
             arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
             arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
@@ -251,6 +252,11 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
 
                                 for (int j = 0; j < arrTextView.length; j++) {
                                     arrTextView[j].setText(countTask[j] + Conts.BLANK);
+                                    if (countTask[j] <= 0) {
+                                        arrTextView[j].setVisibility(View.INVISIBLE);
+                                    } else {
+                                        arrTextView[j].setVisibility(View.VISIBLE);
+                                    }
                                 }
                             }
                         } else {

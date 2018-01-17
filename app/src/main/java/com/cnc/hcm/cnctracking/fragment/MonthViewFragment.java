@@ -173,6 +173,11 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
                                 for (int i = 0; i < results.size(); i++) {
                                     Log.d(TAG, "CountResult: " + results.get(i).getDate().getDay() + "/" + results.get(i).getDate().getMonth() + "/" + results.get(i).getDate().getYear() + " -  " + results.get(i).getCount());
                                     listTextView[i].setText(results.get(i).getCount() + Conts.BLANK);
+                                    if (results.get(i).getCount() <= Conts.DEFAULT_VALUE_INT_0) {
+                                        listTextView[i].setVisibility(View.INVISIBLE);
+                                    } else {
+                                        listTextView[i].setVisibility(View.VISIBLE);
+                                    }
                                 }
                             }
                         } else {
