@@ -72,6 +72,9 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         mainActivity = (MainActivity) getActivity();
         if (mainActivity != null) {
             mainActivity.setMonthViewFragment(MonthViewFragment.this);
+            String date = CommonMethod.formatFullTimeToString(calendarView.getSelectedDate().getDate());
+            String accessToken = UserInfo.getInstance(getContext()).getAccessToken();
+            mainActivity.tryGetTaskList(accessToken, date, date);
         }
     }
 
@@ -83,15 +86,6 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (mainActivity != null) {
-            String date = CommonMethod.formatFullTimeToString(calendarView.getSelectedDate().getDate());
-            String accessToken = UserInfo.getInstance(getContext()).getAccessToken();
-            mainActivity.tryGetTaskList(accessToken, date, date);
-        }
-    }
 
     private void initViews(View view) {
         for (int i = 0; i < listTextView.length; i++) {

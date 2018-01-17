@@ -59,13 +59,17 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     private int[] countTask = new int[Conts.DEFAULT_VALUE_INT_12];
     private MainActivity mainActivity;
 
+    private int years;
+    private int month;
+
     public YearsViewFragment() {
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        years = Calendar.getInstance().get(Calendar.YEAR);
+        month = Calendar.getInstance().get(Calendar.MONTH);
     }
 
     @Override
@@ -75,6 +79,8 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
         if (mainActivity != null) {
             mainActivity.setYearsViewFragment(YearsViewFragment.this);
         }
+
+        getCountTask(years);
     }
 
 
@@ -83,15 +89,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filter_years, container, false);
         initViews(view);
-        getCountTask(Calendar.getInstance().get(Calendar.YEAR));
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        int monthOfYears = Calendar.getInstance().get(Calendar.MONTH);
-        handleActionGetTaskByFilterDate(monthOfYears);
     }
 
     private void initViews(View view) {
@@ -108,53 +106,52 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onClick(View view) {
-        int position = -1;
         switch (view.getId()) {
             case R.id.ll_bg_t1:
-                position = 0;
+                month = 0;
                 break;
             case R.id.ll_bg_t2:
-                position = 1;
+                month = 1;
                 break;
             case R.id.ll_bg_t3:
-                position = 2;
+                month = 2;
                 break;
             case R.id.ll_bg_t4:
-                position = 3;
+                month = 3;
                 break;
             case R.id.ll_bg_t5:
-                position = 4;
+                month = 4;
                 break;
             case R.id.ll_bg_t6:
-                position = 5;
+                month = 5;
                 break;
             case R.id.ll_bg_t7:
-                position = 6;
+                month = 6;
                 break;
             case R.id.ll_bg_t8:
-                position = 7;
+                month = 7;
                 break;
             case R.id.ll_bg_t9:
-                position = 8;
+                month = 8;
                 break;
             case R.id.ll_bg_t10:
-                position = 9;
+                month = 9;
                 break;
             case R.id.ll_bg_t11:
-                position = 10;
+                month = 10;
                 break;
             case R.id.ll_bg_t12:
-                position = 11;
+                month = 11;
                 break;
         }
-        handleActionGetTaskByFilterDate(position);
+        handleActionGetTaskByFilterDate(month, years);
     }
 
 
-    private void handleActionGetTaskByFilterDate(int position) {
+    public void handleActionGetTaskByFilterDate(int position, int years) {
         if (position != -1) {
             setSelected(position);
-            String[] arrayDate = CommonMethod.getStartEndDate(position);
+            String[] arrayDate = CommonMethod.getStartEndDate(position, years);
             String startDate = arrayDate[0];
             String endDate = arrayDate[1];
 
@@ -180,7 +177,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    public void getCountTask(int years) {
+    public void getCountTask(final int years) {
         if (mainActivity != null) {
             mainActivity.showProgressLoadding();
         }
@@ -248,7 +245,6 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
                                             break;
                                         case Conts.DEFAULT_VALUE_INT_12:
                                             updateCountTask(Conts.DEFAULT_VALUE_INT_11, results.get(i).getCount());
-
                                             break;
                                     }
                                 }
@@ -267,6 +263,8 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
                     if (mainActivity != null) {
                         mainActivity.dismisProgressLoading();
                     }
+
+                    handleActionGetTaskByFilterDate(month, years);
                 }
 
                 @Override
@@ -327,5 +325,9 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
             }
         }
         return allDate;
+    }
+
+    public void setYears(int years) {
+        this.years = years;
     }
 }
