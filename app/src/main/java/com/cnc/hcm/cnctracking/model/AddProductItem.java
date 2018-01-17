@@ -54,13 +54,4 @@ public class AddProductItem {
         this.photo = photo;
     }
 
-    @Override
-    public String toString() {
-        return "AddProductItem{" +
-                "name='" + name + '\'' +
-                ", brand='" + brand + '\'' +
-                ", category='" + category + '\'' +
-                ", photo='" + photo + '\'' +
-                '}';
-    }
 }

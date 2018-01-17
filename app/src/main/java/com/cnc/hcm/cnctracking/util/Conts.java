@@ -131,10 +131,9 @@ public class Conts {
     public static final String PATH_PRODUCTS_CATEGORY = "/product-categories";
 
     public static final String PATH_GET_PRODUCT_BY_ID = "/customer-product/{id}";
-    public static final String PATH_ADD_CUSTOMER_PRODUCTS = "/customer-products/create";
+    public static final String PATH_ADD_CUSTOMER_PRODUCTS = "/customer-products";
     public static final String PATH_USER_PROFILE = PATH_USER + "/profile";
     public static final String PATH_ADD_DEVICE_CONTAIN = "/task/{id}/add-device";
-    public static final String PATH_CREATE_DEVICE = "/customer-products/create";
     public static final String PATH_COUNT_TASK = "/tasks/statistics";
 
 

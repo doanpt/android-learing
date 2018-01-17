@@ -310,7 +310,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
     }
 
     private void addProduct2_4(List<MHead> arrHeads, final String qr) {
-        ApiUtils.getAPIService(arrHeads).addPructContain(idTask).enqueue(new Callback<AddContainProductResult>() {
+        ApiUtils.getAPIService(arrHeads).addProductContain(idTask).enqueue(new Callback<AddContainProductResult>() {
             @Override
             public void onResponse(Call<AddContainProductResult> call, Response<AddContainProductResult> response) {
                 //TODO fix code

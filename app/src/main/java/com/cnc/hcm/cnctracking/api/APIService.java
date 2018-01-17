@@ -20,6 +20,7 @@ import com.cnc.hcm.cnctracking.util.Conts;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -48,8 +49,9 @@ public interface APIService {
     Call<CheckContainProductResult> getProductById(@Path("id") String productID);
 
     @PATCH(Conts.PATH_ADD_DEVICE_CONTAIN)
-    Call<AddContainProductResult> addPructContain(@Path("id") String productID);
+    Call<AddContainProductResult> addProductContain(@Path("id") String productID);
 
+    @Headers({"Content-Type: application/json", "Cache-Control: max-age=640000"})
     @POST(Conts.PATH_ADD_CUSTOMER_PRODUCTS)
     Call<AddProductResult> addCustomerProduct(@Body AddProductItem product);
 
