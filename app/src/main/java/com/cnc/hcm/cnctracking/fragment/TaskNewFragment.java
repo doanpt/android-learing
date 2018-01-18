@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
+import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 
 /**
  * Created by giapmn on 9/27/17.
@@ -21,7 +22,7 @@ import com.cnc.hcm.cnctracking.activity.MainActivity;
 public class TaskNewFragment extends Fragment {
 
     private static final String TAGG = TaskNewFragment.class.getSimpleName();
-    private RecyclerView rvNewTask;
+    private MyRecyclerView rvNewTask;
     //    private WorkNewAdapter workNewAdapter;
     private MainActivity mainActivity;
 
@@ -45,7 +46,7 @@ public class TaskNewFragment extends Fragment {
         Log.i("onCreateView", "New");
 
         View view = inflater.inflate(R.layout.fragment_new_task, container, false);
-        rvNewTask = (RecyclerView) view.findViewById(R.id.rv_new_tasks);
+        rvNewTask = (MyRecyclerView) view.findViewById(R.id.rv_new_tasks);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvNewTask.setLayoutManager(linearLayoutManager);

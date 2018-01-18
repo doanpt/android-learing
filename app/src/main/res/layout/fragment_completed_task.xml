@@ -5,7 +5,7 @@
               android:background="@color/color_bg_list"
               android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
+    <com.cnc.hcm.cnctracking.customeview.MyRecyclerView
         android:id="@+id/rv_complete_tasks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

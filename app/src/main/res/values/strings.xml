@@ -80,6 +80,7 @@
     <string name="account_login_on_other_device">Tài khoản này đã được đăng nhập trên thiết bị khác</string>
     <string name="text_title_no_gps">GPS - Vị trí đã tắt</string>
     <string name="text_gps_not_found">Để tiếp tục sử dụng, vui lòng bật định vị GPS. Chọn Setting để bật định vị GPS</string>
+    <string name="no_data">Không có dữ liệu</string>
 
 
 </resources>

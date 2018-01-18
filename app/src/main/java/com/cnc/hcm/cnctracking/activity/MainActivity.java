@@ -315,8 +315,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         showProgressLoadding();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-//        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
-//        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
+        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
+        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
         ApiUtils.getAPIService(arrHeads).getTaskList().enqueue(new Callback<GetTaskListResult>() {
             @Override
             public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
