@@ -383,6 +383,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void clearData() {
+        if (mMap != null) {
+            mMap.clear();
+        }
         if (taskAllFragment != null) {
             taskAllFragment.clearData();
         }
