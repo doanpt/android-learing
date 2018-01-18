@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
+import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 
@@ -29,7 +30,7 @@ public class TaskCompletedFragment extends Fragment implements TaskListAdapter.O
     private MainActivity mainActivity;
     private TaskListAdapter taskListAdapter;
 
-    private RecyclerView rvCompleteWork;
+    private MyRecyclerView rvCompleteWork;
     private ArrayList<ItemTask> arrTask = new ArrayList<>();
     private DialogDetailTaskFragment dialogDetailTaskFragment;
 
@@ -57,7 +58,7 @@ public class TaskCompletedFragment extends Fragment implements TaskListAdapter.O
         View view = inflater.inflate(R.layout.fragment_completed_task, container, false);
         Log.i("onCreateView", "Completed");
 
-        rvCompleteWork = (RecyclerView) view.findViewById(R.id.rv_complete_tasks);
+        rvCompleteWork = (MyRecyclerView) view.findViewById(R.id.rv_complete_tasks);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvCompleteWork.setLayoutManager(linearLayoutManager);

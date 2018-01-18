@@ -16,6 +16,7 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
+import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -31,7 +32,7 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
     private TaskListAdapter taskListAdapter;
     private MainActivity mainActivity;
 
-    private RecyclerView rvAllWork;
+    private MyRecyclerView rvAllWork;
     private ArrayList<ItemTask> arrTask = new ArrayList<>();
     private DialogDetailTaskFragment dialogDetailTaskFragment;
 
@@ -60,7 +61,7 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
         View view = inflater.inflate(R.layout.fragment_all_task, container, false);
         Log.i("onCreateView", "Cancel");
 
-        rvAllWork = (RecyclerView) view.findViewById(R.id.rv_all_tasks);
+        rvAllWork = (MyRecyclerView) view.findViewById(R.id.rv_all_tasks);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvAllWork.setLayoutManager(layoutManager);
@@ -77,7 +78,6 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
     public void onStart() {
         super.onStart();
         rvAllWork.setAdapter(taskListAdapter);
-
     }
 
     public void updateDistanceForAllTask(double latitude, double longitude) {
