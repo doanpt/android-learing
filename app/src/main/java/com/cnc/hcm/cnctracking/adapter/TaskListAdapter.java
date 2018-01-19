@@ -62,9 +62,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         }
         long idTypeWork = result.status._id;
         if (idTypeWork == Conts.TYPE_DOING_TASK) {
-            holder.imvNotiTypeWork.setImageResource(R.drawable.ic_noti_work_doing);
+            holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_doing);
         } else if (idTypeWork == Conts.TYPE_COMPLETE_TASK) {
-            holder.imvNotiTypeWork.setImageResource(R.drawable.ic_noti_work_complete);
+            holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_done);
         }
         holder.tvDistance.setText(itemTask.getDistanceToMyLocation());
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);

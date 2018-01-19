@@ -315,8 +315,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         showProgressLoadding();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
-        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
+//        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
+//        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
         ApiUtils.getAPIService(arrHeads).getTaskList().enqueue(new Callback<GetTaskListResult>() {
             @Override
             public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
@@ -421,10 +421,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             BitmapDescriptor bitmapDescriptor = null;
             switch ((int) task.getTaskResult().status._id) {
                 case Conts.TYPE_DOING_TASK:
-                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_doing);
+                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_doing_task);
                     break;
                 case Conts.TYPE_COMPLETE_TASK:
-                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_done);
+                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_done_task);
                     break;
             }
             GetTaskDetailResult.Result result = task.getTaskResult();
