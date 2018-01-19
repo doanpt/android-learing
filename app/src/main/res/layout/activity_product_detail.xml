@@ -14,88 +14,65 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="top"
+            android:layout_weight="0.7"
+            android:id="@+id/img_back_work_detail"
             android:padding="16dp"
             android:src="@drawable/ic_arrow" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="3"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tủ lạnh samsung e234f23424"
+                android:text="Tủ lạnh samsung hết ga"
+                android:id="@+id/tv_work_name_work_detail"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Công việc: 2"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:maxLines="2"
+                android:id="@+id/tv_location_work_detail"
+                android:text="18/1/2018 Số 1 Phạm Văn Bạch, Hà Nội"
+                android:textColor="#AAfffff2"
+                android:textSize="15sp" />
         </LinearLayout>
-    </LinearLayout>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/rl_header_barcode"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:text="1234567890123"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/imv_expand_barcode"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_chevron_right" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_content_barcode"
+                android:layout_height="0dp"
+                android:text="7h30"
+                android:id="@+id/tv_hour_work_detail"
+                android:gravity="center_vertical"
+                android:paddingTop="5dp"
+                android:textColor="@android:color/white"
+                android:layout_weight="1" />
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/imv_qrcode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-
-                <ImageView
-                    android:id="@+id/imv_code_128"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="16dp" />
-            </LinearLayout>
+                android:layout_height="0dp"
+                android:text="5km"
+                android:id="@+id/tv_distance_work_detail"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/white"
+                android:layout_weight="1" />
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

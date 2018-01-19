@@ -285,8 +285,8 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
                             Log.d("HEAD", "ac:" + accessToken);
                             Log.d("HEAD", "cs:" + customerId);
-                            arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, qrCode));
-                            addProduct2_4(arrHeads,qrCode);
+                            arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, content));
+                            addProduct2_4(arrHeads,content);
                         } else if (status == Conts.RESPONSE_STATUS_404) {
                             edtBarcode.setText(content);
                             Log.d("ABDonResponse", status + "  404 ");
@@ -318,6 +318,8 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                 if (status == Conts.RESPONSE_STATUS_OK) {
                     Intent productDetail = new Intent(AddProductActivity.this, ProductDetailActivity.class);
                     productDetail.putExtra(Conts.KEY_PRODUCT_ID, qr);
+                    productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, accessToken);
+                    productDetail.putExtra(Conts.KEY_ID_TASK, idTask);
                     startActivity(productDetail);
                     CommonMethod.makeToast(AddProductActivity.this, "add product name:" + productName + " manufacture:" + manufacture + " QR code:" + qrCode);
                     Log.d("ABDonResponse", status + "  200 ");

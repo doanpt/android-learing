@@ -129,12 +129,14 @@ public class Conts {
     public static final String PATH_TASK_DETAIL_PROCESS_DEVICE = PATH_TASK_DETAIL + "/process-device";
     public static final String PATH_PRODUCTS_BRAND = "/product-brands";
     public static final String PATH_PRODUCTS_CATEGORY = "/product-categories";
+    public static final String PATH_GET_PRODUCTS_DETAIL = "/task/{id}/get-device";
 
     public static final String PATH_GET_PRODUCT_BY_ID = "/customer-product/{id}";
     public static final String PATH_ADD_CUSTOMER_PRODUCTS = "/customer-products";
     public static final String PATH_USER_PROFILE = PATH_USER + "/profile";
     public static final String PATH_ADD_DEVICE_CONTAIN = "/task/{id}/add-device";
     public static final String PATH_COUNT_TASK = "/tasks/statistics";
+    public static final String PATH_UPLOAD_IMAGE_TO_SERVER = "/task/{id}/device-photo";
 
 
     public static final String KEY_AUTHORIZATION = "Authorization";
