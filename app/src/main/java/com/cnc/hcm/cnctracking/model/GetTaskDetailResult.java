@@ -5,7 +5,7 @@ public final class GetTaskDetailResult {
     public final String message;
     public final Result result;
 
-    public GetTaskDetailResult(long statusCode, String message, Result result){
+    public GetTaskDetailResult(long statusCode, String message, Result result) {
         this.statusCode = statusCode;
         this.message = message;
         this.result = result;
@@ -25,7 +25,7 @@ public final class GetTaskDetailResult {
         public final String appointmentDate;
         public final Address address;
 
-        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address){
+        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address) {
             this._id = _id;
             this.title = title;
             this.service = service;
@@ -49,7 +49,7 @@ public final class GetTaskDetailResult {
             public final String createdDate;
             public final long tax;
 
-            public Service(String _id, String name, String price, String photo, long __v, String createdDate, long tax){
+            public Service(String _id, String name, String price, String photo, long __v, String createdDate, long tax) {
                 this._id = _id;
                 this.name = name;
                 this.price = price;
@@ -72,7 +72,7 @@ public final class GetTaskDetailResult {
             public final String createdDate;
             public final Address address;
 
-            public Customer(String _id, String type, String fullname, String phone, String email, String gender, String dateOfBirth, long __v, String createdDate, Address address){
+            public Customer(String _id, String type, String fullname, String phone, String email, String gender, String dateOfBirth, long __v, String createdDate, Address address) {
                 this._id = _id;
                 this.type = type;
                 this.fullname = fullname;
@@ -91,7 +91,7 @@ public final class GetTaskDetailResult {
                 public final String street;
                 public final Location location;
 
-                public Address(String province, String district, String street, Location location){
+                public Address(String province, String district, String street, Location location) {
                     this.province = province;
                     this.district = district;
                     this.street = street;
@@ -102,7 +102,7 @@ public final class GetTaskDetailResult {
                     public final double latitude;
                     public final double longitude;
 
-                    public Location(double latitude, double longitude){
+                    public Location(double latitude, double longitude) {
                         this.latitude = latitude;
                         this.longitude = longitude;
                     }
@@ -115,7 +115,7 @@ public final class GetTaskDetailResult {
             public final String title;
             public final String description;
 
-            public Status(long _id, String title, String description){
+            public Status(long _id, String title, String description) {
                 this._id = _id;
                 this.title = title;
                 this.description = description;
@@ -131,7 +131,7 @@ public final class GetTaskDetailResult {
             public final ProcessDetail process;
             public final Before before;
 
-            public Process(Device device, User user, String _id, Status status, After after, ProcessDetail process, Before before){
+            public Process(Device device, User user, String _id, Status status, After after, ProcessDetail process, Before before) {
                 this.device = device;
                 this.user = user;
                 this._id = _id;
@@ -148,7 +148,7 @@ public final class GetTaskDetailResult {
                 public final long __v;
                 public final String createdDate;
 
-                public Device(String _id, Detail detail, String customer, long __v, String createdDate){
+                public Device(String _id, Detail detail, String customer, long __v, String createdDate) {
                     this._id = _id;
                     this.detail = detail;
                     this.customer = customer;
@@ -161,11 +161,11 @@ public final class GetTaskDetailResult {
                     public final Brand brand;
                     public final Category category;
                     public final String name;
-                    public final Photo photo;
+                    public final String photo;
                     public final long __v;
                     public final String createdDate;
 
-                    public Detail(String _id, Brand brand, Category category, String name, Photo photo, long __v, String createdDate){
+                    public Detail(String _id, Brand brand, Category category, String name, String photo, long __v, String createdDate) {
                         this._id = _id;
                         this.brand = brand;
                         this.category = category;
@@ -183,7 +183,7 @@ public final class GetTaskDetailResult {
                         public final String createdDate;
                         public final String description;
 
-                        public Brand(String _id, String name, String photo, long __v, String createdDate, String description){
+                        public Brand(String _id, String name, String photo, long __v, String createdDate, String description) {
                             this._id = _id;
                             this.name = name;
                             this.photo = photo;
@@ -201,7 +201,7 @@ public final class GetTaskDetailResult {
                         public final String createdDate;
                         public final String description;
 
-                        public Category(String _id, String title, String photo, long __v, String createdDate, String description){
+                        public Category(String _id, String title, String photo, long __v, String createdDate, String description) {
                             this._id = _id;
                             this.title = title;
                             this.photo = photo;
@@ -211,11 +211,11 @@ public final class GetTaskDetailResult {
                         }
                     }
 
-                    public static final class Photo {
-
-                        public Photo(){
-                        }
-                    }
+//                    public static final class Photo {
+//
+//                        public Photo(){
+//                        }
+//                    }
                 }
             }
 
@@ -235,7 +235,7 @@ public final class GetTaskDetailResult {
                 public final boolean isDriver;
                 public final String agent;
 
-                public User(String _id, String fullname, String email, String phone, long position, long skill, String photo, long __v, String dateOfBirth, String address, String createdDate, long group, boolean isDriver, String agent){
+                public User(String _id, String fullname, String email, String phone, long position, long skill, String photo, long __v, String dateOfBirth, String address, String createdDate, long group, boolean isDriver, String agent) {
                     this._id = _id;
                     this.fullname = fullname;
                     this.email = email;
@@ -258,7 +258,7 @@ public final class GetTaskDetailResult {
                 public final String title;
                 public final String description;
 
-                public Status(long _id, String title, String description){
+                public Status(long _id, String title, String description) {
                     this._id = _id;
                     this.title = title;
                     this.description = description;
@@ -268,7 +268,7 @@ public final class GetTaskDetailResult {
             public static final class After {
                 public final String[] photos;
 
-                public After(String[] photos){
+                public After(String[] photos) {
                     this.photos = photos;
                 }
             }
@@ -278,7 +278,7 @@ public final class GetTaskDetailResult {
                 public final Product products[];
                 public final String[] photos;
 
-                public ProcessDetail(Service[] services, Product[] products, String[] photos){
+                public ProcessDetail(Service[] services, Product[] products, String[] photos) {
                     this.services = services;
                     this.products = products;
                     this.photos = photos;
@@ -289,7 +289,7 @@ public final class GetTaskDetailResult {
                     public final String _id;
                     public final long quantity;
 
-                    public Service(Product product, String _id, long quantity){
+                    public Service(Product product, String _id, long quantity) {
                         this.product = product;
                         this._id = _id;
                         this.quantity = quantity;
@@ -304,7 +304,7 @@ public final class GetTaskDetailResult {
                         public final String createdDate;
                         public final long tax;
 
-                        public Product(String _id, String name, String price, String photo, long __v, String createdDate, long tax){
+                        public Product(String _id, String name, String price, String photo, long __v, String createdDate, long tax) {
                             this._id = _id;
                             this.name = name;
                             this.price = price;
@@ -321,7 +321,7 @@ public final class GetTaskDetailResult {
                     public final String _id;
                     public final long quantity;
 
-                    public Product(ProductDetail product, String _id, long quantity){
+                    public Product(ProductDetail product, String _id, long quantity) {
                         this.product = product;
                         this._id = _id;
                         this.quantity = quantity;
@@ -338,7 +338,7 @@ public final class GetTaskDetailResult {
                         public final long tax;
                         public final long quantity;
 
-                        public ProductDetail(String _id, String name, String brand, String category, String photo, long __v, String createdDate, long tax, long quantity){
+                        public ProductDetail(String _id, String name, String brand, String category, String photo, long __v, String createdDate, long tax, long quantity) {
                             this._id = _id;
                             this.name = name;
                             this.brand = brand;
@@ -356,7 +356,7 @@ public final class GetTaskDetailResult {
             public static final class Before {
                 public final String[] photos;
 
-                public Before(String[] photos){
+                public Before(String[] photos) {
                     this.photos = photos;
                 }
             }
@@ -368,7 +368,7 @@ public final class GetTaskDetailResult {
             public final String joinedDate;
             public final Boolean isLeader;
 
-            public Executive(User user, String _id, String joinedDate, Boolean isLeader){
+            public Executive(User user, String _id, String joinedDate, Boolean isLeader) {
                 this.user = user;
                 this._id = _id;
                 this.joinedDate = joinedDate;
@@ -391,7 +391,7 @@ public final class GetTaskDetailResult {
                 public final boolean isDriver;
                 public final String agent;
 
-                public User(String _id, String fullname, String email, String phone, long position, long skill, String photo, long __v, String dateOfBirth, String address, String createdDate, long group, boolean isDriver, String agent){
+                public User(String _id, String fullname, String email, String phone, long position, long skill, String photo, long __v, String dateOfBirth, String address, String createdDate, long group, boolean isDriver, String agent) {
                     this._id = _id;
                     this.fullname = fullname;
                     this.email = email;
@@ -416,7 +416,7 @@ public final class GetTaskDetailResult {
             public final String province;
             public final Location location;
 
-            public Address(String street, String district, String province, Location location){
+            public Address(String street, String district, String province, Location location) {
                 this.street = street;
                 this.district = district;
                 this.province = province;
@@ -427,7 +427,7 @@ public final class GetTaskDetailResult {
                 public final double latitude;
                 public final double longitude;
 
-                public Location(double latitude, double longitude){
+                public Location(double latitude, double longitude) {
                     this.latitude = latitude;
                     this.longitude = longitude;
                 }
