@@ -182,7 +182,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         tvHour = findViewById(R.id.tv_hour_work_detail);
         tvDistance = findViewById(R.id.tv_distance_work_detail);
 
-        String url = "http://35.198.195.55:3001/uploads/user/image/12694730_1027043980685790_4855700393915351375.jpg";
+        String url = "/uploads/user/image/12694730_1027043980685790_4855700393915351375.jpg";
         arrInit = new ArrayList<>();
         arrProcess = new ArrayList<>();
         arrFinish = new ArrayList<>();
@@ -292,7 +292,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         if (file != null) {
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             // MultipartBody.Part is used to send also the actual file name
-            MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
 //            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
             List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
@@ -305,10 +305,13 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                         String url = response.body().getResult().getImageURL();
                         if (requestCode == KEY_STEP_ONE) {
                             arrInit.add(url);
+                            initAdapter.notifyDataSetChanged();
                         } else if (requestCode == KEY_STEP_TWO) {
                             arrProcess.add(url);
+                            processAdapter.notifyDataSetChanged();
                         } else if (requestCode == KEY_STEP_THREE) {
                             arrFinish.add(url);
+                            finishAdapter.notifyDataSetChanged();
                         }
                         //FIXME làm sao để lúc post biết đc post những thằng nào.
                     } else {
