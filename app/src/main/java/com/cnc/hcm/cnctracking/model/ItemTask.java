@@ -1,8 +1,5 @@
 package com.cnc.hcm.cnctracking.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.cnc.hcm.cnctracking.util.Conts;
 
 /**

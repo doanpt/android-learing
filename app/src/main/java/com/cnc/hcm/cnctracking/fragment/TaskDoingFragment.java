@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,9 +93,6 @@ public class TaskDoingFragment extends Fragment implements TaskListAdapter.OnIte
     @Override
     public void onClickItemWork(int position) {
         String idTask = taskListAdapter.getItem(position).getTaskResult()._id;
-//        Intent intent = new Intent(getContext(), WorkDetailActivity.class);
-//        intent.putExtra(Conts.KEY_ID_TASK, idTask);
-//        startActivity(intent);
         dialogDetailTaskFragment.setIdTask(idTask);
         dialogDetailTaskFragment.show(getActivity().getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
         dialogDetailTaskFragment.setExpaned(true);

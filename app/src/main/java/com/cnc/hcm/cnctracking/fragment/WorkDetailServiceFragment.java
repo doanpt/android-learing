@@ -17,15 +17,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
-import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailServiceRecyclerViewAdapter;
+import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctracking.model.ItemPrice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class WorkDetailServiceFragment extends Fragment implements View.OnClickListener, WorkDetailActivity.TaskDetailLoadedListener {
+public class WorkDetailServiceFragment extends Fragment implements View.OnClickListener, DialogDetailTaskFragment.TaskDetailLoadedListener, DialogDetailTaskFragment.LocationUpdateListener {
 
     private static final String TAG = WorkDetailServiceFragment.class.getSimpleName();
 
@@ -81,7 +81,9 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
         mWorkDetailServiceRecyclerViewAdapter = new WorkDetailServiceRecyclerViewAdapter(getContext());
         rv_service.setAdapter(mWorkDetailServiceRecyclerViewAdapter);
 
-        ((WorkDetailActivity)getActivity()).setTaskDetailLoadedListener(this);
+        ((DialogDetailTaskFragment)getParentFragment()).setTaskDetailLoadedListener(this);
+        ((DialogDetailTaskFragment)getParentFragment()).setLocationUpdateListeners(this);
+
         return view;
     }
 
@@ -113,9 +115,9 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
                 handleActions(getTaskDetailResult.result.customer);
             }
 
-            List<WorkDetailServiceRecyclerViewAdapter.DetailService> detailServices = new ArrayList<>();
+            List<ItemPrice> itemPrices = new ArrayList<>();
             if (getTaskDetailResult.result.service != null) {
-                detailServices.add(new WorkDetailServiceRecyclerViewAdapter.DetailService(getTaskDetailResult.result.service.name, getTaskDetailResult.result.service.price, 1));
+                itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, getTaskDetailResult.result.service._id, getTaskDetailResult.result.service.name, getTaskDetailResult.result.service.tax, getTaskDetailResult.result.service.price, 1));
             }
             if (getTaskDetailResult.result.process != null) {
                 for (int i = 0; i < getTaskDetailResult.result.process.length; i++) {
@@ -125,7 +127,16 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
                         if (services != null) {
                             for (GetTaskDetailResult.Result.Process.ProcessDetail.Service service : services){
                                 if (service != null) {
-                                    detailServices.add(new WorkDetailServiceRecyclerViewAdapter.DetailService(service.product.name, service.product.price, service.quantity));
+                                    itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, service._id, service.product.name, service.product.tax, service.product.price, service.quantity));
+                                }
+                            }
+                        }
+
+                        GetTaskDetailResult.Result.Process.ProcessDetail.Product[] products = process.process.products;
+                        if (products != null) {
+                            for (GetTaskDetailResult.Result.Process.ProcessDetail.Product product : products){
+                                if (product != null) {
+                                    itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, product._id, product.product.name, product.product.tax, product.product.price, product.quantity));
                                 }
                             }
                         }
@@ -134,18 +145,20 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
             }
 
             long totalValue = 0;
-            for (WorkDetailServiceRecyclerViewAdapter.DetailService detailService : detailServices) {
-                if (detailService != null) {
-                    totalValue += detailService.totalPrice();
+            long totalTax = 0;
+            for (ItemPrice itemPrice : itemPrices) {
+                if (itemPrice != null) {
+                    totalValue += itemPrice.getPrice() * itemPrice.getQuantity();
+                    totalTax += totalValue * itemPrice.getTax() / 100;
                 }
             }
 
             tv_total_value.setText("" + totalValue);
-            long vat = totalValue/10;
-            tv_vat.setText("" + vat);
-            tv_have_to_pay.setText("" + (totalValue - vat));
-            tv_detail_work_total_payment.setText("" + (totalValue - vat));
-            mWorkDetailServiceRecyclerViewAdapter.updateDeviceList(detailServices);
+            tv_vat.setText("" + totalTax);
+            tv_have_to_pay.setText("" + (totalValue + totalTax));
+            tv_detail_work_total_payment.setText("" + (totalValue + totalTax));
+
+            mWorkDetailServiceRecyclerViewAdapter.updateServiceList(itemPrices);
 
         } catch (Exception e) {
             Log.e(TAG, "onTaskDetailLoaded(), Exception: " + e);

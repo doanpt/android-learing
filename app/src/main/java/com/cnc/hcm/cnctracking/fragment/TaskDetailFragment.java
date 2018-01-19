@@ -12,7 +12,6 @@ import android.widget.Button;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
-import com.google.android.gms.gcm.Task;
 
 /**
  * A simple {@link Fragment} subclass.

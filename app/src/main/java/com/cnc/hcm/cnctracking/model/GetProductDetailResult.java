@@ -4,10 +4,10 @@ package com.cnc.hcm.cnctracking.model;
  * Created by Android on 1/18/2018.
  */
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class GetProductDetailResult {
     @SerializedName("statusCode")

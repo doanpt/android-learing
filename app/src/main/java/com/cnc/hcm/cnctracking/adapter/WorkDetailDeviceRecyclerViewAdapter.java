@@ -1,6 +1,5 @@
 package com.cnc.hcm.cnctracking.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +43,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         try {
             holder.tv_title.setText(process.device.detail.name + "");
             holder.tv_status.setText("Hoàn thành bước " + process.status._id);
-            holder.iv_status.setImageResource("1".equals(process.status._id) ? R.drawable.step_1_complete : ("2".equals(process.status._id) ? R.drawable.step_2_complete : R.drawable.step_3_complete));
+            holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.step_1_complete : (process.status._id == 2 ? R.drawable.step_2_complete : R.drawable.step_3_complete));
             holder.iv_fix.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

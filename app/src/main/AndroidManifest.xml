@@ -49,8 +49,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.WorkDetailActivity">
-        </activity>
         <activity android:name=".activity.ProductDetailActivity">
         </activity>
     </application>

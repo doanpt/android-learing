@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.event.OnResultTimeDistance;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
-import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;

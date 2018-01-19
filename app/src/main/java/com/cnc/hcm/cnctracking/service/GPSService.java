@@ -28,10 +28,10 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.AddProductActivity;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.activity.ProductDetailActivity;
-import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.api.APIService;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LocationBackupFile;
 import com.cnc.hcm.cnctracking.model.LocationResponseUpload;
@@ -39,9 +39,6 @@ import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
-//import com.github.nkzawa.socketio.client.Ack;
-//import com.github.nkzawa.socketio.client.IO;
-//import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
@@ -65,6 +62,10 @@ import io.socket.client.Socket;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+//import com.github.nkzawa.socketio.client.Ack;
+//import com.github.nkzawa.socketio.client.IO;
+//import com.github.nkzawa.socketio.client.Socket;
 
 
 /**
@@ -92,7 +93,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private Gson gson = new Gson();
     private APIService mService;
     private MainActivity mainActivity;
-    private WorkDetailActivity workDetailActivity;
+    private DialogDetailTaskFragment dialogDetailTaskFragment;
     private AddProductActivity addProductActivity;
     private ProductDetailActivity productDetailActivity;
     //private LocationGooglePlayServicesProvider provider;
@@ -245,8 +246,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         if (mainActivity != null) {
             mainActivity.myLocationHere(latitude, longitude, accuracy, addressName, cityName);
         }
-        if (workDetailActivity != null) {
-            workDetailActivity.myLocationHere(latitude, longitude);
+        if (dialogDetailTaskFragment != null) {
+            dialogDetailTaskFragment.myLocationHere(latitude, longitude);
         }
 
         if (UserInfo.getInstance(GPSService.this).getIsLogin() && longitude != 0.0f && latitude != 0.0f) {
@@ -605,9 +606,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         return cityName;
     }
 
-    public void setWorkDetailActivity(WorkDetailActivity workDetailActivity) {
-        this.workDetailActivity = workDetailActivity;
-        workDetailActivity.myLocationHere(latitude, longitude);
+    public void setDialogDetailTaskFragment(DialogDetailTaskFragment dialogDetailTaskFragment) {
+        this.dialogDetailTaskFragment = dialogDetailTaskFragment;
+        dialogDetailTaskFragment.myLocationHere(latitude, longitude);
     }
 
     public void setAddProductActivity(AddProductActivity addProductActivity) {

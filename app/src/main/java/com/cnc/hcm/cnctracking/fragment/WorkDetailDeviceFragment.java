@@ -12,12 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
-import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailDeviceRecyclerViewAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.event.RecyclerViewItemClickListener;
-import com.cnc.hcm.cnctracking.model.CountTaskResult;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.ProcessDeviceResult;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
@@ -32,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WorkDetailDeviceFragment extends Fragment implements WorkDetailActivity.TaskDetailLoadedListener, RecyclerViewItemClickListener {
+public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTaskFragment.TaskDetailLoadedListener, RecyclerViewItemClickListener {
 
     private static final String TAG = WorkDetailDeviceFragment.class.getSimpleName();
 
@@ -59,7 +58,7 @@ public class WorkDetailDeviceFragment extends Fragment implements WorkDetailActi
         mWorkDetailDeviceRecyclerViewAdapter = new WorkDetailDeviceRecyclerViewAdapter(this);
         rv_device.setAdapter(mWorkDetailDeviceRecyclerViewAdapter);
 
-        ((WorkDetailActivity)getActivity()).setTaskDetailLoadedListener(this);
+        ((DialogDetailTaskFragment)getParentFragment()).setTaskDetailLoadedListener(this);
         return view;
     }
 
@@ -74,11 +73,6 @@ public class WorkDetailDeviceFragment extends Fragment implements WorkDetailActi
         } catch (Exception e) {
             Log.e(TAG, "onTaskDetailLoaded, Exception: " + e);
         }
-    }
-
-    @Override
-    public void onLocationUpdate(double latitude, double longitude) {
-        Log.e(TAG, "onLocationUpdate, latitude: " + latitude + ", longitude: " + longitude);
     }
 
     @Override

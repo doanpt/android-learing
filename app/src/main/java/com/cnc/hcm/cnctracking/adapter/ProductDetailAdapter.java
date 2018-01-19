@@ -8,16 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.cnc.hcm.cnctracking.R;
-import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
-import com.cnc.hcm.cnctracking.model.ItemTask;
-import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Android on 1/11/2018.

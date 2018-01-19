@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.model.ItemPrice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
 
     private static final String TAG = WorkDetailServiceRecyclerViewAdapter.class.getSimpleName();
 
-    private List<DetailService> services = new ArrayList<>();
+    private List<ItemPrice> itemPrices = new ArrayList<>();
 
     private Context context;
 
@@ -25,8 +26,8 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
         this.context = context;
     }
 
-    public List<DetailService> getServices() {
-        return services;
+    public List<ItemPrice> getItemPrices() {
+        return itemPrices;
     }
 
     @Override
@@ -37,12 +38,12 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
 
     @Override
     public void onBindViewHolder(WorkDetailServiceRecyclerViewAdapter.ViewHolder holder, int position) {
-        DetailService service = this.services.get(position);
+        ItemPrice itemPrice = this.itemPrices.get(position);
         try {
-            holder.tv_service_name.setText("" + service.name);
-            holder.tv_single_price.setText("" + service.price);
-            holder.tv_volume.setText("" + service.quantity);
-            holder.tv_service_price.setText("" + service.totalPrice());
+            holder.tv_service_name.setText("" + itemPrice.getName());
+            holder.tv_single_price.setText("" + itemPrice.getPrice());
+            holder.tv_volume.setText("" + itemPrice.getQuantity());
+            holder.tv_service_price.setText("" + itemPrice.getPrice() * itemPrice.getQuantity());
         } catch (Exception e) {
             Log.e(TAG, "onBindViewHolder, Exception: " + e);
         }
@@ -50,12 +51,12 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
 
     @Override
     public int getItemCount() {
-        return services.size();
+        return itemPrices.size();
     }
 
-    public void updateDeviceList(List<DetailService> services) {
-        if (services != null && !services.isEmpty()) {
-            this.services = services;
+    public void updateServiceList(List<ItemPrice> itemPrices) {
+        if (itemPrices != null && !itemPrices.isEmpty()) {
+            this.itemPrices = itemPrices;
             notifyDataSetChanged();
         }
     }
@@ -73,28 +74,6 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
             tv_single_price = itemView.findViewById(R.id.tv_single_price);
             tv_volume = itemView.findViewById(R.id.tv_volume);
             tv_service_price = itemView.findViewById(R.id.tv_service_price);
-        }
-    }
-
-    public static final class DetailService {
-        private String name;
-        private String price;
-        private long quantity;
-
-        public DetailService(String name, String price, long quantity) {
-            this.name = name;
-            this.price = price;
-            this.quantity = quantity;
-        }
-
-        public long totalPrice() {
-            long totalPrice = 0;
-            try {
-                totalPrice = Integer.parseInt(price) * quantity;
-            } catch (Exception e) {
-                Log.e(TAG, "totalPrice(), Exception: " + e.getMessage(), e);
-            }
-            return totalPrice;
         }
     }
 }

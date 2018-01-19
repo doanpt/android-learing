@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.cnc.hcm.cnctracking.fragment.ChangePasswordFragment;
 import com.cnc.hcm.cnctracking.fragment.UserInforFragment;
-import com.cnc.hcm.cnctracking.model.UserProfile;
 
 import java.util.ArrayList;
 import java.util.List;

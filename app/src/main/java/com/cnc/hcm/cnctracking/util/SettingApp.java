@@ -2,7 +2,6 @@ package com.cnc.hcm.cnctracking.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
  * Created by giapmn on 12/22/17.

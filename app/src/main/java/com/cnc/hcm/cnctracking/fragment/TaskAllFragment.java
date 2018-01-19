@@ -1,12 +1,10 @@
 package com.cnc.hcm.cnctracking.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +12,10 @@ import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
-import com.cnc.hcm.cnctracking.activity.WorkDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
 import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.model.ItemTask;
-import com.cnc.hcm.cnctracking.util.Conts;
 
 import java.util.ArrayList;
 
@@ -89,14 +85,9 @@ public class TaskAllFragment extends Fragment implements TaskListAdapter.OnItemW
     @Override
     public void onClickItemWork(int position) {
         String idTask = taskListAdapter.getItem(position).getTaskResult()._id;
-        String customerID = taskListAdapter.getItem(position).getTaskResult().customer._id;
-        Intent intent = new Intent(getContext(), WorkDetailActivity.class);
-        intent.putExtra(Conts.KEY_ID_TASK, idTask);
-        intent.putExtra(Conts.KEY_CUSTOMER_ID, customerID);
-        startActivity(intent);
-//        dialogDetailTaskFragment.setIdTask(idTask);
-//        dialogDetailTaskFragment.show(getActivity().getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
-//        dialogDetailTaskFragment.setExpaned(true);
+        dialogDetailTaskFragment.setIdTask(idTask);
+        dialogDetailTaskFragment.show(getActivity().getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
+        dialogDetailTaskFragment.setExpaned(true);
     }
 
     public void addItem(ItemTask itemTask) {

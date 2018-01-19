@@ -43,13 +43,13 @@ public final class GetTaskDetailResult {
         public static final class Service {
             public final String _id;
             public final String name;
-            public final String price;
+            public final double price;
             public final String photo;
             public final long __v;
             public final String createdDate;
             public final long tax;
 
-            public Service(String _id, String name, String price, String photo, long __v, String createdDate, long tax) {
+            public Service(String _id, String name, double price, String photo, long __v, String createdDate, long tax) {
                 this._id = _id;
                 this.name = name;
                 this.price = price;
@@ -298,13 +298,13 @@ public final class GetTaskDetailResult {
                     public static final class Product {
                         public final String _id;
                         public final String name;
-                        public final String price;
+                        public final double price;
                         public final String photo;
                         public final long __v;
                         public final String createdDate;
                         public final long tax;
 
-                        public Product(String _id, String name, String price, String photo, long __v, String createdDate, long tax) {
+                        public Product(String _id, String name, double price, String photo, long __v, String createdDate, long tax) {
                             this._id = _id;
                             this.name = name;
                             this.price = price;
@@ -336,9 +336,10 @@ public final class GetTaskDetailResult {
                         public final long __v;
                         public final String createdDate;
                         public final long tax;
+                        public final double price;
                         public final long quantity;
 
-                        public ProductDetail(String _id, String name, String brand, String category, String photo, long __v, String createdDate, long tax, long quantity) {
+                        public ProductDetail(String _id, String name, String brand, String category, String photo, long __v, String createdDate, long tax, double price, long quantity) {
                             this._id = _id;
                             this.name = name;
                             this.brand = brand;
@@ -347,6 +348,7 @@ public final class GetTaskDetailResult {
                             this.__v = __v;
                             this.createdDate = createdDate;
                             this.tax = tax;
+                            this.price = price;
                             this.quantity = quantity;
                         }
                     }

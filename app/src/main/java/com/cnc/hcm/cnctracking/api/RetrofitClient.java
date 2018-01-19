@@ -4,10 +4,8 @@ package com.cnc.hcm.cnctracking.api;
 import com.cnc.hcm.cnctracking.util.Conts;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
