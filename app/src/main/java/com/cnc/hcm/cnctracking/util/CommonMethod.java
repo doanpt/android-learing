@@ -47,9 +47,9 @@ public class CommonMethod {
         return new SimpleDateFormat("HH:mm").format(date);
     }
 
-    public static String format(double number) {
-        DecimalFormat format = new DecimalFormat("#.##");
-        return format.format(number) + Conts.BLANK;
+    public static String formatCurrency(long number) {
+        DecimalFormat format = new DecimalFormat("###,###,###");
+        return (format.format(number) + Conts.BLANK).replaceAll("," , ".");
     }
 
 

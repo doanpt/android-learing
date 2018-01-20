@@ -37,6 +37,7 @@ import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -221,6 +222,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 }
                 if (getTaskDetailResult.result.address != null) {
                     tv_address_item_work.setText(getTaskDetailResult.result.address.street + "");
+                } else if (getTaskDetailResult.result.customer.address != null) {
+                    tv_address_item_work.setText(getTaskDetailResult.result.customer.address.street + "");
                 }
                 tv_distance_item_work.setText("0 km");    //TODO update distance later
                 if (getTaskDetailResult.result.customer != null) {
@@ -315,6 +318,22 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 integrator.initiateScan();
                 fabMenu.collapse();
                 break;
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+            } else {
+                String content = result.getContents();
+                String format = result.getFormatName();
+                CommonMethod.makeToast(getActivity(), content + ", " + format);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

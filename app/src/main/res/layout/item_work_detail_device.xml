@@ -7,6 +7,7 @@
 
     <RelativeLayout
         android:id="@+id/item_product"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp">
@@ -55,29 +56,29 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_history"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@+id/iv_fix"
-            android:src="@drawable/ic_payment_disable" />
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_history"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:layout_toLeftOf="@+id/iv_fix"-->
+            <!--android:src="@drawable/ic_payment_disable" />-->
 
-        <ImageView
-            android:id="@+id/iv_fix"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_settings_product" />
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_fix"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:src="@drawable/ic_settings_product" />-->
     </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginRight="56dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="#1A000000" />
 
 </LinearLayout>

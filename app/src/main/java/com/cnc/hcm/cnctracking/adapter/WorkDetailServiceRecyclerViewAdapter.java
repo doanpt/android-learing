@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.model.ItemPrice;
+import com.cnc.hcm.cnctracking.util.CommonMethod;
+import com.cnc.hcm.cnctracking.util.Conts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +42,10 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
     public void onBindViewHolder(WorkDetailServiceRecyclerViewAdapter.ViewHolder holder, int position) {
         ItemPrice itemPrice = this.itemPrices.get(position);
         try {
-            holder.tv_service_name.setText("" + itemPrice.getName());
-            holder.tv_single_price.setText("" + itemPrice.getPrice());
-            holder.tv_volume.setText("" + itemPrice.getQuantity());
-            holder.tv_service_price.setText("" + itemPrice.getPrice() * itemPrice.getQuantity());
+            holder.tv_service_name.setText(itemPrice.getName() + Conts.BLANK);
+            holder.tv_single_price.setText(CommonMethod.formatCurrency((long)itemPrice.getPrice()));
+            holder.tv_volume.setText(itemPrice.getQuantity() + Conts.BLANK);
+            holder.tv_service_price.setText(CommonMethod.formatCurrency((long)(itemPrice.getPrice() * itemPrice.getQuantity())));
         } catch (Exception e) {
             Log.e(TAG, "onBindViewHolder, Exception: " + e);
         }

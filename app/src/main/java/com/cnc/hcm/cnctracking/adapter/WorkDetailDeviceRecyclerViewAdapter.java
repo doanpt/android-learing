@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
@@ -44,7 +45,13 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
             holder.tv_title.setText(process.device.detail.name + "");
             holder.tv_status.setText("Hoàn thành bước " + process.status._id);
             holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.step_1_complete : (process.status._id == 2 ? R.drawable.step_2_complete : R.drawable.step_3_complete));
-            holder.iv_fix.setOnClickListener(new View.OnClickListener() {
+//            holder.iv_fix.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mListener.onClick(v, position);
+//                }
+//            });
+            holder.item_product.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mListener.onClick(v, position);
@@ -69,19 +76,21 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        private RelativeLayout item_product;
         private ImageView iv_icon;
         private ImageView iv_status;
-        private ImageView iv_history;
-        private ImageView iv_fix;
+//        private ImageView iv_history;
+//        private ImageView iv_fix;
         private TextView tv_title;
         private TextView tv_status;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            item_product = itemView.findViewById(R.id.item_product);
             iv_icon = itemView.findViewById(R.id.iv_icon);
             iv_status = itemView.findViewById(R.id.iv_status);
-            iv_history = itemView.findViewById(R.id.iv_history);
-            iv_fix = itemView.findViewById(R.id.iv_fix);
+//            iv_history = itemView.findViewById(R.id.iv_history);
+//            iv_fix = itemView.findViewById(R.id.iv_fix);
             tv_title = itemView.findViewById(R.id.tv_title);
             tv_status = itemView.findViewById(R.id.tv_status);
         }

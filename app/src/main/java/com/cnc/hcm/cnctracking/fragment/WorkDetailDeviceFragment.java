@@ -78,37 +78,38 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
     @Override
     public void onClick(View view, int position) {
         switch (view.getId()) {
-            case R.id.iv_fix :
-                Log.d(TAG, "onClick, processDevice, taskId: " + saveTaskId + ", deviceId: " + mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id);
-                List<MHead> arrHeads = new ArrayList<>();
-                arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getContext()).getAccessToken()));
-                arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id));
-                ApiUtils.getAPIService(arrHeads).processDevice(saveTaskId).enqueue(new Callback<ProcessDeviceResult>() {
-                    @Override
-                    public void onResponse(Call<ProcessDeviceResult> call, Response<ProcessDeviceResult> response) {
-                        int statusCode = response.code();
-                        Log.d(TAG, "onClick.onResponse(), statusCode: " + statusCode);
-                        if (response.isSuccessful()) {
-                            ProcessDeviceResult processDeviceResult = response.body();
-                            if (processDeviceResult != null) {
-                                Log.e(TAG, "onClick.onResponse() success");
-                                Toast.makeText(getActivity(), "onClick fix icon. process device --> success for " + processDeviceResult.result.title, Toast.LENGTH_LONG).show();
-                            } else {
-                                CommonMethod.makeToast(getContext(), "onClick fix icon. process device --> success but processDeviceResult is null");
-                            }
-                        } else {
-                            CommonMethod.makeToast(getContext(), "onClick fix icon. process device --> not success: " + response.toString());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ProcessDeviceResult> call, Throwable t) {
-                        CommonMethod.makeToast(getContext(), "onClick fix icon. process device --> onFailure" + t.toString());
-                    }
-                });
+            case R.id.item_product :
+                proressDevice(position);
                 break;
             default:
                 break;
         }
+    }
+
+    private void proressDevice(int position) {
+        Log.d(TAG, "item_product.onClick(), taskId: " + saveTaskId + ", deviceId: " + mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id);
+        // TODO
+        List<MHead> arrHeads = new ArrayList<>();
+        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getContext()).getAccessToken()));
+        arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id));
+        ApiUtils.getAPIService(arrHeads).processDevice(saveTaskId).enqueue(new Callback<ProcessDeviceResult>() {
+            @Override
+            public void onResponse(Call<ProcessDeviceResult> call, Response<ProcessDeviceResult> response) {
+                int statusCode = response.code();
+                Log.d(TAG, "onClick.onResponse(), statusCode: " + statusCode);
+                if (response.isSuccessful()) {
+                    ProcessDeviceResult processDeviceResult = response.body();
+                    String id = (processDeviceResult != null && processDeviceResult.result != null) ? processDeviceResult.result._id : "Not found";
+                    Toast.makeText(getActivity(), "onClick fix icon. process-device SUCCESSFULLY, id: " + id, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), "onClick fix icon. process-device NOT successfully", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProcessDeviceResult> call, Throwable t) {
+                CommonMethod.makeToast(getContext(), "onClick fix icon. process device --> onFailure" + t.toString());
+            }
+        });
     }
 }

@@ -15,12 +15,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailServiceRecyclerViewAdapter;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.ItemPrice;
+import com.cnc.hcm.cnctracking.util.CommonMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,11 +106,19 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onTaskDetailLoaded(GetTaskDetailResult getTaskDetailResult) {
+        Log.d(TAG, "onTaskDetailLoaded");
         try {
-            Log.d(TAG, "onTaskDetailLoaded");
-            if (getTaskDetailResult.result.address != null) {
-                handleActions(getTaskDetailResult.result.address);
+            if (getTaskDetailResult.result.address != null && getTaskDetailResult.result.address.location != null) {
+                handleActions(getTaskDetailResult.result.address.location.latitude, getTaskDetailResult.result.address.location.longitude);
+            } else if (getTaskDetailResult.result.customer.address != null && getTaskDetailResult.result.customer.address.location != null) {
+                handleActions(getTaskDetailResult.result.customer.address.location.latitude, getTaskDetailResult.result.customer.address.location.longitude);
+            } else {
+                Toast.makeText(getActivity(), "Not found the work address.", Toast.LENGTH_LONG).show();
             }
+        } catch (Exception e) {
+            Log.e(TAG, "onTaskDetailLoaded(), Exception1: " + e);
+        }
+        try {
             if (getTaskDetailResult.result.customer != null) {
                 tv_detail_work_contact_name.setText(getTaskDetailResult.result.customer.fullname + "");
                 tv_detail_work_contact_phone.setText(getTaskDetailResult.result.customer.phone + "");
@@ -153,10 +163,10 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
                 }
             }
 
-            tv_total_value.setText("" + totalValue);
-            tv_vat.setText("" + totalTax);
-            tv_have_to_pay.setText("" + (totalValue + totalTax));
-            tv_detail_work_total_payment.setText("" + (totalValue + totalTax));
+            tv_total_value.setText(CommonMethod.formatCurrency(totalValue));
+            tv_vat.setText(CommonMethod.formatCurrency(totalTax));
+            tv_have_to_pay.setText(CommonMethod.formatCurrency((totalValue + totalTax)));
+            tv_detail_work_total_payment.setText(CommonMethod.formatCurrency(totalValue + totalTax) + " đ");
 
             mWorkDetailServiceRecyclerViewAdapter.updateServiceList(itemPrices);
 
@@ -165,23 +175,23 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
         }
     }
 
-    @Override
-    public void onLocationUpdate(double latitude, double longitude) {
-        Log.d(TAG, "onLocationUpdate, latitude: " + latitude + ", longitude: " + longitude);
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-
-    private void handleActions(final GetTaskDetailResult.Result.Address address) {
+    private void handleActions(final double targetLatitude, final double targetLongitude) {
         tv_detail_work_address_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                         Uri.parse("http://maps.google.com/maps?saddr=" + latitude + "," + longitude
-                                + "&daddr=" + address.location.latitude + "," + address.location.longitude));
+                                + "&daddr=" + targetLatitude + "," + targetLongitude));
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onLocationUpdate(double latitude, double longitude) {
+        Log.d(TAG, "onLocationUpdate, latitude: " + latitude + ", longitude: " + longitude);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     private void handleActions(final GetTaskDetailResult.Result.Customer customer) {
