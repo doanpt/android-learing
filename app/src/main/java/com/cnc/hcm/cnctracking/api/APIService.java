@@ -15,7 +15,9 @@ import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LoginResponseStatus;
 import com.cnc.hcm.cnctracking.model.ProcessDeviceResult;
 import com.cnc.hcm.cnctracking.model.ProductListResult;
+import com.cnc.hcm.cnctracking.model.SubmitProcessParam;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
+import com.cnc.hcm.cnctracking.model.UpdateProcessResult;
 import com.cnc.hcm.cnctracking.model.UploadImageResult;
 import com.cnc.hcm.cnctracking.util.Conts;
 
@@ -76,4 +78,10 @@ public interface APIService {
     @POST(Conts.PATH_UPLOAD_IMAGE_TO_SERVER)
     Call<UploadImageResult> uploadPhoto(@Part MultipartBody.Part filePart,@Path("id") String idTask);
 
+    @Headers({"Content-Type: application/json"})
+    @PATCH(Conts.PATH_UPDATE_PROCESS)
+    Call<UpdateProcessResult> updateProcess(@Path("id") String productID ,@Body SubmitProcessParam param);
+
+    @PATCH(Conts.PATH_COMPLETE_PROCESS)
+    Call<UpdateProcessResult> completeProcess(@Path("id") String productID );
 }

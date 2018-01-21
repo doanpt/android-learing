@@ -24,7 +24,10 @@ import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
+import com.cnc.hcm.cnctracking.model.AddProductResult;
 import com.cnc.hcm.cnctracking.model.GetProductDetailResult;
+import com.cnc.hcm.cnctracking.model.SubmitProcessParam;
+import com.cnc.hcm.cnctracking.model.UpdateProcessResult;
 import com.cnc.hcm.cnctracking.model.UploadImageResult;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
@@ -56,7 +59,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private FloatingActionsMenu fabMenu;
     private TextView tvCompleteWork;
     private TextView tvName, tvLocation, tvHour, tvDistance, tvProductID;
-    private FloatingActionButton fabNote, fabProduct, fabStep1, fabStep2, fabStep3;
+    private FloatingActionButton fabNote, fabProduct, fabStep1, fabStep2, fabStep3,fabFinish;
     private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
     private GPSService gpsService;
@@ -150,13 +153,13 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
-                llViewControl.setVisibility(View.VISIBLE);
+//                llViewControl.setVisibility(View.VISIBLE);
                 flBlurView.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onMenuCollapsed() {
-                llViewControl.setVisibility(View.GONE);
+//                llViewControl.setVisibility(View.GONE);
                 flBlurView.setVisibility(View.GONE);
             }
         });
@@ -169,6 +172,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         fabStep1 = (FloatingActionButton) findViewById(R.id.fab_step_one);
         fabStep2 = (FloatingActionButton) findViewById(R.id.fab_step_two);
         fabStep3 = (FloatingActionButton) findViewById(R.id.fab_step_three);
+        fabFinish = (FloatingActionButton) findViewById(R.id.fab_complete);
         tvName = findViewById(R.id.tv_work_name_work_detail);
         tvLocation = findViewById(R.id.tv_location_work_detail);
         tvHour = findViewById(R.id.tv_hour_work_detail);
@@ -180,19 +184,8 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         arrFinish = new ArrayList<>();
         arrFinish.add(url);
         arrFinish.add(url);
-        arrFinish.add(url);
-        arrFinish.add(url);
-        arrFinish.add(url);
         arrInit.add(url);
         arrInit.add(url);
-        arrInit.add(url);
-        arrInit.add(url);
-        arrInit.add(url);
-
-        arrProcess.add(url);
-        arrProcess.add(url);
-        arrProcess.add(url);
-        arrProcess.add(url);
         arrProcess.add(url);
         arrProcess.add(url);
         initAdapter = new ProductDetailAdapter(this, arrInit);
@@ -221,6 +214,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         fabStep1.setOnClickListener(this);
         fabStep2.setOnClickListener(this);
         fabStep3.setOnClickListener(this);
+        fabFinish.setOnClickListener(this);
     }
 
     @Override
@@ -235,8 +229,8 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_complete_work:
-                //TODO complete work
+            case R.id.fab_complete:
+                completeWork();
                 closeFabMenu();
                 break;
             case R.id.fab_note:
@@ -251,15 +245,37 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 closeFabMenu();
                 break;
             case R.id.fab_step_two:
-                takePicture(KEY_STEP_ONE);
+                takePicture(KEY_STEP_TWO);
                 closeFabMenu();
                 break;
             case R.id.fab_step_three:
-                takePicture(KEY_STEP_ONE);
+                takePicture(KEY_STEP_THREE);
                 closeFabMenu();
                 break;
 
         }
+    }
+
+    private void completeWork() {
+        List<MHead> arrHeads = new ArrayList<>();
+        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+        arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceID));
+        ApiUtils.getAPIService(arrHeads).completeProcess(idTask).enqueue(new Callback<UpdateProcessResult>() {
+            @Override
+            public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
+                Long status = response.body().getStatusCode();
+                if (status == Conts.RESPONSE_STATUS_OK) {
+                    CommonMethod.makeToast(ProductDetailActivity.this, "Complete OK!!!");
+                } else {
+                    CommonMethod.makeToast(ProductDetailActivity.this, "Complete error!!!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateProcessResult> call, Throwable t) {
+                CommonMethod.makeToast(ProductDetailActivity.this, "Upload status onFailure");
+            }
+        });
     }
 
     private void takePicture(int keyResult) {
@@ -276,16 +292,12 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap photo;
-        File file = null;// initialize file here
-        if (requestCode == KEY_STEP_ONE) {
-            photo = (Bitmap) data.getExtras().get("data");
-            file = saveBitmapFile(photo, "KEY_STEP_ONE_" + System.currentTimeMillis());
-        }
+        File file = null;
+        photo = (Bitmap) data.getExtras().get("data");
+        file = saveBitmapFile(photo, System.currentTimeMillis() + "");
         if (file != null) {
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            // MultipartBody.Part is used to send also the actual file name
             MultipartBody.Part body = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
-//            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
             List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
 
@@ -295,17 +307,43 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     Long code = response.body().getStatusCode();
                     if (code == Conts.RESPONSE_STATUS_OK) {
                         String url = response.body().getResult().getImageURL();
+                        List<MHead> arrHeads = new ArrayList<>();
+                        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+                        arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceID));
+                        SubmitProcessParam param = new SubmitProcessParam();
                         if (requestCode == KEY_STEP_ONE) {
                             arrInit.add(url);
                             initAdapter.notifyDataSetChanged();
+                            param.setBefore(new SubmitProcessParam.Before());
+                            param.getBefore().setPhotos(arrInit);
                         } else if (requestCode == KEY_STEP_TWO) {
                             arrProcess.add(url);
                             processAdapter.notifyDataSetChanged();
+                            param.setProcess(new SubmitProcessParam.Process());
+                            param.getProcess().setPhotos(arrProcess);
                         } else if (requestCode == KEY_STEP_THREE) {
                             arrFinish.add(url);
                             finishAdapter.notifyDataSetChanged();
+                            param.setAfter(new SubmitProcessParam.After());
+                            param.getAfter().setPhotos(arrFinish);
                         }
-                        //FIXME làm sao để lúc post biết đc post những thằng nào.
+                        ApiUtils.getAPIService(arrHeads).updateProcess(idTask, param).enqueue(new Callback<UpdateProcessResult>() {
+                            @Override
+                            public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
+                                Long status = response.body().getStatusCode();
+                                if (status == Conts.RESPONSE_STATUS_OK) {
+                                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Step OK!!!");
+                                } else {
+                                    //TODO nếu ERROR thì remove phần tử cuối của array image đó.
+                                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Process Error! Response != 200");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<UpdateProcessResult> call, Throwable t) {
+                                CommonMethod.makeToast(ProductDetailActivity.this, "Update Process Error, onFailure");
+                            }
+                        });
                     } else {
                         CommonMethod.makeToast(ProductDetailActivity.this, "Upload status error");
                     }

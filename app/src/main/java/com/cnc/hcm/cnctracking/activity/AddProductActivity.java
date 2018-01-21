@@ -112,7 +112,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
     private void getInformation() {
         customerId = getIntent().getStringExtra(Conts.KEY_CUSTOMER_ID);
         idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
-        Log.d("ABD", customerId + " ");
+        Log.d("ABD", customerId + " "+idTask);
         CommonMethod.makeToast(this, customerId);
         accessToken = UserInfo.getInstance(getApplicationContext()).getAccessToken();
         arrHeads.clear();
@@ -320,7 +320,6 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                     productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, accessToken);
                     productDetail.putExtra(Conts.KEY_ID_TASK, idTask);
                     startActivity(productDetail);
-                    CommonMethod.makeToast(AddProductActivity.this, "add product name:" + productName + " manufacture:" + manufacture + " QR code:" + qrCode);
                     Log.d("ABDonResponse", status + "  200 ");
                 } else {
                     Toast.makeText(AddProductActivity.this, "Add contain product error", Toast.LENGTH_SHORT).show();
