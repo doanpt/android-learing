@@ -189,4 +189,6 @@ public class Conts {
     public static final String KEY_START_DATE = "startDate";
     public static final String KEY_END_DATE = "endDate";
 
+    public static final String SOCKET_EVENT_NEW_TASK = "new task";
+    public static final String SOCKET_EVENT_JOIN = "join";
 }

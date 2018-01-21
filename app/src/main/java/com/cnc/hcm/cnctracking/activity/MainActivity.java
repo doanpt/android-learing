@@ -12,12 +12,17 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -262,6 +267,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
             gpsService.setMainActivity(MainActivity.this);
+            if (taskNewFragment != null) {
+                taskNewFragment.getData();
+            }
             //FIXME this code which is commented could remove if you want
 //            if (gpsService.getmSocket() == null || !gpsService.getmSocket().connected()) {
 //                String token = UserInfo.getInstance(MainActivity.this).getAccessToken();
@@ -414,6 +422,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tvQuantityNewTask.setText(quantityNewTask + Conts.BLANK);
         tvQuantityDoingTask.setText(quantityDoingTask + Conts.BLANK);
         tvQuantityCompleteTask.setText(quantityCompletedTask + Conts.BLANK);
+    }
+
+    public void receiverNewTask(GetTaskDetailResult.Result result) {
+        if (taskNewFragment != null) {
+            taskNewFragment.addItem(new ItemTask(result));
+        }
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        v.vibrate(1500);
+
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+        r.play();
+
     }
 
     private void initMarkerOnMap() {
@@ -936,5 +959,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void setYearsViewFragment(YearsViewFragment yearsViewFragment) {
         this.yearsViewFragment = yearsViewFragment;
+    }
+
+    public GPSService getGpsService() {
+        return gpsService;
     }
 }
