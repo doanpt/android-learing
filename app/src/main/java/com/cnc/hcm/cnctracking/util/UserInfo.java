@@ -8,6 +8,7 @@ public class UserInfo {
 
     private static final String KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN";
     private static final String KEY_IS_LOGIN = "KEY_IS_LOGIN";
+    private static final String KEY_USER_ID = "KEY_USER_ID";
     private static final String KEY_USER_NAME = "KEY_USER_NAME";
     private static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
     private static final String KEY_USER_PHONE_NO = "KEY_USER_PHONE_NO";
@@ -60,6 +61,7 @@ public class UserInfo {
     public void setUserInfoLogout() {
         setLogout();
         setAccessToken(Conts.BLANK);
+        setUserId(Conts.BLANK);
         setUserName(Conts.BLANK);
         setUserEmail(Conts.BLANK);
         setUserPhone(Conts.BLANK);
@@ -71,6 +73,13 @@ public class UserInfo {
         setLogin(false);
     }
 
+    public void setUserId(String id) {
+        putString(KEY_USER_ID, id);
+    }
+
+    public String getUserId() {
+        return sharedPreferences.getString(KEY_USER_ID, Conts.BLANK);
+    }
 
     public void setUserName(String name) {
         putString(KEY_USER_NAME, name);

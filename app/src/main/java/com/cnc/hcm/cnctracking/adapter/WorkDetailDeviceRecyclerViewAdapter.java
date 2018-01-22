@@ -1,6 +1,8 @@
 package com.cnc.hcm.cnctracking.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.event.RecyclerViewItemClickListener;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctracking.util.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +32,11 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
 
     private final RecyclerViewItemClickListener mListener;
 
-    public WorkDetailDeviceRecyclerViewAdapter(RecyclerViewItemClickListener listener) {
+    private final Context mContext;
+
+    public WorkDetailDeviceRecyclerViewAdapter(RecyclerViewItemClickListener listener, Context context) {
         mListener = listener;
+        mContext = context;
     }
 
     @Override
@@ -40,25 +47,31 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
 
     @Override
     public void onBindViewHolder(WorkDetailDeviceRecyclerViewAdapter.ViewHolder holder, final int position) {
-        GetTaskDetailResult.Result.Process process = processes.get(position);
+        final GetTaskDetailResult.Result.Process process = processes.get(position);
         try {
             holder.tv_title.setText(process.device.detail.name + "");
             holder.tv_status.setText("Hoàn thành bước " + process.status._id);
-            holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.step_1_complete : (process.status._id == 2 ? R.drawable.step_2_complete : R.drawable.step_3_complete));
-//            holder.iv_fix.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mListener.onClick(v, position);
-//                }
-//            });
-            holder.item_product.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onClick(v, position);
-                }
-            });
+
+            if (TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.user._id)) {
+                holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.step_1_complete : (process.status._id == 2 ? R.drawable.step_2_complete : R.drawable.step_3_complete));
+                holder.item_product.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onClick(v, position);
+                    }
+                });
+            } else {
+                holder.iv_status.setImageResource(R.drawable.icon_cnc_lock);
+                holder.item_product.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e(TAG, "You can't process this device. Owner of this device is " + process.user.fullname);
+                    }
+                });
+            }
+
         } catch (Exception e) {
-            Log.e(TAG, "", e);
+            Log.e(TAG, "onBindViewHolder()", e);
         }
     }
 

@@ -257,8 +257,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mProgressDialog.dismiss();
         UserProfile userProfile = userProfileResponseStatus.getResult();
         if (userProfile != null) {
-            UserInfo.getInstance(LoginActivity.this).setUserEmail(!TextUtils.isEmpty(userProfile.getEmail()) ? userProfile.getEmail() : Conts.UNKNOWN);
+            UserInfo.getInstance(LoginActivity.this).setUserId(!TextUtils.isEmpty(userProfile.getId()) ? userProfile.getId() : Conts.UNKNOWN);
             UserInfo.getInstance(LoginActivity.this).setUserName(!TextUtils.isEmpty(userProfile.getFullname()) ? userProfile.getFullname() : Conts.UNKNOWN);
+            UserInfo.getInstance(LoginActivity.this).setUserEmail(!TextUtils.isEmpty(userProfile.getEmail()) ? userProfile.getEmail() : Conts.UNKNOWN);
             UserInfo.getInstance(LoginActivity.this).setUserPhone(!TextUtils.isEmpty(userProfile.getPhone()) ? userProfile.getPhone() : Conts.UNKNOWN);
             UserInfo.getInstance(LoginActivity.this).setUserUrlImage(!TextUtils.isEmpty(userProfile.getPhoto()) ? userProfile.getPhoto() : Conts.UNKNOWN);
 

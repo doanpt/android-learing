@@ -91,24 +91,24 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         locationUpdateListener.onLocationUpdate(latitude, longitude);
     }
 
-    private GPSService gpsService;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder iBinder) {
-            Log.e(TAG, "serviceConnection at WorkDetailActivity is Connected");
-            gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
-            if (gpsService != null) {
-                gpsService.setDialogDetailTaskFragment(DialogDetailTaskFragment.this);
-            } else {
-                Log.e(TAG, "serviceConnection at WorkDetailActivity is null");
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Log.e(TAG, "serviceConnection at WorkDetailActivity is Disconnected");
-        }
-    };
+//    private GPSService gpsService;
+//    private ServiceConnection serviceConnection = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName name, IBinder iBinder) {
+//            Log.e(TAG, "serviceConnection at DialogDetailTaskFragment is Connected");
+//            gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
+//            if (gpsService != null) {
+//                gpsService.setDialogDetailTaskFragment(DialogDetailTaskFragment.this);
+//            } else {
+//                Log.e(TAG, "serviceConnection at DialogDetailTaskFragment is null");
+//            }
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName name) {
+//            Log.e(TAG, "serviceConnection at DialogDetailTaskFragment is Disconnected");
+//        }
+//    };
 
     public DialogDetailTaskFragment() {
     }
@@ -302,8 +302,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 CommonMethod.actionFindWayInMapApp(getContext(), 0, 0, 0, 0);
                 break;
             case R.id.tv_complete_work:
-                CommonMethod.makeToast(getActivity(), "Completed Work");
-                fabMenu.collapse();
+                handleCompleteWordAction();
                 break;
             case R.id.fab_add_product:
                 Intent intent = new Intent(getActivity(), AddProductActivity.class);
@@ -323,6 +322,22 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 fabMenu.collapse();
                 break;
         }
+    }
+
+    private void handleCompleteWordAction() {
+        boolean isComplete = true;
+        try {
+            GetTaskDetailResult.Result.Process[] process = getTaskDetailResult.result.process;
+            for (int i = 0; i < process.length; i++) {
+                if(process[i].status._id < 3) {
+                    isComplete = false;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+        }
+        CommonMethod.makeToast(getActivity(), isComplete ? "Completed Work" : "Some devices are not completed");
+        fabMenu.collapse();
     }
 
 

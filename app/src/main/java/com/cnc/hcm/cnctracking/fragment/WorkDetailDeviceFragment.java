@@ -55,7 +55,7 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
         View view = inflater.inflate(R.layout.fragment_work_detail_device, container, false);
         rv_device = view.findViewById(R.id.rv_device);
         rv_device.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        mWorkDetailDeviceRecyclerViewAdapter = new WorkDetailDeviceRecyclerViewAdapter(this);
+        mWorkDetailDeviceRecyclerViewAdapter = new WorkDetailDeviceRecyclerViewAdapter(this, getActivity());
         rv_device.setAdapter(mWorkDetailDeviceRecyclerViewAdapter);
 
         ((DialogDetailTaskFragment)getParentFragment()).setTaskDetailLoadedListener(this);
@@ -79,14 +79,14 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
     public void onClick(View view, int position) {
         switch (view.getId()) {
             case R.id.item_product :
-                proressDevice(position);
+                processDevice(position);
                 break;
             default:
                 break;
         }
     }
 
-    private void proressDevice(int position) {
+    private void processDevice(int position) {
         Log.d(TAG, "item_product.onClick(), taskId: " + saveTaskId + ", deviceId: " + mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id);
         // TODO
         List<MHead> arrHeads = new ArrayList<>();
@@ -108,7 +108,7 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
 
             @Override
             public void onFailure(Call<ProcessDeviceResult> call, Throwable t) {
-                CommonMethod.makeToast(getContext(), "onClick fix icon. process device --> onFailure" + t.toString());
+                CommonMethod.makeToast(getContext(), "processDevice --> onFailure: " + t.toString());
             }
         });
     }
