@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -53,7 +54,6 @@ public class AddProductActivity extends Activity implements View.OnClickListener
     private Spinner edtManufacture, edtCategory;
     private EditText edtBarcode;
     private ImageView imgCameraBarCode, imgAddDevice, imgBack;
-    private FrameLayout frameManufacture;
     private String customerId, qrCode, manufacture, productName, category;
     private List<MHead> arrHeads;
     private String accessToken;
@@ -67,6 +67,8 @@ public class AddProductActivity extends Activity implements View.OnClickListener
     private DialogGPSSetting dialogGPSSetting;
     private DialogNetworkSetting dialogNetworkSetting;
     private GPSService gpsService;
+    private String titleWork, addressWork, timeWork, distanceWork;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,7 +114,11 @@ public class AddProductActivity extends Activity implements View.OnClickListener
     private void getInformation() {
         customerId = getIntent().getStringExtra(Conts.KEY_CUSTOMER_ID);
         idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
-        Log.d("ABD", customerId + " "+idTask);
+        titleWork = getIntent().getStringExtra(Conts.KEY_WORK_NAME);
+        addressWork = getIntent().getStringExtra(Conts.KEY_WORK_LOCATION);
+        distanceWork = getIntent().getStringExtra(Conts.KEY_WORK_DISTANCE);
+        timeWork = getIntent().getStringExtra(Conts.KEY_WORK_TIME);
+        Log.d("ABD", customerId + " " + idTask);
         CommonMethod.makeToast(this, customerId);
         accessToken = UserInfo.getInstance(getApplicationContext()).getAccessToken();
         arrHeads.clear();
@@ -191,7 +197,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                 manufacture = edtManufacture.getSelectedItem().toString();
                 qrCode = edtBarcode.getText().toString();
                 productName = edtDeviceName.getText().toString();
-                category=edtCategory.getSelectedItem().toString();
+                category = edtCategory.getSelectedItem().toString();
                 addProduct(productName, category, manufacture, qrCode);
                 break;
             case R.id.img_scan_barcode:
@@ -210,11 +216,11 @@ public class AddProductActivity extends Activity implements View.OnClickListener
         if ("".equals(productName) || "".equals(manufacture) || "".equals(qrCode)) {
             CommonMethod.makeToast(this, "Param invalid");
         } else {
-            final ProgressDialog mDialog = new ProgressDialog(AddProductActivity.this);
-            mDialog.setMessage("Adding product");
-            mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mDialog.setCancelable(false);
-            mDialog.show();
+            mProgressDialog = new ProgressDialog(AddProductActivity.this);
+            mProgressDialog.setMessage("Adding product");
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
             for (CategoryListResult.Category c : listCategory) {
                 if (c.getTitle().equals(category)) {
                     category = c.getId();
@@ -227,26 +233,28 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                     break;
                 }
             }
+            mProgressDialog.cancel();
             List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-            arrHeads.add(new MHead(Conts.KEY_CUSTOMER_ID,customerId));
+            arrHeads.add(new MHead(Conts.KEY_CUSTOMER_ID, customerId));
             AddProductItem productItem = new AddProductItem();
             productItem.setBrand(manufacture);
             productItem.setCategory(category);
             productItem.setName(productName);
-            Log.d("HEAD_ITEM",productItem.toString());
+            productItem.setBarcode(qrCode);
+            Log.d("HEAD_ITEM", productItem.toString());
             //sử dụng API: https://recode.atlassian.net/wiki/spaces/CNC/pages/158433284/Th+m+thi+t+b+c+a+kh+ch+h+ng
             ApiUtils.getAPIService(arrHeads).addCustomerProduct(productItem).enqueue(new Callback<AddProductResult>() {
                 @Override
                 public void onResponse(Call<AddProductResult> call, Response<AddProductResult> response) {
                     //TODO :FIX ERROR ADD
                     Long status = response.body().getStatusCode();
-                    mDialog.dismiss();
+                    mProgressDialog.dismiss();
                     if (status == Conts.RESPONSE_STATUS_OK) {
                         List<MHead> arrHeads = new ArrayList<>();
                         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-                        arrHeads.add(new MHead(Conts.KEY_DEVICE_ID,qrCode));
-                        addProduct2_4(arrHeads,qrCode);
+                        arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, qrCode));
+                        addProduct2_4(arrHeads, qrCode);
                     } else {
                         CommonMethod.makeToast(AddProductActivity.this, "Add product error!");
                     }
@@ -254,10 +262,27 @@ public class AddProductActivity extends Activity implements View.OnClickListener
 
                 @Override
                 public void onFailure(Call<AddProductResult> call, Throwable t) {
-                    mDialog.dismiss();
+                    CommonMethod.makeToast(AddProductActivity.this,"Call 5.3 error onFailure");
+                    mProgressDialog.dismiss();
                 }
             });
         }
+    }
+
+    public void showLoadingDialog() {
+        mProgressDialog = new ProgressDialog(AddProductActivity.this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+            }
+        }, 5000);
     }
 
     @Override
@@ -266,6 +291,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
         if (result != null) {
             if (result.getContents() == null) {
             } else {
+                showLoadingDialog();
                 final String content = result.getContents();
                 String format = result.getFormatName();
                 //sử dụng API:https://recode.atlassian.net/wiki/spaces/CNC/pages/158531628/Th+ng+tin+thi+t+b
@@ -285,7 +311,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                             Log.d("HEAD", "ac:" + accessToken);
                             Log.d("HEAD", "cs:" + customerId);
                             arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, content));
-                            addProduct2_4(arrHeads,content);
+                            addProduct2_4(arrHeads, content);
                         } else if (status == Conts.RESPONSE_STATUS_404) {
                             edtBarcode.setText(content);
                             Log.d("ABDonResponse", status + "  404 ");
@@ -298,6 +324,9 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                     @Override
                     public void onFailure(Call<CheckContainProductResult> call, Throwable t) {
                         //FIXME add more code to check onFailure
+                        if (mProgressDialog!=null && mProgressDialog.isShowing()) {
+                            mProgressDialog.dismiss();
+                        }
                     }
                 });
                 CommonMethod.makeToast(AddProductActivity.this, content + ", " + format);
@@ -315,20 +344,35 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                 //TODO fix code
                 int status = response.code();
                 if (status == Conts.RESPONSE_STATUS_OK) {
+                    if (mProgressDialog!=null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
                     Intent productDetail = new Intent(AddProductActivity.this, ProductDetailActivity.class);
                     productDetail.putExtra(Conts.KEY_PRODUCT_ID, qr);
                     productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, accessToken);
                     productDetail.putExtra(Conts.KEY_ID_TASK, idTask);
+                    productDetail.putExtra(Conts.KEY_WORK_NAME, titleWork);
+                    productDetail.putExtra(Conts.KEY_WORK_LOCATION, addressWork);
+                    productDetail.putExtra(Conts.KEY_WORK_DISTANCE, distanceWork);
+                    productDetail.putExtra(Conts.KEY_WORK_TIME, timeWork);
+                    edtDeviceName.setText("");
+                    edtBarcode.setText("");
                     startActivity(productDetail);
                     Log.d("ABDonResponse", status + "  200 ");
                 } else {
+                    if (mProgressDialog!=null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
                     Toast.makeText(AddProductActivity.this, "Add contain product error", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<AddContainProductResult> call, Throwable t) {
-
+                if (mProgressDialog!=null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                Toast.makeText(AddProductActivity.this, "Add contain product onFailure", Toast.LENGTH_SHORT).show();
             }
         });
     }

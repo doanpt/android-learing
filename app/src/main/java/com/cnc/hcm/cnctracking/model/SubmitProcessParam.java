@@ -1,5 +1,6 @@
 package com.cnc.hcm.cnctracking.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
@@ -49,7 +50,7 @@ public class SubmitProcessParam {
 
         @SerializedName("photos")
         @Expose
-        private List<String> photos = null;
+        private List<String> photos = new ArrayList<>();
 
         public List<String> getPhotos() {
             return photos;
@@ -65,7 +66,7 @@ public class SubmitProcessParam {
 
         @SerializedName("photos")
         @Expose
-        private List<String> photos = null;
+        private List<String> photos = new ArrayList<>();
 
         public List<String> getPhotos() {
             return photos;
@@ -81,13 +82,13 @@ public class SubmitProcessParam {
 
         @SerializedName("photos")
         @Expose
-        private List<String> photos = null;
+        private List<String> photos = new ArrayList<>();
         @SerializedName("products")
         @Expose
-        private List<Product> products = null;
+        private List<Product> products = new ArrayList<>();
         @SerializedName("services")
         @Expose
-        private List<Service> services = null;
+        private List<Service> services = new ArrayList<>();
 
         public List<String> getPhotos() {
             return photos;

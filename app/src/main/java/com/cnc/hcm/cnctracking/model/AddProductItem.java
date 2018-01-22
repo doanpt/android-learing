@@ -21,6 +21,9 @@ public class AddProductItem {
     @SerializedName("photo")
     @Expose
     private String photo;
+    @SerializedName("barcode")
+    @Expose
+    private String barcode;
 
     public String getName() {
         return name;
@@ -54,4 +57,11 @@ public class AddProductItem {
         this.photo = photo;
     }
 
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
 }

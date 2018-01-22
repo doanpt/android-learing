@@ -14,11 +14,11 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/img_back_work_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:layout_weight="0.7"
-            android:id="@+id/img_back_work_detail"
             android:padding="16dp"
             android:src="@drawable/ic_arrow" />
 
@@ -30,18 +30,18 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_work_name_work_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tủ lạnh samsung hết ga"
-                android:id="@+id/tv_work_name_work_detail"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/tv_location_work_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:id="@+id/tv_location_work_detail"
                 android:text="18/1/2018 Số 1 Phạm Văn Bạch, Hà Nội"
                 android:textColor="#AAfffff2"
                 android:textSize="15sp" />
@@ -55,22 +55,23 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_hour_work_detail"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:text="7h30"
-                android:id="@+id/tv_hour_work_detail"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:paddingTop="5dp"
-                android:textColor="@android:color/white"
-                android:layout_weight="1" />
+                android:text="7h30"
+                android:textColor="@android:color/white" />
+
             <TextView
+                android:id="@+id/tv_distance_work_detail"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:text="5km"
-                android:id="@+id/tv_distance_work_detail"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:textColor="@android:color/white"
-                android:layout_weight="1" />
+                android:text="5km"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </LinearLayout>
 
@@ -79,8 +80,9 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:id="@+id/sc_work"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -139,7 +141,8 @@
                                 android:id="@+id/rv_initial_condition"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
-                                android:padding="5dp"></android.support.v7.widget.RecyclerView>
+                                android:padding="5dp"
+                                android:visibility="gone"></android.support.v7.widget.RecyclerView>
                         </LinearLayout>
 
                         <FrameLayout
@@ -200,7 +203,8 @@
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/rv_process_condition"
                                 android:layout_width="match_parent"
-                                android:layout_height="100dp"></android.support.v7.widget.RecyclerView>
+                                android:layout_height="100dp"
+                                android:visibility="gone"></android.support.v7.widget.RecyclerView>
                         </LinearLayout>
 
                         <FrameLayout
@@ -347,7 +351,8 @@
                                 android:id="@+id/rv_finish_condition"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
-                                android:padding="5dp"></android.support.v7.widget.RecyclerView>
+                                android:padding="5dp"
+                                android:visibility="gone"></android.support.v7.widget.RecyclerView>
 
                         </LinearLayout>
 
@@ -420,6 +425,7 @@
                 app:fab_icon="@drawable/ic_camera"
                 app:fab_size="mini"
                 app:fab_title="Bước 1" />
+
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_complete"
                 android:layout_width="wrap_content"
@@ -431,30 +437,112 @@
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
         <LinearLayout
-            android:id="@+id/view_control"
-            android:layout_width="wrap_content"
+            android:id="@+id/ll_complete_task"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/sc_work"
             android:layout_centerHorizontal="true"
-            android:layout_margin="16dp"
-            android:orientation="horizontal"
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
-                android:layout_width="100dp"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:id="@+id/tv_complete_work"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_border_button_ok"
-                android:paddingBottom="4dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
+                android:gravity="center"
                 android:text="Hoàn thành"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/holo_blue_light"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/view_control"
+                android:layout_toEndOf="@+id/blurView"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:text="Bắt đầu"
+                    android:textColor="@android:color/darker_gray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:text="Kết thúc"
+                    android:textColor="@android:color/darker_gray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:text="Thời gian"
+                    android:textColor="@android:color/darker_gray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/view_control"
+                android:layout_toEndOf="@+id/blurView"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tv_start_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:text="12:00 22/12/2018"
+                    android:textColor="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tv_end_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:text="14h00 24/12/2025"
+                    android:textColor="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tv_total_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:text="2h30p"
+                    android:textColor="@android:color/darker_gray" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

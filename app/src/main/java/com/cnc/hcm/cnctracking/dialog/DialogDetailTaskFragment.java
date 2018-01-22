@@ -309,6 +309,10 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 Intent intent = new Intent(getActivity(), AddProductActivity.class);
                 intent.putExtra(Conts.KEY_CUSTOMER_ID, customerId);
                 intent.putExtra(Conts.KEY_ID_TASK, idTask);
+                intent.putExtra(Conts.KEY_WORK_NAME,tv_title_item_work.getText().toString());
+                intent.putExtra(Conts.KEY_WORK_LOCATION,tv_address_item_work.getText().toString());
+                intent.putExtra(Conts.KEY_WORK_TIME,tv_time_item_work.getText().toString());
+                intent.putExtra(Conts.KEY_WORK_DISTANCE,tv_distance_item_work.getText().toString());
                 startActivity(intent);
                 fabMenu.collapse();
                 break;
