@@ -2,11 +2,9 @@ package com.cnc.hcm.cnctracking.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.location.Address;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -21,16 +19,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.AddProductActivity;
+import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailPageAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.fragment.WorkDetailDeviceFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkDetailServiceFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
-import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
@@ -72,6 +71,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     private double longitude;
 
     private WorkDetailPageAdapter mWorkDetailPageAdapter;
+    private MainActivity mainActivity;
 
     private ProgressDialog mProgressDialog;
     private GetTaskDetailResult getTaskDetailResult;
@@ -299,7 +299,30 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 setExpaned(false);
                 break;
             case R.id.ll_find_way:
-                CommonMethod.actionFindWayInMapApp(getContext(), 0, 0, 0, 0);
+
+                GetTaskDetailResult.Result result = getTaskDetailResult.result;
+                if (mainActivity != null && result != null) {
+                    if (result.address != null) {
+                        if (result.address.location != null) {
+                            CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
+                                    mainActivity.getLongtitude(), result.address.location.latitude, result.address.location.longitude);
+                        } else {
+                            String locationName = result.address.street;
+                            Address address = CommonMethod.getLocationFromLocationName(getContext(), locationName);
+                            if (address != null) {
+                                CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
+                                        mainActivity.getLongtitude(), address.getLatitude(), address.getLongitude());
+                            }
+                        }
+                    } else {
+                        if (result.customer != null && result.customer.address != null && result.customer.address.location != null) {
+
+                            CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
+                                    mainActivity.getLongtitude(), result.customer.address.location.latitude, result.customer.address.location.longitude);
+                        }
+                    }
+                }
+
                 break;
             case R.id.tv_complete_work:
                 handleCompleteWordAction();
@@ -308,10 +331,10 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 Intent intent = new Intent(getActivity(), AddProductActivity.class);
                 intent.putExtra(Conts.KEY_CUSTOMER_ID, customerId);
                 intent.putExtra(Conts.KEY_ID_TASK, idTask);
-                intent.putExtra(Conts.KEY_WORK_NAME,tv_title_item_work.getText().toString());
-                intent.putExtra(Conts.KEY_WORK_LOCATION,tv_address_item_work.getText().toString());
-                intent.putExtra(Conts.KEY_WORK_TIME,tv_time_item_work.getText().toString());
-                intent.putExtra(Conts.KEY_WORK_DISTANCE,tv_distance_item_work.getText().toString());
+                intent.putExtra(Conts.KEY_WORK_NAME, tv_title_item_work.getText().toString());
+                intent.putExtra(Conts.KEY_WORK_LOCATION, tv_address_item_work.getText().toString());
+                intent.putExtra(Conts.KEY_WORK_TIME, tv_time_item_work.getText().toString());
+                intent.putExtra(Conts.KEY_WORK_DISTANCE, tv_distance_item_work.getText().toString());
                 startActivity(intent);
                 fabMenu.collapse();
                 break;
@@ -329,7 +352,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         try {
             GetTaskDetailResult.Result.Process[] process = getTaskDetailResult.result.process;
             for (int i = 0; i < process.length; i++) {
-                if(process[i].status._id < 3) {
+                if (process[i].status._id < 3) {
                     isComplete = false;
                     break;
                 }
@@ -376,5 +399,9 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
     public interface LocationUpdateListener {
         void onLocationUpdate(double latitude, double longitude);
+    }
+
+    public void setMainActivity(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
     }
 }

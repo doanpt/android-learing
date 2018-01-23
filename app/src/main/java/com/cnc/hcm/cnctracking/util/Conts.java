@@ -191,8 +191,11 @@ public class Conts {
 
     public static final String SOCKET_EVENT_NEW_TASK = "new task";
     public static final String SOCKET_EVENT_JOIN = "join";
+    public static final String SOCKET_EVENT_LOGIN_OTHER_DEVICE = "login conflict";
+
     public static final String KEY_WORK_NAME = "KEY_WORK_NAME";
     public static final String KEY_WORK_LOCATION = "KEY_WORK_LOCATION";
     public static final String KEY_WORK_TIME = "KEY_WORK_TIME";
     public static final String KEY_WORK_DISTANCE = "KEY_WORK_DISTANCE";
+    public static final String KEY_ID_TASK_TO_SHOW_DETAIL = "KEY_ID_TASK_TO_SHOW_DETAIL";
 }

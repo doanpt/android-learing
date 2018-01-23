@@ -2,6 +2,8 @@ package com.cnc.hcm.cnctracking.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -182,5 +185,18 @@ public class CommonMethod {
         return arr;
     }
 
+    public static Address getLocationFromLocationName(Context context, String locationName) {
+        Geocoder geocoder = new Geocoder(context);
+        List<Address> addressList = null;
+        try {
+            addressList = geocoder.getFromLocationName(locationName, 5);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addressList != null && addressList.size() > 0) {
+            return addressList.get(0);
+        }
+        return null;
+    }
 
 }

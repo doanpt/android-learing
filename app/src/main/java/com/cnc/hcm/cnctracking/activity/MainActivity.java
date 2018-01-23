@@ -147,13 +147,25 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         checkUserLoginOnOtherDevice();
         initMap();
+        checkExistIdTask();
+    }
+
+    private void checkExistIdTask() {
+        String idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL);
+        if (idTask != null && !idTask.equals(Conts.BLANK)) {
+            if (dialogDetailTaskFragment != null) {
+                dialogDetailTaskFragment.setIdTask(idTask);
+                dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
+                dialogDetailTaskFragment.setExpaned(true);
+            }
+        }
     }
 
     private void initObject() {
         dialogNetworkSetting = new DialogNetworkSetting(this);
         dialogGPSSetting = new DialogGPSSetting(this);
         dialogDetailTaskFragment = new DialogDetailTaskFragment();
-
+        dialogDetailTaskFragment.setMainActivity(MainActivity.this);
         taskNewFragment = new TaskNewFragment();
         taskDoingFragment = new TaskDoingFragment();
         taskCompletedFragment = new TaskCompletedFragment();
@@ -342,7 +354,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
                     if (getTaskListResult != null) {
                         GetTaskDetailResult.Result[] result1 = getTaskListResult.result;
-                        CommonMethod.makeToast(MainActivity.this, "CountTask: " + result1.length);
                         if (result1 != null && result1.length > 0) {
                             arrItemTask.clear();
                             for (int index = 0; index < result1.length; index++) {
@@ -457,7 +468,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                             result.address.location.longitude, result.address.street, bitmapDescriptor);
                 } else {
                     String locationName = result.address.street;
-                    Address address = getLocationFromLocationName(locationName);
+                    Address address = CommonMethod.getLocationFromLocationName(MainActivity.this, locationName);
                     if (address != null) {
                         addMarkerMap(result._id, address.getLatitude(), address.getLongitude(), locationName, bitmapDescriptor);
                     } else {
@@ -477,19 +488,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    private Address getLocationFromLocationName(String locationName) {
-        Geocoder geocoder = new Geocoder(this);
-        List<Address> addressList = null;
-        try {
-            addressList = geocoder.getFromLocationName(locationName, 5);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (addressList != null && addressList.size() > 0) {
-            return addressList.get(0);
-        }
-        return null;
-    }
 
     public void callViewCalendar(int typeView) {
         long time = Calendar.getInstance().getTime().getTime();
@@ -935,6 +933,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
         return false;
     }
+
 
     private String getIDMarked(Marker marker) {
         String id = Conts.BLANK;

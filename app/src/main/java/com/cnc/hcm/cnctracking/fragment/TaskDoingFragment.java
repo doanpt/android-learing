@@ -40,9 +40,10 @@ public class TaskDoingFragment extends Fragment implements TaskListAdapter.OnIte
     }
 
     private void initObject() {
-        dialogDetailTaskFragment = new DialogDetailTaskFragment();
-
         mainActivity = (MainActivity) getActivity();
+
+        dialogDetailTaskFragment = new DialogDetailTaskFragment();
+        dialogDetailTaskFragment.setMainActivity(mainActivity);
         taskListAdapter = new TaskListAdapter(getContext());
         taskListAdapter.notiDataChange(arrTask);
         taskListAdapter.setOnItemWorkClickListener(this);

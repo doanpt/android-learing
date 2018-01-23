@@ -39,6 +39,7 @@ import com.cnc.hcm.cnctracking.model.LocationBackupFile;
 import com.cnc.hcm.cnctracking.model.LocationResponseUpload;
 import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
+import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.google.gson.Gson;
@@ -77,11 +78,13 @@ import retrofit2.Response;
 
 public class GPSService extends Service implements OnLocationUpdatedListener {
     private static final String ACTION_SHOW_APP = "ACTION_SHOW_APP";
+    private static final String ACTION_DETAIL_TASK = "ACTION_DETAIL_TASK";
+    private static final String KEY_ID_OPEND_DETAIL_TASK = "KEY_ID_OPEND_DETAIL_TASK";
+
     private static final String TAGG = "GPSService";
     private static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
     private static final int NOTIFI_ID = 111;
     private static final float MIN_DISTANCE_GET_GPS = 20f;
-    private static final long MIN_TIME_GET_GPS = 1000L;
     private static final int MAXIMUM_PACKAGE = 100;
     private static final int MINXIMUM_PACKAGE = 5;
 
@@ -157,6 +160,21 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                         stopSelf();
                         stopForeground(true);
                         return START_NOT_STICKY;
+                    }
+                    break;
+                case ACTION_DETAIL_TASK:
+                    if (isUserLogin) {
+                        if (intent != null) {
+                            String idTask = intent.getStringExtra(KEY_ID_OPEND_DETAIL_TASK);
+
+                            Intent intentShowDetailTask = new Intent(this, MainActivity.class);
+                            intentShowDetailTask.putExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL, idTask);
+                            intentShowDetailTask.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intentShowDetailTask);
+
+                            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            manager.cancel(0);
+                        }
                     }
                     break;
             }
@@ -496,6 +514,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     public void connectSocket(String token) {
         if (mSocket != null && !mSocket.connected()) {
             mSocket.on(Conts.SOCKET_EVENT_NEW_TASK, eventNewTask);
+            mSocket.on(Conts.SOCKET_EVENT_LOGIN_OTHER_DEVICE, eventLoginOtherDevice);
             mSocket.emit(Conts.SOCKET_EVENT_JOIN, token, new Ack() {
                 @Override
                 public void call(Object... args) {
@@ -507,6 +526,22 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         }
     }
 
+    private Emitter.Listener eventLoginOtherDevice = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            UserInfo.getInstance(GPSService.this).setUserLoginOnOtherDevice(true);
+            updateNotification(getString(R.string.account_login_on_other_device));
+            if (mainActivity != null && UserInfo.getInstance(GPSService.this).getMainActivityActive()) {
+                mainActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainActivity.showMessageRequestLogout();
+                    }
+                });
+            }
+        }
+    };
+
     private Emitter.Listener eventNewTask = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
@@ -516,7 +551,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             final GetTaskDetailResult.Result result = gson.fromJson(args[0].toString(), GetTaskDetailResult.Result.class);
             if (result != null) {
                 arrNewTask.add(new ItemTask(result));
-                addNotification(result.title);
+                addNotification(result._id, result.title, result.service.name);
                 if (mainActivity != null) {
                     mainActivity.runOnUiThread(new Runnable() {
                         @Override
@@ -595,17 +630,18 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     }
 
-    private void addNotification(String titleTask) {
+    private void addNotification(String idTask, String titleTask, String serviceName) {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Công việc mới")
-                        .setContentText(titleTask);
+                        .setContentTitle(titleTask)
+                        .setContentText(serviceName);
 
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
+        Intent intentOpen = new Intent(ACTION_DETAIL_TASK);
+        intentOpen.setClass(this, GPSService.class);
+        intentOpen.putExtra(KEY_ID_OPEND_DETAIL_TASK, idTask);
+        PendingIntent piOpen = PendingIntent.getService(this, 0, intentOpen, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(piOpen);
 
         // Add as notification
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
