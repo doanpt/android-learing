@@ -6,6 +6,7 @@ import com.cnc.hcm.cnctracking.model.AddProductItem;
 import com.cnc.hcm.cnctracking.model.AddProductResult;
 import com.cnc.hcm.cnctracking.model.CategoryListResult;
 import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
+import com.cnc.hcm.cnctracking.model.ConfirmChargeResponse;
 import com.cnc.hcm.cnctracking.model.CountTaskResult;
 import com.cnc.hcm.cnctracking.model.GetProductDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
@@ -84,4 +85,7 @@ public interface APIService {
 
     @PATCH(Conts.PATH_COMPLETE_PROCESS)
     Call<UpdateProcessResult> completeProcess(@Path("id") String productID );
+
+    @PATCH(Conts.PATH_CONFIRM_CHARGE)
+    Call<ConfirmChargeResponse> confirmCharge(@Path("id") String idTask);
 }

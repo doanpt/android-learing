@@ -127,9 +127,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         } else {
             finishRecycler.setVisibility(View.VISIBLE);
         }
-        if (false){ // TODO update condition to show completed information
-            llComplete.setVisibility(View.VISIBLE);
-        }
     }
 
     private void displayDetailWork(GetProductDetailResult body) {
@@ -143,6 +140,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         arrInit.addAll(body.getResult().getBefore().getPhotos());
         arrProcess.addAll(body.getResult().getProcess().getPhotos());
         arrFinish.addAll(body.getResult().getAfter().getPhotos());
+        if (body.getResult().getStatus().getId() == 3){
+            llComplete.setVisibility(View.VISIBLE);
+        }
         initAdapter.notifyDataSetChanged();
         processAdapter.notifyDataSetChanged();
         finishAdapter.notifyDataSetChanged();

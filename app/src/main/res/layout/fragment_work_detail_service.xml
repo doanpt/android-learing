@@ -582,16 +582,19 @@
                     android:background="#1A000000"/>
 
             </LinearLayout>
-                <Button
-                    android:id="@+id/btn_confirm_charge"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:layout_gravity="right"
-                    android:text="Xác nhận thanh toán"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"/>
+
+            <TextView
+                android:id="@+id/btn_confirm_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="100dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="right"
+                android:text="Xác nhận thanh toán"
+                android:background="@color/colorPrimaryLight"
+                android:textColor="@android:color/white"/>
         </LinearLayout>
     </ScrollView>
 

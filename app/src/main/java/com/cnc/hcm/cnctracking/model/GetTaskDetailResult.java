@@ -19,13 +19,14 @@ public final class GetTaskDetailResult {
         public final String note;
         public final long __v;
         public final String createdDate;
+        public final Invoice invoice;
         public final Status status;
         public final Process process[];
         public final Executive executive[];
         public final String appointmentDate;
         public final Address address;
 
-        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address) {
+        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Invoice invoice, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address) {
             this._id = _id;
             this.title = title;
             this.service = service;
@@ -33,6 +34,7 @@ public final class GetTaskDetailResult {
             this.note = note;
             this.__v = __v;
             this.createdDate = createdDate;
+            this.invoice = invoice;
             this.status = status;
             this.process = process;
             this.executive = executive;
@@ -109,7 +111,23 @@ public final class GetTaskDetailResult {
                 }
             }
         }
+        public static final class Invoice {
+            public final String modifiedDate;
+            public final String createdDate;
+            public final Status status;
+            public final int discount;
+            public final Process.ProcessDetail.Service[] services;
+            public final Process.ProcessDetail.Product[] products;
 
+            public Invoice(String modifiedDate, String createdDate, Status status, int discount, Process.ProcessDetail.Service[] services, Process.ProcessDetail.Product[] products) {
+                this.modifiedDate = modifiedDate;
+                this.createdDate = createdDate;
+                this.status = status;
+                this.discount = discount;
+                this.services = services;
+                this.products = products;
+            }
+        }
         public static final class Status {
             public final long _id;
             public final String title;

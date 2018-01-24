@@ -1,6 +1,9 @@
 package com.cnc.hcm.cnctracking.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,13 +23,22 @@ import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailServiceRecyclerViewAdapter;
+import com.cnc.hcm.cnctracking.api.ApiUtils;
+import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
+import com.cnc.hcm.cnctracking.model.ConfirmChargeResponse;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.ItemPrice;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
+import com.cnc.hcm.cnctracking.util.Conts;
+import com.cnc.hcm.cnctracking.util.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WorkDetailServiceFragment extends Fragment implements View.OnClickListener, DialogDetailTaskFragment.TaskDetailLoadedListener, DialogDetailTaskFragment.LocationUpdateListener {
 
@@ -44,7 +56,7 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
     private TextView tv_vat;
     private TextView tv_have_to_pay;
     private TextView tv_detail_work_total_payment;
-    private Button btn_confirm_charge;
+    private TextView btn_confirm_charge;
     private double latitude;
     private double longitude;
 
@@ -96,7 +108,20 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_confirm_charge:
-                Toast.makeText(getActivity(), "Tính năng đang được cập nhật.", Toast.LENGTH_LONG).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Xác nhận khách hàng đã thanh toán cho đơn hàng");
+                builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        handleConfirmChangeAction();
+                    }
+                });
+                builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 break;
 //            case R.id.rl_expand_header_bill:
 //                if (ll_content_bill.getVisibility() == View.GONE) {
@@ -110,9 +135,49 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
         }
     }
 
+    private void handleConfirmChangeAction() {
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment != null && parentFragment instanceof DialogDetailTaskFragment) {
+            DialogDetailTaskFragment dialogDetailTaskFragment = (DialogDetailTaskFragment) parentFragment;
+            GetTaskDetailResult getTaskDetailResult = dialogDetailTaskFragment.getGetTaskDetailResult();
+            if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
+                String idTask = getTaskDetailResult.result._id;
+                List<MHead> arrHeads = new ArrayList<>();
+                arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken()));
+                ApiUtils.getAPIService(arrHeads).confirmCharge(idTask).enqueue(new Callback<ConfirmChargeResponse>() {
+                    @Override
+                    public void onResponse(Call<ConfirmChargeResponse> call, Response<ConfirmChargeResponse> response) {
+                        if (response.isSuccessful()) {
+                            CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thành công");
+                            btn_confirm_charge.setEnabled(false);
+                            btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
+                            btn_confirm_charge.setText("Đã thanh toán");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ConfirmChargeResponse> call, Throwable t) {
+                        CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thất bại");
+                    }
+                });
+            }
+        }
+    }
+
     @Override
     public void onTaskDetailLoaded(GetTaskDetailResult getTaskDetailResult) {
         Log.d(TAG, "onTaskDetailLoaded");
+        try {
+            Log.d(TAG, "onTaskDetailLoaded, invoice.status._id: " + getTaskDetailResult.result.invoice.status._id);
+            if (getTaskDetailResult.result.invoice.status._id > 1) {
+                btn_confirm_charge.setEnabled(false);
+                btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
+                btn_confirm_charge.setText("Đã thanh toán");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "onTaskDetailLoaded(), Exception1: " + e);
+        }
+
         try {
             if (getTaskDetailResult.result.address != null && getTaskDetailResult.result.address.location != null) {
                 handleActions(getTaskDetailResult.result.address.location.latitude, getTaskDetailResult.result.address.location.longitude);
