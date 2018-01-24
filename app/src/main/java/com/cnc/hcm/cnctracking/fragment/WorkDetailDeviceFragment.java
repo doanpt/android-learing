@@ -1,35 +1,27 @@
 package com.cnc.hcm.cnctracking.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailDeviceRecyclerViewAdapter;
-import com.cnc.hcm.cnctracking.api.ApiUtils;
-import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.event.RecyclerViewItemClickListener;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
-import com.cnc.hcm.cnctracking.model.ProcessDeviceResult;
-import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTaskFragment.TaskDetailLoadedListener, RecyclerViewItemClickListener {
 
@@ -88,28 +80,33 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
 
     private void processDevice(int position) {
         Log.d(TAG, "item_product.onClick(), taskId: " + saveTaskId + ", deviceId: " + mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id);
-        // TODO
-        List<MHead> arrHeads = new ArrayList<>();
-        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getContext()).getAccessToken()));
-        arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id));
-        ApiUtils.getAPIService(arrHeads).processDevice(saveTaskId).enqueue(new Callback<ProcessDeviceResult>() {
-            @Override
-            public void onResponse(Call<ProcessDeviceResult> call, Response<ProcessDeviceResult> response) {
-                int statusCode = response.code();
-                Log.d(TAG, "onClick.onResponse(), statusCode: " + statusCode);
-                if (response.isSuccessful()) {
-                    ProcessDeviceResult processDeviceResult = response.body();
-                    String id = (processDeviceResult != null && processDeviceResult.result != null) ? processDeviceResult.result._id : "Not found";
-                    Toast.makeText(getActivity(), "onClick fix icon. process-device SUCCESSFULLY, id: " + id, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getActivity(), "onClick fix icon. process-device NOT successfully", Toast.LENGTH_LONG).show();
+        GetTaskDetailResult.Result.Process process = mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position);
+        Fragment parentFragment = getParentFragment();
+        if (process != null && parentFragment instanceof DialogDetailTaskFragment) {
+            try {
+                Intent productDetail = new Intent(getActivity(), ProductDetailActivity.class);
+                productDetail.putExtra(Conts.KEY_PRODUCT_ID, process.device._id);
+                productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken());
+                productDetail.putExtra(Conts.KEY_ID_TASK, saveTaskId);
+                DialogDetailTaskFragment dialogDetailTaskFragment = (DialogDetailTaskFragment) getParentFragment();
+                GetTaskDetailResult getTaskDetailResult = dialogDetailTaskFragment.getGetTaskDetailResult();
+                if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
+                    productDetail.putExtra(Conts.KEY_WORK_NAME, getTaskDetailResult.result.title + "");
+                    if (getTaskDetailResult.result.address != null) {
+                        productDetail.putExtra(Conts.KEY_WORK_LOCATION, getTaskDetailResult.result.address.street + "");
+                    } else if (getTaskDetailResult.result.customer.address != null) {
+                        productDetail.putExtra(Conts.KEY_WORK_LOCATION, getTaskDetailResult.result.customer.address.street + "");
+                    }
+                    productDetail.putExtra(Conts.KEY_WORK_DISTANCE, "5 km");
+                    String date = getTaskDetailResult.result.createdDate;
+                    if (!TextUtils.isEmpty(date)) {
+                        productDetail.putExtra(Conts.KEY_WORK_TIME, date.substring(date.indexOf("T") + 1, date.indexOf("T") + 6));
+                    }
                 }
+                startActivity(productDetail);
+            } catch (Exception e) {
+                Log.e(TAG, "processDevice, Exception: " + e);
             }
-
-            @Override
-            public void onFailure(Call<ProcessDeviceResult> call, Throwable t) {
-                CommonMethod.makeToast(getContext(), "processDevice --> onFailure: " + t.toString());
-            }
-        });
+        }
     }
 }

@@ -24,7 +24,6 @@ import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
-import com.cnc.hcm.cnctracking.model.AddProductResult;
 import com.cnc.hcm.cnctracking.model.GetProductDetailResult;
 import com.cnc.hcm.cnctracking.model.SubmitProcessParam;
 import com.cnc.hcm.cnctracking.model.UpdateProcessResult;
@@ -96,6 +95,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onResponse(Call<GetProductDetailResult> call, Response<GetProductDetailResult> response) {
                 Long code = response.body().getStatusCode();
+                Log.d(TAGG, "getData.onResponse, code: " + code);
                 if (code == Conts.RESPONSE_STATUS_OK) {
                     displayDetailWork(response.body());
                 } else {
@@ -105,7 +105,8 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onFailure(Call<GetProductDetailResult> call, Throwable t) {
-
+                Log.e(TAGG, "getData.onResponse", t);
+                Toast.makeText(ProductDetailActivity.this, "Get Detail failure", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -125,6 +126,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             finishRecycler.setVisibility(View.GONE);
         } else {
             finishRecycler.setVisibility(View.VISIBLE);
+        }
+        if (false){ // TODO update condition to show completed information
+            llComplete.setVisibility(View.VISIBLE);
         }
     }
 
@@ -293,6 +297,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
                 Long status = response.body().getStatusCode();
+                Log.d(TAGG, "completeWork.onResponse, status: " + status);
                 if (status == Conts.RESPONSE_STATUS_OK) {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Complete OK!!!");
                     llComplete.setVisibility(View.VISIBLE);
@@ -337,6 +342,8 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 @Override
                 public void onResponse(Call<UploadImageResult> call, Response<UploadImageResult> response) {
                     Long code = response.body().getStatusCode();
+
+                    Log.d(TAGG, "uploadPhoto.onResponse, code: " + code);
                     if (code == Conts.RESPONSE_STATUS_OK) {
                         final String url = response.body().getResult().getImageURL();
                         List<MHead> arrNewHeads = new ArrayList<>();
@@ -366,6 +373,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                             @Override
                             public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
                                 Long status = response.body().getStatusCode();
+                                Log.d(TAGG, "updateProcess.onResponse, status: " + status);
                                 if (status == Conts.RESPONSE_STATUS_OK) {
                                     if (requestCode == KEY_STEP_ONE) {
                                         arrInit.add(url);
@@ -380,7 +388,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                                     visiableRecycler();
                                     CommonMethod.makeToast(ProductDetailActivity.this, "Update Step OK!!!");
                                 } else {
-                                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Process Error! Response != 200");
+                                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Process Error");
                                 }
                             }
 
@@ -393,7 +401,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                                 } else if (requestCode == KEY_STEP_THREE) {
                                     arrFinish.remove(arrFinish.size() - 1);
                                 }
-                                CommonMethod.makeToast(ProductDetailActivity.this, "Update Error, onFailure");
+                                CommonMethod.makeToast(ProductDetailActivity.this, "Update process Error, onFailure");
                             }
                         });
                     } else {

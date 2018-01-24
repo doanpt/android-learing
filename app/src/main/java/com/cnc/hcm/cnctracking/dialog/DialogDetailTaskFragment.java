@@ -81,7 +81,13 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
     public void setTaskDetailLoadedListener(TaskDetailLoadedListener taskDetailLoadedListener) {
         mTaskDetailLoadedListener.add(taskDetailLoadedListener);
-        taskDetailLoadedListener.onTaskDetailLoaded(getTaskDetailResult);
+        if (getTaskDetailResult != null) {
+            taskDetailLoadedListener.onTaskDetailLoaded(getTaskDetailResult);
+        }
+    }
+
+    public GetTaskDetailResult getGetTaskDetailResult() {
+        return getTaskDetailResult;
     }
 
     private List<LocationUpdateListener> mLocationUpdateListeners = new ArrayList<>();
@@ -225,7 +231,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 } else if (getTaskDetailResult.result.customer.address != null) {
                     tv_address_item_work.setText(getTaskDetailResult.result.customer.address.street + "");
                 }
-                tv_distance_item_work.setText("0 km");    //TODO update distance later
+                tv_distance_item_work.setText("5 km");    //TODO update distance later
                 if (getTaskDetailResult.result.customer != null) {
                     customerId = getTaskDetailResult.result.customer._id;
                 }
@@ -252,6 +258,12 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         if (mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dismisDialogLoading();
     }
 
     //TODO edit them at here

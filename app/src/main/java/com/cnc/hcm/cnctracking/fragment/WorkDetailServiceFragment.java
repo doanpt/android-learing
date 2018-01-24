@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -43,6 +44,7 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
     private TextView tv_vat;
     private TextView tv_have_to_pay;
     private TextView tv_detail_work_total_payment;
+    private Button btn_confirm_charge;
     private double latitude;
     private double longitude;
 
@@ -77,7 +79,8 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
         tv_vat = (TextView) view.findViewById(R.id.tv_vat);
         tv_have_to_pay = (TextView) view.findViewById(R.id.tv_have_to_pay);
         tv_detail_work_total_payment = (TextView) view.findViewById(R.id.tv_detail_work_total_payment);
-
+        btn_confirm_charge = view.findViewById(R.id.btn_confirm_charge);
+        btn_confirm_charge.setOnClickListener(this);
         rv_service = (RecyclerView) view.findViewById(R.id.rv_service);
         rv_service.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mWorkDetailServiceRecyclerViewAdapter = new WorkDetailServiceRecyclerViewAdapter(getContext());
@@ -92,15 +95,18 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rl_expand_header_bill:
-                if (ll_content_bill.getVisibility() == View.GONE) {
-                    ll_content_bill.setVisibility(View.VISIBLE);
-                    imv_expand_bill.setImageResource(R.drawable.ic_expand_task_details);
-                } else {
-                    ll_content_bill.setVisibility(View.GONE);
-                    imv_expand_bill.setImageResource(R.drawable.ic_chevron_right);
-                }
+            case R.id.btn_confirm_charge:
+                Toast.makeText(getActivity(), "Tính năng đang được cập nhật.", Toast.LENGTH_LONG).show();
                 break;
+//            case R.id.rl_expand_header_bill:
+//                if (ll_content_bill.getVisibility() == View.GONE) {
+//                    ll_content_bill.setVisibility(View.VISIBLE);
+//                    imv_expand_bill.setImageResource(R.drawable.ic_expand_task_details);
+//                } else {
+//                    ll_content_bill.setVisibility(View.GONE);
+//                    imv_expand_bill.setImageResource(R.drawable.ic_chevron_right);
+//                }
+//                break;
         }
     }
 
