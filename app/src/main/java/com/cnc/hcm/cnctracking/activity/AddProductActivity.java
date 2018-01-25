@@ -262,7 +262,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
 
                 @Override
                 public void onFailure(Call<AddProductResult> call, Throwable t) {
-                    CommonMethod.makeToast(AddProductActivity.this,"Call 5.3 error onFailure");
+                    CommonMethod.makeToast(AddProductActivity.this, "Call 5.3 error onFailure");
                     mProgressDialog.dismiss();
                 }
             });
@@ -313,9 +313,17 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                             arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, content));
                             addProduct2_4(arrHeads, content);
                         } else if (status == Conts.RESPONSE_STATUS_404) {
+                            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                                mProgressDialog.dismiss();
+                            }
                             edtBarcode.setText(content);
+                            CommonMethod.makeToast(AddProductActivity.this, "New Product:" + content);
                             Log.d("ABDonResponse", status + "  404 ");
                         } else if (status == Conts.RESPONSE_STATUS_500) {
+                            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                                mProgressDialog.dismiss();
+                            }
+                            CommonMethod.makeToast(AddProductActivity.this, "Status 500");
                             //FIXME chưa biết status 500 làm gì
                             Log.d("ABDonResponse", status + "  500 ");
                         }
@@ -324,12 +332,16 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                     @Override
                     public void onFailure(Call<CheckContainProductResult> call, Throwable t) {
                         //FIXME add more code to check onFailure
-                        if (mProgressDialog!=null && mProgressDialog.isShowing()) {
+                        if (mProgressDialog != null && mProgressDialog.isShowing()) {
                             mProgressDialog.dismiss();
                         }
+                        String cause="";
+                        if(t!=null){
+                            cause=t.getCause().toString();
+                        }
+                        CommonMethod.makeToast(AddProductActivity.this,  "onFailure 5.3:"+cause);
                     }
                 });
-                CommonMethod.makeToast(AddProductActivity.this, content + ", " + format);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -342,11 +354,11 @@ public class AddProductActivity extends Activity implements View.OnClickListener
             @Override
             public void onResponse(Call<AddContainProductResult> call, Response<AddContainProductResult> response) {
                 //TODO fix code
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
                 int status = response.code();
                 if (status == Conts.RESPONSE_STATUS_OK) {
-                    if (mProgressDialog!=null && mProgressDialog.isShowing()) {
-                        mProgressDialog.dismiss();
-                    }
                     Intent productDetail = new Intent(AddProductActivity.this, ProductDetailActivity.class);
                     productDetail.putExtra(Conts.KEY_PRODUCT_ID, qr);
                     productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, accessToken);
@@ -360,19 +372,20 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                     startActivity(productDetail);
                     Log.d("ABDonResponse", status + "  200 ");
                 } else {
-                    if (mProgressDialog!=null && mProgressDialog.isShowing()) {
-                        mProgressDialog.dismiss();
-                    }
                     Toast.makeText(AddProductActivity.this, "Add contain product error", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<AddContainProductResult> call, Throwable t) {
-                if (mProgressDialog!=null && mProgressDialog.isShowing()) {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
-                Toast.makeText(AddProductActivity.this, "Add contain product onFailure", Toast.LENGTH_SHORT).show();
+                String cause="";
+                if(t!=null){
+                    cause=t.getCause().toString();
+                }
+                Toast.makeText(AddProductActivity.this, "onFailure 2.4:"+cause, Toast.LENGTH_SHORT).show();
             }
         });
     }

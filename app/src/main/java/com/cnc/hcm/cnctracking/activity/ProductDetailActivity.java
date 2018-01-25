@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,7 +75,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private String accessToken, deviceID, idTask, workName, address, distanceWork, timeWork;
     private LinearLayout llComplete;
     private TextView tvStartDate, tvEndDate, tvTotalTime;
-
+    private ImageView imgBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -202,7 +203,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 flBlurView.setVisibility(View.GONE);
             }
         });
-
+        imgBack=(ImageView) findViewById(R.id.img_back_work_detail);
         llComplete = (LinearLayout) findViewById(R.id.ll_complete_task);
         tvStartDate = findViewById(R.id.tv_start_date);
         tvEndDate = findViewById(R.id.tv_end_date);
@@ -241,7 +242,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         initRecycler.setAdapter(initAdapter);
         processRecycler.setAdapter(processAdapter);
         finishRecycler.setAdapter(finishAdapter);
-
+        imgBack.setOnClickListener(this);
         fabNote.setOnClickListener(this);
         fabProduct.setOnClickListener(this);
         fabStep1.setOnClickListener(this);
@@ -284,6 +285,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             case R.id.fab_step_three:
                 takePicture(KEY_STEP_THREE);
                 closeFabMenu();
+                break;
+            case R.id.img_back_work_detail:
+                onBackPressed();
                 break;
 
         }
