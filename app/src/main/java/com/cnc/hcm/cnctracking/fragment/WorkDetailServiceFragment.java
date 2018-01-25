@@ -98,8 +98,8 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
         mWorkDetailServiceRecyclerViewAdapter = new WorkDetailServiceRecyclerViewAdapter(getContext());
         rv_service.setAdapter(mWorkDetailServiceRecyclerViewAdapter);
 
-        ((DialogDetailTaskFragment)getParentFragment()).setTaskDetailLoadedListener(this);
-        ((DialogDetailTaskFragment)getParentFragment()).setLocationUpdateListeners(this);
+        ((DialogDetailTaskFragment) getParentFragment()).setTaskDetailLoadedListener(this);
+        ((DialogDetailTaskFragment) getParentFragment()).setLocationUpdateListeners(this);
 
         return view;
     }
@@ -148,10 +148,15 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
                     @Override
                     public void onResponse(Call<ConfirmChargeResponse> call, Response<ConfirmChargeResponse> response) {
                         if (response.isSuccessful()) {
-                            CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thành công");
-                            btn_confirm_charge.setEnabled(false);
-                            btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
-                            btn_confirm_charge.setText("Đã thanh toán");
+                            ConfirmChargeResponse confirmChargeResponse = response.body();
+                            if (confirmChargeResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
+                                CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thành công");
+                                btn_confirm_charge.setEnabled(false);
+                                btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
+                                btn_confirm_charge.setText("Đã thanh toán");
+                            } else {
+                                CommonMethod.makeToast(getActivity(), "Chưa hoàn thành dịch vụ");
+                            }
                         }
                     }
 
@@ -206,7 +211,7 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
                     if (process != null && process.process != null) {
                         GetTaskDetailResult.Result.Process.ProcessDetail.Service[] services = process.process.services;
                         if (services != null) {
-                            for (GetTaskDetailResult.Result.Process.ProcessDetail.Service service : services){
+                            for (GetTaskDetailResult.Result.Process.ProcessDetail.Service service : services) {
                                 if (service != null) {
                                     itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, service._id, service.product.name, service.product.tax, service.product.price, service.quantity));
                                 }
@@ -215,7 +220,7 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
 
                         GetTaskDetailResult.Result.Process.ProcessDetail.Product[] products = process.process.products;
                         if (products != null) {
-                            for (GetTaskDetailResult.Result.Process.ProcessDetail.Product product : products){
+                            for (GetTaskDetailResult.Result.Process.ProcessDetail.Product product : products) {
                                 if (product != null) {
                                     itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, product._id, product.product.name, product.product.tax, product.product.price, product.quantity));
                                 }

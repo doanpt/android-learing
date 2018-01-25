@@ -127,6 +127,8 @@ public class Conts {
     public static final String PATH_TASK_LIST = "/tasks";
     public static final String PATH_TASK_DETAIL = "/task/{id}";
     public static final String PATH_TASK_DETAIL_PROCESS_DEVICE = PATH_TASK_DETAIL + "/process-device";
+    public static final String PATH_UPDATE_STATUS_IS_READ = PATH_TASK_DETAIL + "/read";
+
     public static final String PATH_PRODUCTS_BRAND = "/product-brands";
     public static final String PATH_PRODUCTS_CATEGORY = "/product-categories";
     public static final String PATH_GET_PRODUCTS_DETAIL = "/task/{id}/get-device";

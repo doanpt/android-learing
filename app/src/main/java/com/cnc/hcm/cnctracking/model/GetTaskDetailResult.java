@@ -12,13 +12,14 @@ public final class GetTaskDetailResult {
     }
 
     public static final class Result {
+        public final long __v;
         public final String _id;
         public final String title;
         public final Service service;
         public final Customer customer;
         public final String note;
-        public final long __v;
         public final String createdDate;
+        public boolean isRead;
         public final Invoice invoice;
         public final Status status;
         public final Process process[];
@@ -26,7 +27,7 @@ public final class GetTaskDetailResult {
         public final String appointmentDate;
         public final Address address;
 
-        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Invoice invoice, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address) {
+        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, boolean isRead, Invoice invoice, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address) {
             this._id = _id;
             this.title = title;
             this.service = service;
@@ -34,6 +35,7 @@ public final class GetTaskDetailResult {
             this.note = note;
             this.__v = __v;
             this.createdDate = createdDate;
+            this.isRead = isRead;
             this.invoice = invoice;
             this.status = status;
             this.process = process;

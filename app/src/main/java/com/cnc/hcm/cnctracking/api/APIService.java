@@ -16,6 +16,7 @@ import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LoginResponseStatus;
 import com.cnc.hcm.cnctracking.model.ProcessDeviceResult;
 import com.cnc.hcm.cnctracking.model.ProductListResult;
+import com.cnc.hcm.cnctracking.model.ResponseCNC;
 import com.cnc.hcm.cnctracking.model.SubmitProcessParam;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctracking.model.UpdateProcessResult;
@@ -77,15 +78,18 @@ public interface APIService {
 
     @Multipart
     @POST(Conts.PATH_UPLOAD_IMAGE_TO_SERVER)
-    Call<UploadImageResult> uploadPhoto(@Part MultipartBody.Part filePart,@Path("id") String idTask);
+    Call<UploadImageResult> uploadPhoto(@Part MultipartBody.Part filePart, @Path("id") String idTask);
 
     @Headers({"Content-Type: application/json"})
     @PATCH(Conts.PATH_UPDATE_PROCESS)
-    Call<UpdateProcessResult> updateProcess(@Path("id") String productID ,@Body SubmitProcessParam param);
+    Call<UpdateProcessResult> updateProcess(@Path("id") String productID, @Body SubmitProcessParam param);
 
     @PATCH(Conts.PATH_COMPLETE_PROCESS)
-    Call<UpdateProcessResult> completeProcess(@Path("id") String productID );
+    Call<UpdateProcessResult> completeProcess(@Path("id") String productID);
 
     @PATCH(Conts.PATH_CONFIRM_CHARGE)
     Call<ConfirmChargeResponse> confirmCharge(@Path("id") String idTask);
+
+    @PATCH(Conts.PATH_UPDATE_STATUS_IS_READ)
+    Call<ResponseCNC> updateStatusIsRead(@Path("id") String idTask);
 }

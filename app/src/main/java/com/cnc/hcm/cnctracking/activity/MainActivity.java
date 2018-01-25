@@ -11,7 +11,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Geocoder;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
@@ -21,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -30,8 +28,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
@@ -43,24 +41,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
-import com.cnc.hcm.cnctracking.adapter.FragmentAdapter;
+import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
 import com.cnc.hcm.cnctracking.fragment.MonthViewFragment;
-import com.cnc.hcm.cnctracking.fragment.TaskAllFragment;
-import com.cnc.hcm.cnctracking.fragment.TaskCompletedFragment;
-import com.cnc.hcm.cnctracking.fragment.TaskDoingFragment;
-import com.cnc.hcm.cnctracking.fragment.TaskNewFragment;
 import com.cnc.hcm.cnctracking.fragment.YearsViewFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemMarkedMap;
 import com.cnc.hcm.cnctracking.model.ItemTask;
+import com.cnc.hcm.cnctracking.model.ResponseCNC;
 import com.cnc.hcm.cnctracking.service.GPSService;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -84,7 +80,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -92,13 +87,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener,
+        OnMapReadyCallback, GoogleMap.OnMarkerClickListener, TaskListAdapter.OnItemWorkClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_UPDATE = 4234;
     private GoogleMap mMap;
 
-    private ViewPager viewPager;
     private LinearLayout llClickNetwork, llClickGPS, llClickSetting, llClickHelp, llTabs,
             llTabNewWork, llTabDoingWork, llTabCompleteWork;
     private LinearLayout bottomSheetLayout;
@@ -111,11 +106,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView imvMenuDrawer, imvFilterActionBar, imvProfile, imvFilter;
     private DrawerLayout drawer;
     private ProgressDialog mProgressDialog;
+    private MyRecyclerView rcTask;
 
-    private TaskNewFragment taskNewFragment;
-    private TaskDoingFragment taskDoingFragment;
-    private TaskCompletedFragment taskCompletedFragment;
-    private TaskAllFragment taskAllFragment;
     private MonthViewFragment monthViewFragment;
     private YearsViewFragment yearsViewFragment;
 
@@ -124,6 +116,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private DialogDetailTaskFragment dialogDetailTaskFragment;
     private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
+    private TaskListAdapter taskListAdapter;
 
     private ArrayList<ItemTask> arrItemTask = new ArrayList<>();
     private ArrayList<ItemMarkedMap> arrMarkedTask = new ArrayList<>();
@@ -166,11 +159,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         dialogGPSSetting = new DialogGPSSetting(this);
         dialogDetailTaskFragment = new DialogDetailTaskFragment();
         dialogDetailTaskFragment.setMainActivity(MainActivity.this);
-        taskNewFragment = new TaskNewFragment();
-        taskDoingFragment = new TaskDoingFragment();
-        taskCompletedFragment = new TaskCompletedFragment();
-        taskAllFragment = new TaskAllFragment();
-        listFrag = new Fragment[]{taskNewFragment, taskDoingFragment, taskCompletedFragment, taskAllFragment};
+
+        taskListAdapter = new TaskListAdapter(this);
+        taskListAdapter.setOnItemWorkClickListener(this);
     }
 
     private void initViews() {
@@ -243,23 +234,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             @Override
             public void onSlide(@NonNull View view, float v) {
-                if (v < 0) {
+                if (v <= 0) {
                     llTabs.setVisibility(View.VISIBLE);
                 } else if (v > 0) {
                     llTabs.setVisibility(View.GONE);
-                } else if (v == 0) {
-                    llTabs.setVisibility(View.VISIBLE);
-                    viewPager.setCurrentItem(SettingApp.getInstance(MainActivity.this).getTypeFilterList());
                 }
 
             }
         });
 
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), listFrag);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(adapter);
-        BottomSheetUtils.setupViewPager(viewPager);
-        viewPager.setCurrentItem(SettingApp.getInstance(this).getTypeFilterList());
+        rcTask = (MyRecyclerView) findViewById(R.id.rc_task);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rcTask.setLayoutManager(layoutManager);
+        rcTask.setAdapter(taskListAdapter);
 
         int typeView = SettingApp.getInstance(this).getTypeView();
         callViewCalendar(typeView);
@@ -279,9 +267,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
             gpsService.setMainActivity(MainActivity.this);
-            if (taskNewFragment != null) {
-                taskNewFragment.getData();
-            }
+
             //FIXME this code which is commented could remove if you want
 //            if (gpsService.getmSocket() == null || !gpsService.getmSocket().connected()) {
 //                String token = UserInfo.getInstance(MainActivity.this).getAccessToken();
@@ -333,10 +319,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void tryGetTaskList(String accessToken, String startDate, String endDate) {
         showProgressLoadding();
-        List<MHead> arrHeads = new ArrayList<>();
+        final List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-//        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
-//        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
+        arrHeads.add(new MHead(Conts.KEY_START_DATE, startDate));
+        arrHeads.add(new MHead(Conts.KEY_END_DATE, endDate));
         ApiUtils.getAPIService(arrHeads).getTaskList().enqueue(new Callback<GetTaskListResult>() {
             @Override
             public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
@@ -351,39 +337,33 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Log.e(TAG, "tryGetTaskList.onResponse(), --> response: " + response.toString());
                     GetTaskListResult getTaskListResult = response.body();
                     Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
-
+                    arrItemTask.clear();
                     if (getTaskListResult != null) {
                         GetTaskDetailResult.Result[] result1 = getTaskListResult.result;
                         if (result1 != null && result1.length > 0) {
-                            arrItemTask.clear();
                             for (int index = 0; index < result1.length; index++) {
                                 ItemTask itemTask = new ItemTask(result1[index]);
-                                arrItemTask.add(new ItemTask(result1[index]));
-                                if (taskAllFragment != null) {
-                                    taskAllFragment.addItem(itemTask);
-                                }
+                                arrItemTask.add(itemTask);
                                 switch ((int) itemTask.getTaskResult().status._id) {
                                     case Conts.TYPE_COMPLETE_TASK:
-                                        if (taskCompletedFragment != null) {
-                                            taskCompletedFragment.addItem(itemTask);
-                                        }
                                         quantityCompletedTask++;
                                         break;
                                     case Conts.TYPE_DOING_TASK:
-                                        if (taskDoingFragment != null) {
-                                            taskDoingFragment.addItem(itemTask);
-                                        }
                                         quantityDoingTask++;
+                                        break;
+                                    case Conts.TYPE_NEW_TASK:
+                                        quantityNewTask++;
                                         break;
                                 }
                             }
                             initMarkerOnMap();
                         }
-                        notiDataChange();
+                        updateQuantityTask();
                     } else {
                         CommonMethod.makeToast(MainActivity.this, "Không có công việc nào cả");
                     }
                     dismisProgressLoading();
+                    taskListAdapter.notiDataChange(arrItemTask);
                 } else {
                     CommonMethod.makeToast(MainActivity.this, response.toString());
                     dismisProgressLoading();
@@ -405,29 +385,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (mMap != null) {
             mMap.clear();
         }
-        if (taskAllFragment != null) {
-            taskAllFragment.clearData();
-        }
-        if (taskDoingFragment != null) {
-            taskDoingFragment.clearData();
-        }
-        if (taskCompletedFragment != null) {
-            taskCompletedFragment.clearData();
-        }
     }
 
-    private void notiDataChange() {
-        if (taskAllFragment != null) {
-            taskAllFragment.notiDataChange();
-        }
-        if (taskDoingFragment != null) {
-            taskDoingFragment.notiDataChange();
-        }
-        if (taskCompletedFragment != null) {
-            taskCompletedFragment.notiDataChange();
-        }
-        updateQuantityTask();
-    }
 
     private void updateQuantityTask() {
         tvQuantityNewTask.setText(quantityNewTask + Conts.BLANK);
@@ -436,10 +395,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void receiverNewTask(GetTaskDetailResult.Result result) {
-        if (taskNewFragment != null) {
-            taskNewFragment.addItem(new ItemTask(result));
+        quantityNewTask++;
+        updateQuantityTask();
+        arrItemTask.add(new ItemTask(result));
+        if (taskListAdapter != null) {
+            taskListAdapter.notiDataChange(arrItemTask);
         }
-
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         v.vibrate(1500);
@@ -677,15 +638,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void setCurrentItemViewPager(int position) {
-        viewPager.setCurrentItem(position);
         if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_COLLAPSED) {
             bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
         }
     }
 
-    public void setCurrentItemViewPagerByFilterList(int position) {
-        viewPager.setCurrentItem(position);
-    }
 
     @Override
     protected void onDestroy() {
@@ -805,20 +762,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void updateDistanceTo4TabWork() {
-        if (taskNewFragment != null) {
-            taskNewFragment.updateDistanceNewWork(gpsService.getLatitude(), gpsService.getLongitude());
-        }
-
-        if (taskDoingFragment != null) {
-            taskDoingFragment.updateDistanceDoingWork(gpsService.getLatitude(), gpsService.getLongitude());
-        }
-
-        if (taskCompletedFragment != null) {
-            taskCompletedFragment.updateDistanceCompleteWork(gpsService.getLatitude(), gpsService.getLongitude());
-        }
-
-        if (taskAllFragment != null) {
-            taskAllFragment.updateDistanceForAllTask(gpsService.getLatitude(), gpsService.getLongitude());
+        if (taskListAdapter != null && gpsService != null) {
+            taskListAdapter.updateDistanceForTask(isNetworkConnected, gpsService.getLatitude(), gpsService.getLongitude());
         }
     }
 
@@ -877,6 +822,42 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 //        tvStatus.append("\n" + str);
     }
 
+    @Override
+    public void onClickItemWork(int position) {
+        String idTask = taskListAdapter.getItem(position).getTaskResult()._id;
+        dialogDetailTaskFragment.setIdTask(idTask);
+        dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
+        dialogDetailTaskFragment.setExpaned(true);
+
+        updateStatusIsRead(idTask, position);
+    }
+
+    private void updateStatusIsRead(String idTask, final int position) {
+        String accessToken = UserInfo.getInstance(this).getAccessToken();
+        List<MHead> arrHeads = new ArrayList<>();
+        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+        ApiUtils.getAPIService(arrHeads).updateStatusIsRead(idTask).enqueue(new Callback<ResponseCNC>() {
+            @Override
+            public void onResponse(Call<ResponseCNC> call, Response<ResponseCNC> response) {
+                Log.e(TAG, "updateStatusIsRead.onResponse(), statusCode: " + response.code());
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "updateStatusIsRead.onResponse(), --> response: " + response.toString());
+                    ResponseCNC responseCNC = response.body();
+                    if (responseCNC.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
+                        taskListAdapter.getItem(position).getTaskResult().isRead = true;
+                        taskListAdapter.notifyItemChanged(position);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseCNC> call, Throwable t) {
+                Log.e(TAG, "updateStatusIsRead.onFailure() --> " + t);
+                t.printStackTrace();
+            }
+        });
+    }
+
     private boolean isServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -889,6 +870,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void setTitleStatusGPS(boolean status) {
 
+    }
+
+    public void filerTask(int type) {
+        if (taskListAdapter != null) {
+            taskListAdapter.filter(type);
+        }
     }
 
     private void checkUserLoginOnOtherDevice() {
@@ -963,4 +950,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public GPSService getGpsService() {
         return gpsService;
     }
+
+
 }

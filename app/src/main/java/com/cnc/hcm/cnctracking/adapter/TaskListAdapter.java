@@ -1,6 +1,7 @@
 package com.cnc.hcm.cnctracking.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
+import com.cnc.hcm.cnctracking.util.SettingApp;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +35,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     private static final String TAGG = TaskListAdapter.class.getSimpleName();
     private Context context;
     private ArrayList<ItemTask> arrTask = new ArrayList<>();
+    private ArrayList<ItemTask> arrTaskTemp = new ArrayList<>();
 
     private OnItemWorkClickListener onItemWorkClickListener;
     private double latitude;
@@ -64,8 +67,20 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_doing);
         } else if (idTypeWork == Conts.TYPE_COMPLETE_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_done);
+        } else if (idTypeWork == Conts.TYPE_NEW_TASK) {
+            holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_new);
+        }
+
+        boolean isRead = result.isRead;
+        if (!isRead) {
+            holder.tvTitleWork.setTypeface(holder.tvTitleWork.getTypeface(), Typeface.BOLD);
+            holder.tvAddressWork.setTypeface(holder.tvAddressWork.getTypeface(), Typeface.BOLD);
+        } else {
+            holder.tvTitleWork.setTypeface(holder.tvTitleWork.getTypeface(), Typeface.NORMAL);
+            holder.tvAddressWork.setTypeface(holder.tvAddressWork.getTypeface(), Typeface.NORMAL);
         }
         holder.tvDistance.setText(itemTask.getDistanceToMyLocation());
+
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         String createDate = itemTask.getTaskResult().createdDate.substring(0, itemTask.getTaskResult().createdDate.lastIndexOf(".")) + "Z";
         try {
@@ -95,7 +110,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     public void notiDataChange(ArrayList<ItemTask> itemTasks) {
         this.arrTask.clear();
         this.arrTask.addAll(itemTasks);
+        arrTaskTemp.clear();
+        this.arrTaskTemp.addAll(itemTasks);
         notifyDataSetChanged();
+        filter(SettingApp.getInstance(context).getTypeFilterList());
     }
 
     public void updateDistanceForTask(boolean isNetworkConnected, double latitude, double longitude) {
@@ -187,4 +205,20 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     public void setOnItemWorkClickListener(OnItemWorkClickListener onItemWorkClickListener) {
         this.onItemWorkClickListener = onItemWorkClickListener;
     }
+
+
+    public void filter(int type) {
+        arrTask.clear();
+        if (type == Conts.TYPE_ALL_TASK) {
+            arrTask.addAll(arrTaskTemp);
+        } else {
+            for (int index = 0; index < arrTaskTemp.size(); index++) {
+                if (arrTaskTemp.get(index).getTaskResult().status._id == type) {
+                    arrTask.add(arrTaskTemp.get(index));
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 }

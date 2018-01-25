@@ -76,7 +76,7 @@ public class DialogOptionFilter extends Dialog implements View.OnClickListener {
             public void onClick(View v) {
                 SettingApp.getInstance(context).setTypeFilterList(option);
                 if (mainActivity != null) {
-                    mainActivity.setCurrentItemViewPagerByFilterList(option);
+                    mainActivity.filerTask(option);
                 }
                 dismiss();
             }
