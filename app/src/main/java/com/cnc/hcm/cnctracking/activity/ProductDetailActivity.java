@@ -142,7 +142,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         arrInit.addAll(body.getResult().getBefore().getPhotos());
         arrProcess.addAll(body.getResult().getProcess().getPhotos());
         arrFinish.addAll(body.getResult().getAfter().getPhotos());
-        if (body.getResult().getStatus().getId() == 3) {
+        if (body.getResult().getStatus().getId() == 3){
             llComplete.setVisibility(View.VISIBLE);
         }
         initAdapter.notifyDataSetChanged();
