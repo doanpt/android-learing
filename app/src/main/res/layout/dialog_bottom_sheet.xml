@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +41,7 @@
                             android:layout_height="40dp"
                             android:layout_marginTop="-10dp"
                             android:background="@drawable/bg_view_hover"
-                            android:src="@drawable/ic_back"/>
+                            android:src="@drawable/ic_back" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -54,7 +55,7 @@
                             android:id="@+id/imv_image_service"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="@drawable/circle_bg_white"/>
+                            android:background="@drawable/circle_bg_white" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -72,7 +73,7 @@
                         android:paddingTop="5dp"
                         android:text="Bảo trì máy lạnh gia đình nha"
                         android:textColor="@android:color/white"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tv_address_item_work"
@@ -81,7 +82,7 @@
                         android:maxLines="2"
                         android:text="PVI Tower, 1 Phạm Văn Bạch, Yên Hoà, Cầu Giấy, Hà Nội"
                         android:textColor="@color/colorPrimaryGray"
-                        android:textSize="12sp"/>
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -101,7 +102,7 @@
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
                             android:padding="5dp"
-                            android:src="@drawable/ic_time_while"/>
+                            android:src="@drawable/ic_time_while" />
 
                         <TextView
                             android:id="@+id/tv_time_item_work"
@@ -113,7 +114,7 @@
                             android:paddingRight="15dp"
                             android:text="17:34"
                             android:textColor="@android:color/white"
-                            android:textSize="12sp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -127,7 +128,7 @@
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
                             android:padding="5dp"
-                            android:src="@drawable/ic_distance_while"/>
+                            android:src="@drawable/ic_distance_while" />
 
                         <TextView
                             android:id="@+id/tv_distance_item_work"
@@ -139,7 +140,7 @@
                             android:paddingRight="15dp"
                             android:text="5 km"
                             android:textColor="@android:color/white"
-                            android:textSize="12sp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -169,7 +170,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
                         android:padding="3dp"
-                        android:src="@drawable/ic_infor_while"/>
+                        android:src="@drawable/ic_infor_while" />
 
 
                     <TextView
@@ -180,7 +181,7 @@
                         android:layout_toRightOf="@+id/imv_icon_infor"
                         android:gravity="center"
                         android:text="@string/text_detail"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
                     <LinearLayout
                         android:id="@+id/ll_find_way"
@@ -196,7 +197,7 @@
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
                             android:padding="4dp"
-                            android:src="@drawable/ic_chi_duong_while"/>
+                            android:src="@drawable/ic_chi_duong_while" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -205,7 +206,7 @@
                             android:paddingLeft="10dp"
                             android:paddingRight="15dp"
                             android:text="@string/text_find_way"
-                            android:textColor="@android:color/white"/>
+                            android:textColor="@android:color/white" />
                     </LinearLayout>
                 </RelativeLayout>
             </FrameLayout>
@@ -220,7 +221,7 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </LinearLayout>
     </LinearLayout>
 
@@ -230,7 +231,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#40000000"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/fab_menu"
@@ -249,7 +250,7 @@
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_icon="@drawable/ic_fab_add_product"
             app:fab_size="mini"
-            app:fab_title="@string/add_new_product"/>
+            app:fab_title="@string/add_new_product" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_scan_qr"
@@ -258,7 +259,7 @@
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_icon="@drawable/ic_fab_qrcode"
             app:fab_size="mini"
-            app:fab_title="@string/scan_qr_product"/>
+            app:fab_title="@string/scan_qr_product" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     <LinearLayout
@@ -269,6 +270,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:orientation="horizontal"
+        android:paddingBottom="27dp"
         android:visibility="gone">
 
         <TextView
@@ -282,6 +284,6 @@
             android:paddingRight="8dp"
             android:paddingTop="4dp"
             android:text="@string/text_complete"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </RelativeLayout>

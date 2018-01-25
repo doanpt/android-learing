@@ -355,6 +355,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                         quantityNewTask++;
                                         break;
                                 }
+                                String idTask = MainActivity.this.getIntent().getStringExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL);
+                                if (itemTask.getTaskResult()._id.equals(idTask) && !itemTask.getTaskResult().isRead) {
+                                    itemTask.getTaskResult().isRead = true;
+                                    updateStatusIsRead(idTask, -1);
+                                }
                             }
                             initMarkerOnMap();
                         }
@@ -529,7 +534,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.tv_today:
                 if (monthViewFragment != null) {
-                    monthViewFragment.gotoCurrentDate();
+                    String dateSelected = monthViewFragment.gotoCurrentDate();
+                    String accessToken = UserInfo.getInstance(this).getAccessToken();
+                    tryGetTaskList(accessToken, dateSelected, dateSelected);
                 }
                 break;
             case R.id.tv_month_calendar:
@@ -844,8 +851,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Log.e(TAG, "updateStatusIsRead.onResponse(), --> response: " + response.toString());
                     ResponseCNC responseCNC = response.body();
                     if (responseCNC.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
-                        taskListAdapter.getItem(position).getTaskResult().isRead = true;
-                        taskListAdapter.notifyItemChanged(position);
+                        if (position > 0) {
+                            taskListAdapter.getItem(position).getTaskResult().isRead = true;
+                            taskListAdapter.notifyItemChanged(position);
+                        }
                     }
                 }
             }

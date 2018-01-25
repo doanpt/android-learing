@@ -32,6 +32,7 @@ import com.cnc.hcm.cnctracking.model.ItemPrice;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WorkDetailServiceFragment extends Fragment implements View.OnClickListener, DialogDetailTaskFragment.TaskDetailLoadedListener, DialogDetailTaskFragment.LocationUpdateListener {
+public class WorkDetailServiceFragment extends Fragment implements
+        View.OnClickListener, DialogDetailTaskFragment.TaskDetailLoadedListener,
+        DialogDetailTaskFragment.LocationUpdateListener {
 
     private static final String TAG = WorkDetailServiceFragment.class.getSimpleName();
 
@@ -59,8 +62,9 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
     private TextView btn_confirm_charge;
     private double latitude;
     private double longitude;
-
     private RecyclerView rv_service;
+
+    private OnPayCompletedListener onPayCompletedListener;
 
     private WorkDetailServiceRecyclerViewAdapter mWorkDetailServiceRecyclerViewAdapter;
 
@@ -154,6 +158,10 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
                                 btn_confirm_charge.setEnabled(false);
                                 btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
                                 btn_confirm_charge.setText("Đã thanh toán");
+
+                                if (onPayCompletedListener != null) {
+                                    onPayCompletedListener.onPayCompleted();
+                                }
                             } else {
                                 CommonMethod.makeToast(getActivity(), "Chưa hoàn thành dịch vụ");
                             }
@@ -178,6 +186,10 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
                 btn_confirm_charge.setEnabled(false);
                 btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
                 btn_confirm_charge.setText("Đã thanh toán");
+
+                if (onPayCompletedListener != null) {
+                    onPayCompletedListener.onPayCompleted();
+                }
             }
         } catch (Exception e) {
             Log.e(TAG, "onTaskDetailLoaded(), Exception1: " + e);
@@ -292,4 +304,11 @@ public class WorkDetailServiceFragment extends Fragment implements View.OnClickL
         });
     }
 
+    public interface OnPayCompletedListener {
+        void onPayCompleted();
+    }
+
+    public void setOnPayCompletedListener(OnPayCompletedListener onPayCompletedListener) {
+        this.onPayCompletedListener = onPayCompletedListener;
+    }
 }

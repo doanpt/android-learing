@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,7 +59,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private FloatingActionsMenu fabMenu;
     private TextView tvCompleteWork;
     private TextView tvName, tvLocation, tvHour, tvDistance, tvProductID;
-    private FloatingActionButton fabNote, fabProduct, fabStep1, fabStep2, fabStep3, fabFinish;
+    private FloatingActionButton fabNote, fabProduct, fabStep1, fabStep2, fabStep3;
     private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
     private GPSService gpsService;
@@ -74,6 +75,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private String accessToken, deviceID, idTask, workName, address, distanceWork, timeWork;
     private LinearLayout llComplete;
     private TextView tvStartDate, tvEndDate, tvTotalTime;
+    private ImageView imvBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +142,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         arrInit.addAll(body.getResult().getBefore().getPhotos());
         arrProcess.addAll(body.getResult().getProcess().getPhotos());
         arrFinish.addAll(body.getResult().getAfter().getPhotos());
-        if (body.getResult().getStatus().getId() == 3){
+        if (body.getResult().getStatus().getId() == 3) {
             llComplete.setVisibility(View.VISIBLE);
         }
         initAdapter.notifyDataSetChanged();
@@ -186,19 +188,21 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     //11/01/2017 ADD by HoangIT END
 
     private void initViews() {
+        tvCompleteWork = (TextView) findViewById(R.id.tv_complete_work);
+        tvCompleteWork.setOnClickListener(this);
         llViewControl = (LinearLayout) findViewById(R.id.view_control);
         flBlurView = (FrameLayout) findViewById(R.id.blurView);
         fabMenu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
         fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
-//                llViewControl.setVisibility(View.VISIBLE);
+                llViewControl.setVisibility(View.VISIBLE);
                 flBlurView.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onMenuCollapsed() {
-//                llViewControl.setVisibility(View.GONE);
+                llViewControl.setVisibility(View.GONE);
                 flBlurView.setVisibility(View.GONE);
             }
         });
@@ -207,12 +211,11 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         tvStartDate = findViewById(R.id.tv_start_date);
         tvEndDate = findViewById(R.id.tv_end_date);
         tvTotalTime = findViewById(R.id.tv_total_time);
-        fabNote = (FloatingActionButton) findViewById(R.id.fab_note);
+//        fabNote = (FloatingActionButton) findViewById(R.id.fab_note);
         fabProduct = (FloatingActionButton) findViewById(R.id.fab_add_product);
         fabStep1 = (FloatingActionButton) findViewById(R.id.fab_step_one);
         fabStep2 = (FloatingActionButton) findViewById(R.id.fab_step_two);
         fabStep3 = (FloatingActionButton) findViewById(R.id.fab_step_three);
-        fabFinish = (FloatingActionButton) findViewById(R.id.fab_complete);
         tvName = findViewById(R.id.tv_work_name_work_detail);
         tvLocation = findViewById(R.id.tv_location_work_detail);
         tvHour = findViewById(R.id.tv_hour_work_detail);
@@ -242,12 +245,14 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         processRecycler.setAdapter(processAdapter);
         finishRecycler.setAdapter(finishAdapter);
 
-        fabNote.setOnClickListener(this);
+//        fabNote.setOnClickListener(this);
         fabProduct.setOnClickListener(this);
         fabStep1.setOnClickListener(this);
         fabStep2.setOnClickListener(this);
         fabStep3.setOnClickListener(this);
-        fabFinish.setOnClickListener(this);
+
+        imvBack = (ImageView) findViewById(R.id.img_back_work_detail);
+        imvBack.setOnClickListener(this);
     }
 
     @Override
@@ -262,15 +267,16 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fab_complete:
+            case R.id.tv_complete_work:
                 completeWork();
                 closeFabMenu();
                 break;
-            case R.id.fab_note:
-                closeFabMenu();
-                break;
+//            case R.id.fab_note:
+//                closeFabMenu();
+//                break;
             case R.id.fab_add_product:
                 //TODO add product
+                CommonMethod.makeToast(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!");
                 closeFabMenu();
                 break;
             case R.id.fab_step_one:
@@ -285,7 +291,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 takePicture(KEY_STEP_THREE);
                 closeFabMenu();
                 break;
-
+            case R.id.img_back_work_detail:
+                finish();
+                break;
         }
     }
 

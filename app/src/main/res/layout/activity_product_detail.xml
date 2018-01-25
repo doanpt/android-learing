@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:paddingTop="5dp"
                 android:text="7h30"
                 android:textColor="@android:color/white" />
@@ -69,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="5km"
                 android:textColor="@android:color/white" />
         </LinearLayout>
@@ -494,14 +494,14 @@
             app:fab_addButtonColorNormal="@color/colorPrimary"
             app:fab_labelStyle="@style/menu_labels_style">
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_note"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:fab_colorNormal="@color/colorPrimary"
-                app:fab_icon="@drawable/ic_brush"
-                app:fab_size="mini"
-                app:fab_title="Ghi chú" />
+            <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+            <!--android:id="@+id/fab_note"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:fab_colorNormal="@color/colorPrimary"-->
+            <!--app:fab_icon="@drawable/ic_brush"-->
+            <!--app:fab_size="mini"-->
+            <!--app:fab_title="Ghi chú" />-->
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_product"
@@ -539,15 +539,31 @@
                 app:fab_size="mini"
                 app:fab_title="Bước 1" />
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_complete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:fab_colorNormal="@color/colorPrimary"
-                app:fab_icon="@drawable/ic_brush"
-                app:fab_size="mini"
-                app:fab_title="Hoàn thành" />
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
+        <LinearLayout
+            android:id="@+id/view_control"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="16dp"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_complete_work"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="70dp"
+                android:background="@drawable/bg_border_button_ok"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:text="@string/text_complete"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

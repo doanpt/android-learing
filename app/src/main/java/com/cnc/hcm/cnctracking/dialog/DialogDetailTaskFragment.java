@@ -48,7 +48,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 @SuppressLint("ValidFragment")
-public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment implements View.OnClickListener {
+public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
+        implements View.OnClickListener {
 
     private static final String TAG = DialogDetailTaskFragment.class.getSimpleName();
 
@@ -179,7 +180,16 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         viewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mWorkDetailPageAdapter = new WorkDetailPageAdapter(getChildFragmentManager());
-        mWorkDetailPageAdapter.addFragment(new WorkDetailServiceFragment());
+        WorkDetailServiceFragment workDetailServiceFragment = new WorkDetailServiceFragment();
+        workDetailServiceFragment.setOnPayCompletedListener(new WorkDetailServiceFragment.OnPayCompletedListener() {
+            @Override
+            public void onPayCompleted() {
+                if (fabMenu != null) {
+                    fabMenu.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+        mWorkDetailPageAdapter.addFragment(workDetailServiceFragment);
         mWorkDetailPageAdapter.addFragment(new WorkDetailDeviceFragment());
         viewPager.setAdapter(mWorkDetailPageAdapter);
         BottomSheetUtils.setupViewPager(viewPager);
@@ -190,6 +200,9 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         super.onResume();
         Log.e("VIM", "onResume(), idTask: " + idTask);
         tryGetTaskDetail(UserInfo.getInstance(getActivity().getApplicationContext()).getAccessToken(), idTask);
+        if (fabMenu != null && fabMenu.isExpanded()) {
+            fabMenu.collapse();
+        }
 
     }
 

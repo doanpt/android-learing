@@ -29,8 +29,11 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -54,7 +57,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
     private MaterialCalendarView calendarView;
     private OneDayDecorator oneDayDecorator = new OneDayDecorator();
     private MainActivity mainActivity;
-    private List<String> arrAllDate;
+    private List<String> arrAllDate = new ArrayList<>();
 
     public MonthViewFragment() {
     }
@@ -62,8 +65,6 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        arrAllDate = SplashActivity.allDateInYears;
-        Log.d(TAG, "AllDate: " + arrAllDate.size());
     }
 
     @Override
@@ -85,7 +86,6 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         initViews(view);
         return view;
     }
-
 
     private void initViews(View view) {
         for (int i = 0; i < listTextView.length; i++) {
@@ -118,10 +118,12 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
     }
 
 
-    public void gotoCurrentDate() {
+    public String gotoCurrentDate() {
         Calendar instance = Calendar.getInstance();
         oneDayDecorator.setDate(instance.getTime());
         calendarView.invalidateDecorators();
+        String dateSelected = CommonMethod.formatFullTimeToString(instance.getTime());
+        return dateSelected;
     }
 
     @Override
@@ -133,7 +135,9 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         String dateOfWeek = CommonMethod.formatFullTimeToString(date.getDate());
         Log.d(TAG, "DateOfWeek: -------------------- " + dateOfWeek);
         List<String> listWeek = null;
-
+        arrAllDate.clear();
+        arrAllDate.addAll(getAllDateInYear());
+        Log.d(TAG, "AllDate: " + arrAllDate.size());
         for (int i = 0; i < arrAllDate.size(); i++) {
             if (arrAllDate.get(i).toString().equals(dateOfWeek)) {
                 listWeek = new ArrayList<>();
@@ -224,5 +228,39 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
             mainActivity.tryGetTaskList(accessToken, dateSelected, dateSelected);
         }
 
+    }
+
+    public List<String> getAllDateInYear() {
+        List<String> allDate = new ArrayList<>();
+        for (int i = -1; i < 2; i++) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DATE, 01);
+            calendar.set(Calendar.MONTH, 01);
+            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + i);
+
+            int years = calendar.get(Calendar.YEAR);
+            for (int index = 0; index < 12; index++) {
+                String month = index < 9 ? ("0" + (index + 1)) : ((index + 1) + Conts.BLANK);
+                String dateFirstOfMonthTemp = years + "-" + month + "-01" + Conts.FORMAT_TIME_FULL;
+                SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+                Date dateFirstOfMonth = null;
+                try {
+                    dateFirstOfMonth = format.parse(dateFirstOfMonthTemp);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (dateFirstOfMonth != null) {
+                    calendar.setTime(dateFirstOfMonth);
+                    calendar.set(Calendar.DAY_OF_MONTH, 1);
+                    int myMonth = calendar.get(Calendar.MONTH);
+                    while (myMonth == calendar.get(Calendar.MONTH)) {
+                        allDate.add(format.format(calendar.getTime()));
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    }
+                }
+            }
+        }
+
+        return allDate;
     }
 }
