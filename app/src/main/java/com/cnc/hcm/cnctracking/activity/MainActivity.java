@@ -901,6 +901,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void showProgressLoadding() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
         mProgressDialog = new ProgressDialog(MainActivity.this);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);

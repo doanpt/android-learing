@@ -20,10 +20,7 @@ import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.SettingApp;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by giapmn on 12/21/17.
@@ -81,15 +78,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         }
         holder.tvDistance.setText(itemTask.getDistanceToMyLocation());
 
-        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         String createDate = itemTask.getTaskResult().createdDate.substring(0, itemTask.getTaskResult().createdDate.lastIndexOf(".")) + "Z";
-        try {
-            Date date = format.parse(createDate);
-            String time = CommonMethod.formatDateToString(date.getTime());
-            holder.tvTime.setText(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        String time = CommonMethod.formatTimeFromServer(createDate);
+        holder.tvTime.setText(time);
+
 
     }
 

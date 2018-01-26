@@ -235,9 +235,10 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         try {
             if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
                 tv_title_item_work.setText(getTaskDetailResult.result.title + "");
-                String date = getTaskDetailResult.result.createdDate;
+                String date = getTaskDetailResult.result.createdDate.substring(0, getTaskDetailResult.result.createdDate.lastIndexOf(".")) + "Z";
                 if (!TextUtils.isEmpty(date)) {
-                    tv_time_item_work.setText(date.substring(date.indexOf("T") + 1, date.indexOf("T") + 6));
+                    String time = CommonMethod.formatTimeFromServer(date);
+                    tv_time_item_work.setText(time);
                 }
                 if (getTaskDetailResult.result.address != null) {
                     tv_address_item_work.setText(getTaskDetailResult.result.address.street + "");

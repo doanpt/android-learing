@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,6 +36,20 @@ import okhttp3.Response;
  */
 
 public class CommonMethod {
+
+    public static String formatTimeFromServer(String inputTime) {
+        TimeZone timeZone = TimeZone.getDefault();
+        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
+        Date date = null;
+        try {
+            date = format.parse(inputTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String time = CommonMethod.formatDateToString(date.getTime());
+        return time;
+    }
 
     public static String formatTimeToString(long time) {
         Date date = new Date(time);
@@ -52,7 +67,7 @@ public class CommonMethod {
 
     public static String formatCurrency(long number) {
         DecimalFormat format = new DecimalFormat("###,###,###");
-        return (format.format(number) + Conts.BLANK).replaceAll("," , ".");
+        return (format.format(number) + Conts.BLANK).replaceAll(",", ".");
     }
 
 
