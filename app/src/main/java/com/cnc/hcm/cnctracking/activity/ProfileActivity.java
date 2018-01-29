@@ -69,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         viewPagerProfile.setCurrentItem(DEFAULT_TAB_POSITION);
 
         viewPagerProfile.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPagerProfile.setCurrentItem(tab.getPosition());
@@ -88,7 +88,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
-
 
 
     @Override

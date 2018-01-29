@@ -81,6 +81,9 @@
     <string name="text_title_no_gps">GPS - Vị trí đã tắt</string>
     <string name="text_gps_not_found">Để tiếp tục sử dụng, vui lòng bật định vị GPS. Chọn Setting để bật định vị GPS</string>
     <string name="no_data">Không có dữ liệu</string>
+    <string name="type_search">Tìm kiếm</string>
+    <string name="text_product">Sản phẩm</string>
+    <string name="text_service">Dịch vụ</string>
 
 
 </resources>
