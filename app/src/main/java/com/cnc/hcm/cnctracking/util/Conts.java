@@ -195,6 +195,7 @@ public class Conts {
     public static final String SOCKET_EVENT_NEW_TASK = "new task";
     public static final String SOCKET_EVENT_JOIN = "join";
     public static final String SOCKET_EVENT_LOGIN_OTHER_DEVICE = "login conflict";
+    public static final String SOCKET_EVENT_ERROR = "error";
 
     public static final String KEY_WORK_NAME = "KEY_WORK_NAME";
     public static final String KEY_WORK_LOCATION = "KEY_WORK_LOCATION";

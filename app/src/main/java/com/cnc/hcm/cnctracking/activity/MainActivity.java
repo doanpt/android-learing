@@ -679,7 +679,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         final DialogNotification dialog = new DialogNotification(MainActivity.this);
         dialog.setHiddenBtnExit();
         dialog.setContentMessage("Tài khoản này đã được đăng nhập trên thiết bị khác. Ứng dụng sẽ đăng xuất tài khoản. Vui lòng đăng nhập lại để tiếp tục sử dụng.");
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dialog.setOnClickDialogNotificationListener(new DialogNotification.OnClickDialogNotificationListener() {
             @Override
             public void onClickButtonOK() {

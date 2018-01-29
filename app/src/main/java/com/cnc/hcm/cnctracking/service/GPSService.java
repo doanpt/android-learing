@@ -117,14 +117,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private String cityName;
     private boolean isUploading;
 
-    {
-        try {
-            mSocket = IO.socket(Conts.BASE_URL);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
     private Handler handler = new Handler();
 
     @Nullable
@@ -193,6 +185,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     }
 
     private void initObject() {
+        try {
+            String url = Conts.URL_BASE + "?token=" + UserInfo.getInstance(getApplicationContext()).getAccessToken();
+            mSocket = IO.socket(url);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         arrNewTask = new ArrayList<>();
         arrTrackLocation = new ArrayList<>();
     }
@@ -214,6 +212,10 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         Log.d(TAGG, "Service on Destroy");
         disconnectSocket();
         unregisterReceiver(mBroadcast);
+        stopSmartLocation();
+    }
+
+    private void stopSmartLocation() {
         SmartLocation.with(GPSService.this).location().stop();
         SmartLocation.with(this).geocoding().stop();
     }
@@ -478,7 +480,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, token));
         mService = ApiUtils.getAPIService(arrHeads);
         Log.d(TAGG, "Call connect in Service");
-        connectSocket(token);
+//        connectSocket(token);
         handler.post(runnableUpdateUI);
     }
 
@@ -515,22 +517,33 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         if (mSocket != null && !mSocket.connected()) {
             mSocket.on(Conts.SOCKET_EVENT_NEW_TASK, eventNewTask);
             mSocket.on(Conts.SOCKET_EVENT_LOGIN_OTHER_DEVICE, eventLoginOtherDevice);
-            mSocket.emit(Conts.SOCKET_EVENT_JOIN, token, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    Log.d(TAGG, "Tao nhan dc roi1");
-                    Log.d(TAGG, "startThread1" + args.toString());
-                }
-            });
+            mSocket.on(Conts.SOCKET_EVENT_ERROR, eventError);
+
+//            mSocket.emit(Conts.SOCKET_EVENT_JOIN, token, new Ack() {
+//                @Override
+//                public void call(Object... args) {
+//                    Log.d(TAGG, "Tao nhan dc roi1");
+//                    Log.d(TAGG, "startThread1" + args.toString());
+//                }
+//            });
             mSocket.connect();
         }
     }
+
+    private Emitter.Listener eventError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.d(TAGG, "ConnectSocket eventError");
+            Log.d(TAGG, "ConnectSocket eventError");
+        }
+    };
 
     private Emitter.Listener eventLoginOtherDevice = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             UserInfo.getInstance(GPSService.this).setUserLoginOnOtherDevice(true);
             updateNotification(getString(R.string.account_login_on_other_device));
+            stopSmartLocation();
             if (mainActivity != null && UserInfo.getInstance(GPSService.this).getMainActivityActive()) {
                 mainActivity.runOnUiThread(new Runnable() {
                     @Override

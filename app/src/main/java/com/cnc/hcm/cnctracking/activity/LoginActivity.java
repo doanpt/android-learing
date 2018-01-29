@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         mProgressDialog = new ProgressDialog(LoginActivity.this);
         mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage(getResources().getString(R.string.logging_please_wait));
         mProgressDialog.show();
 
