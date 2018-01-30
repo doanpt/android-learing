@@ -17,7 +17,9 @@ import com.cnc.hcm.cnctracking.model.LoginResponseStatus;
 import com.cnc.hcm.cnctracking.model.ProcessDeviceResult;
 import com.cnc.hcm.cnctracking.model.ProductListResult;
 import com.cnc.hcm.cnctracking.model.ResponseCNC;
+import com.cnc.hcm.cnctracking.model.Services;
 import com.cnc.hcm.cnctracking.model.SubmitProcessParam;
+import com.cnc.hcm.cnctracking.model.TraddingProduct;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctracking.model.UpdateProcessResult;
 import com.cnc.hcm.cnctracking.model.UploadImageResult;
@@ -92,4 +94,10 @@ public interface APIService {
 
     @PATCH(Conts.PATH_UPDATE_STATUS_IS_READ)
     Call<ResponseCNC> updateStatusIsRead(@Path("id") String idTask);
+
+    @GET(Conts.PATH_GET_TRADING_PRODUCT)
+    Call<TraddingProduct> getListTraddingProduct();
+
+    @GET(Conts.PATH_GET_SERVICES)
+    Call<Services> getServices();
 }

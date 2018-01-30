@@ -70,6 +70,11 @@ public class CommonMethod {
         return (format.format(number) + Conts.BLANK).replaceAll(",", ".");
     }
 
+    public static String formatMoney(int number) {
+        DecimalFormat format = new DecimalFormat("###,###");
+        return (format.format(number) + Conts.BLANK).replaceAll(",", ".");
+    }
+
 
     public static String formatTimeToMonth(long time) {
         Date date = new Date(time);

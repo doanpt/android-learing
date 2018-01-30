@@ -24,7 +24,6 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
     private EditText edtSeach;
     private ViewPager viewPager;
     private TextView tvClear;
-    private OnTextChangeServiceListener onTextChangeServiceListener;
     private OnTextChangeProductListener onTextChangeProductListener;
 
     @Override
@@ -48,9 +47,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (onTextChangeServiceListener != null) {
-                    onTextChangeServiceListener.onTextChange(charSequence);
-                }
+
                 if (onTextChangeProductListener != null) {
                     onTextChangeProductListener.onTextChange(charSequence);
                 }
@@ -101,16 +98,8 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
         }
     }
 
-    public interface OnTextChangeServiceListener {
-        void onTextChange(CharSequence str);
-    }
-
     public interface OnTextChangeProductListener {
         void onTextChange(CharSequence str);
-    }
-
-    public void setOnTextChangeServiceListener(OnTextChangeServiceListener onTextChangeServiceListener) {
-        this.onTextChangeServiceListener = onTextChangeServiceListener;
     }
 
     public void setOnTextChangeProductListener(OnTextChangeProductListener onTextChangeProductListener) {

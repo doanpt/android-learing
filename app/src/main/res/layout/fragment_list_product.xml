@@ -4,11 +4,9 @@
               android:layout_height="match_parent"
               tools:context="com.cnc.hcm.cnctracking.fragment.ListProductFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.cnc.hcm.cnctracking.customeview.MyRecyclerView
+        android:id="@+id/rc_tradding_product"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/hello_blank_fragment"/>
+        android:layout_height="match_parent"></com.cnc.hcm.cnctracking.customeview.MyRecyclerView>
 
 </LinearLayout>

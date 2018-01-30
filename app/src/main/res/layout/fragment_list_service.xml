@@ -5,11 +5,9 @@
               android:gravity="center"
               tools:context="com.cnc.hcm.cnctracking.fragment.ListServiceFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.cnc.hcm.cnctracking.customeview.MyRecyclerView
+        android:id="@+id/rc_services"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Fragment List Service"/>
+        android:layout_height="match_parent"></com.cnc.hcm.cnctracking.customeview.MyRecyclerView>
 
 </LinearLayout>

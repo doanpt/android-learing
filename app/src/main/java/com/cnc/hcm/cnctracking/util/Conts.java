@@ -142,6 +142,9 @@ public class Conts {
     public static final String PATH_UPDATE_PROCESS = "/task/{id}/submit-process";
     public static final String PATH_COMPLETE_PROCESS = "/task/{id}/complete-process";
     public static final String PATH_CONFIRM_CHARGE = "/task/{id}/confirm-charge";
+    public static final String PATH_GET_TRADING_PRODUCT = "/trading-products";
+    public static final String PATH_GET_SERVICES = "/services";
+
 
     public static final String KEY_AUTHORIZATION = "Authorization";
     public static final String VALUE_AUTHORIZATION = "Basic ZGVtbzI6MTIzNDU2";
