@@ -1,7 +1,9 @@
 package com.cnc.hcm.cnctracking.fragment;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +21,6 @@ import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.event.OnItemInputClickListener;
 import com.cnc.hcm.cnctracking.model.TraddingProduct;
-import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
@@ -130,6 +131,11 @@ public class ListProductFragment extends Fragment implements ListProductAndServi
 
     @Override
     public void onClickInput(int position) {
-        CommonMethod.makeToast(getContext(), "" + adapter.getItem(position).getName());
+        TraddingProduct.Result result = adapter.getItem(position);
+        Intent intentResult = new Intent();
+        intentResult.putExtra(Conts.KEY_SERVICE_PRODUCT_RESULT, result);
+        intentResult.putExtra(Conts.KEY_CHECK_TYPE_RESULT, Conts.KEY_PRODUCT);
+        activity.setResult(Activity.RESULT_OK, intentResult);
+        activity.finish();
     }
 }

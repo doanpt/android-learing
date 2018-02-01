@@ -3,6 +3,7 @@ package com.cnc.hcm.cnctracking.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -45,7 +46,7 @@ public class Services {
         this.result = result;
     }
 
-    public class Result {
+    public class Result implements Serializable{
 
         @SerializedName("_id")
         @Expose
@@ -53,21 +54,27 @@ public class Services {
         @SerializedName("name")
         @Expose
         private String name;
+        @SerializedName("category")
+        @Expose
+        private Category category;
         @SerializedName("price")
         @Expose
-        private String price;
+        private Long price;
+        @SerializedName("tax")
+        @Expose
+        private Long tax;
+        @SerializedName("unit")
+        @Expose
+        private Unit unit;
         @SerializedName("photo")
         @Expose
         private String photo;
-        @SerializedName("__v")
-        @Expose
-        private Integer v;
         @SerializedName("createdDate")
         @Expose
         private String createdDate;
-        @SerializedName("tax")
+        @SerializedName("__v")
         @Expose
-        private Integer tax;
+        private Long v;
 
         public String getId() {
             return id;
@@ -85,12 +92,36 @@ public class Services {
             this.name = name;
         }
 
-        public String getPrice() {
+        public Category getCategory() {
+            return category;
+        }
+
+        public void setCategory(Category category) {
+            this.category = category;
+        }
+
+        public Long getPrice() {
             return price;
         }
 
-        public void setPrice(String price) {
+        public void setPrice(Long price) {
             this.price = price;
+        }
+
+        public Long getTax() {
+            return tax;
+        }
+
+        public void setTax(Long tax) {
+            this.tax = tax;
+        }
+
+        public Unit getUnit() {
+            return unit;
+        }
+
+        public void setUnit(Unit unit) {
+            this.unit = unit;
         }
 
         public String getPhoto() {
@@ -101,12 +132,65 @@ public class Services {
             this.photo = photo;
         }
 
-        public Integer getV() {
+        public String getCreatedDate() {
+            return createdDate;
+        }
+
+        public void setCreatedDate(String createdDate) {
+            this.createdDate = createdDate;
+        }
+
+        public Long getV() {
             return v;
         }
 
-        public void setV(Integer v) {
+        public void setV(Long v) {
             this.v = v;
+        }
+    }
+    public class Category implements Serializable{
+
+        @SerializedName("_id")
+        @Expose
+        private String id;
+        @SerializedName("title")
+        @Expose
+        private String title;
+        @SerializedName("photo")
+        @Expose
+        private String photo;
+        @SerializedName("createdDate")
+        @Expose
+        private String createdDate;
+        @SerializedName("description")
+        @Expose
+        private String description;
+        @SerializedName("__v")
+        @Expose
+        private Long v;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getPhoto() {
+            return photo;
+        }
+
+        public void setPhoto(String photo) {
+            this.photo = photo;
         }
 
         public String getCreatedDate() {
@@ -117,12 +201,47 @@ public class Services {
             this.createdDate = createdDate;
         }
 
-        public Integer getTax() {
-            return tax;
+        public String getDescription() {
+            return description;
         }
 
-        public void setTax(Integer tax) {
-            this.tax = tax;
+        public void setDescription(String description) {
+            this.description = description;
         }
+
+        public Long getV() {
+            return v;
+        }
+
+        public void setV(Long v) {
+            this.v = v;
+        }
+
+    }
+    public class Unit implements Serializable{
+
+        @SerializedName("_id")
+        @Expose
+        private String id;
+        @SerializedName("title")
+        @Expose
+        private String title;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
     }
 }

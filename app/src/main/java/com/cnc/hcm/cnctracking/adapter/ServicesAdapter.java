@@ -37,7 +37,9 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tradding_product, parent, false);
         return new ViewHolder(view);
     }
-
+    public Services.Result getItem(int pos){
+        return arr.get(pos);
+    }
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Services.Result result = arr.get(position);
@@ -47,7 +49,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
 
         holder.tvTitle.setText(result.getName());
 
-        holder.tvPriceUnit.setText("Giá: " + CommonMethod.formatMoney(Integer.parseInt(result.getPrice())) + " đ");
+        holder.tvPriceUnit.setText("Giá: " + CommonMethod.formatMoney(Integer.parseInt(String.valueOf(result.getPrice()))) + " đ");
     }
 
     @Override
