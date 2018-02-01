@@ -660,6 +660,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (dialogDetailTaskFragment != null) {
+            dialogDetailTaskFragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {

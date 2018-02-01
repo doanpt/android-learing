@@ -19,16 +19,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.AddProductActivity;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
+import com.cnc.hcm.cnctracking.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailPageAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.fragment.WorkDetailDeviceFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkDetailServiceFragment;
+import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -396,12 +397,36 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         if (result != null) {
             if (result.getContents() == null) {
             } else {
-                String content = result.getContents();
-                String format = result.getFormatName();
-                CommonMethod.makeToast(getActivity(), content + ", " + format);
+                final String content = result.getContents();
+                List<MHead> arrHeads = new ArrayList<>();
+                arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken()));
+                arrHeads.add(new MHead(Conts.KEY_CUSTOMER_ID, customerId));
+
+                ApiUtils.getAPIService(arrHeads).getProductById(content).enqueue(new Callback<CheckContainProductResult>() {
+                    @Override
+                    public void onResponse(Call<CheckContainProductResult> call, Response<CheckContainProductResult> response) {
+                        Long status = response.body().getStatusCode();
+                        if (status == Conts.RESPONSE_STATUS_OK) {
+                            Intent productDetail = new Intent(getActivity(), ProductDetailActivity.class);
+                            productDetail.putExtra(Conts.KEY_PRODUCT_ID, content);
+                            productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken());
+                            productDetail.putExtra(Conts.KEY_ID_TASK, idTask);
+                            productDetail.putExtra(Conts.KEY_WORK_NAME, tv_title_item_work.getText().toString());
+                            productDetail.putExtra(Conts.KEY_WORK_LOCATION, tv_address_item_work.getText().toString());
+                            productDetail.putExtra(Conts.KEY_WORK_TIME, tv_time_item_work.getText().toString());
+                            productDetail.putExtra(Conts.KEY_WORK_DISTANCE, tv_distance_item_work.getText().toString());
+                            startActivity(productDetail);
+                        } else {
+                            CommonMethod.makeToast(getActivity(), "Device not found!");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CheckContainProductResult> call, Throwable t) {
+                        CommonMethod.makeToast(getActivity(),  "getProductById.onFailure()");
+                    }
+                });
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

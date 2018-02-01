@@ -144,7 +144,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 case ACTION_SHOW_APP:
                     if (isUserLogin) {
                         Intent intent1 = new Intent(this, MainActivity.class);
-//                        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent1);
                         Log.i(TAGG, "onStartCommand, ACTION_SHOW_APP");
