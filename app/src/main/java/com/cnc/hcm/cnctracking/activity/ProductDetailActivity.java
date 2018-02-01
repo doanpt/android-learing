@@ -26,7 +26,9 @@ import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
 import com.cnc.hcm.cnctracking.model.GetProductDetailResult;
+import com.cnc.hcm.cnctracking.model.Services;
 import com.cnc.hcm.cnctracking.model.SubmitProcessParam;
+import com.cnc.hcm.cnctracking.model.TraddingProduct;
 import com.cnc.hcm.cnctracking.model.UpdateProcessResult;
 import com.cnc.hcm.cnctracking.model.UploadImageResult;
 import com.cnc.hcm.cnctracking.service.GPSService;
@@ -54,6 +56,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private static final int KEY_STEP_ONE = 1;
     private static final int KEY_STEP_TWO = 2;
     private static final int KEY_STEP_THREE = 3;
+    private static final int KEY_RESULT_FROM_LIST_SERVICE_ACTIVITY = 1000;
     private LinearLayout llViewControl;
     private FrameLayout flBlurView;
     private FloatingActionsMenu fabMenu;
@@ -142,7 +145,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         arrInit.addAll(body.getResult().getBefore().getPhotos());
         arrProcess.addAll(body.getResult().getProcess().getPhotos());
         arrFinish.addAll(body.getResult().getAfter().getPhotos());
-        if (body.getResult().getStatus().getId() == 3){
+        if (body.getResult().getStatus().getId() == 3) {
             llComplete.setVisibility(View.VISIBLE);
         }
         initAdapter.notifyDataSetChanged();
@@ -276,7 +279,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 //                break;
             case R.id.fab_add_product:
                 //TODO add product
-                CommonMethod.makeToast(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!");
+//                CommonMethod.makeToast(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!");
+                Intent intent = new Intent(this, ListProductAndServiceActivity.class);
+                startActivityForResult(intent, KEY_RESULT_FROM_LIST_SERVICE_ACTIVITY);
                 closeFabMenu();
                 break;
             case R.id.fab_step_one:
@@ -334,6 +339,29 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case KEY_STEP_ONE:
+            case KEY_STEP_TWO:
+            case KEY_STEP_THREE:
+                checkResultSteps(requestCode, resultCode, data);
+                break;
+            case KEY_RESULT_FROM_LIST_SERVICE_ACTIVITY:
+                String type = data.getStringExtra(Conts.KEY_CHECK_TYPE_RESULT);
+                TraddingProduct.Result resultTradding;
+                Services.Result resultService;
+                if (type.equals(Conts.KEY_PRODUCT)) {
+                    resultTradding = (TraddingProduct.Result) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
+                    CommonMethod.makeToast(ProductDetailActivity.this, "result service");
+                } else if (type.equals(Conts.KEY_SERVICE)) {
+                     resultService = (Services.Result) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
+                    CommonMethod.makeToast(ProductDetailActivity.this, "result service");
+                }
+                break;
+        }
+
+    }
+
+    private void checkResultSteps(final int requestCode, int resultCode, Intent data) {
         Bitmap photo;
         File file = null;
         if (data != null) {

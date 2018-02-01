@@ -205,4 +205,8 @@ public class Conts {
     public static final String KEY_WORK_TIME = "KEY_WORK_TIME";
     public static final String KEY_WORK_DISTANCE = "KEY_WORK_DISTANCE";
     public static final String KEY_ID_TASK_TO_SHOW_DETAIL = "KEY_ID_TASK_TO_SHOW_DETAIL";
+    public static final String KEY_SERVICE_PRODUCT_RESULT = "KEY_SERVICE_PRODUCT_RESULT";
+    public static final String KEY_SERVICE = "KEY_SERVICE";
+    public static final String KEY_PRODUCT = "KEY_PRODUCT";
+    public static final String KEY_CHECK_TYPE_RESULT = "KEY_SERVICE";
 }

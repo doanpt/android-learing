@@ -3,6 +3,7 @@ package com.cnc.hcm.cnctracking.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public class TraddingProduct {
         this.result = result;
     }
 
-    public class Result {
+    public class Result implements Serializable{
 
         @SerializedName("_id")
         @Expose
@@ -168,7 +169,7 @@ public class TraddingProduct {
             this.quantity = quantity;
         }
 
-        public class Unit {
+        public class Unit implements Serializable{
 
             @SerializedName("_id")
             @Expose
@@ -195,7 +196,7 @@ public class TraddingProduct {
 
         }
 
-        public class Category {
+        public class Category implements Serializable{
 
             @SerializedName("_id")
             @Expose
@@ -266,7 +267,7 @@ public class TraddingProduct {
 
         }
 
-        public class Brand {
+        public class Brand implements Serializable{
 
             @SerializedName("_id")
             @Expose
