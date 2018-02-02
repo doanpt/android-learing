@@ -117,6 +117,11 @@ public class AddProductActivity extends Activity implements View.OnClickListener
         titleWork = getIntent().getStringExtra(Conts.KEY_WORK_NAME);
         addressWork = getIntent().getStringExtra(Conts.KEY_WORK_LOCATION);
         timeWork = getIntent().getStringExtra(Conts.KEY_WORK_TIME);
+
+        String barCode = getIntent().getStringExtra(Conts.KEY_DEVICE_ID);
+        if (barCode != null) {
+            edtBarcode.setText(barCode + "");
+        }
         Log.d("ABD", customerId + " " + idTask);
         CommonMethod.makeToast(this, customerId);
         accessToken = UserInfo.getInstance(getApplicationContext()).getAccessToken();

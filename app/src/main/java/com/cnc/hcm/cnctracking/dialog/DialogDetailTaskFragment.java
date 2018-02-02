@@ -1,7 +1,9 @@
 package com.cnc.hcm.cnctracking.dialog;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
@@ -23,12 +25,12 @@ import android.widget.TextView;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.AddProductActivity;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
-import com.cnc.hcm.cnctracking.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailPageAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.fragment.WorkDetailDeviceFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkDetailServiceFragment;
+import com.cnc.hcm.cnctracking.model.AddContainProductResult;
 import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
@@ -395,6 +397,18 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             if (result.getContents() == null) {
             } else {
                 final String content = result.getContents();
+                try {
+                    GetTaskDetailResult.Result.Process[] processes = getTaskDetailResult.result.process;
+                    for (int i = 0; i < processes.length; i++) {
+                        if (TextUtils.equals(content, processes[i].device._id)) {
+                            showDialogDeviceExisted();
+                            return;
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "onActivityResult()", e);
+                }
+
                 List<MHead> arrHeads = new ArrayList<>();
                 arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken()));
                 arrHeads.add(new MHead(Conts.KEY_CUSTOMER_ID, customerId));
@@ -404,16 +418,9 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                     public void onResponse(Call<CheckContainProductResult> call, Response<CheckContainProductResult> response) {
                         Long status = response.body().getStatusCode();
                         if (status == Conts.RESPONSE_STATUS_OK) {
-                            Intent productDetail = new Intent(getActivity(), ProductDetailActivity.class);
-                            productDetail.putExtra(Conts.KEY_PRODUCT_ID, content);
-                            productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken());
-                            productDetail.putExtra(Conts.KEY_ID_TASK, idTask);
-                            productDetail.putExtra(Conts.KEY_WORK_NAME, tv_title_item_work.getText().toString());
-                            productDetail.putExtra(Conts.KEY_WORK_LOCATION, tv_address_item_work.getText().toString());
-                            productDetail.putExtra(Conts.KEY_WORK_TIME, tv_time_item_work.getText().toString());
-                            startActivity(productDetail);
+                            addDeviceToTask(content);
                         } else {
-                            CommonMethod.makeToast(getActivity(), "Device not found!");
+                            showDialogAddDevice(content);
                         }
                     }
 
@@ -424,6 +431,71 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 });
             }
         }
+    }
+
+    private void addDeviceToTask(String deviceId) {
+        List<MHead> arrHeads = new ArrayList<>();
+        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken()));
+        arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceId));
+        ApiUtils.getAPIService(arrHeads).addProductContain(idTask).enqueue(new Callback<AddContainProductResult>() {
+            @Override
+            public void onResponse(Call<AddContainProductResult> call, Response<AddContainProductResult> response) {
+                int status = response.code();
+                if (status == Conts.RESPONSE_STATUS_OK) {
+                    CommonMethod.makeToast(getActivity(), "Đang add thiết bị vào đơn hàng.");
+                    tryGetTaskDetail(UserInfo.getInstance(getActivity()).getAccessToken(), idTask);
+                } else {
+                    CommonMethod.makeToast(getActivity(), "Add contain product error");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddContainProductResult> call, Throwable t) {
+                String cause = "";
+                if (t != null) {
+                    cause = t.getCause().toString();
+                }
+                CommonMethod.makeToast(getActivity(), "addProductContain() -> onFailure:" + cause);
+            }
+        });
+    }
+
+    private void showDialogDeviceExisted() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Thiết bị đã có sẵn trong đơn hàng.");
+        builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showDialogAddDevice(final String deviceId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Thiết bị không tồn tại. Thêm mới thiết bị vào hệ thống?");
+        builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                handleConfirmAddNewDeviceAction(deviceId);
+            }
+        });
+        builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void handleConfirmAddNewDeviceAction(String deviceId) {
+        Intent intent = new Intent(getActivity(), AddProductActivity.class);
+        intent.putExtra(Conts.KEY_CUSTOMER_ID, customerId);
+        intent.putExtra(Conts.KEY_ID_TASK, idTask);
+        intent.putExtra(Conts.KEY_WORK_NAME, tv_title_item_work.getText().toString());
+        intent.putExtra(Conts.KEY_WORK_LOCATION, tv_address_item_work.getText().toString());
+        intent.putExtra(Conts.KEY_WORK_TIME, tv_time_item_work.getText().toString());
+        intent.putExtra(Conts.KEY_DEVICE_ID, deviceId);
+        startActivity(intent);
     }
 
     public void setIdTask(String idTask) {
