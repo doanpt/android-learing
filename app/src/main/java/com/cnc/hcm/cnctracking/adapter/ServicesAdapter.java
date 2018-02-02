@@ -37,9 +37,11 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tradding_product, parent, false);
         return new ViewHolder(view);
     }
-    public Services.Result getItem(int pos){
+
+    public Services.Result getItem(int pos) {
         return arr.get(pos);
     }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Services.Result result = arr.get(position);
@@ -48,8 +50,8 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             Picasso.with(context).load(urlPhoto).into(holder.imvIcon);
 
         holder.tvTitle.setText(result.getName());
-
-        holder.tvPriceUnit.setText("Giá: " + CommonMethod.formatMoney(Integer.parseInt(String.valueOf(result.getPrice()))) + " đ");
+        holder.tvPriceUnit.setText("Giá: " + CommonMethod.formatMoney(Integer.parseInt(String.valueOf(result.getPrice()))) + " đ    Đvt: " + result.getUnit().getTitle());
+        holder.tvTypeManufacture.setText("Loại: " + result.getCategory().getTitle());
     }
 
     @Override
@@ -77,7 +79,6 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             imvInput.setOnClickListener(this);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_tite_trading_product);
             tvTypeManufacture = (TextView) itemView.findViewById(R.id.tv_type_manufacture);
-            tvTypeManufacture.setVisibility(View.GONE);
             tvPriceUnit = (TextView) itemView.findViewById(R.id.tv_price_unit);
         }
 

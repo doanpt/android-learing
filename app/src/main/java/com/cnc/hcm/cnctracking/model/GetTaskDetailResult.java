@@ -1,5 +1,8 @@
 package com.cnc.hcm.cnctracking.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public final class GetTaskDetailResult {
     public final long statusCode;
     public final String message;
@@ -19,6 +22,7 @@ public final class GetTaskDetailResult {
         public final Customer customer;
         public final String note;
         public final String createdDate;
+        public final Recipient recipient;
         public boolean isRead;
         public final Invoice invoice;
         public final Status status;
@@ -27,7 +31,7 @@ public final class GetTaskDetailResult {
         public final String appointmentDate;
         public final Address address;
 
-        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, boolean isRead, Invoice invoice, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address) {
+        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Recipient recipient, boolean isRead, Invoice invoice, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address) {
             this._id = _id;
             this.title = title;
             this.service = service;
@@ -35,6 +39,7 @@ public final class GetTaskDetailResult {
             this.note = note;
             this.__v = __v;
             this.createdDate = createdDate;
+            this.recipient = recipient;
             this.isRead = isRead;
             this.invoice = invoice;
             this.status = status;
@@ -62,6 +67,33 @@ public final class GetTaskDetailResult {
                 this.createdDate = createdDate;
                 this.tax = tax;
             }
+        }
+
+        public static final class Recipient {
+
+            @SerializedName("fullname")
+            @Expose
+            private String fullname;
+            @SerializedName("phone")
+            @Expose
+            private String phone;
+
+            public String getFullname() {
+                return fullname;
+            }
+
+            public void setFullname(String fullname) {
+                this.fullname = fullname;
+            }
+
+            public String getPhone() {
+                return phone;
+            }
+
+            public void setPhone(String phone) {
+                this.phone = phone;
+            }
+
         }
 
         public static final class Customer {

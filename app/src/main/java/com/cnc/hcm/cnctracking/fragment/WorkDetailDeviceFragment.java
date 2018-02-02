@@ -97,7 +97,6 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
                     } else if (getTaskDetailResult.result.customer.address != null) {
                         productDetail.putExtra(Conts.KEY_WORK_LOCATION, getTaskDetailResult.result.customer.address.street + "");
                     }
-                    productDetail.putExtra(Conts.KEY_WORK_DISTANCE, "5 km");
                     String date = getTaskDetailResult.result.createdDate;
                     if (!TextUtils.isEmpty(date)) {
                         productDetail.putExtra(Conts.KEY_WORK_TIME, date.substring(date.indexOf("T") + 1, date.indexOf("T") + 6));

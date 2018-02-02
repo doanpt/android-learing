@@ -104,27 +104,27 @@
                     android:textSize="12sp"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:orientation="horizontal">-->
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_distance"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:src="@drawable/ic_distance"/>-->
 
-                <TextView
-                    android:id="@+id/tv_distance_item_work"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="3dp"
-                    android:text="5 km"
-                    android:textSize="12sp"/>
-            </LinearLayout>
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_distance_item_work"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:paddingLeft="3dp"-->
+                    <!--android:text="5 km"-->
+                    <!--android:textSize="12sp"/>-->
+            <!--</LinearLayout>-->
         </LinearLayout>
     </LinearLayout>
 

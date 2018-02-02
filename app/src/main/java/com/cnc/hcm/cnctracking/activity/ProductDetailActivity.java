@@ -61,7 +61,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private FrameLayout flBlurView;
     private FloatingActionsMenu fabMenu;
     private TextView tvCompleteWork;
-    private TextView tvName, tvLocation, tvHour, tvDistance, tvProductID;
+    private TextView tvName, tvLocation, tvHour, tvProductID;
     private FloatingActionButton fabNote, fabProduct, fabStep1, fabStep2, fabStep3;
     private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
@@ -75,7 +75,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private RecyclerView initRecycler;
     private RecyclerView processRecycler;
     private RecyclerView finishRecycler;
-    private String accessToken, deviceID, idTask, workName, address, distanceWork, timeWork;
+    private String accessToken, deviceID, idTask, workName, address, timeWork;
     private LinearLayout llComplete;
     private TextView tvStartDate, tvEndDate, tvTotalTime;
     private ImageView imvBack;
@@ -137,7 +137,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private void displayDetailWork(GetProductDetailResult body) {
         tvName.setText(workName);
         tvLocation.setText(address);
-        tvDistance.setText(distanceWork);
         tvHour.setText(timeWork);
         arrInit.clear();
         arrProcess.clear();
@@ -164,7 +163,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         timeWork = passData.getStringExtra(Conts.KEY_WORK_TIME);
         address = passData.getStringExtra(Conts.KEY_WORK_LOCATION);
         workName = passData.getStringExtra(Conts.KEY_WORK_NAME);
-        distanceWork = passData.getStringExtra(Conts.KEY_WORK_DISTANCE);
         Log.d("doan.pt", accessToken + " " + deviceID + " " + idTask + " detail-getextra");
         dialogGPSSetting = new DialogGPSSetting(this);
         dialogNetworkSetting = new DialogNetworkSetting(this);
@@ -222,7 +220,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         tvName = findViewById(R.id.tv_work_name_work_detail);
         tvLocation = findViewById(R.id.tv_location_work_detail);
         tvHour = findViewById(R.id.tv_hour_work_detail);
-        tvDistance = findViewById(R.id.tv_distance_work_detail);
 
         arrInit = new ArrayList<>();
         arrProcess = new ArrayList<>();

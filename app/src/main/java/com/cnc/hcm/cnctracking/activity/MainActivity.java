@@ -78,6 +78,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
@@ -400,12 +401,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void receiverNewTask(GetTaskDetailResult.Result result) {
-        quantityNewTask++;
-        updateQuantityTask();
-        arrItemTask.add(new ItemTask(result));
-        if (taskListAdapter != null) {
-            taskListAdapter.notiDataChange(arrItemTask);
+
+        String currenDate = CommonMethod.formatTimeStandand(Calendar.getInstance().getTime());
+
+        String appointmentDate = result.appointmentDate.substring(0, result.appointmentDate.lastIndexOf(".")) + "Z";
+        Date appmentDate = CommonMethod.formatTimeFromServerToDate(appointmentDate);
+        String appDate = CommonMethod.formatTimeStandand(appmentDate);
+
+        if (currenDate.equals(appDate)) {
+            quantityNewTask++;
+            updateQuantityTask();
+            arrItemTask.add(new ItemTask(result));
+            if (taskListAdapter != null) {
+                taskListAdapter.notiDataChange(arrItemTask);
+            }
+
         }
+
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         v.vibrate(1500);

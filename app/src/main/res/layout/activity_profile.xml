@@ -81,7 +81,7 @@
             android:layout_height="match_parent"
             android:background="?android:selectableItemBackground"
             android:padding="15dp"
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/ic_back_while"/>
 
         <TextView
             android:layout_width="match_parent"

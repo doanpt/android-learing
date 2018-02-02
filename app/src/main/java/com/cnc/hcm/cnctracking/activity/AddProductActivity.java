@@ -67,7 +67,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
     private DialogGPSSetting dialogGPSSetting;
     private DialogNetworkSetting dialogNetworkSetting;
     private GPSService gpsService;
-    private String titleWork, addressWork, timeWork, distanceWork;
+    private String titleWork, addressWork, timeWork;
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -116,7 +116,6 @@ public class AddProductActivity extends Activity implements View.OnClickListener
         idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
         titleWork = getIntent().getStringExtra(Conts.KEY_WORK_NAME);
         addressWork = getIntent().getStringExtra(Conts.KEY_WORK_LOCATION);
-        distanceWork = getIntent().getStringExtra(Conts.KEY_WORK_DISTANCE);
         timeWork = getIntent().getStringExtra(Conts.KEY_WORK_TIME);
         Log.d("ABD", customerId + " " + idTask);
         CommonMethod.makeToast(this, customerId);
@@ -335,11 +334,11 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                         if (mProgressDialog != null && mProgressDialog.isShowing()) {
                             mProgressDialog.dismiss();
                         }
-                        String cause="";
-                        if(t!=null){
-                            cause=t.getCause().toString();
+                        String cause = "";
+                        if (t != null) {
+                            cause = t.getCause().toString();
                         }
-                        CommonMethod.makeToast(AddProductActivity.this,  "onFailure 5.3:"+cause);
+                        CommonMethod.makeToast(AddProductActivity.this, "onFailure 5.3:" + cause);
                     }
                 });
             }
@@ -365,7 +364,6 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                     productDetail.putExtra(Conts.KEY_ID_TASK, idTask);
                     productDetail.putExtra(Conts.KEY_WORK_NAME, titleWork);
                     productDetail.putExtra(Conts.KEY_WORK_LOCATION, addressWork);
-                    productDetail.putExtra(Conts.KEY_WORK_DISTANCE, distanceWork);
                     productDetail.putExtra(Conts.KEY_WORK_TIME, timeWork);
                     edtDeviceName.setText("");
                     edtBarcode.setText("");
@@ -381,11 +379,11 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                 if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
-                String cause="";
-                if(t!=null){
-                    cause=t.getCause().toString();
+                String cause = "";
+                if (t != null) {
+                    cause = t.getCause().toString();
                 }
-                Toast.makeText(AddProductActivity.this, "onFailure 2.4:"+cause, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddProductActivity.this, "onFailure 2.4:" + cause, Toast.LENGTH_SHORT).show();
             }
         });
     }

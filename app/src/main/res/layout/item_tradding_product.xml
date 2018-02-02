@@ -17,10 +17,10 @@
             android:layout_marginLeft="10dp">
 
             <ImageView
-                android:scaleType="fitXY"
                 android:id="@+id/imv_icon_product"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:padding="10dp"/>
         </android.support.v7.widget.CardView>
 
         <LinearLayout
@@ -32,6 +32,7 @@
             android:paddingLeft="10dp">
 
             <TextView
+                android:maxLines="2"
                 android:id="@+id/tv_tite_trading_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,7 +45,12 @@
                 android:id="@+id/tv_type_manufacture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="1"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
                 android:text="Loại: thiết bị máy lạnh   NSX: Samsung"/>
 
             <TextView

@@ -37,7 +37,7 @@ import okhttp3.Response;
 
 public class CommonMethod {
 
-    public static String formatTimeFromServer(String inputTime) {
+    public static String formatTimeFromServerToString(String inputTime) {
         TimeZone timeZone = TimeZone.getDefault();
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
@@ -49,6 +49,19 @@ public class CommonMethod {
         }
         String time = CommonMethod.formatDateToString(date.getTime());
         return time;
+    }
+
+    public static Date formatTimeFromServerToDate(String inputTime) {
+        TimeZone timeZone = TimeZone.getDefault();
+        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
+        Date date = null;
+        try {
+            date = format.parse(inputTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
     public static String formatTimeToString(long time) {
@@ -89,69 +102,8 @@ public class CommonMethod {
 //        return String.valueOf(calendar.get(Calendar.YEAR));
     }
 
-    public static String getDestination(ArrayList<GetTaskListResult> arrayList) {
-        String result = Conts.BLANK;
-        if (arrayList.size() > Conts.DEFAULT_VALUE_INT_0) {
-            StringBuilder builder = new StringBuilder();
-            for (GetTaskListResult itemWork : arrayList) {
-                GetTaskDetailResult.Result result1 = itemWork.result[0];
-                builder.append(result1.customer.address.location.latitude + "," + result1.customer.address.location.longitude + "|");
-            }
-            result = builder.toString().substring(Conts.DEFAULT_VALUE_INT_0, builder.toString().lastIndexOf("|"));
-        }
-        return result;
-    }
-
-    public static void jsonRequestUpdateDistance(boolean isNetworkConected, double latiOrigin, double longtiOrigin, String destination, final OnResultTimeDistance onResultTimeDistance) {
-        if (latiOrigin != 0.0 && longtiOrigin != 0.0 && !destination.equals(Conts.BLANK) && isNetworkConected) {
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/distancematrix/json?origins="
-                    + latiOrigin + "," + longtiOrigin + "&destinations=" + destination + "&key=AIzaSyD8Hp8WobhNtPUAPVJsU8mk5s_aRPa4lC4").build();
-            try {
-                client.newCall(request).enqueue(new Callback() {
-
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) {
-
-                        try {
-                            String myResponse = response.body().string();
-
-                            JSONObject object = new JSONObject(myResponse);
-                            JSONArray arrRow = object.getJSONArray(Conts.JSON_ELEMENT_ROWS);
-                            if (arrRow.length() > 0) {
-                                JSONObject ob = arrRow.getJSONObject(Conts.DEFAULT_VALUE_INT_0);
-                                JSONArray arr = ob.getJSONArray(Conts.JSON_ELEMENT);
-                                if (arr.length() > 0) {
-                                    for (int index = Conts.DEFAULT_VALUE_INT_0; index < arr.length(); index++) {
-                                        JSONObject objDistance = arr.getJSONObject(index).getJSONObject(Conts.JSON_ELEMENT_DISTANCE);
-                                        JSONObject objDuration = arr.getJSONObject(index).getJSONObject(Conts.JSON_ELEMENT_DURATION);
-
-                                        String distance = objDistance.getString(Conts.JSON_ELEMENT_TEXT);
-                                        String duration = objDuration.getString(Conts.JSON_ELEMENT_TEXT);
-                                        duration = duration.replace(Conts.STRING_MINITE_EN, Conts.STRING_MINITE_VN);
-                                        onResultTimeDistance.editData(index, distance, duration);
-                                    }
-                                    onResultTimeDistance.postToHandle();
-                                }
-                            }
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    public static String formatTimeStandand(Date date){
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
     }
 
     public static void actionFindWayInMapApp(Context context, double latitude_cur, double longitude_cur, double latitude, double longitude) {

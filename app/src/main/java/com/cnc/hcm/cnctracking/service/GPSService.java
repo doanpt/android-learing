@@ -39,7 +39,6 @@ import com.cnc.hcm.cnctracking.model.LocationBackupFile;
 import com.cnc.hcm.cnctracking.model.LocationResponseUpload;
 import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
-import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.google.gson.Gson;
@@ -59,7 +58,6 @@ import io.nlopez.smartlocation.OnReverseGeocodingListener;
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
 import io.nlopez.smartlocation.location.config.LocationParams;
-import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -144,7 +142,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 case ACTION_SHOW_APP:
                     if (isUserLogin) {
                         Intent intent1 = new Intent(this, MainActivity.class);
-                        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent1);
                         Log.i(TAGG, "onStartCommand, ACTION_SHOW_APP");
@@ -565,6 +563,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             if (result != null) {
                 arrNewTask.add(new ItemTask(result));
                 addNotification(result._id, result.title, result.service.name);
+
                 if (mainActivity != null) {
                     mainActivity.runOnUiThread(new Runnable() {
                         @Override
@@ -573,6 +572,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                         }
                     });
                 }
+
                 Log.d(TAGG, "eventNewTask: " + args[0].toString());
                 Log.d(TAGG, "eventNewTask");
             }

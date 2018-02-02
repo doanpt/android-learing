@@ -76,10 +76,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.tvTitleWork.setTypeface(holder.tvTitleWork.getTypeface(), Typeface.NORMAL);
             holder.tvAddressWork.setTypeface(holder.tvAddressWork.getTypeface(), Typeface.NORMAL);
         }
-        holder.tvDistance.setText(itemTask.getDistanceToMyLocation());
+        //K can thiet nua
+        //holder.tvDistance.setText(itemTask.getDistanceToMyLocation());
 
-        String createDate = itemTask.getTaskResult().createdDate.substring(0, itemTask.getTaskResult().createdDate.lastIndexOf(".")) + "Z";
-        String time = CommonMethod.formatTimeFromServer(createDate);
+        String appointmentDate = itemTask.getTaskResult().appointmentDate.substring(0, itemTask.getTaskResult().appointmentDate.lastIndexOf(".")) + "Z";
+        String time = CommonMethod.formatTimeFromServerToString(appointmentDate);
         holder.tvTime.setText(time);
 
 
@@ -112,7 +113,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         if (latitude != 0 && longitude != 0) {
             this.latitude = latitude;
             this.longitude = longitude;
-            CommonMethod.jsonRequestUpdateDistance(isNetworkConnected, latitude, longitude, getDestination(), TaskListAdapter.this);
+//            CommonMethod.jsonRequestUpdateDistance(isNetworkConnected, latitude, longitude, getDestination(), TaskListAdapter.this);
         }
     }
 
@@ -169,7 +170,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
         private LinearLayout llOnClickItem;
         private ImageView imvNotiTypeWork;
-        private TextView tvTitleWork, tvAddressWork, tvTime, tvDistance;
+        private TextView tvTitleWork, tvAddressWork, tvTime;
 
         public ViewHolder(View view) {
             super(view);
@@ -179,7 +180,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             tvTitleWork = (TextView) itemView.findViewById(R.id.tv_title_item_work);
             tvAddressWork = (TextView) itemView.findViewById(R.id.tv_address_item_work);
             tvTime = (TextView) itemView.findViewById(R.id.tv_time_item_work);
-            tvDistance = (TextView) itemView.findViewById(R.id.tv_distance_item_work);
+//            tvDistance = (TextView) itemView.findViewById(R.id.tv_distance_item_work);
         }
 
         @Override

@@ -61,6 +61,7 @@ public class ListServiceFragment extends Fragment implements
             @Override
             public void onResponse(Call<Services> call, Response<Services> response) {
 
+
                 Log.e(TAGG, "getListService.onResponse(), statusCode: " + response.code());
                 if (response.isSuccessful()) {
                     Log.e(TAGG, "getListService.onResponse(), --> response: " + response.toString());

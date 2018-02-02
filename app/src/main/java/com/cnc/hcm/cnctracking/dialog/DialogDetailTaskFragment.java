@@ -63,7 +63,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
     private LinearLayout llImageService, llFindWay;
     private RelativeLayout rlDetail;
-    private ImageView imvBack, imvImageService, imvTime, imvDistance;
+    private ImageView imvBack, imvImageService, imvTime;
     private TextView tvDetailTask;
     private ViewPager viewPager;
 
@@ -77,7 +77,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
     private ProgressDialog mProgressDialog;
     private GetTaskDetailResult getTaskDetailResult;
-    private TextView tv_title_item_work, tv_address_item_work, tv_time_item_work, tv_distance_item_work;
+    private TextView tv_title_item_work, tv_address_item_work, tv_time_item_work;
 
     private List<TaskDetailLoadedListener> mTaskDetailLoadedListener = new ArrayList<>();
 
@@ -139,7 +139,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         imvBack.setOnClickListener(this);
         imvImageService = (ImageView) view.findViewById(R.id.imv_image_service);
         imvTime = (ImageView) view.findViewById(R.id.imv_time);
-        imvDistance = (ImageView) view.findViewById(R.id.imv_distance);
+//        imvDistance = (ImageView) view.findViewById(R.id.imv_distance);
         rlDetail = (RelativeLayout) view.findViewById(R.id.rl_detail_task);
 
         tvDetailTask = (TextView) view.findViewById(R.id.tv_detail_task);
@@ -176,7 +176,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         tv_title_item_work = view.findViewById(R.id.tv_title_item_work);
         tv_address_item_work = view.findViewById(R.id.tv_address_item_work);
         tv_time_item_work = view.findViewById(R.id.tv_time_item_work);
-        tv_distance_item_work = view.findViewById(R.id.tv_distance_item_work);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         viewPager = (ViewPager) view.findViewById(R.id.view_pager);
@@ -236,9 +235,9 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         try {
             if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
                 tv_title_item_work.setText(getTaskDetailResult.result.title + "");
-                String date = getTaskDetailResult.result.createdDate.substring(0, getTaskDetailResult.result.createdDate.lastIndexOf(".")) + "Z";
+                String date = getTaskDetailResult.result.appointmentDate.substring(0, getTaskDetailResult.result.appointmentDate.lastIndexOf(".")) + "Z";
                 if (!TextUtils.isEmpty(date)) {
-                    String time = CommonMethod.formatTimeFromServer(date);
+                    String time = CommonMethod.formatTimeFromServerToString(date);
                     tv_time_item_work.setText(time);
                 }
                 if (getTaskDetailResult.result.address != null) {
@@ -246,7 +245,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 } else if (getTaskDetailResult.result.customer.address != null) {
                     tv_address_item_work.setText(getTaskDetailResult.result.customer.address.street + "");
                 }
-                tv_distance_item_work.setText("5 km");    //TODO update distance later
                 if (getTaskDetailResult.result.customer != null) {
                     customerId = getTaskDetailResult.result.customer._id;
                 }
@@ -293,12 +291,12 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             llImageService.setVisibility(View.GONE);
             rlDetail.setVisibility(View.GONE);
             imvTime.setVisibility(View.GONE);
-            imvDistance.setVisibility(View.GONE);
+//            imvDistance.setVisibility(View.GONE);
         } else {
             llImageService.setVisibility(View.VISIBLE);
             rlDetail.setVisibility(View.VISIBLE);
             imvTime.setVisibility(View.VISIBLE);
-            imvDistance.setVisibility(View.VISIBLE);
+//            imvDistance.setVisibility(View.VISIBLE);
         }
     }
 
@@ -311,7 +309,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         llImageService.setVisibility(View.GONE);
         rlDetail.setVisibility(View.GONE);
         imvTime.setVisibility(View.GONE);
-        imvDistance.setVisibility(View.GONE);
+//        imvDistance.setVisibility(View.GONE);
     }
 
     @Override
@@ -361,7 +359,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 intent.putExtra(Conts.KEY_WORK_NAME, tv_title_item_work.getText().toString());
                 intent.putExtra(Conts.KEY_WORK_LOCATION, tv_address_item_work.getText().toString());
                 intent.putExtra(Conts.KEY_WORK_TIME, tv_time_item_work.getText().toString());
-                intent.putExtra(Conts.KEY_WORK_DISTANCE, tv_distance_item_work.getText().toString());
                 startActivity(intent);
                 fabMenu.collapse();
                 break;
@@ -414,7 +411,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                             productDetail.putExtra(Conts.KEY_WORK_NAME, tv_title_item_work.getText().toString());
                             productDetail.putExtra(Conts.KEY_WORK_LOCATION, tv_address_item_work.getText().toString());
                             productDetail.putExtra(Conts.KEY_WORK_TIME, tv_time_item_work.getText().toString());
-                            productDetail.putExtra(Conts.KEY_WORK_DISTANCE, tv_distance_item_work.getText().toString());
                             startActivity(productDetail);
                         } else {
                             CommonMethod.makeToast(getActivity(), "Device not found!");
@@ -423,7 +419,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
                     @Override
                     public void onFailure(Call<CheckContainProductResult> call, Throwable t) {
-                        CommonMethod.makeToast(getActivity(),  "getProductById.onFailure()");
+                        CommonMethod.makeToast(getActivity(), "getProductById.onFailure()");
                     }
                 });
             }

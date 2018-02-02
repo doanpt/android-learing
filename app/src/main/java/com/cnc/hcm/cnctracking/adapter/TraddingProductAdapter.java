@@ -51,6 +51,7 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
 
         holder.tvTitle.setText(result.getName());
         holder.tvTypeManufacture.setText("Loại: " + result.getCategory().getTitle() + "    NSX: " + result.getBrand().getName());
+        holder.tvTypeManufacture.setSelected(true);
         holder.tvPriceUnit.setText("Giá: " + CommonMethod.formatMoney(result.getPrice()) + " đ    Đvt: " + result.getUnit().getTitle());
     }
 
@@ -64,11 +65,17 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
     }
 
     public void notiData(List<TraddingProduct.Result> result) {
-        arr.clear();
-        arr.addAll(result);
-        arrTemp.clear();
-        arrTemp.addAll(result);
-        notifyDataSetChanged();
+        if (result != null) {
+            if (arr != null) {
+                arr.clear();
+                arr.addAll(result);
+            }
+            if (arrTemp != null) {
+                arrTemp.clear();
+                arrTemp.addAll(result);
+            }
+            notifyDataSetChanged();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -55,23 +55,23 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_marginTop="17dp"
                 android:id="@+id/tv_hour_work_detail"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingTop="5dp"
                 android:text="7h30"
                 android:textColor="@android:color/white" />
 
-            <TextView
-                android:id="@+id/tv_distance_work_detail"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="5km"
-                android:textColor="@android:color/white" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_distance_work_detail"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center"-->
+                <!--android:text="5km"-->
+                <!--android:textColor="@android:color/white" />-->
         </LinearLayout>
     </LinearLayout>
 

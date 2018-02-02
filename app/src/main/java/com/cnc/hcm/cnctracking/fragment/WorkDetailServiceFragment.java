@@ -207,12 +207,17 @@ public class WorkDetailServiceFragment extends Fragment implements
             Log.e(TAG, "onTaskDetailLoaded(), Exception1: " + e);
         }
         try {
-            if (getTaskDetailResult.result.customer != null) {
-                tv_detail_work_contact_name.setText(getTaskDetailResult.result.customer.fullname + "");
-                tv_detail_work_contact_phone.setText(getTaskDetailResult.result.customer.phone + "");
-                handleActions(getTaskDetailResult.result.customer);
+            if (getTaskDetailResult.result.recipient != null) {
+                tv_detail_work_contact_name.setText(getTaskDetailResult.result.recipient.getFullname() + "");
+                tv_detail_work_contact_phone.setText(getTaskDetailResult.result.recipient.getPhone() + "");
+                handleActions(getTaskDetailResult.result.recipient.getPhone());
+            } else {
+                if (getTaskDetailResult.result.customer != null) {
+                    tv_detail_work_contact_name.setText(getTaskDetailResult.result.customer.fullname + "");
+                    tv_detail_work_contact_phone.setText(getTaskDetailResult.result.customer.phone + "");
+                    handleActions(getTaskDetailResult.result.customer.phone);
+                }
             }
-
             List<ItemPrice> itemPrices = new ArrayList<>();
             if (getTaskDetailResult.result.service != null) {
                 itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, getTaskDetailResult.result.service._id, getTaskDetailResult.result.service.name, getTaskDetailResult.result.service.tax, getTaskDetailResult.result.service.price, 1));
@@ -282,18 +287,18 @@ public class WorkDetailServiceFragment extends Fragment implements
         this.longitude = longitude;
     }
 
-    private void handleActions(final GetTaskDetailResult.Result.Customer customer) {
+    private void handleActions(final String numPhone) {
         tv_detail_work_call_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", customer.phone, null)));
+                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", numPhone, null)));
             }
         });
         tv_detail_work_sms_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    Uri uri = Uri.parse("smsto:" + customer.phone);
+                    Uri uri = Uri.parse("smsto:" + numPhone);
                     Intent smsIntent = new Intent(Intent.ACTION_SENDTO, uri);
                     smsIntent.putExtra("sms_body", "sms content");
                     startActivity(smsIntent);
