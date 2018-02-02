@@ -48,27 +48,27 @@ public class GetProductDetailResult {
 
         @SerializedName("services")
         @Expose
-        private List<Service> services = null;
+        private List<Services.Result> services = null;
         @SerializedName("products")
         @Expose
-        private List<Product_> products = null;
+        private List<TraddingProduct.Result> products = null;
         @SerializedName("photos")
         @Expose
         private List<String> photos = null;
 
-        public List<Service> getServices() {
+        public List<Services.Result> getServices() {
             return services;
         }
 
-        public void setServices(List<Service> services) {
+        public void setServices(List<Services.Result> services) {
             this.services = services;
         }
 
-        public List<Product_> getProducts() {
+        public List<TraddingProduct.Result> getProducts() {
             return products;
         }
 
-        public void setProducts(List<Product_> products) {
+        public void setProducts(List<TraddingProduct.Result> products) {
             this.products = products;
         }
 
@@ -78,263 +78,6 @@ public class GetProductDetailResult {
 
         public void setPhotos(List<String> photos) {
             this.photos = photos;
-        }
-
-    }
-
-    public class Product {
-
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("name")
-        @Expose
-        private String name;
-        @SerializedName("photo")
-        @Expose
-        private String photo;
-        @SerializedName("__v")
-        @Expose
-        private Long v;
-        @SerializedName("unit")
-        @Expose
-        private Unit unit;
-        @SerializedName("createdDate")
-        @Expose
-        private String createdDate;
-        @SerializedName("tax")
-        @Expose
-        private Long tax;
-        @SerializedName("price")
-        @Expose
-        private Long price;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getPhoto() {
-            return photo;
-        }
-
-        public void setPhoto(String photo) {
-            this.photo = photo;
-        }
-
-        public Long getV() {
-            return v;
-        }
-
-        public void setV(Long v) {
-            this.v = v;
-        }
-
-        public Unit getUnit() {
-            return unit;
-        }
-
-        public void setUnit(Unit unit) {
-            this.unit = unit;
-        }
-
-        public String getCreatedDate() {
-            return createdDate;
-        }
-
-        public void setCreatedDate(String createdDate) {
-            this.createdDate = createdDate;
-        }
-
-        public Long getTax() {
-            return tax;
-        }
-
-        public void setTax(Long tax) {
-            this.tax = tax;
-        }
-
-        public Long getPrice() {
-            return price;
-        }
-
-        public void setPrice(Long price) {
-            this.price = price;
-        }
-
-    }
-
-    public class Product_ {
-
-        @SerializedName("product")
-        @Expose
-        private Product__ product;
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("quantity")
-        @Expose
-        private Long quantity;
-
-        public Product__ getProduct() {
-            return product;
-        }
-
-        public void setProduct(Product__ product) {
-            this.product = product;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Long getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(Long quantity) {
-            this.quantity = quantity;
-        }
-
-    }
-
-    public class Product__ {
-
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("name")
-        @Expose
-        private String name;
-        @SerializedName("brand")
-        @Expose
-        private String brand;
-        @SerializedName("category")
-        @Expose
-        private String category;
-        @SerializedName("photo")
-        @Expose
-        private String photo;
-        @SerializedName("__v")
-        @Expose
-        private Long v;
-        @SerializedName("unit")
-        @Expose
-        private Unit_ unit;
-        @SerializedName("createdDate")
-        @Expose
-        private String createdDate;
-        @SerializedName("tax")
-        @Expose
-        private Long tax;
-        @SerializedName("price")
-        @Expose
-        private Long price;
-        @SerializedName("quantity")
-        @Expose
-        private Long quantity;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getBrand() {
-            return brand;
-        }
-
-        public void setBrand(String brand) {
-            this.brand = brand;
-        }
-
-        public String getCategory() {
-            return category;
-        }
-
-        public void setCategory(String category) {
-            this.category = category;
-        }
-
-        public String getPhoto() {
-            return photo;
-        }
-
-        public void setPhoto(String photo) {
-            this.photo = photo;
-        }
-
-        public Long getV() {
-            return v;
-        }
-
-        public void setV(Long v) {
-            this.v = v;
-        }
-
-        public Unit_ getUnit() {
-            return unit;
-        }
-
-        public void setUnit(Unit_ unit) {
-            this.unit = unit;
-        }
-
-        public String getCreatedDate() {
-            return createdDate;
-        }
-
-        public void setCreatedDate(String createdDate) {
-            this.createdDate = createdDate;
-        }
-
-        public Long getTax() {
-            return tax;
-        }
-
-        public void setTax(Long tax) {
-            this.tax = tax;
-        }
-
-        public Long getPrice() {
-            return price;
-        }
-
-        public void setPrice(Long price) {
-            this.price = price;
-        }
-
-        public Long getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(Long quantity) {
-            this.quantity = quantity;
         }
 
     }
@@ -421,44 +164,6 @@ public class GetProductDetailResult {
 
     }
 
-    public class Service {
-
-        @SerializedName("product")
-        @Expose
-        private Product product;
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("quantity")
-        @Expose
-        private Long quantity;
-
-        public Product getProduct() {
-            return product;
-        }
-
-        public void setProduct(Product product) {
-            this.product = product;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Long getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(Long quantity) {
-            this.quantity = quantity;
-        }
-
-    }
-
     public class Status {
 
         @SerializedName("_id")
@@ -493,60 +198,6 @@ public class GetProductDetailResult {
 
         public void setDescription(String description) {
             this.description = description;
-        }
-
-    }
-
-    public class Unit {
-
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("title")
-        @Expose
-        private String title;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-    }
-
-    public class Unit_ {
-
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("title")
-        @Expose
-        private String title;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
         }
 
     }

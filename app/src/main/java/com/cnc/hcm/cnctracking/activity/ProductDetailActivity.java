@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.ProductDetailAdapter;
+import com.cnc.hcm.cnctracking.adapter.ProductProcessAdapter;
+import com.cnc.hcm.cnctracking.adapter.ServiceProcessAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
@@ -57,6 +59,8 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private static final int KEY_STEP_TWO = 2;
     private static final int KEY_STEP_THREE = 3;
     private static final int KEY_RESULT_FROM_LIST_SERVICE_ACTIVITY = 1000;
+    private static final int KEY_PROCESS_SERVICE = 4;
+    private static final int KEY_PROCESS_PRODUCT = 5;
     private LinearLayout llViewControl;
     private FrameLayout flBlurView;
     private FloatingActionsMenu fabMenu;
@@ -66,19 +70,19 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
     private GPSService gpsService;
-    private ArrayList<String> arrInit;
-    private ArrayList<String> arrProcess;
-    private ArrayList<String> arrFinish;
-    private ProductDetailAdapter initAdapter;
-    private ProductDetailAdapter processAdapter;
-    private ProductDetailAdapter finishAdapter;
-    private RecyclerView initRecycler;
-    private RecyclerView processRecycler;
-    private RecyclerView finishRecycler;
+    private ArrayList<String> arrInit, arrProcess, arrFinish;
+    private ArrayList<TraddingProduct.Result> arrTrading;
+    private ArrayList<Services.Result> arrService;
+    private ProductDetailAdapter initAdapter, processAdapter, finishAdapter;
+    private ProductProcessAdapter productAdapter;
+    private ServiceProcessAdapter serviceAdapter;
+    private RecyclerView initRecycler, processRecycler, finishRecycler, listServiceRecycler, listProductRecycler;
     private String accessToken, deviceID, idTask, workName, address, timeWork;
     private LinearLayout llComplete;
     private TextView tvStartDate, tvEndDate, tvTotalTime;
     private ImageView imvBack;
+    private ArrayList<SubmitProcessParam.Service> arrPushProcess2Service;
+    private ArrayList<SubmitProcessParam.Product> arrPushProcess2Product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +136,16 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         } else {
             finishRecycler.setVisibility(View.VISIBLE);
         }
+        if (arrTrading.size() == 0) {
+            listProductRecycler.setVisibility(View.GONE);
+        } else {
+            listProductRecycler.setVisibility(View.VISIBLE);
+        }
+        if (arrService.size() == 0) {
+            listServiceRecycler.setVisibility(View.GONE);
+        } else {
+            listServiceRecycler.setVisibility(View.VISIBLE);
+        }
     }
 
     private void displayDetailWork(GetProductDetailResult body) {
@@ -141,8 +155,12 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         arrInit.clear();
         arrProcess.clear();
         arrFinish.clear();
+        arrService.clear();
+        arrTrading.clear();
         arrInit.addAll(body.getResult().getBefore().getPhotos());
         arrProcess.addAll(body.getResult().getProcess().getPhotos());
+        arrService.addAll(body.getResult().getProcess().getServices());
+        arrTrading.addAll(body.getResult().getProcess().getProducts());
         arrFinish.addAll(body.getResult().getAfter().getPhotos());
         if (body.getResult().getStatus().getId() == 3) {
             llComplete.setVisibility(View.VISIBLE);
@@ -224,12 +242,21 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         arrInit = new ArrayList<>();
         arrProcess = new ArrayList<>();
         arrFinish = new ArrayList<>();
+        arrTrading = new ArrayList<>();
+        arrService = new ArrayList<>();
+        arrPushProcess2Product = new ArrayList<>();
+        arrPushProcess2Service = new ArrayList<>();
+
         initAdapter = new ProductDetailAdapter(this, arrInit);
         processAdapter = new ProductDetailAdapter(this, arrProcess);
         finishAdapter = new ProductDetailAdapter(this, arrFinish);
+        productAdapter = new ProductProcessAdapter(this, arrTrading);
+        serviceAdapter = new ServiceProcessAdapter(this, arrService);
         initRecycler = findViewById(R.id.rv_initial_condition);
         processRecycler = findViewById(R.id.rv_process_condition);
         finishRecycler = findViewById(R.id.rv_finish_condition);
+        listServiceRecycler = findViewById(R.id.rv_list_service);
+        listProductRecycler = findViewById(R.id.rv_list_product);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         layoutManager.scrollToPosition(0);
@@ -240,10 +267,18 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         layoutManager2.scrollToPosition(0);
         finishRecycler.setLayoutManager(layoutManager2);
+        LinearLayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        layoutManager.scrollToPosition(0);
+        listProductRecycler.setLayoutManager(layoutManager3);
+        LinearLayoutManager layoutManager4 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        layoutManager.scrollToPosition(0);
+        listServiceRecycler.setLayoutManager(layoutManager4);
 
         initRecycler.setAdapter(initAdapter);
         processRecycler.setAdapter(processAdapter);
         finishRecycler.setAdapter(finishAdapter);
+        listProductRecycler.setAdapter(productAdapter);
+        listServiceRecycler.setAdapter(serviceAdapter);
 
 //        fabNote.setOnClickListener(this);
         fabProduct.setOnClickListener(this);
@@ -346,16 +381,69 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 String type = data.getStringExtra(Conts.KEY_CHECK_TYPE_RESULT);
                 TraddingProduct.Result resultTradding;
                 Services.Result resultService;
+                List<MHead> arrNewHeads = new ArrayList<>();
+                arrNewHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+                arrNewHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceID));
+                final SubmitProcessParam param = new SubmitProcessParam();
                 if (type.equals(Conts.KEY_PRODUCT)) {
                     resultTradding = (TraddingProduct.Result) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
+                    getAllProcess2();
+                    for (SubmitProcessParam.Product p : arrPushProcess2Product) {
+                        if (p.getProduct().equals(resultTradding.getId())) {
+                            CommonMethod.makeToast(ProductDetailActivity.this, "Product already added");
+                            return;
+                        }
+                    }
+                    SubmitProcessParam.Product product = new SubmitProcessParam.Product();
+                    product.setProduct(resultTradding.getId());
+                    product.setQuantity(Long.valueOf(resultTradding.getQuantity()));
+                    arrPushProcess2Product.add(product);
+                    param.setProcess(new SubmitProcessParam.Process());
+                    param.getProcess().setServices(arrPushProcess2Service);
+                    param.getProcess().setProducts(arrPushProcess2Product);
+                    param.getProcess().setPhotos(arrProcess);
+                    uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_PRODUCT, resultTradding, null);
                     CommonMethod.makeToast(ProductDetailActivity.this, "result service");
                 } else if (type.equals(Conts.KEY_SERVICE)) {
-                     resultService = (Services.Result) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
+                    getAllProcess2();
+                    resultService = (Services.Result) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
+                    for (SubmitProcessParam.Service p : arrPushProcess2Service) {
+                        if (p.getProduct().equals(resultService.getId())) {
+                            CommonMethod.makeToast(ProductDetailActivity.this, "Service already added");
+                            return;
+                        }
+                    }
+                    SubmitProcessParam.Service service = new SubmitProcessParam.Service();
+                    service.setProduct(resultService.getId());
+                    service.setQuantity((long) 1);
+                    arrPushProcess2Service.add(service);
+                    param.setProcess(new SubmitProcessParam.Process());
+                    param.getProcess().setServices(arrPushProcess2Service);
+                    param.getProcess().setProducts(arrPushProcess2Product);
+                    param.getProcess().setPhotos(arrProcess);
+                    uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_SERVICE, null, resultService);
                     CommonMethod.makeToast(ProductDetailActivity.this, "result service");
                 }
                 break;
         }
 
+    }
+
+    private void getAllProcess2() {
+        arrPushProcess2Service.clear();
+        arrPushProcess2Product.clear();
+        for (Services.Result result : arrService) {
+            SubmitProcessParam.Service s = new SubmitProcessParam.Service();
+            s.setProduct(result.getId());
+            s.setQuantity((long) 1);
+            arrPushProcess2Service.add(s);
+        }
+        for (TraddingProduct.Result result : arrTrading) {
+            SubmitProcessParam.Product s = new SubmitProcessParam.Product();
+            s.setProduct(result.getId());
+            s.setQuantity(Long.valueOf(result.getQuantity()));
+            arrPushProcess2Product.add(s);
+        }
     }
 
     private void checkResultSteps(final int requestCode, int resultCode, Intent data) {
@@ -370,7 +458,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             MultipartBody.Part body = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
             List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-
             ApiUtils.getAPIService(arrHeads).uploadPhoto(body, idTask).enqueue(new Callback<UploadImageResult>() {
                 @Override
                 public void onResponse(Call<UploadImageResult> call, Response<UploadImageResult> response) {
@@ -391,9 +478,12 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                             param.setBefore(new SubmitProcessParam.Before());
                             param.getBefore().setPhotos(arrImage);
                         } else if (requestCode == KEY_STEP_TWO) {
+                            getAllProcess2();
                             arrImage.addAll(arrProcess);
                             arrImage.add(url);
                             param.setProcess(new SubmitProcessParam.Process());
+                            param.getProcess().setServices(arrPushProcess2Service);
+                            param.getProcess().setProducts(arrPushProcess2Product);
                             param.getProcess().setPhotos(arrImage);
                         } else if (requestCode == KEY_STEP_THREE) {
                             arrImage.addAll(arrFinish);
@@ -402,41 +492,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                             param.getAfter().setPhotos(arrImage);
                         }
                         Log.d("ABC", idTask + " " + param.getProcess());
-                        ApiUtils.getAPIService(arrNewHeads).updateProcess(idTask, param).enqueue(new Callback<UpdateProcessResult>() {
-                            @Override
-                            public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
-                                Long status = response.body().getStatusCode();
-                                Log.d(TAGG, "updateProcess.onResponse, status: " + status);
-                                if (status == Conts.RESPONSE_STATUS_OK) {
-                                    if (requestCode == KEY_STEP_ONE) {
-                                        arrInit.add(url);
-                                        initAdapter.notifyDataSetChanged();
-                                    } else if (requestCode == KEY_STEP_TWO) {
-                                        arrProcess.add(url);
-                                        processAdapter.notifyDataSetChanged();
-                                    } else if (requestCode == KEY_STEP_THREE) {
-                                        arrFinish.add(url);
-                                        finishAdapter.notifyDataSetChanged();
-                                    }
-                                    visiableRecycler();
-                                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Step OK!!!");
-                                } else {
-                                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Process Error");
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<UpdateProcessResult> call, Throwable t) {
-                                if (requestCode == KEY_STEP_ONE) {
-                                    arrInit.remove(arrInit.size() - 1);
-                                } else if (requestCode == KEY_STEP_TWO) {
-                                    arrProcess.remove(arrProcess.size() - 1);
-                                } else if (requestCode == KEY_STEP_THREE) {
-                                    arrFinish.remove(arrFinish.size() - 1);
-                                }
-                                CommonMethod.makeToast(ProductDetailActivity.this, "Update process Error, onFailure");
-                            }
-                        });
+                        uploadProcess(arrNewHeads, idTask, param, requestCode, null, null);
                     } else {
                         CommonMethod.makeToast(ProductDetailActivity.this, "Upload error");
                     }
@@ -450,6 +506,50 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         } else {
             CommonMethod.makeToast(ProductDetailActivity.this, "Get image error");
         }
+    }
+
+    private void uploadProcess(List<MHead> arrHeads, String idTask, final SubmitProcessParam param, final int requestCode, final TraddingProduct.Result product, final Services.Result service) {
+        ApiUtils.getAPIService(arrHeads).updateProcess(idTask, param).enqueue(new Callback<UpdateProcessResult>() {
+            @Override
+            public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
+                Long status = response.body().getStatusCode();
+                Log.d(TAGG, "updateProcess.onResponse, status: " + status);
+                if (status == Conts.RESPONSE_STATUS_OK) {
+                    if (requestCode == KEY_STEP_ONE) {
+                        arrInit.add(param.getBefore().getPhotos().get(param.getBefore().getPhotos().size() - 1));
+                        initAdapter.notifyDataSetChanged();
+                    } else if (requestCode == KEY_STEP_TWO) {
+                        arrProcess.add(param.getProcess().getPhotos().get(param.getProcess().getPhotos().size() - 1));
+                        processAdapter.notifyDataSetChanged();
+                    } else if (requestCode == KEY_STEP_THREE) {
+                        arrFinish.add(param.getAfter().getPhotos().get(param.getAfter().getPhotos().size() - 1));
+                        finishAdapter.notifyDataSetChanged();
+                    } else if (requestCode == KEY_PROCESS_SERVICE) {
+                        arrService.add(service);
+                        serviceAdapter.notifyDataSetChanged();
+                    } else if (requestCode == KEY_PROCESS_PRODUCT) {
+                        arrTrading.add(product);
+                        productAdapter.notifyDataSetChanged();
+                    }
+                    visiableRecycler();
+                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Step OK!!!");
+                } else {
+                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Process Error");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateProcessResult> call, Throwable t) {
+                if (requestCode == KEY_STEP_ONE) {
+                    arrInit.remove(arrInit.size() - 1);
+                } else if (requestCode == KEY_STEP_TWO) {
+                    arrProcess.remove(arrProcess.size() - 1);
+                } else if (requestCode == KEY_STEP_THREE) {
+                    arrFinish.remove(arrFinish.size() - 1);
+                }
+                CommonMethod.makeToast(ProductDetailActivity.this, "Update process Error, onFailure");
+            }
+        });
     }
 
     private File saveBitmapFile(Bitmap bitmap, String name) {

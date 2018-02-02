@@ -116,7 +116,7 @@ public class SubmitProcessParam {
 
     }
 
-    public class Product {
+    public static class Product {
 
         @SerializedName("product")
         @Expose
@@ -143,7 +143,7 @@ public class SubmitProcessParam {
 
     }
 
-    public class Service {
+    public static class Service {
 
         @SerializedName("product")
         @Expose
