@@ -32,6 +32,7 @@ import com.cnc.hcm.cnctracking.fragment.WorkDetailDeviceFragment;
 import com.cnc.hcm.cnctracking.fragment.WorkDetailServiceFragment;
 import com.cnc.hcm.cnctracking.model.AddContainProductResult;
 import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
+import com.cnc.hcm.cnctracking.model.CompleteTicketResponse;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -385,8 +386,39 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             }
         } catch (Exception e) {
         }
-        CommonMethod.makeToast(getActivity(), isComplete ? "Completed Work" : "Some devices are not completed");
+
+        if (isComplete) {
+            finishTicket();
+        }
+
+        CommonMethod.makeToast(getActivity(), isComplete ? "Đã hoàn thành ticket" : "Tồn tại thiết bị chưa được sửa xong");
         fabMenu.collapse();
+    }
+
+    private void finishTicket() {
+        if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
+            String idTask = getTaskDetailResult.result._id;
+            List<MHead> arrHeads = new ArrayList<>();
+            arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken()));
+            ApiUtils.getAPIService(arrHeads).completeTicket(idTask).enqueue(new Callback<CompleteTicketResponse>() {
+                @Override
+                public void onResponse(Call<CompleteTicketResponse> call, Response<CompleteTicketResponse> response) {
+                    if (response.isSuccessful()) {
+                        CompleteTicketResponse completeTicketResponse = response.body();
+                        if (completeTicketResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
+                            CommonMethod.makeToast(getActivity(), "Xử lý hoàn thành ticket thành công");
+                        } else {
+                            CommonMethod.makeToast(getActivity(), "Bạn chưa hoàn thành dịch vụ");
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CompleteTicketResponse> call, Throwable t) {
+                    CommonMethod.makeToast(getActivity(), "Xử lý hoàn thành ticket thất bại");
+                }
+            });
+        }
     }
 
 

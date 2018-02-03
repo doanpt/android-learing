@@ -76,6 +76,7 @@
     <string name="add_new_product">Thêm mới thiết bị</string>
     <string name="scan_qr_product">Scan QR thiết bị</string>
     <string name="text_complete">Hoàn thành</string>
+    <string name="text_complete_ticket">Hoàn thành ticket</string>
     <string name="text_am_1">-1</string>
     <string name="account_login_on_other_device">Tài khoản này đã được đăng nhập trên thiết bị khác</string>
     <string name="text_title_no_gps">GPS - Vị trí đã tắt</string>

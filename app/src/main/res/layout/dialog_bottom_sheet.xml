@@ -284,7 +284,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="4dp"
-            android:text="@string/text_complete"
+            android:text="@string/text_complete_ticket"
             android:textColor="@android:color/white"/>
     </LinearLayout>
 </RelativeLayout>
