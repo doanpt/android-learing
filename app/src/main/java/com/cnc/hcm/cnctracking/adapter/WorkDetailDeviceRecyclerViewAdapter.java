@@ -81,7 +81,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
     }
 
     public void updateDeviceList(List<GetTaskDetailResult.Result.Process> processes) {
-        if (processes != null && !processes.isEmpty()) {
+        if (processes != null) {
             this.processes = processes;
             notifyDataSetChanged();
         }
