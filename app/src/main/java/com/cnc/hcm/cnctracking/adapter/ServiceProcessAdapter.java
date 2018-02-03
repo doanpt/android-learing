@@ -39,7 +39,7 @@ public class ServiceProcessAdapter extends RecyclerView.Adapter<ServiceProcessAd
     public void onBindViewHolder(ServiceHolder holder, int position) {
         Services.Result item = arrServices.get(position);
         holder.tvName.setText(item.getName() + "");
-        holder.tvAmount.setText("1 lần");
+        holder.tvAmount.setText("1 " + item.getUnit().getTitle());
         holder.tvPrice.setText(item.getPrice() + "");
         holder.tvTotalPrice.setText(item.getPrice() + "");
     }

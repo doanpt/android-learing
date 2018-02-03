@@ -83,6 +83,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private ImageView imvBack;
     private ArrayList<SubmitProcessParam.Service> arrPushProcess2Service;
     private ArrayList<SubmitProcessParam.Product> arrPushProcess2Product;
+    private boolean isNewProduct = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -381,6 +382,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 if (resultCode != RESULT_OK) {
                     return;
                 }
+                isNewProduct = true;
                 String type = data.getStringExtra(Conts.KEY_CHECK_TYPE_RESULT);
                 TraddingProduct.Result resultTradding;
                 Services.Result resultService;
@@ -391,10 +393,10 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 if (type.equals(Conts.KEY_PRODUCT)) {
                     resultTradding = (TraddingProduct.Result) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
                     getAllProcess2();
-                    for (SubmitProcessParam.Product p : arrPushProcess2Product) {
-                        if (p.getProduct().equals(resultTradding.getId())) {
-                            CommonMethod.makeToast(ProductDetailActivity.this, "Product already added");
-                            return;
+                    for (int i = 0; i < arrPushProcess2Product.size(); i++) {
+                        if (arrPushProcess2Product.get(i).getProduct().equals(resultTradding.getId())) {
+                            arrPushProcess2Product.get(i).setQuantity(arrPushProcess2Product.get(i).getQuantity() + 1);
+                            isNewProduct = false;
                         }
                     }
                     SubmitProcessParam.Product product = new SubmitProcessParam.Product();
@@ -406,7 +408,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     param.getProcess().setProducts(arrPushProcess2Product);
                     param.getProcess().setPhotos(arrProcess);
                     uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_PRODUCT, resultTradding, null);
-                    CommonMethod.makeToast(ProductDetailActivity.this, "result service");
                 } else if (type.equals(Conts.KEY_SERVICE)) {
                     getAllProcess2();
                     resultService = (Services.Result) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
@@ -425,7 +426,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     param.getProcess().setProducts(arrPushProcess2Product);
                     param.getProcess().setPhotos(arrProcess);
                     uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_SERVICE, null, resultService);
-                    CommonMethod.makeToast(ProductDetailActivity.this, "result service");
                 }
                 break;
         }
@@ -531,7 +531,16 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                         arrService.add(service);
                         serviceAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_PROCESS_PRODUCT) {
-                        arrTrading.add(product);
+                        if (isNewProduct == true) {
+                            arrTrading.add(product);
+                        } else {
+                            for (int i = 0; i < arrTrading.size(); i++) {
+                                if (arrTrading.get(i).getId().equals(product.getId())) {
+                                    arrTrading.get(i).setQuantity(arrTrading.get(i).getQuantity() + 1);
+                                    break;
+                                }
+                            }
+                        }
                         productAdapter.notifyDataSetChanged();
                     }
                     visiableRecycler();

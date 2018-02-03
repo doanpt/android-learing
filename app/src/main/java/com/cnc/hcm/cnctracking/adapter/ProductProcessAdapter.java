@@ -41,7 +41,7 @@ public class ProductProcessAdapter extends RecyclerView.Adapter<ProductProcessAd
     public void onBindViewHolder(ProductHolder holder, int position) {
         TraddingProduct.Result item = arrProduct.get(position);
         holder.tvName.setText(item.getName() + "");
-        holder.tvAmount.setText(item.getQuantity() + " cái");
+        holder.tvAmount.setText(item.getQuantity() +" "+item.getUnit().getTitle());
         holder.tvPrice.setText(item.getPrice() + "");
         int total = Integer.parseInt(item.getQuantity() + "") * Integer.parseInt(item.getPrice().toString() + "");
         holder.tvTotalPrice.setText(total + "");

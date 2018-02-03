@@ -132,6 +132,7 @@ public class ListProductFragment extends Fragment implements ListProductAndServi
     @Override
     public void onClickInput(int position) {
         TraddingProduct.Result result = adapter.getItem(position);
+        result.setQuantity(1);
         Intent intentResult = new Intent();
         intentResult.putExtra(Conts.KEY_SERVICE_PRODUCT_RESULT, result);
         intentResult.putExtra(Conts.KEY_CHECK_TYPE_RESULT, Conts.KEY_PRODUCT);
