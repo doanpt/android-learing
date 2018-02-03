@@ -90,12 +90,19 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imv_back:
+                setResult(RESULT_CANCELED);
                 finish();
                 break;
             case R.id.tv_clear_text_search:
                 edtSeach.setText(Conts.BLANK);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
     public interface OnTextChangeProductListener {

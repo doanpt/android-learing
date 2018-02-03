@@ -378,6 +378,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 checkResultSteps(requestCode, resultCode, data);
                 break;
             case KEY_RESULT_FROM_LIST_SERVICE_ACTIVITY:
+                if (resultCode != RESULT_OK) {
+                    return;
+                }
                 String type = data.getStringExtra(Conts.KEY_CHECK_TYPE_RESULT);
                 TraddingProduct.Result resultTradding;
                 Services.Result resultService;
