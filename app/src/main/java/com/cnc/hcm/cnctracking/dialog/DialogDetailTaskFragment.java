@@ -76,6 +76,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     private double longitude;
 
     private WorkDetailPageAdapter mWorkDetailPageAdapter;
+
     private MainActivity mainActivity;
 
     private ProgressDialog mProgressDialog;
@@ -91,15 +92,12 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         }
     }
 
-    public GetTaskDetailResult getGetTaskDetailResult() {
-        return getTaskDetailResult;
+    public MainActivity getMainActivity() {
+        return mainActivity;
     }
 
-    private List<LocationUpdateListener> mLocationUpdateListeners = new ArrayList<>();
-
-    public void setLocationUpdateListeners(LocationUpdateListener locationUpdateListener) {
-        mLocationUpdateListeners.add(locationUpdateListener);
-        locationUpdateListener.onLocationUpdate(latitude, longitude);
+    public GetTaskDetailResult getGetTaskDetailResult() {
+        return getTaskDetailResult;
     }
 
 //    private GPSService gpsService;
@@ -131,7 +129,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         View view = inflater.inflate(R.layout.dialog_bottom_sheet, container);
         initViews(view);
         mTaskDetailLoadedListener.clear();
-        mLocationUpdateListeners.clear();
 
         return view;
     }
@@ -537,19 +534,10 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     public void myLocationHere(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-        for (LocationUpdateListener locationUpdateListener : mLocationUpdateListeners) {
-            if (locationUpdateListener != null) {
-                locationUpdateListener.onLocationUpdate(latitude, longitude);
-            }
-        }
     }
 
     public interface TaskDetailLoadedListener {
         void onTaskDetailLoaded(GetTaskDetailResult getTaskDetailResult);
-    }
-
-    public interface LocationUpdateListener {
-        void onLocationUpdate(double latitude, double longitude);
     }
 
     public void setMainActivity(MainActivity mainActivity) {

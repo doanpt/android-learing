@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -32,7 +31,6 @@ import com.cnc.hcm.cnctracking.model.ItemPrice;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class WorkDetailServiceFragment extends Fragment implements
-        View.OnClickListener, DialogDetailTaskFragment.TaskDetailLoadedListener,
-        DialogDetailTaskFragment.LocationUpdateListener {
+        View.OnClickListener, DialogDetailTaskFragment.TaskDetailLoadedListener {
 
     private static final String TAG = WorkDetailServiceFragment.class.getSimpleName();
 
@@ -60,8 +57,6 @@ public class WorkDetailServiceFragment extends Fragment implements
     private TextView tv_have_to_pay;
     private TextView tv_detail_work_total_payment;
     private TextView btn_confirm_charge;
-    private double latitude;
-    private double longitude;
     private RecyclerView rv_service;
 
     private OnPayCompletedListener onPayCompletedListener;
@@ -103,7 +98,6 @@ public class WorkDetailServiceFragment extends Fragment implements
         rv_service.setAdapter(mWorkDetailServiceRecyclerViewAdapter);
 
         ((DialogDetailTaskFragment) getParentFragment()).setTaskDetailLoadedListener(this);
-        ((DialogDetailTaskFragment) getParentFragment()).setLocationUpdateListeners(this);
 
         return view;
     }
@@ -206,6 +200,7 @@ public class WorkDetailServiceFragment extends Fragment implements
         } catch (Exception e) {
             Log.e(TAG, "onTaskDetailLoaded(), Exception1: " + e);
         }
+
         try {
             if (getTaskDetailResult.result.recipient != null) {
                 tv_detail_work_contact_name.setText(getTaskDetailResult.result.recipient.getFullname() + "");
@@ -269,22 +264,18 @@ public class WorkDetailServiceFragment extends Fragment implements
     }
 
     private void handleActions(final double targetLatitude, final double targetLongitude) {
+        DialogDetailTaskFragment dialogDetailTaskFragment = (DialogDetailTaskFragment)getParentFragment();
+        final double latitude = dialogDetailTaskFragment.getMainActivity().getLatitude();
+        final double longtitude = dialogDetailTaskFragment.getMainActivity().getLongtitude();
         tv_detail_work_address_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?saddr=" + latitude + "," + longitude
+                        Uri.parse("http://maps.google.com/maps?saddr=" + latitude + "," + longtitude
                                 + "&daddr=" + targetLatitude + "," + targetLongitude));
                 startActivity(intent);
             }
         });
-    }
-
-    @Override
-    public void onLocationUpdate(double latitude, double longitude) {
-        Log.d(TAG, "onLocationUpdate, latitude: " + latitude + ", longitude: " + longitude);
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 
     private void handleActions(final String numPhone) {
