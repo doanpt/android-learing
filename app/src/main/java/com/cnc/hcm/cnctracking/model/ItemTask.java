@@ -8,21 +8,21 @@ import com.cnc.hcm.cnctracking.util.Conts;
 
 public class ItemTask {
 
-    private GetTaskDetailResult.Result taskResult;
+    private GetTaskListResult.Result taskResult;
     private String distanceToMyLocation;
     private String timeGoToMyLocation;
 
-    public ItemTask(GetTaskDetailResult.Result taskResult) {
+    public ItemTask(GetTaskListResult.Result taskResult) {
         this.taskResult = taskResult;
         distanceToMyLocation = "0 km";
         timeGoToMyLocation = Conts.BLANK;
     }
 
-    public GetTaskDetailResult.Result getTaskResult() {
+    public GetTaskListResult.Result getTaskResult() {
         return taskResult;
     }
 
-    public void setTaskResult(GetTaskDetailResult.Result taskResult) {
+    public void setTaskResult(GetTaskListResult.Result taskResult) {
         this.taskResult = taskResult;
     }
 

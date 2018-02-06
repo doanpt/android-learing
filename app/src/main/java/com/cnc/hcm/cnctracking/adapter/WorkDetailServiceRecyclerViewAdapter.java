@@ -57,7 +57,7 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
     }
 
     public void updateServiceList(List<ItemPrice> itemPrices) {
-        if (itemPrices != null && !itemPrices.isEmpty()) {
+        if (itemPrices != null) {
             this.itemPrices = itemPrices;
             notifyDataSetChanged();
         }

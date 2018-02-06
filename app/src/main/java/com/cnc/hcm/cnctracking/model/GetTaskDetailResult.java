@@ -1,8 +1,5 @@
 package com.cnc.hcm.cnctracking.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public final class GetTaskDetailResult {
     public final long statusCode;
     public final String message;
@@ -70,30 +67,20 @@ public final class GetTaskDetailResult {
         }
 
         public static final class Recipient {
-
-            @SerializedName("fullname")
-            @Expose
             private String fullname;
-            @SerializedName("phone")
-            @Expose
             private String phone;
+
+            public Recipient(String fullname, String phone) {
+                this.fullname = fullname;
+                this.phone = phone;
+            }
 
             public String getFullname() {
                 return fullname;
             }
-
-            public void setFullname(String fullname) {
-                this.fullname = fullname;
-            }
-
             public String getPhone() {
                 return phone;
             }
-
-            public void setPhone(String phone) {
-                this.phone = phone;
-            }
-
         }
 
         public static final class Customer {
@@ -151,9 +138,9 @@ public final class GetTaskDetailResult {
             public final Status status;
             public final int discount;
             public final Process.ProcessDetail.Service[] services;
-            public final Process.ProcessDetail.Product[] products;
+            public final Product[] products;
 
-            public Invoice(String modifiedDate, String createdDate, Status status, int discount, Process.ProcessDetail.Service[] services, Process.ProcessDetail.Product[] products) {
+            public Invoice(String modifiedDate, String createdDate, Status status, int discount, Process.ProcessDetail.Service[] services, Product[] products) {
                 this.modifiedDate = modifiedDate;
                 this.createdDate = createdDate;
                 this.status = status;
@@ -161,7 +148,64 @@ public final class GetTaskDetailResult {
                 this.services = services;
                 this.products = products;
             }
+
+            public static final class Product {
+                public final ProductDetail product;
+                public final String _id;
+                public final long quantity;
+
+                public Product(ProductDetail product, String _id, long quantity) {
+                    this.product = product;
+                    this._id = _id;
+                    this.quantity = quantity;
+                }
+
+                public static final class ProductDetail {
+                    public final String _id;
+                    public final String name;
+                    public final Process.Device.Detail.Brand brand;
+                    public final Category category;
+                    public final String photo;
+                    public final long __v;
+                    public final String createdDate;
+                    public final long tax;
+                    public final double price;
+                    public final long quantity;
+
+                    public ProductDetail(String _id, String name, Process.Device.Detail.Brand brand, Category category, String photo, long __v, String createdDate, long tax, double price, long quantity) {
+                        this._id = _id;
+                        this.name = name;
+                        this.brand = brand;
+                        this.category = category;
+                        this.photo = photo;
+                        this.__v = __v;
+                        this.createdDate = createdDate;
+                        this.tax = tax;
+                        this.price = price;
+                        this.quantity = quantity;
+                    }
+
+                    public class Category {
+                        private final String _id;
+                        private final String title;
+                        private final String photo;
+                        private final Integer __v;
+                        private final String createdDate;
+                        private final String description;
+
+                        public Category(String _id, String title, String photo, Integer __v, String createdDate, String description) {
+                            this._id = _id;
+                            this.title = title;
+                            this.photo = photo;
+                            this.__v = __v;
+                            this.createdDate = createdDate;
+                            this.description = description;
+                        }
+                    }
+                }
+            }
         }
+
         public static final class Status {
             public final long _id;
             public final String title;

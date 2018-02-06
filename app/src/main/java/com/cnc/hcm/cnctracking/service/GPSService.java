@@ -33,6 +33,7 @@ import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LocationBackupFile;
@@ -559,7 +560,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             Gson gson = new Gson();
             Log.d(TAGG, "eventNewTask: " + args[0].toString());
             Log.d(TAGG, "eventNewTask");
-            final GetTaskDetailResult.Result result = gson.fromJson(args[0].toString(), GetTaskDetailResult.Result.class);
+            final GetTaskListResult.Result result = gson.fromJson(args[0].toString(), GetTaskListResult.Result.class);
             if (result != null) {
                 arrNewTask.add(new ItemTask(result));
                 addNotification(result._id, result.title, result.service.name);

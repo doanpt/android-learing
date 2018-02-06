@@ -214,9 +214,9 @@ public class WorkDetailServiceFragment extends Fragment implements
                 }
             }
             List<ItemPrice> itemPrices = new ArrayList<>();
-            if (getTaskDetailResult.result.service != null) {
-                itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, getTaskDetailResult.result.service._id, getTaskDetailResult.result.service.name, getTaskDetailResult.result.service.tax, getTaskDetailResult.result.service.price, 1));
-            }
+//            if (getTaskDetailResult.result.service != null) {
+//                itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, getTaskDetailResult.result.service._id, getTaskDetailResult.result.service.name, getTaskDetailResult.result.service.tax, getTaskDetailResult.result.service.price, 1));
+//            }
             if (getTaskDetailResult.result.process != null) {
                 for (int i = 0; i < getTaskDetailResult.result.process.length; i++) {
                     GetTaskDetailResult.Result.Process process = getTaskDetailResult.result.process[i];

@@ -340,7 +340,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
                     arrItemTask.clear();
                     if (getTaskListResult != null) {
-                        GetTaskDetailResult.Result[] result1 = getTaskListResult.result;
+                        GetTaskListResult.Result[] result1 = getTaskListResult.result;
                         if (result1 != null && result1.length > 0) {
                             for (int index = 0; index < result1.length; index++) {
                                 ItemTask itemTask = new ItemTask(result1[index]);
@@ -400,7 +400,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tvQuantityCompleteTask.setText(quantityCompletedTask + Conts.BLANK);
     }
 
-    public void receiverNewTask(GetTaskDetailResult.Result result) {
+    public void receiverNewTask(GetTaskListResult.Result result) {
 
         String currenDate = CommonMethod.formatTimeStandand(Calendar.getInstance().getTime());
 
@@ -439,7 +439,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_done_task);
                     break;
             }
-            GetTaskDetailResult.Result result = task.getTaskResult();
+            GetTaskListResult.Result result = task.getTaskResult();
             if (result.address != null) {
                 if (result.address.location != null) {
                     addMarkerMap(result._id, result.address.location.latitude,
