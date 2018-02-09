@@ -335,4 +335,8 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     public void setYears(int years) {
         this.years = years;
     }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
 }

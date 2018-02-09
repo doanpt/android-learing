@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,7 +93,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
             listTextView[i] = (TextView) view.findViewById(listId[i]);
         }
         calendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
-        Calendar instance = Calendar.getInstance();
+        Calendar instance = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         calendarView.setSelectedDate(instance.getTime());
         calendarView.setOnMonthChangedListener(this);
         calendarView.setOnDateChangedListener(this);

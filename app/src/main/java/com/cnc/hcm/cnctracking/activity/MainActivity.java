@@ -473,7 +473,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case Conts.TYPE_VIEW_BY_MONTH:
                 SettingApp.getInstance(MainActivity.this).setTypeView(Conts.TYPE_VIEW_BY_MONTH);
                 callFragment(new MonthViewFragment());
-                tvToday.setVisibility(View.VISIBLE);
                 tvYear.setVisibility(View.VISIBLE);
                 tvMonth.setClickable(false);
                 tvMonth.setText(CommonMethod.formatTimeToMonth(time));
@@ -484,7 +483,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case Conts.TYPE_VIEW_BY_YEARS:
                 SettingApp.getInstance(MainActivity.this).setTypeView(Conts.TYPE_VIEW_BY_YEARS);
                 callFragment(new YearsViewFragment());
-                tvToday.setVisibility(View.INVISIBLE);
                 tvYear.setVisibility(View.GONE);
                 tvMonth.setText(CommonMethod.formatTimeToYear(time));
                 tvMonth.setClickable(true);
@@ -545,10 +543,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 showPopupMenu(view);
                 break;
             case R.id.tv_today:
-                if (monthViewFragment != null) {
-                    String dateSelected = monthViewFragment.gotoCurrentDate();
-                    String accessToken = UserInfo.getInstance(this).getAccessToken();
-                    tryGetTaskList(accessToken, dateSelected, dateSelected);
+                int typeView = SettingApp.getInstance(MainActivity.this).getTypeView();
+                switch (typeView) {
+                    case Conts.TYPE_VIEW_BY_MONTH:
+                        if (monthViewFragment != null) {
+                            String dateSelected = monthViewFragment.gotoCurrentDate();
+                            String accessToken = UserInfo.getInstance(this).getAccessToken();
+                            tryGetTaskList(accessToken, dateSelected, dateSelected);
+                        }
+                        break;
+                    case Conts.TYPE_VIEW_BY_YEARS:
+                        if (yearsViewFragment != null) {
+                            int month = Calendar.getInstance().get(Calendar.MONTH);
+                            int yeah = Calendar.getInstance().get(Calendar.YEAR);
+                            yearsViewFragment.setMonth(month);
+                            yearsViewFragment.getCountTask(yeah);
+                        }
+                        break;
                 }
                 break;
             case R.id.tv_month_calendar:
