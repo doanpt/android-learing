@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.event.OnResultTimeDistance;
-import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
@@ -65,6 +64,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_doing);
         } else if (idTypeWork == Conts.TYPE_COMPLETE_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_done);
+        } else if (idTypeWork == Conts.TYPE_CANCEL_TASK) {
+            holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_cancel);
         } else if (idTypeWork == Conts.TYPE_NEW_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_new);
         }

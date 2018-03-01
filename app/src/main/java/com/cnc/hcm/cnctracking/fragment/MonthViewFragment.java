@@ -51,14 +51,22 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
     private static final String TAG = MonthViewFragment.class.getSimpleName();
 
     private TextView tvT2, tvT3, tvT4, tvT5, tvT6, tvT7, tvCN;
+    private TextView tvSelectedT2, tvSelectedT3, tvSelectedT4, tvSelectedT5, tvSelectedT6, tvSelectedT7, tvSelectedCN;
     private TextView[] listTextView = {tvT2, tvT3, tvT4, tvT5, tvT6, tvT7, tvCN};
+    private TextView[] listTextViewSelected = {tvSelectedT2, tvSelectedT3, tvSelectedT4, tvSelectedT5, tvSelectedT6, tvSelectedT7, tvSelectedCN};
+
+
     private int[] listId = new int[]{R.id.tv_number_task_thu_2, R.id.tv_number_task_thu_3, R.id.tv_number_task_thu_4,
             R.id.tv_number_task_thu_5, R.id.tv_number_task_thu_6, R.id.tv_number_task_thu_7, R.id.tv_number_task_chu_nhat};
+    private int[] listIdSelected = new int[]{R.id.tv_border_select_t2, R.id.tv_border_select_t3, R.id.tv_border_select_t4,
+            R.id.tv_border_select_t5, R.id.tv_border_select_t6, R.id.tv_border_select_t7, R.id.tv_border_select_cn};
 
     private MaterialCalendarView calendarView;
     private OneDayDecorator oneDayDecorator = new OneDayDecorator();
     private MainActivity mainActivity;
     private List<String> arrAllDate = new ArrayList<>();
+    private List<String> listWeek = new ArrayList<>();
+
 
     public MonthViewFragment() {
     }
@@ -91,6 +99,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
     private void initViews(View view) {
         for (int i = 0; i < listTextView.length; i++) {
             listTextView[i] = (TextView) view.findViewById(listId[i]);
+            listTextViewSelected[i] = (TextView) view.findViewById(listIdSelected[i]);
         }
         calendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
         Calendar instance = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
@@ -114,8 +123,24 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
                 oneDayDecorator
         );
 
+        int currentDate = instance.get(Calendar.DATE);
+        setBorderDateSelected(currentDate);
+
         Animation animationIn = AnimationUtils.loadAnimation(getContext(), R.anim.anim_move_up_in);
         view.startAnimation(animationIn);
+    }
+
+    private void setBorderDateSelected(int currentDate) {
+        for (int index = 0; index < listWeek.size(); index++) {
+            String time = listWeek.get(index).toString();
+            Date dateTemp = CommonMethod.formatTimeFromServerToDate(time);
+            int dateIndex = dateTemp.getDate();
+            if (dateIndex == currentDate) {
+                listTextViewSelected[index].setVisibility(View.VISIBLE);
+            } else {
+                listTextViewSelected[index].setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
 
@@ -124,6 +149,8 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         oneDayDecorator.setDate(instance.getTime());
         calendarView.invalidateDecorators();
         String dateSelected = CommonMethod.formatFullTimeToString(instance.getTime());
+        int currentDay = instance.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+        setBorderDateSelected(currentDay);
         return dateSelected;
     }
 
@@ -133,15 +160,19 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
             mainActivity.updateMonthChange(date);
             mainActivity.showProgressLoadding();
         }
+
+        for (int i = 0; i < listTextViewSelected.length; i++) {
+            listTextViewSelected[i].setVisibility(View.INVISIBLE);
+        }
+
         String dateOfWeek = CommonMethod.formatFullTimeToString(date.getDate());
         Log.d(TAG, "DateOfWeek: -------------------- " + dateOfWeek);
-        List<String> listWeek = null;
         arrAllDate.clear();
         arrAllDate.addAll(getAllDateInYear());
         Log.d(TAG, "AllDate: " + arrAllDate.size());
+        listWeek.clear();
         for (int i = 0; i < arrAllDate.size(); i++) {
             if (arrAllDate.get(i).toString().equals(dateOfWeek)) {
-                listWeek = new ArrayList<>();
                 for (int j = 0; j < 7; j++) {
                     listWeek.add(arrAllDate.get(i + j));
                     Log.d(TAG, "DateOfWeek: " + arrAllDate.get(i + j).toString());
@@ -228,6 +259,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         if (mainActivity != null) {
             mainActivity.tryGetTaskList(accessToken, dateSelected, dateSelected);
         }
+        setBorderDateSelected(date.getDay());
 
     }
 

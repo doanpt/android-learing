@@ -433,11 +433,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             BitmapDescriptor bitmapDescriptor = null;
             switch ((int) task.getTaskResult().status._id) {
                 case Conts.TYPE_DOING_TASK:
-                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_doing_task);
+                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_doing);
                     break;
                 case Conts.TYPE_COMPLETE_TASK:
-                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_done_task);
+                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_done);
                     break;
+                case Conts.TYPE_CANCEL_TASK:
+                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_cancel);
+                    break;
+                case Conts.TYPE_NEW_TASK:
+                    bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_new);
+                    break;
+
             }
             GetTaskListResult.Result result = task.getTaskResult();
             if (result.address != null) {

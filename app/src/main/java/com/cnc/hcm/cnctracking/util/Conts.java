@@ -62,17 +62,10 @@ public class Conts {
 
 
     public static final String KEY_AUTHORIZATION = "Authorization";
-    public static final String VALUE_AUTHORIZATION = "Basic ZGVtbzI6MTIzNDU2";
-
-    public static final String KEY_CONTENT_TYPE = "Content-Type";
-    public static final String VALUE_CONTENT_TYPE = "application/json";
-
-
     public static final String KEY_CUSTOMER_ID = "customerId";
-
     public static final String KEY_DEVICE_ID = "deviceId";
-
     public static final String KEY_ACCESS_TOKEN = "accessToken";
+
     public static final String ACTION_NETWORK_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
 
     public static final String FILE_LOCATION_NO_NETWORK = "NoNetwork.txt";
@@ -83,17 +76,15 @@ public class Conts {
     public static final int TYPE_NEW_TASK = 0;
     public static final int TYPE_DOING_TASK = 1;
     public static final int TYPE_COMPLETE_TASK = 2;
-    public static final int TYPE_ALL_TASK = 3;
+    public static final int TYPE_ALL_TASK = 99;
+    public static final int TYPE_CANCEL_TASK = 3;
+
 
     public static final int TYPE_VIEW_BY_MONTH = 0;
     public static final int TYPE_VIEW_BY_YEARS = 1;
 
 
-    public static final String KEY_OBJECT_ITEM_WORK = "KEY_OBJECT_ITEM_WORK";
     public static final String KEY_ID_TASK = "KEY_ID_TASK";
-    public static final String KEY_TYPE_CHECK_PRODUCT = "KEY_TYPE_CHECK_PRODUCT";
-    public static final String KEY_NEW_PRODUCT = "KEY_NEW_PRODUCT";
-    public static final String KEY_OLD_PRODUCT = "KEY_OLD_PRODUCT";
     public static final String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
     public static final String FORMAT_DATE_FULL = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String FORMAT_TIME_FULL = "T00:00:00Z";
