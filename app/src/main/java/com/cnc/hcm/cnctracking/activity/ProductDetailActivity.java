@@ -26,6 +26,7 @@ import com.cnc.hcm.cnctracking.adapter.ServiceProcessAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
+import com.cnc.hcm.cnctracking.dialog.DialogInfor;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
 import com.cnc.hcm.cnctracking.model.GetProductDetailResult;
 import com.cnc.hcm.cnctracking.model.Services;
@@ -38,6 +39,7 @@ import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,8 +66,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private LinearLayout llViewControl;
     private FrameLayout flBlurView;
     private FloatingActionsMenu fabMenu;
-    private TextView tvCompleteWork;
-    private TextView tvName, tvLocation, tvHour, tvProductID;
+    private TextView tvCompleteWork, tvDeviceCode, tvDeviceName, tvName, tvLocation, tvHour, tvProductID, llCompleteWork;
     private FloatingActionButton fabNote, fabProduct, fabStep1, fabStep2, fabStep3;
     private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
@@ -78,12 +79,13 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private ServiceProcessAdapter serviceAdapter;
     private RecyclerView initRecycler, processRecycler, finishRecycler, listServiceRecycler, listProductRecycler;
     private String accessToken, deviceID, idTask, workName, address, timeWork;
-    private LinearLayout llComplete;
+    //    private LinearLayout llComplete;
     private TextView tvStartDate, tvEndDate, tvTotalTime;
-    private ImageView imvBack;
+    private ImageView imvBack, imgDevice;
     private ArrayList<SubmitProcessParam.Service> arrPushProcess2Service;
     private ArrayList<SubmitProcessParam.Product> arrPushProcess2Product;
     private boolean isNewProduct = false;
+    private DialogInfor dialogInfor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +155,15 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         tvName.setText(workName);
         tvLocation.setText(address);
         tvHour.setText(timeWork);
+        tvDeviceCode.setText(body.getResult().getDevice().getId());
+        tvDeviceName.setText(body.getResult().getDevice().getDetail().getName());
+        String path;
+        if (body.getResult().getDevice().getDetail().getPhoto() == null) {
+            path = body.getResult().getDevice().getDetail().getBrand().getPhoto().toString();
+        } else {
+            path = body.getResult().getDevice().getDetail().getPhoto().toString();
+        }
+        Picasso.with(ProductDetailActivity.this).load(Conts.URL_BASE + path).placeholder(R.drawable.errror_image).error(R.drawable.errror_image).into(imgDevice);
         arrInit.clear();
         arrProcess.clear();
         arrFinish.clear();
@@ -164,7 +175,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         arrTrading.addAll(body.getResult().getProcess().getProducts());
         arrFinish.addAll(body.getResult().getAfter().getPhotos());
         if (body.getResult().getStatus().getId() == 3) {
-            llComplete.setVisibility(View.VISIBLE);
+            llCompleteWork.setVisibility(View.VISIBLE);
+            fabMenu.setVisibility(View.GONE);
+//            llComplete.setVisibility(View.VISIBLE);
         }
         initAdapter.notifyDataSetChanged();
         processAdapter.notifyDataSetChanged();
@@ -185,6 +198,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         Log.d("doan.pt", accessToken + " " + deviceID + " " + idTask + " detail-getextra");
         dialogGPSSetting = new DialogGPSSetting(this);
         dialogNetworkSetting = new DialogNetworkSetting(this);
+        dialogInfor = new DialogInfor(this);
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -208,9 +222,14 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     //11/01/2017 ADD by HoangIT END
 
     private void initViews() {
-        tvCompleteWork = (TextView) findViewById(R.id.tv_complete_work);
+        tvCompleteWork = (TextView) findViewById(R.id.tv_complete_work_float_button);
+        llCompleteWork = findViewById(R.id.tv_work_complete);
+        tvDeviceName = findViewById(R.id.tv_device_name);
+        tvDeviceCode = findViewById(R.id.tv_device_code);
+        imgDevice = findViewById(R.id.img_device_image);
         tvCompleteWork.setOnClickListener(this);
         llViewControl = (LinearLayout) findViewById(R.id.view_control);
+
         flBlurView = (FrameLayout) findViewById(R.id.blurView);
         fabMenu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
         fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
@@ -227,7 +246,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             }
         });
 
-        llComplete = (LinearLayout) findViewById(R.id.ll_complete_task);
+//        llComplete = (LinearLayout) findViewById(R.id.ll_complete_task);
         tvStartDate = findViewById(R.id.tv_start_date);
         tvEndDate = findViewById(R.id.tv_end_date);
         tvTotalTime = findViewById(R.id.tv_total_time);
@@ -303,7 +322,31 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_complete_work:
+            case R.id.tv_complete_work_float_button:
+                if (arrPushProcess2Service.size() == 0) {
+                    dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
+                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform));
+                    showInforDialog();
+                    return;
+                }
+                if (arrInit.size() == 0) {
+                    dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
+                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform));
+                    showInforDialog();
+                    return;
+                }
+                if (arrProcess.size() == 0) {
+                    dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
+                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform3));
+                    showInforDialog();
+                    return;
+                }
+                if (arrFinish.size() == 0) {
+                    dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
+                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform4));
+                    showInforDialog();
+                    return;
+                }
                 completeWork();
                 closeFabMenu();
                 break;
@@ -311,6 +354,12 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 //                closeFabMenu();
 //                break;
             case R.id.fab_add_product:
+                if (arrInit.size() == 0) {
+                    dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
+                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform));
+                    showInforDialog();
+                    return;
+                }
                 //TODO add product
 //                CommonMethod.makeToast(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!");
                 Intent intent = new Intent(this, ListProductAndServiceActivity.class);
@@ -322,10 +371,22 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 closeFabMenu();
                 break;
             case R.id.fab_step_two:
+                if (arrInit.size() == 0) {
+                    dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
+                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform));
+                    showInforDialog();
+                    return;
+                }
                 takePicture(KEY_STEP_TWO);
                 closeFabMenu();
                 break;
             case R.id.fab_step_three:
+                if (arrInit.size() == 0 || arrProcess.size() == 0) {
+                    dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
+                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform2));
+                    showInforDialog();
+                    return;
+                }
                 takePicture(KEY_STEP_THREE);
                 closeFabMenu();
                 break;
@@ -346,7 +407,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 Log.d(TAGG, "completeWork.onResponse, status: " + status);
                 if (status == Conts.RESPONSE_STATUS_OK) {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Complete OK!!!");
-                    llComplete.setVisibility(View.VISIBLE);
+//                    llComplete.setVisibility(View.VISIBLE);
+                    fabMenu.setVisibility(View.GONE);
+                    tvCompleteWork.setVisibility(View.VISIBLE);
                 } else {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Complete error!!!");
                 }
@@ -621,6 +684,12 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private void dismisDialogGPSSetting() {
         if (dialogGPSSetting != null && dialogGPSSetting.isShowing() && !ProductDetailActivity.this.isDestroyed()) {
             dialogGPSSetting.dismiss();
+        }
+    }
+
+    private void showInforDialog() {
+        if (dialogInfor != null) {
+            dialogInfor.show();
         }
     }
 

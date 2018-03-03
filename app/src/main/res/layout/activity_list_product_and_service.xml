@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,71 +8,192 @@
     tools:context="com.cnc.hcm.cnctracking.activity.ListProductAndServiceActivity">
 
     <LinearLayout
+        android:id="@+id/ll_search_invisible"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-        <ImageView
-            android:id="@+id/imv_back"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="?android:selectableItemBackground"
-            android:padding="10dp"
-            android:src="@drawable/ic_back_while"/>
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="5dp">
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
 
-
-            <EditText
-                android:id="@+id/edt_search"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/imv_back"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/border_edt_search"
-                android:hint="@string/type_search"
-                android:lines="1"
-                android:paddingLeft="10dp"
-                android:paddingRight="30dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:background="?android:selectableItemBackground"
+                android:padding="10dp"
+                android:src="@drawable/ic_back_while" />
 
             <TextView
-                android:id="@+id/tv_clear_text_search"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:text="X"
-                android:textColor="@android:color/darker_gray"/>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="Sản phẩm và dịch vụ"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        </RelativeLayout>
+            <ImageView
+                android:id="@+id/img_search"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:padding="8dp"
+                android:src="@drawable/ic_search" />
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:padding="5dp">-->
+
+
+            <!--<EditText-->
+            <!--android:id="@+id/edt_search"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/border_edt_search"-->
+            <!--android:hint="@string/type_search"-->
+            <!--android:lines="1"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="30dp"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"/>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/tv_clear_text_search"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:gravity="center"-->
+            <!--android:text="X"-->
+            <!--android:textColor="@android:color/darker_gray"/>-->
+
+            <!--</RelativeLayout>-->
+        </LinearLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TextView"
+            app:tabTextColor="@android:color/darker_gray">
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/text_product" />
+
+            <android.support.design.widget.TabItem
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/text_service" />
+        </android.support.design.widget.TabLayout>
     </LinearLayout>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabLayout"
+    <LinearLayout
+        android:id="@+id/ll_search_visible"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:tabIndicatorColor="@android:color/white"
-        app:tabIndicatorHeight="2dp"
-        app:tabSelectedTextColor="@android:color/white"
-        app:tabTextAppearance="@android:style/TextAppearance.Widget.TextView"
-        app:tabTextColor="@android:color/darker_gray">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/text_product"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <android.support.design.widget.TabItem
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="?android:selectableItemBackground"
+                android:padding="10dp"
+                android:src="@drawable/ic_back_while" />
 
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/text_service"/>
-    </android.support.design.widget.TabLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp">
+
+
+                <EditText
+                    android:id="@+id/edt_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_edt_search"
+                    android:hint="@string/type_search"
+                    android:lines="1"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="30dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/tv_clear_text_search"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="X"
+                    android:textColor="@android:color/darker_gray" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:text="Loại sản phẩm"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/spn_product_type"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"></Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:text="Nhà sản xuất"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/spn_manufacture"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"></Spinner>
+        </LinearLayout>
+    </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"

@@ -165,7 +165,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             }
         });
 
-        tvComplete = (TextView) view.findViewById(R.id.tv_complete_work);
+        tvComplete = (TextView) view.findViewById(R.id.tv_complete_work_float_button);
         tvComplete.setOnClickListener(this);
 
         fabAddProduct = (FloatingActionButton) view.findViewById(R.id.fab_add_product);
@@ -349,7 +349,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 }
 
                 break;
-            case R.id.tv_complete_work:
+            case R.id.tv_complete_work_float_button:
                 handleCompleteWordAction();
                 break;
             case R.id.fab_add_product:
