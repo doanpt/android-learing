@@ -10,15 +10,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.event.RecyclerViewItemClickListener;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<WorkDetailDeviceRecyclerViewAdapter.ViewHolder> {
 
@@ -51,7 +54,8 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         try {
             holder.tv_title.setText(process.device.detail.name + "");
             holder.tv_status.setText("Hoàn thành bước " + process.status._id);
-
+//            String iconPath = ""; // TODO Confirm with backend team
+//            Picasso.with(mContext).load(Conts.URL_BASE + iconPath).into(holder.iv_icon);
             if (TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.user._id)) {
                 holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.step_1_complete : (process.status._id == 2 ? R.drawable.step_2_complete : R.drawable.step_3_complete));
                 holder.item_product.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +72,11 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
                         Log.e(TAG, "You can't process this device. Owner of this device is " + process.user.fullname);
                     }
                 });
+                Log.e(TAG, "Photo: " + process.user.photo);
+                if (!TextUtils.isEmpty(process.user.photo)) {
+                    Picasso.with(mContext).load(Conts.URL_BASE + process.user.photo).into(holder.iv_user_added_device);
+                }
             }
-
         } catch (Exception e) {
             Log.e(TAG, "onBindViewHolder()", e);
         }
@@ -93,7 +100,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         private ImageView iv_icon;
         private ImageView iv_status;
 //        private ImageView iv_history;
-//        private ImageView iv_fix;
+        private CircleImageView iv_user_added_device;
         private TextView tv_title;
         private TextView tv_status;
 
@@ -103,7 +110,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
             iv_icon = itemView.findViewById(R.id.iv_icon);
             iv_status = itemView.findViewById(R.id.iv_status);
 //            iv_history = itemView.findViewById(R.id.iv_history);
-//            iv_fix = itemView.findViewById(R.id.iv_fix);
+            iv_user_added_device = itemView.findViewById(R.id.iv_user_added_device);
             tv_title = itemView.findViewById(R.id.tv_title);
             tv_status = itemView.findViewById(R.id.tv_status);
         }

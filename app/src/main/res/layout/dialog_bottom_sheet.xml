@@ -287,4 +287,18 @@
             android:text="@string/text_complete_ticket"
             android:textColor="@android:color/white"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_completed_ticket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        android:text="Đã hoàn thành ticket"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:padding="16dp"/>
 </RelativeLayout>

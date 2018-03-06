@@ -65,13 +65,12 @@
             <!--android:layout_toLeftOf="@+id/iv_fix"-->
             <!--android:src="@drawable/ic_payment_disable" />-->
 
-        <!--<ImageView-->
-            <!--android:id="@+id/iv_fix"-->
-            <!--android:layout_width="24dp"-->
-            <!--android:layout_height="24dp"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:src="@drawable/ic_settings_product" />-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_user_added_device"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 
     <FrameLayout

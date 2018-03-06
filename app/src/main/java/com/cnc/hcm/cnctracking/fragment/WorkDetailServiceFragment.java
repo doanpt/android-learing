@@ -59,7 +59,7 @@ public class WorkDetailServiceFragment extends Fragment implements
     private TextView btn_confirm_charge;
     private RecyclerView rv_service;
 
-    private OnPayCompletedListener onPayCompletedListener;
+//    private OnPayCompletedListener onPayCompletedListener;
 
     private WorkDetailServiceRecyclerViewAdapter mWorkDetailServiceRecyclerViewAdapter;
 
@@ -153,9 +153,9 @@ public class WorkDetailServiceFragment extends Fragment implements
                                 btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
                                 btn_confirm_charge.setText("Đã thanh toán");
 
-                                if (onPayCompletedListener != null) {
-                                    onPayCompletedListener.onPayCompleted();
-                                }
+//                                if (onPayCompletedListener != null) {
+//                                    onPayCompletedListener.onPayCompleted();
+//                                }
                             } else {
                                 CommonMethod.makeToast(getActivity(), "Chưa hoàn thành dịch vụ");
                             }
@@ -181,9 +181,9 @@ public class WorkDetailServiceFragment extends Fragment implements
                 btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
                 btn_confirm_charge.setText("Đã thanh toán");
 
-                if (onPayCompletedListener != null) {
-                    onPayCompletedListener.onPayCompleted();
-                }
+//                if (onPayCompletedListener != null) {
+//                    onPayCompletedListener.onPayCompleted();
+//                }
             }
         } catch (Exception e) {
             Log.e(TAG, "onTaskDetailLoaded(), Exception1: " + e);
@@ -247,7 +247,7 @@ public class WorkDetailServiceFragment extends Fragment implements
             for (ItemPrice itemPrice : itemPrices) {
                 if (itemPrice != null) {
                     totalValue += itemPrice.getPrice() * itemPrice.getQuantity();
-                    totalTax += totalValue * itemPrice.getTax() / 100;
+                    totalTax += itemPrice.getPrice() * itemPrice.getQuantity() * itemPrice.getTax() / 100;
                 }
             }
 
@@ -300,11 +300,11 @@ public class WorkDetailServiceFragment extends Fragment implements
         });
     }
 
-    public interface OnPayCompletedListener {
-        void onPayCompleted();
-    }
-
-    public void setOnPayCompletedListener(OnPayCompletedListener onPayCompletedListener) {
-        this.onPayCompletedListener = onPayCompletedListener;
-    }
+//    public interface OnPayCompletedListener {
+//        void onPayCompleted();
+//    }
+//
+//    public void setOnPayCompletedListener(OnPayCompletedListener onPayCompletedListener) {
+//        this.onPayCompletedListener = onPayCompletedListener;
+//    }
 }
