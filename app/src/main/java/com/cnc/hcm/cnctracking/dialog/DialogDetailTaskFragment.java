@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.AddProductActivity;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
+import com.cnc.hcm.cnctracking.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailPageAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
@@ -84,6 +85,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     private TextView tv_title_item_work, tv_address_item_work, tv_time_item_work;
 
     private List<TaskDetailLoadedListener> mTaskDetailLoadedListener = new ArrayList<>();
+    private TextView tv_completed_ticket;
 
     public void setTaskDetailLoadedListener(TaskDetailLoadedListener taskDetailLoadedListener) {
         mTaskDetailLoadedListener.add(taskDetailLoadedListener);
@@ -147,6 +149,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         llFindWay = (LinearLayout) view.findViewById(R.id.ll_find_way);
         llFindWay.setOnClickListener(this);
 
+        tv_completed_ticket = view.findViewById(R.id.tv_completed_ticket);
+
         // Float action button
         llViewControl = (LinearLayout) view.findViewById(R.id.view_control);
         flBlurView = (FrameLayout) view.findViewById(R.id.blurView);
@@ -181,14 +185,14 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         viewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mWorkDetailPageAdapter = new WorkDetailPageAdapter(getChildFragmentManager());
         WorkDetailServiceFragment workDetailServiceFragment = new WorkDetailServiceFragment();
-        workDetailServiceFragment.setOnPayCompletedListener(new WorkDetailServiceFragment.OnPayCompletedListener() {
-            @Override
-            public void onPayCompleted() {
-                if (fabMenu != null) {
-                    fabMenu.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+//        workDetailServiceFragment.setOnPayCompletedListener(new WorkDetailServiceFragment.OnPayCompletedListener() {
+//            @Override
+//            public void onPayCompleted() {
+//                if (fabMenu != null) {
+//                    fabMenu.setVisibility(View.GONE);
+//                }
+//            }
+//        });
         mWorkDetailPageAdapter.addFragment(workDetailServiceFragment);
         mWorkDetailPageAdapter.addFragment(new WorkDetailDeviceFragment());
         viewPager.setAdapter(mWorkDetailPageAdapter);
@@ -248,6 +252,14 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 if (getTaskDetailResult.result.customer != null) {
                     customerId = getTaskDetailResult.result.customer._id;
                 }
+
+                try {
+                    fabMenu.setVisibility(getTaskDetailResult.result.status._id != 2 ? View.GONE : View.VISIBLE);
+                    tv_completed_ticket.setVisibility(getTaskDetailResult.result.status._id != 2 ? View.VISIBLE : View.GONE);
+                } catch (Exception e) {
+                    Log.e(TAG, "onTaskInfoLoaded() --> Exception occurs.", e);
+                }
+
                 for (TaskDetailLoadedListener taskDetailLoadedListener : mTaskDetailLoadedListener) {
                     if (taskDetailLoadedListener != null) {
                         taskDetailLoadedListener.onTaskDetailLoaded(getTaskDetailResult);
@@ -375,10 +387,14 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         boolean isComplete = true;
         try {
             GetTaskDetailResult.Result.Process[] process = getTaskDetailResult.result.process;
-            for (int i = 0; i < process.length; i++) {
-                if (process[i].status._id < 3) {
-                    isComplete = false;
-                    break;
+            if (process == null || process.length < 1) {
+                isComplete = false;
+            } else {
+                for (int i = 0; i < process.length; i++) {
+                    if (process[i].status._id < 3) {
+                        isComplete = false;
+                        break;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -388,7 +404,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             finishTicket();
         }
 
-        CommonMethod.makeToast(getActivity(), isComplete ? "Đã hoàn thành ticket" : "Tồn tại thiết bị chưa được sửa xong");
+        CommonMethod.makeToast(getActivity(), isComplete ? "Đã hoàn thành ticket" : "Không tìm thấy thiết bị bảo trì hoặc tồn tại thiết bị chưa được bảo trì xong");
         fabMenu.collapse();
     }
 
@@ -404,6 +420,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                         CompleteTicketResponse completeTicketResponse = response.body();
                         if (completeTicketResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
                             CommonMethod.makeToast(getActivity(), "Xử lý hoàn thành ticket thành công");
+                            fabMenu.setVisibility(View.GONE);
+                            tv_completed_ticket.setVisibility(View.VISIBLE);
                         } else {
                             CommonMethod.makeToast(getActivity(), "Bạn chưa hoàn thành dịch vụ");
                         }
@@ -430,7 +448,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                     GetTaskDetailResult.Result.Process[] processes = getTaskDetailResult.result.process;
                     for (int i = 0; i < processes.length; i++) {
                         if (TextUtils.equals(content, processes[i].device._id)) {
-                            showDialogDeviceExisted();
+                            showDialogDeviceExisted(content);
                             return;
                         }
                     }
@@ -489,15 +507,34 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         });
     }
 
-    private void showDialogDeviceExisted() {
+    private void showDialogDeviceExisted(final String deviceId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Thiết bị đã có sẵn trong đơn hàng.");
+        builder.setMessage("Thiết bị đã có sẵn trong đơn hàng. Đi tới chi tiết quá trình sửa chữa");
         builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                showProductDetailActivity(deviceId);
             }
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void showProductDetailActivity(String deviceId) {
+        Intent productDetail = new Intent(getMainActivity(), ProductDetailActivity.class);
+        productDetail.putExtra(Conts.KEY_PRODUCT_ID, deviceId);
+        productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken());
+        productDetail.putExtra(Conts.KEY_ID_TASK, idTask);
+        productDetail.putExtra(Conts.KEY_WORK_NAME, ""); // TODO get this information
+        productDetail.putExtra(Conts.KEY_WORK_LOCATION, "");
+        productDetail.putExtra(Conts.KEY_WORK_TIME, "");
+        startActivity(productDetail);
     }
 
     private void showDialogAddDevice(final String deviceId) {
