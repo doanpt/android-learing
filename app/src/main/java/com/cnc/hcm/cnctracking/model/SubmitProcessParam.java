@@ -89,6 +89,9 @@ public class SubmitProcessParam {
         @SerializedName("services")
         @Expose
         private List<Service> services = new ArrayList<>();
+        @SerializedName("note")
+        @Expose
+        private String note;
 
         public List<String> getPhotos() {
             return photos;
@@ -114,6 +117,13 @@ public class SubmitProcessParam {
             this.services = services;
         }
 
+        public String getNote() {
+            return note;
+        }
+
+        public void setNote(String note) {
+            this.note = note;
+        }
     }
 
     public static class Product {

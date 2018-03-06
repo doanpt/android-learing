@@ -63,10 +63,11 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private static final int KEY_RESULT_FROM_LIST_SERVICE_ACTIVITY = 1000;
     private static final int KEY_PROCESS_SERVICE = 4;
     private static final int KEY_PROCESS_PRODUCT = 5;
+    private static final int KEY_ADD_NOTE = 6;
     private LinearLayout llViewControl;
     private FrameLayout flBlurView;
     private FloatingActionsMenu fabMenu;
-    private TextView tvCompleteWork, tvDeviceCode, tvDeviceName, tvName, tvLocation, tvHour, tvProductID, llCompleteWork;
+    private TextView tvCompleteWork, tvDeviceCode, tvDeviceName, tvName, tvLocation, tvHour, tvProductID, llCompleteWork, tvNoteWork;
     private FloatingActionButton fabNote, fabProduct, fabStep1, fabStep2, fabStep3;
     private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
@@ -86,6 +87,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private ArrayList<SubmitProcessParam.Product> arrPushProcess2Product;
     private boolean isNewProduct = false;
     private DialogInfor dialogInfor;
+    private String note = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +175,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         arrProcess.addAll(body.getResult().getProcess().getPhotos());
         arrService.addAll(body.getResult().getProcess().getServices());
         arrTrading.addAll(body.getResult().getProcess().getProducts());
+        note = body.getResult().getProcess().getNote();
         arrFinish.addAll(body.getResult().getAfter().getPhotos());
         if (body.getResult().getStatus().getId() == 3) {
             llCompleteWork.setVisibility(View.VISIBLE);
@@ -227,6 +230,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         tvDeviceName = findViewById(R.id.tv_device_name);
         tvDeviceCode = findViewById(R.id.tv_device_code);
         imgDevice = findViewById(R.id.img_device_image);
+        tvNoteWork = findViewById(R.id.tv_detail_work_note);
         tvCompleteWork.setOnClickListener(this);
         llViewControl = (LinearLayout) findViewById(R.id.view_control);
 
@@ -250,7 +254,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         tvStartDate = findViewById(R.id.tv_start_date);
         tvEndDate = findViewById(R.id.tv_end_date);
         tvTotalTime = findViewById(R.id.tv_total_time);
-//        fabNote = (FloatingActionButton) findViewById(R.id.fab_note);
+        fabNote = (FloatingActionButton) findViewById(R.id.fab_note);
         fabProduct = (FloatingActionButton) findViewById(R.id.fab_add_product);
         fabStep1 = (FloatingActionButton) findViewById(R.id.fab_step_one);
         fabStep2 = (FloatingActionButton) findViewById(R.id.fab_step_two);
@@ -300,7 +304,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         listProductRecycler.setAdapter(productAdapter);
         listServiceRecycler.setAdapter(serviceAdapter);
 
-//        fabNote.setOnClickListener(this);
+        fabNote.setOnClickListener(this);
         fabProduct.setOnClickListener(this);
         fabStep1.setOnClickListener(this);
         fabStep2.setOnClickListener(this);
@@ -350,9 +354,18 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 completeWork();
                 closeFabMenu();
                 break;
-//            case R.id.fab_note:
-//                closeFabMenu();
-//                break;
+            case R.id.fab_note:
+                if (arrInit.size() == 0) {
+                    dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
+                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform));
+                    showInforDialog();
+                    return;
+                }
+                Intent intentNote = new Intent(ProductDetailActivity.this, AddNoteActivity.class);
+                intentNote.putExtra(Conts.KEY_CURRENT_NOTE,note);
+                startActivityForResult(intentNote, KEY_ADD_NOTE);
+                closeFabMenu();
+                break;
             case R.id.fab_add_product:
                 if (arrInit.size() == 0) {
                     dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
@@ -441,6 +454,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             case KEY_STEP_THREE:
                 checkResultSteps(requestCode, resultCode, data);
                 break;
+            case KEY_ADD_NOTE:
+                checkDataFromNoteActivity(resultCode, data);
+                break;
             case KEY_RESULT_FROM_LIST_SERVICE_ACTIVITY:
                 if (resultCode != RESULT_OK) {
                     return;
@@ -470,6 +486,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     param.getProcess().setServices(arrPushProcess2Service);
                     param.getProcess().setProducts(arrPushProcess2Product);
                     param.getProcess().setPhotos(arrProcess);
+                    param.getProcess().setNote(note);
                     uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_PRODUCT, resultTradding, null);
                 } else if (type.equals(Conts.KEY_SERVICE)) {
                     getAllProcess2();
@@ -488,11 +505,31 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     param.getProcess().setServices(arrPushProcess2Service);
                     param.getProcess().setProducts(arrPushProcess2Product);
                     param.getProcess().setPhotos(arrProcess);
+                    param.getProcess().setNote(note);
                     uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_SERVICE, null, resultService);
                 }
                 break;
         }
 
+    }
+
+    private void checkDataFromNoteActivity(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            List<MHead> arrNewHeads = new ArrayList<>();
+            arrNewHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+            arrNewHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceID));
+            SubmitProcessParam param = new SubmitProcessParam();
+            String note = data.getStringExtra(Conts.KEY_RESULT_ADD_NOTE);
+            getAllProcess2();
+            param.setProcess(new SubmitProcessParam.Process());
+            param.getProcess().setServices(arrPushProcess2Service);
+            param.getProcess().setProducts(arrPushProcess2Product);
+            param.getProcess().setPhotos(arrProcess);
+            param.getProcess().setNote(note);
+            uploadProcess(arrNewHeads, idTask, param, KEY_ADD_NOTE, null, null);
+        } else if (resultCode == RESULT_CANCELED) {
+            //Don't nothing
+        }
     }
 
     private void getAllProcess2() {
@@ -550,6 +587,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                             param.setProcess(new SubmitProcessParam.Process());
                             param.getProcess().setServices(arrPushProcess2Service);
                             param.getProcess().setProducts(arrPushProcess2Product);
+                            param.getProcess().setNote(note);
                             param.getProcess().setPhotos(arrImage);
                         } else if (requestCode == KEY_STEP_THREE) {
                             arrImage.addAll(arrFinish);
@@ -605,6 +643,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                             }
                         }
                         productAdapter.notifyDataSetChanged();
+                    } else if (requestCode == KEY_ADD_NOTE) {
+                        note = param.getProcess().getNote();
+                        tvNoteWork.setText(note);
                     }
                     visiableRecycler();
                     CommonMethod.makeToast(ProductDetailActivity.this, "Update Step OK!!!");
@@ -631,10 +672,10 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
         OutputStream outStream = null;
         // String temp = null;
-        File file = new File(extStorageDirectory, name + ".png");
+        File file = new File(extStorageDirectory, "/CoolBackup/" + name + ".png");
         if (file.exists()) {
             file.delete();
-            file = new File(extStorageDirectory, name + ".png");
+            file = new File(extStorageDirectory, "/CoolBackup/" + name + ".png");
 
         }
 

@@ -285,7 +285,32 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="#1A000000" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Ghi chú"
+                                android:textColor="#33000000" />
+
+                            <TextView
+                                android:id="@+id/tv_detail_work_note"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:maxLines="2"
+                                android:text="Máy lạnh không hoạt đông, dộng cơ bị hỏng Máy lạnh không hoạt đông, dộng cơ bị hỏng Máy lạnh không hoạt đông, dộng cơ bị hỏng" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#1A000000" />
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -476,14 +501,14 @@
             app:fab_addButtonColorNormal="@color/colorPrimary"
             app:fab_labelStyle="@style/menu_labels_style">
 
-            <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
-            <!--android:id="@+id/fab_note"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:fab_colorNormal="@color/colorPrimary"-->
-            <!--app:fab_icon="@drawable/ic_brush"-->
-            <!--app:fab_size="mini"-->
-            <!--app:fab_title="Ghi chú" />-->
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/colorPrimary"
+                app:fab_icon="@drawable/ic_brush"
+                app:fab_size="mini"
+                app:fab_title="Ghi chú" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_product"

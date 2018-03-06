@@ -55,6 +55,9 @@ public class GetProductDetailResult {
         @SerializedName("photos")
         @Expose
         private List<String> photos = null;
+        @SerializedName("note")
+        @Expose
+        private String note = "";
 
         public List<Services.Result> getServices() {
             return services;
@@ -80,6 +83,13 @@ public class GetProductDetailResult {
             this.photos = photos;
         }
 
+        public String getNote() {
+            return note;
+        }
+
+        public void setNote(String note) {
+            this.note = note;
+        }
     }
 
     public class Result {

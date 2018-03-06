@@ -103,4 +103,6 @@ public class Conts {
     public static final String KEY_SERVICE = "KEY_SERVICE";
     public static final String KEY_PRODUCT = "KEY_PRODUCT";
     public static final String KEY_CHECK_TYPE_RESULT = "KEY_SERVICE";
+    public static final String KEY_RESULT_ADD_NOTE = "KEY_RESULT_ADD_NOTE";
+    public static final String KEY_CURRENT_NOTE = "KEY_CURRENT_NOTE";
 }
