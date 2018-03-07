@@ -188,7 +188,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         @Override
         public void onClick(View view) {
             if (onItemWorkClickListener != null) {
-                onItemWorkClickListener.onClickItemWork(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (arrTask.get(position).getTaskResult().status._id != Conts.TYPE_CANCEL_TASK) {
+                    onItemWorkClickListener.onClickItemWork(position);
+                } else {
+                    onItemWorkClickListener.onClickItemWork(Conts.DEFAULT_VALUE_INT_INVALID);
+                }
             }
         }
     }

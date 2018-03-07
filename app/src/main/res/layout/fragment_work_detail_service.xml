@@ -109,6 +109,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="center"
                     android:text="Liên hệ"
+                    android:paddingRight="8dp"
                     android:textColor="@color/colorPrimary"/>
 
                 <LinearLayout
@@ -122,9 +123,10 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -154,7 +156,8 @@
                         android:background="#1A000000"/>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:orientation="horizontal">
@@ -163,7 +166,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_call_disable"/>
+                            android:src="@drawable/ic_call_disable" />
 
                         <TextView
                             android:id="@+id/tv_detail_work_contact_phone"

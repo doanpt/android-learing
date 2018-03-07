@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:inputType="textEmailAddress"
+            android:text="demo5@cnc.com"
             android:paddingLeft="30dp"
             android:textColor="#8D8D8D" />
 
@@ -69,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:inputType="textPassword"
+            android:text="123456"
             android:paddingLeft="30dp"
             android:textColor="#8D8D8D" />
 

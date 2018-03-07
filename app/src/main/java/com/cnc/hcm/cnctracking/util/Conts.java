@@ -10,6 +10,7 @@ public class Conts {
     public static final String UNKNOWN = "Unknown";
 
     //Default value int
+    public static final int DEFAULT_VALUE_INT_INVALID = Integer.MIN_VALUE;
     public static final int DEFAULT_VALUE_INT_0 = 0;
     public static final int DEFAULT_VALUE_INT_1 = 1;
     public static final int DEFAULT_VALUE_INT_2 = 2;
@@ -94,6 +95,8 @@ public class Conts {
     public static final String SOCKET_EVENT_NEW_TASK = "new task";
     public static final String SOCKET_EVENT_LOGIN_OTHER_DEVICE = "login conflict";
     public static final String SOCKET_EVENT_ERROR = "error";
+    public static final String SOCKET_EVENT_CANCEL_TASK = "cancel task";
+    public static final String SOCKET_EVENT_UNASSIGNED_TASK = "unassigned task";
 
     public static final String KEY_WORK_NAME = "KEY_WORK_NAME";
     public static final String KEY_WORK_LOCATION = "KEY_WORK_LOCATION";

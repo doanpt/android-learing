@@ -54,8 +54,13 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         try {
             holder.tv_title.setText(process.device.detail.name + "");
             holder.tv_status.setText("Hoàn thành bước " + process.status._id);
-//            String iconPath = ""; // TODO Confirm with backend team
-//            Picasso.with(mContext).load(Conts.URL_BASE + iconPath).into(holder.iv_icon);
+            String iconPath = process.device.detail.photo;
+            if (TextUtils.isEmpty(iconPath)) {
+                iconPath = process.device.detail.brand.photo;
+            }
+            if (!TextUtils.isEmpty(iconPath)) {
+            Picasso.with(mContext).load(Conts.URL_BASE + iconPath).into(holder.iv_icon);
+            }
             if (TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.user._id)) {
                 holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.step_1_complete : (process.status._id == 2 ? R.drawable.step_2_complete : R.drawable.step_3_complete));
                 holder.item_product.setOnClickListener(new View.OnClickListener() {

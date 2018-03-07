@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -35,19 +36,27 @@ import com.cnc.hcm.cnctracking.model.AddContainProductResult;
 import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
 import com.cnc.hcm.cnctracking.model.CompleteTicketResponse;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctracking.model.ItemCancelTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.zxing.common.StringUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetDialogFragment;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,6 +95,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
     private List<TaskDetailLoadedListener> mTaskDetailLoadedListener = new ArrayList<>();
     private TextView tv_completed_ticket;
+    private Socket mSocket;
+    private Handler mHandler;
 
     public void setTaskDetailLoadedListener(TaskDetailLoadedListener taskDetailLoadedListener) {
         mTaskDetailLoadedListener.add(taskDetailLoadedListener);
@@ -130,9 +141,120 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         Log.e("VIM", "onCreateView(), idTask: " + idTask);
         View view = inflater.inflate(R.layout.dialog_bottom_sheet, container);
         initViews(view);
+        mHandler = new Handler();
+        initSocket();
+        connectSocket();
         mTaskDetailLoadedListener.clear();
 
         return view;
+    }
+
+    private void disconnectSocket() {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.disconnect();
+            mSocket = null;
+        }
+    }
+
+    private void connectSocket() {
+        if (mSocket != null && !mSocket.connected()) {
+            mSocket.on(Conts.SOCKET_EVENT_CANCEL_TASK, new Emitter.Listener(){
+                @Override
+                public void call(Object... args) {
+                    try {
+                        Log.d(TAG, "SOCKET_EVENT_CANCEL_TASK -> data: " + args[0]);
+                        ItemCancelTask itemCancelTask = new Gson().fromJson(args[0].toString(), ItemCancelTask.class);
+                        showDialogCancelTicket(itemCancelTask.content, itemCancelTask.data._id);
+                    } catch (Exception e) {
+                        Log.e(TAG, "SOCKET_EVENT_CANCEL_TASK -> e: " + e);
+                    }
+                }
+            });
+            mSocket.on(Conts.SOCKET_EVENT_UNASSIGNED_TASK, new Emitter.Listener(){
+                @Override
+                public void call(Object... args) {
+                    try {
+                        Log.d(TAG, "SOCKET_EVENT_UNASSIGNED_TASK -> data: " + args[0]);
+                        showDialogUnAssignedTask(idTask);
+                    } catch (Exception e) {
+                        Log.e(TAG, "SOCKET_EVENT_UNASSIGNED_TASK -> e: " + e);
+                    }
+                }
+            });
+            mSocket.on(Conts.SOCKET_EVENT_ERROR, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Log.d(TAG, "SOCKET_EVENT_ERROR -> data: " + (args != null && args.length > 0 ? args[0] : args));
+                }
+            });
+            mSocket.connect();
+        }
+    }
+
+    private void showDialogUnAssignedTask(final String idTask) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(false);
+                final AlertDialog dialog = builder.create();
+
+                View view = getLayoutInflater().inflate(R.layout.dialog_cancel, null);
+                dialog.setView(view);
+                TextView tv_message = view.findViewById(R.id.tv_message);
+                tv_message.setText("Bạn đã bị xóa khỏi ticket");
+                view.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        DialogDetailTaskFragment.this.dismiss();
+                        getMainActivity().onUnAssignedTask(idTask);
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+    }
+
+    private void showDialogCancelTicket(String message, final String idTask) {
+        if (TextUtils.isEmpty(message)) {
+            message = "Đơn hàng bị hủy.";
+        }
+
+        final String finalMessage = message;
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(false);
+                final AlertDialog dialog = builder.create();
+
+                View view = getLayoutInflater().inflate(R.layout.dialog_cancel, null);
+                dialog.setView(view);
+                TextView tv_message = view.findViewById(R.id.tv_message);
+                tv_message.setText(finalMessage);
+                view.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        DialogDetailTaskFragment.this.dismiss();
+                        getMainActivity().onTaskCanceled(idTask);
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+    }
+
+    private void initSocket() {
+        try {
+            String url = Conts.URL_BASE + "?token=" + UserInfo.getInstance(getContext()).getAccessToken();
+            mSocket = IO.socket(url);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initViews(View view) {
@@ -203,6 +325,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     public void onResume() {
         super.onResume();
         Log.e("VIM", "onResume(), idTask: " + idTask);
+        viewPager.setCurrentItem(0);
         tryGetTaskDetail(UserInfo.getInstance(getActivity().getApplicationContext()).getAccessToken(), idTask);
         if (fabMenu != null && fabMenu.isExpanded()) {
             fabMenu.collapse();
@@ -254,8 +377,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 }
 
                 try {
-                    fabMenu.setVisibility(getTaskDetailResult.result.status._id != 2 ? View.GONE : View.VISIBLE);
-                    tv_completed_ticket.setVisibility(getTaskDetailResult.result.status._id != 2 ? View.VISIBLE : View.GONE);
+                    fabMenu.setVisibility(getTaskDetailResult.result.status._id == Conts.TYPE_COMPLETE_TASK ? View.GONE : View.VISIBLE);
+                    tv_completed_ticket.setVisibility(getTaskDetailResult.result.status._id == Conts.TYPE_COMPLETE_TASK ? View.VISIBLE : View.GONE);
                 } catch (Exception e) {
                     Log.e(TAG, "onTaskInfoLoaded() --> Exception occurs.", e);
                 }
@@ -288,6 +411,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
+        disconnectSocket();
         dismisDialogLoading();
     }
 
@@ -448,7 +572,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                     GetTaskDetailResult.Result.Process[] processes = getTaskDetailResult.result.process;
                     for (int i = 0; i < processes.length; i++) {
                         if (TextUtils.equals(content, processes[i].device._id)) {
-                            showDialogDeviceExisted(content);
+                            showDialogDeviceExisted();
                             return;
                         }
                     }
@@ -480,7 +604,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         }
     }
 
-    private void addDeviceToTask(String deviceId) {
+    private void addDeviceToTask(final String deviceId) {
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken()));
         arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceId));
@@ -489,10 +613,10 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             public void onResponse(Call<AddContainProductResult> call, Response<AddContainProductResult> response) {
                 int status = response.code();
                 if (status == Conts.RESPONSE_STATUS_OK) {
-                    CommonMethod.makeToast(getActivity(), "Đang add thiết bị vào đơn hàng.");
-                    tryGetTaskDetail(UserInfo.getInstance(getActivity()).getAccessToken(), idTask);
+                    CommonMethod.makeToast(getActivity(), "Đã thêm thiết bị vào đơn hàng thành công.");
+                    showProductDetailActivity(deviceId);
                 } else {
-                    CommonMethod.makeToast(getActivity(), "Add contain product error");
+                    CommonMethod.makeToast(getActivity(), "Add thiết bị vào đơn hàng không thành công");
                 }
             }
 
@@ -507,21 +631,15 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         });
     }
 
-    private void showDialogDeviceExisted(final String deviceId) {
+    private void showDialogDeviceExisted() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Thiết bị đã có sẵn trong đơn hàng. Đi tới chi tiết quá trình sửa chữa");
+        builder.setMessage("Thiết bị đã có sẵn trong đơn hàng.");
         builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
             }
         });
-        builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                showProductDetailActivity(deviceId);
-            }
-        });
+        builder.setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -531,9 +649,29 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         productDetail.putExtra(Conts.KEY_PRODUCT_ID, deviceId);
         productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken());
         productDetail.putExtra(Conts.KEY_ID_TASK, idTask);
-        productDetail.putExtra(Conts.KEY_WORK_NAME, ""); // TODO get this information
-        productDetail.putExtra(Conts.KEY_WORK_LOCATION, "");
-        productDetail.putExtra(Conts.KEY_WORK_TIME, "");
+        String workName = Conts.BLANK;
+        String workLocation = Conts.BLANK;
+        String workTime = Conts.BLANK;
+
+        try {
+            if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
+                workName += getTaskDetailResult.result.title;
+                String date = getTaskDetailResult.result.appointmentDate.substring(0, getTaskDetailResult.result.appointmentDate.lastIndexOf(".")) + "Z";
+                if (!TextUtils.isEmpty(date)) {
+                    workTime += CommonMethod.formatTimeFromServerToString(date);
+                }
+                if (getTaskDetailResult.result.address != null) {
+                    workLocation += getTaskDetailResult.result.address.street;
+                } else if (getTaskDetailResult.result.customer.address != null) {
+                    workLocation += getTaskDetailResult.result.customer.address.street;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "showProductDetailActivity() --> Exception occurs.", e);
+        }
+        productDetail.putExtra(Conts.KEY_WORK_NAME, workName);
+        productDetail.putExtra(Conts.KEY_WORK_LOCATION, workLocation);
+        productDetail.putExtra(Conts.KEY_WORK_TIME, workTime);
         startActivity(productDetail);
     }
 

@@ -31,6 +31,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -680,7 +681,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -868,6 +868,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onClickItemWork(int position) {
+        if (position == Conts.DEFAULT_VALUE_INT_INVALID) {
+            Log.e(TAG, "onClickItemWork() -> position: DEFAULT_VALUE_INT_INVALID");
+            Toast.makeText(MainActivity.this, "Công việc này đã bị hủy", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         String idTask = taskListAdapter.getItem(position).getTaskResult()._id;
         dialogDetailTaskFragment.setIdTask(idTask);
         dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
@@ -1002,4 +1008,25 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
+    public void onTaskCanceled(String idTask) {
+        for (ItemTask itemTask : arrItemTask) {
+            if (TextUtils.equals(idTask, itemTask.getTaskResult()._id)) {
+                itemTask.getTaskResult().status._id = Conts.TYPE_CANCEL_TASK;
+                taskListAdapter.notiDataChange(arrItemTask);
+                // TODO update các item khác nếu cần. ex: taskCount,...
+                return;
+            }
+        }
+    }
+
+    public void onUnAssignedTask(String idTask) {
+        for (ItemTask itemTask : arrItemTask) {
+            if (TextUtils.equals(idTask, itemTask.getTaskResult()._id)) {
+                arrItemTask.remove(itemTask);
+                taskListAdapter.notiDataChange(arrItemTask);
+                // TODO update các item khác nếu cần. ex: taskCount,...
+                return;
+            }
+        }
+    }
 }

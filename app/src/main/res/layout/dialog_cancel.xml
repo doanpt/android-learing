@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingTop="20dp"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/border_dialog_custome"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_cancel"
+        android:layout_gravity="center_horizontal"/>
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="cancel cancel cancel cancel cancel cancel cancel cancel cancel cancel"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <Button
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="Quay về trang chủ"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>
+
+
