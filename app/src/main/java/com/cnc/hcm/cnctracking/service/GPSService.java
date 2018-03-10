@@ -556,6 +556,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private Emitter.Listener eventError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
             Log.d(TAGG, "ConnectSocket eventError");
             Log.d(TAGG, "ConnectSocket eventError");
         }
