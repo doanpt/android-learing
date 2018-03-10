@@ -160,10 +160,14 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         tvDeviceCode.setText(body.getResult().getDevice().getId());
         tvDeviceName.setText(body.getResult().getDevice().getDetail().getName());
         String path;
-        if (body.getResult().getDevice().getDetail().getPhoto() == null) {
-            path = body.getResult().getDevice().getDetail().getBrand().getPhoto().toString();
-        } else {
-            path = body.getResult().getDevice().getDetail().getPhoto().toString();
+        try {
+            if (body.getResult().getDevice().getDetail().getPhoto() == null) {
+                path = body.getResult().getDevice().getDetail().getBrand().getPhoto().toString();
+            } else {
+                path = body.getResult().getDevice().getDetail().getPhoto().toString();
+            }
+        } catch (Exception e) {
+            path = "";
         }
         Picasso.with(ProductDetailActivity.this).load(Conts.URL_BASE + path).placeholder(R.drawable.errror_image).error(R.drawable.errror_image).into(imgDevice);
         arrInit.clear();
@@ -362,7 +366,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     return;
                 }
                 Intent intentNote = new Intent(ProductDetailActivity.this, AddNoteActivity.class);
-                intentNote.putExtra(Conts.KEY_CURRENT_NOTE,note);
+                intentNote.putExtra(Conts.KEY_CURRENT_NOTE, note);
                 startActivityForResult(intentNote, KEY_ADD_NOTE);
                 closeFabMenu();
                 break;

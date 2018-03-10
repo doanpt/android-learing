@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.cnc.hcm.cnctracking.fragment.ListProductFragment;
 import com.cnc.hcm.cnctracking.fragment.ListServiceFragment;
 import com.cnc.hcm.cnctracking.model.CategoryListResult;
 import com.cnc.hcm.cnctracking.model.ProductListResult;
+import com.cnc.hcm.cnctracking.model.SearchModel;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
@@ -35,11 +37,11 @@ import retrofit2.Response;
 
 public class ListProductAndServiceActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView imvBack, imgSearch;
-    private LinearLayout llSearchVisiable, llSearchInVisiable;
-    private EditText edtSearch;
+    private ImageView imvBack, imgSearch, imgExitProductSearch, imgExitServiceSearch;
+    private LinearLayout llTitle, llProductSearch, llServiceSearch;
+    private EditText edtProductSearch, edtServiceSearch;
     private ViewPager viewPager;
-    private TextView tvClear;
+    private TextView tvProductClear, tvServiceClear;
     private OnTextChangeProductListener onTextChangeProductListener;
     private ArrayAdapter manufactureAdapter;
     private ArrayAdapter categoryAdapter;
@@ -69,12 +71,24 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
     }
 
     private void initViews() {
-        imvBack = (ImageView) findViewById(R.id.imv_back);
+        imvBack = findViewById(R.id.imv_back);
         imgSearch = findViewById(R.id.img_search);
-        llSearchInVisiable = findViewById(R.id.ll_search_invisible);
-        llSearchVisiable = findViewById(R.id.ll_search_visible);
-        tvClear = (TextView) findViewById(R.id.tv_clear_text_search);
-        edtSearch = (EditText) findViewById(R.id.edt_search);
+
+        llTitle = findViewById(R.id.ll_title_visible);
+        llServiceSearch = findViewById(R.id.ll_search_service_visible);
+        llProductSearch = findViewById(R.id.ll_product_search_visible);
+        llTitle.setVisibility(View.VISIBLE);
+        llServiceSearch.setVisibility(View.GONE);
+        llProductSearch.setVisibility(View.GONE);
+
+        tvServiceClear = findViewById(R.id.tv_service_clear_text_search);
+        tvProductClear = findViewById(R.id.tv_product_clear_text_search);
+
+        edtProductSearch = findViewById(R.id.edt_product_search);
+        edtServiceSearch = findViewById(R.id.edt_service_search);
+
+        imgExitProductSearch = findViewById(R.id.img_product_back_to_list);
+        imgExitServiceSearch = findViewById(R.id.img_service_back_to_list);
         ApiUtils.getAPIService(arrHeads).getListManufactures().enqueue(new Callback<ProductListResult>() {
             @Override
             public void onResponse(Call<ProductListResult> call, Response<ProductListResult> response) {
@@ -82,6 +96,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
                 if (status == 200) {
                     arrManufactures.clear();
                     listProduct = (ArrayList<ProductListResult.Product>) response.body().getResult();
+                    arrManufactures.add("Chọn nhà sản xuất");
                     for (ProductListResult.Product p : listProduct) {
                         arrManufactures.add(p.getName());
                         manufactureAdapter.notifyDataSetChanged();
@@ -100,6 +115,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
                 Long status = response.body().getStatusCode();
                 if (status == 200) {
                     arrCategory.clear();
+                    arrCategory.add("Chọn loại thiết bị");
                     listCategory = (ArrayList<CategoryListResult.Category>) response.body().getResult();
                     for (CategoryListResult.Category category : listCategory) {
                         arrCategory.add(category.getTitle());
@@ -113,16 +129,16 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             }
         });
-        spnCategory = findViewById(R.id.spn_product_type);
-        spnManufacuture = findViewById(R.id.spn_manufacture);
+        spnCategory = findViewById(R.id.spn_product_product_type);
+        spnManufacuture = findViewById(R.id.spn_product_manufacture);
         spnManufacuture.setAdapter(manufactureAdapter);
         spnCategory.setAdapter(categoryAdapter);
 
         imgSearch.setOnClickListener(this);
         imvBack.setOnClickListener(this);
-        tvClear.setOnClickListener(this);
-
-        edtSearch.addTextChangedListener(new TextWatcher() {
+        tvProductClear.setOnClickListener(this);
+        imgExitProductSearch.setOnClickListener(this);
+        edtProductSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -132,7 +148,12 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (onTextChangeProductListener != null) {
-                    onTextChangeProductListener.onTextChange(charSequence);
+                    SearchModel searchModel = new SearchModel();
+                    searchModel.setText(charSequence.toString());
+                    searchModel.setBranch(spnManufacuture.getSelectedItem().toString());
+                    searchModel.setCategory(spnCategory.getSelectedItem().toString());
+                    searchModel.setOnlyText(false);
+                    onTextChangeProductListener.onTextChange(searchModel);
                 }
             }
 
@@ -142,12 +163,62 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
             }
         });
 
+        spnManufacuture.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                search();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                search();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         Fragment[] list = new Fragment[]{new ListProductFragment(), new ListServiceFragment()};
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), list);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    if (llProductSearch.getVisibility() != View.VISIBLE && llTitle.getVisibility() != View.VISIBLE) {
+                        llProductSearch.setVisibility(View.VISIBLE);
+                        llServiceSearch.setVisibility(View.GONE);
+                        llTitle.setVisibility(View.GONE);
+                    }
+                } else if (position == 1) {
+                    if (llServiceSearch.getVisibility() != View.VISIBLE && llTitle.getVisibility() != View.VISIBLE) {
+                        llProductSearch.setVisibility(View.GONE);
+                        llServiceSearch.setVisibility(View.VISIBLE);
+                        llTitle.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -169,6 +240,17 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
     }
 
+    private void search() {
+        if (onTextChangeProductListener != null) {
+            SearchModel searchModel = new SearchModel();
+            searchModel.setText(edtProductSearch.getText().toString());
+            searchModel.setBranch(spnManufacuture.getSelectedItem().toString());
+            searchModel.setCategory(spnCategory.getSelectedItem().toString());
+            searchModel.setOnlyText(false);
+            onTextChangeProductListener.onTextChange(searchModel);
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -176,21 +258,34 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
                 setResult(RESULT_CANCELED);
                 finish();
                 break;
-            case R.id.tv_clear_text_search:
-                edtSearch.setText(Conts.BLANK);
+            case R.id.tv_product_clear_text_search:
+                edtProductSearch.setText(Conts.BLANK);
                 break;
             case R.id.img_search:
-                llSearchVisiable.setVisibility(View.VISIBLE);
-                llSearchInVisiable.setVisibility(View.GONE);
+                if (viewPager.getCurrentItem() == 0) {
+                    llProductSearch.setVisibility(View.VISIBLE);
+                    llServiceSearch.setVisibility(View.GONE);
+                    llTitle.setVisibility(View.GONE);
+                } else {
+                    llProductSearch.setVisibility(View.VISIBLE);
+                    llServiceSearch.setVisibility(View.GONE);
+                    llTitle.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.img_product_back_to_list:
+                llProductSearch.setVisibility(View.GONE);
+                llServiceSearch.setVisibility(View.GONE);
+                llTitle.setVisibility(View.VISIBLE);
                 break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (llSearchVisiable.getVisibility() == View.VISIBLE) {
-            llSearchVisiable.setVisibility(View.GONE);
-            llSearchInVisiable.setVisibility(View.VISIBLE);
+        if (llServiceSearch.getVisibility() == View.VISIBLE || llProductSearch.getVisibility() == View.VISIBLE) {
+            llProductSearch.setVisibility(View.GONE);
+            llServiceSearch.setVisibility(View.GONE);
+            llTitle.setVisibility(View.VISIBLE);
         } else {
             setResult(RESULT_CANCELED);
             finish();
@@ -198,7 +293,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
     }
 
     public interface OnTextChangeProductListener {
-        void onTextChange(CharSequence str);
+        void onTextChange(SearchModel str);
     }
 
     public void setOnTextChangeProductListener(OnTextChangeProductListener onTextChangeProductListener) {
