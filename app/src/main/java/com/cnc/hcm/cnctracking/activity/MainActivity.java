@@ -49,6 +49,7 @@ import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
+import com.cnc.hcm.cnctracking.dialog.DialogNotiTaskAppointment;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
 import com.cnc.hcm.cnctracking.fragment.MonthViewFragment;
@@ -319,7 +320,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     };
 
 
-    public void tryGetTaskList(String accessToken, String startDate, String endDate) {
+    public void tryGetTaskList(String accessToken, final String startDate, final String endDate) {
         showProgressLoadding();
         final List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
@@ -363,6 +364,29 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                     updateStatusIsRead(idTask, -1);
                                 }
                             }
+                            if (startDate.equals(endDate)) {
+                                Calendar calendarParam = CommonMethod.getInstanceCalendar();
+                                Date inputParam = CommonMethod.formatTimeFromServerToDate(startDate);
+                                calendarParam.setTime(inputParam);
+
+                                int yearParam = calendarParam.get(Calendar.YEAR);
+                                int monthParam = calendarParam.get(Calendar.MONTH);
+                                int dayParam = calendarParam.get(Calendar.DAY_OF_MONTH);
+
+                                Calendar calendar = CommonMethod.getInstanceCalendar();
+                                int currentYear = calendar.get(Calendar.YEAR);
+                                int currentMonth = calendar.get(Calendar.MONTH);
+                                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+                                if (yearParam == currentYear
+                                        && monthParam == currentMonth
+                                        && dayParam == currentDay) {
+                                    if (gpsService != null) {
+                                        gpsService.setListTaskToDay(arrItemTask);
+                                    }
+                                }
+                            }
+
                             initMarkerOnMap();
                         }
                         updateQuantityTask();
@@ -1028,5 +1052,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 return;
             }
         }
+    }
+
+    public void showDialogAppointmentTask(ItemTask item) {
+//        DialogNotiTaskAppointment notiTaskAppointment = new DialogNotiTaskAppointment(getApplicationContext());
+//        notiTaskAppointment.setData(item.getTaskResult().title, appointmentDate);
+//        notiTaskAppointment.show();
     }
 }

@@ -108,4 +108,5 @@ public class Conts {
     public static final String KEY_CHECK_TYPE_RESULT = "KEY_SERVICE";
     public static final String KEY_RESULT_ADD_NOTE = "KEY_RESULT_ADD_NOTE";
     public static final String KEY_CURRENT_NOTE = "KEY_CURRENT_NOTE";
+    public static final String TIME_ZONE_VN = "Asia/Ho_Chi_Minh";
 }

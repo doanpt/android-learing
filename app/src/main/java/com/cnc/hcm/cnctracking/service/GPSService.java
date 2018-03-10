@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
@@ -32,6 +33,7 @@ import com.cnc.hcm.cnctracking.api.APIService;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
+import com.cnc.hcm.cnctracking.dialog.DialogNotiTaskAppointment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemTask;
@@ -40,6 +42,7 @@ import com.cnc.hcm.cnctracking.model.LocationBackupFile;
 import com.cnc.hcm.cnctracking.model.LocationResponseUpload;
 import com.cnc.hcm.cnctracking.model.TrackLocation;
 import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
+import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.google.gson.Gson;
@@ -52,6 +55,7 @@ import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
@@ -117,6 +121,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private boolean isUploading;
 
     private Handler handler = new Handler();
+    private ArrayList<ItemTask> listTaskToDay = new ArrayList<>();
 
     @Nullable
     @Override
@@ -129,7 +134,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             return GPSService.this;
         }
     }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -484,9 +488,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     }
 
     Runnable runnableUpdateUI = new Runnable() {
+        int timeMinute = 0;
+
         @Override
         public void run() {
 
+            timeMinute++;
             boolean statusGPS = SmartLocation.with(GPSService.this).location().state().isAnyProviderAvailable();
 
             //Check network connection
@@ -504,7 +511,24 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 productDetailActivity.handleGPSSetting(statusGPS);
             }
 
-            handler.postDelayed(runnableUpdateUI, 500);
+            if (timeMinute >= 60) {
+                String currentTime = CommonMethod.formatDateToString(CommonMethod.getInstanceCalendar().getTimeInMillis());
+                Log.d(TAGG, "runnableUpdateUI, CurrentTime: " + currentTime);
+                for (ItemTask item : listTaskToDay) {
+                    String appointmentDate = item.getTaskResult().appointmentDate.substring(0, item.getTaskResult().appointmentDate.lastIndexOf(".")) + "Z";
+                    String timeItemTask = CommonMethod.formatTimeAppointmentDateBeforThirtyMinute(appointmentDate);
+                    Log.d(TAGG, "runnableUpdateUI, Time before 30': " + timeItemTask);
+
+                    if (timeItemTask.equals(currentTime)) {
+                        if (mainActivity!=null){
+                            mainActivity.showDialogAppointmentTask(item);
+                        }
+                        CommonMethod.makeToast(getApplicationContext(), "Ticket " + item.getTaskResult().title + " còn 30 phút nữa sẽ đến lịch hẹn");
+                    }
+                }
+                timeMinute = 0;
+            }
+            handler.postDelayed(runnableUpdateUI, 1000);
         }
     };
 
@@ -714,5 +738,10 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     public ArrayList<ItemTask> getArrNewTask() {
         return arrNewTask;
+    }
+
+    public void setListTaskToDay(ArrayList<ItemTask> listTaskToDay) {
+        this.listTaskToDay.clear();
+        this.listTaskToDay.addAll(listTaskToDay);
     }
 }

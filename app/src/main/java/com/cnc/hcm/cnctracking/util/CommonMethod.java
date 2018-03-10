@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -47,6 +48,23 @@ public class CommonMethod {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        String time = CommonMethod.formatDateToString(date.getTime());
+        return time;
+    }
+
+    public static String formatTimeAppointmentDateBeforThirtyMinute(String inputTime) {
+        TimeZone timeZone = TimeZone.getDefault();
+        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
+        Date date = null;
+        try {
+            date = format.parse(inputTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long thirtyMinute = TimeUnit.MINUTES.toMillis(30);
+        long timeAfterMinus = date.getTime() - thirtyMinute;
+        date.setTime(timeAfterMinus);
         String time = CommonMethod.formatDateToString(date.getTime());
         return time;
     }
@@ -102,8 +120,12 @@ public class CommonMethod {
 //        return String.valueOf(calendar.get(Calendar.YEAR));
     }
 
-    public static String formatTimeStandand(Date date){
+    public static String formatTimeStandand(Date date) {
         return new SimpleDateFormat("dd/MM/yyyy").format(date);
+    }
+
+    public static Calendar getInstanceCalendar() {
+        return Calendar.getInstance(TimeZone.getTimeZone(Conts.TIME_ZONE_VN));
     }
 
     public static void actionFindWayInMapApp(Context context, double latitude_cur, double longitude_cur, double latitude, double longitude) {
@@ -124,7 +146,7 @@ public class CommonMethod {
     }
 
     public static void makeToast(Context context, String title) {
-        Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, title, Toast.LENGTH_LONG).show();
     }
 
     public static String[] getStartEndDate(int currentMonth, int years) {

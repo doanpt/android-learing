@@ -102,7 +102,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
             listTextViewSelected[i] = (TextView) view.findViewById(listIdSelected[i]);
         }
         calendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
-        Calendar instance = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        Calendar instance = CommonMethod.getInstanceCalendar();
         calendarView.setSelectedDate(instance.getTime());
         calendarView.setOnMonthChangedListener(this);
         calendarView.setOnDateChangedListener(this);
