@@ -16,21 +16,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="8dp">
 
                 <LinearLayout
                     android:id="@+id/tv_detail_work_call_action"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_call"/>
+                        android:src="@drawable/ic_call" />
+
                     <TextView
                         android:id="@+id/tv_call"
                         android:layout_width="wrap_content"
@@ -38,21 +40,23 @@
                         android:gravity="center"
                         android:text="Call"
                         android:textColor="@color/colorPrimaryDark"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/tv_detail_work_sms_action"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_sms"/>
+                        android:src="@drawable/ic_sms" />
+
                     <TextView
                         android:id="@+id/tv_sms"
                         android:layout_width="wrap_content"
@@ -60,21 +64,23 @@
                         android:gravity="center"
                         android:text="SMS"
                         android:textColor="@color/colorPrimaryDark"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/tv_detail_work_address_action"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_address"/>
+                        android:src="@drawable/ic_address" />
+
                     <TextView
                         android:id="@+id/tv_addr"
                         android:layout_width="wrap_content"
@@ -82,7 +88,7 @@
                         android:gravity="center"
                         android:text="Addr"
                         android:textColor="@color/colorPrimaryDark"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -90,7 +96,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#1A000000"/>
+                android:background="#1A000000" />
 
             <!-- line 2 Liên Hệ -->
             <RelativeLayout
@@ -104,28 +110,28 @@
 
                 <TextView
                     android:id="@+id/tv_contact_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="42dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:gravity="center"
-                    android:text="Liên hệ"
+                    android:gravity="left"
                     android:paddingRight="8dp"
-                    android:textColor="@color/colorPrimary"/>
+                    android:text="Liên hệ"
+                    android:textColor="@color/colorPrimary" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
                     android:layout_toRightOf="@+id/tv_contact_title"
+                    android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -133,7 +139,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_info_username"/>
+                            android:src="@drawable/ic_info_username" />
 
                         <TextView
                             android:id="@+id/tv_detail_work_contact_name"
@@ -145,7 +151,7 @@
                             android:minLines="2"
                             android:text="Contact name"
                             android:textColor="@color/text_color_secondary"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <FrameLayout
@@ -153,13 +159,13 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:background="#1A000000"/>
+                        android:background="#1A000000" />
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -178,25 +184,25 @@
                             android:minLines="2"
                             android:text="Contact number"
                             android:textColor="@color/text_color_secondary"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <!--<ImageView-->
-                    <!--android:id="@+id/imv_expand_contact"-->
-                    <!--android:layout_width="24dp"-->
-                    <!--android:layout_height="24dp"-->
-                    <!--android:layout_alignParentEnd="true"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:src="@drawable/ic_chevron_right"/>-->
+                <!--android:id="@+id/imv_expand_contact"-->
+                <!--android:layout_width="24dp"-->
+                <!--android:layout_height="24dp"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:src="@drawable/ic_chevron_right"/>-->
             </RelativeLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#1A000000"/>
+                android:background="#1A000000" />
 
             <!-- Liên hệ expand -->
             <LinearLayout
@@ -216,7 +222,7 @@
                     <ImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:src="@drawable/ic_marker_disable"/>
+                        android:src="@drawable/ic_marker_disable" />
 
                     <TextView
                         android:id="@+id/tv_detail_work_contact_address"
@@ -226,13 +232,13 @@
                         android:gravity="center"
                         android:minLines="2"
                         android:text="270B/64/22/5 Lý Thường Kiệt, P.6, Q.Tân Bình, Tp.HCM"
-                        android:textColor="@color/text_color"/>
+                        android:textColor="@color/text_color" />
                 </LinearLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#1A000000"/>
+                    android:background="#1A000000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -244,7 +250,7 @@
                     <ImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:src="@drawable/ic_task_disable"/>
+                        android:src="@drawable/ic_task_disable" />
 
                     <TextView
                         android:id="@+id/tv_detail_work_note"
@@ -254,16 +260,159 @@
                         android:gravity="center"
                         android:minLines="2"
                         android:text="Máy vẫn chạy nhưng không còn lạnh, rò nước"
-                        android:textColor="@color/text_color"/>
+                        android:textColor="@color/text_color" />
                 </LinearLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#1A000000"/>
+                    android:background="#1A000000" />
             </LinearLayout>
 
-            <!--Line 3 Đơn Hàng-->
+            <!--Line 3 Yêu cầu-->
+            <RelativeLayout
+                android:id="@+id/rl_require"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
+
+                <TextView
+                    android:id="@+id/tv_require"
+                    android:layout_width="42dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:lines="2"
+                    android:gravity="left"
+                    android:text="Yêu cầu"
+                    android:textColor="@color/colorPrimary" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/imv_expand_require"
+                    android:layout_toRightOf="@+id/tv_require"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Dịch vụ "
+                            android:lines="2"
+                            android:gravity="center"
+                            android:textColor="@color/text_color" />
+
+                        <TextView
+                            android:id="@+id/tv_number_service"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="4dp"
+                            android:text="0"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#1A000000" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Thiết bị "
+                            android:lines="2"
+                            android:gravity="center"
+                            android:textColor="@color/text_color" />
+
+                        <TextView
+                            android:id="@+id/tv_number_device"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="4dp"
+                            android:text="0"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imv_expand_require"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_chevron_right"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1A000000" />
+
+            <!-- Yêu cầu expand -->
+            <LinearLayout
+                android:id="@+id/ll_require_expand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:visibility="visible">
+
+                <!--list yêu cầu-->
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_require"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/tv_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:text="Dịch vụ sửa máy lạnh"
+                    android:textColor="@color/text_color" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1A000000" />
+
+            <!--Line 4 Đơn Hàng-->
             <RelativeLayout
                 android:id="@+id/rl_expand_header_bill"
                 android:layout_width="match_parent"
@@ -275,12 +424,12 @@
 
                 <TextView
                     android:id="@+id/tv_bill_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="42dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:text="Đơn hàng"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/colorPrimary" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -304,7 +453,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Tổng tiền"
-                            android:textColor="@color/text_color"/>
+                            android:textColor="@color/text_color" />
 
                         <TextView
                             android:id="@+id/tv_detail_work_total_payment"
@@ -313,13 +462,13 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="4dp"
                             android:text="0 đ"
-                            android:textColor="@color/colorPrimary"/>
+                            android:textColor="@color/colorPrimary" />
                     </LinearLayout>
 
                     <FrameLayout
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="#1A000000"/>
+                        android:background="#1A000000" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -333,7 +482,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Thanh toán"
-                            android:textColor="@color/text_color"/>
+                            android:textColor="@color/text_color" />
 
                         <TextView
                             android:id="@+id/tv_detail_work_status_payment"
@@ -342,7 +491,7 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="4dp"
                             android:text="Chưa thanh toán"
-                            android:textColor="@color/colorPrimary"/>
+                            android:textColor="@color/colorPrimary" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -355,13 +504,13 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_chevron_right"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#1A000000"/>
+                android:background="#1A000000" />
 
             <!-- Đơn hàng expand -->
             <LinearLayout
@@ -378,14 +527,14 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_service"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                 </android.support.v7.widget.RecyclerView>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#1A000000"/>
+                    android:background="#1A000000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -398,11 +547,11 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:padding="4dp"/>
+                        android:padding="4dp" />
 
                     <FrameLayout
                         android:layout_width="1dp"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
 
                     <!-- tổng label -->
                     <TextView
@@ -412,12 +561,12 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="Tổng"
-                        android:textColor="@color/text_color"/>
+                        android:textColor="@color/text_color" />
 
                     <FrameLayout
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="#1A000000"/>
+                        android:background="#1A000000" />
 
                     <!-- tổng value -->
                     <TextView
@@ -428,14 +577,14 @@
                         android:gravity="right"
                         android:padding="4dp"
                         android:text="0"
-                        android:textColor="@color/text_color"/>
+                        android:textColor="@color/text_color" />
 
                 </LinearLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#1A000000"/>
+                    android:background="#1A000000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -448,11 +597,11 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:padding="4dp"/>
+                        android:padding="4dp" />
 
                     <FrameLayout
                         android:layout_width="1dp"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
                     <!-- thuế vat label -->
                     <TextView
                         android:layout_width="match_parent"
@@ -461,12 +610,12 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="Thuế VAT"
-                        android:textColor="@color/text_color"/>
+                        android:textColor="@color/text_color" />
 
                     <FrameLayout
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="#1A000000"/>
+                        android:background="#1A000000" />
 
                     <!-- thuế vat value -->
                     <TextView
@@ -477,14 +626,14 @@
                         android:gravity="right"
                         android:padding="4dp"
                         android:text="0"
-                        android:textColor="@color/text_color"/>
+                        android:textColor="@color/text_color" />
 
                 </LinearLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#1A000000"/>
+                    android:background="#1A000000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -497,11 +646,11 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:padding="4dp"/>
+                        android:padding="4dp" />
 
                     <FrameLayout
                         android:layout_width="1dp"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
 
                     <!--giảm giá label-->
                     <TextView
@@ -511,12 +660,12 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="Giảm giá"
-                        android:textColor="@color/text_color"/>
+                        android:textColor="@color/text_color" />
 
                     <FrameLayout
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="#1A000000"/>
+                        android:background="#1A000000" />
 
                     <!--giảm giá value-->
                     <TextView
@@ -526,14 +675,14 @@
                         android:gravity="right"
                         android:padding="4dp"
                         android:text="0"
-                        android:textColor="@color/text_color"/>
+                        android:textColor="@color/text_color" />
 
                 </LinearLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#1A000000"/>
+                    android:background="#1A000000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -546,11 +695,11 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:padding="4dp"/>
+                        android:padding="4dp" />
 
                     <FrameLayout
                         android:layout_width="1dp"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
 
                     <!--thanh toan label-->
                     <TextView
@@ -560,12 +709,12 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="4dp"
-                        android:text="Thanh toán"/>
+                        android:text="Thanh toán" />
 
                     <FrameLayout
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="#1A000000"/>
+                        android:background="#1A000000" />
 
                     <!--thanh toan value-->
                     <TextView
@@ -575,14 +724,14 @@
                         android:layout_weight="1"
                         android:gravity="right"
                         android:padding="4dp"
-                        android:text="0"/>
+                        android:text="0" />
 
                 </LinearLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#1A000000"/>
+                    android:background="#1A000000" />
 
             </LinearLayout>
 
@@ -590,14 +739,14 @@
                 android:id="@+id/btn_confirm_charge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:layout_marginTop="10dp"
+                android:layout_gravity="right"
                 android:layout_marginBottom="100dp"
                 android:layout_marginRight="10dp"
-                android:layout_gravity="right"
-                android:text="Xác nhận thanh toán"
+                android:layout_marginTop="10dp"
                 android:background="@color/colorPrimaryLight"
-                android:textColor="@android:color/white"/>
+                android:padding="12dp"
+                android:text="Xác nhận thanh toán"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
 
