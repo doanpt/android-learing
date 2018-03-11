@@ -10,13 +10,17 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.event.OnItemInputClickListener;
+import com.cnc.hcm.cnctracking.model.SearchModel;
+import com.cnc.hcm.cnctracking.model.SearchServiceModel;
 import com.cnc.hcm.cnctracking.model.Services;
+import com.cnc.hcm.cnctracking.model.TraddingProduct;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by giapmn on 1/30/18.
@@ -26,6 +30,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
 
     private Context context;
     private ArrayList<Services.Result> arr = new ArrayList<>();
+    private ArrayList<Services.Result> arrTemp = new ArrayList<>();
     private OnItemInputClickListener onItemInputClickListener;
 
     public ServicesAdapter(Context context) {
@@ -60,9 +65,17 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
     }
 
     public void notiData(List<Services.Result> result) {
-        arr.clear();
-        arr.addAll(result);
-        notifyDataSetChanged();
+        if (result != null) {
+            if (arr != null) {
+                arr.clear();
+                arr.addAll(result);
+            }
+            if (arrTemp != null) {
+                arrTemp.clear();
+                arrTemp.addAll(result);
+            }
+            notifyDataSetChanged();
+        }
     }
 
 
@@ -74,12 +87,12 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imvIcon = (ImageView) itemView.findViewById(R.id.imv_icon_product);
-            imvInput = (ImageView) itemView.findViewById(R.id.imv_input);
+            imvIcon = itemView.findViewById(R.id.imv_icon_product);
+            imvInput = itemView.findViewById(R.id.imv_input);
             imvInput.setOnClickListener(this);
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_tite_trading_product);
-            tvTypeManufacture = (TextView) itemView.findViewById(R.id.tv_type_manufacture);
-            tvPriceUnit = (TextView) itemView.findViewById(R.id.tv_price_unit);
+            tvTitle = itemView.findViewById(R.id.tv_tite_trading_product);
+            tvTypeManufacture = itemView.findViewById(R.id.tv_type_manufacture);
+            tvPriceUnit = itemView.findViewById(R.id.tv_price_unit);
         }
 
         @Override
@@ -94,6 +107,45 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         }
     }
 
+    public void filter(SearchServiceModel model) {
+        arr.clear();
+        String text, category;
+        text = model.getName().toLowerCase();
+        category = model.getCategory().toLowerCase();
+        boolean isText = false;
+        boolean isCategory = false;
+        isText = "".equals(model.getName()) ? false : true;
+        isCategory = category.equals(context.getResources().getString(R.string.spn_category_service_default).toLowerCase()) ? false : true;
+
+        if (isText == true) {
+            ArrayList<Services.Result> arrTemp2 = new ArrayList<>();
+            arrTemp2.addAll(arr);
+            arr.clear();
+            for (int i = 0; i < arrTemp.size(); i++) {
+                if (arrTemp.get(i).getName().toString().toLowerCase(Locale.getDefault()).contains(text)) {
+                    arr.add(arrTemp.get(i));
+                }
+            }
+//            for (int i = 0; i < arrTemp2.size(); i++) {
+//                if (arrTemp2.get(i).getName().toLowerCase().equals(text)) {
+//                    arr.add(arrTemp2.get(i));
+//                }
+//            }
+        } else {
+            arr.addAll(arrTemp);
+        }
+        if (isCategory == true) {
+            ArrayList<Services.Result> arrTemp3 = new ArrayList<>();
+            arrTemp3.addAll(arr);
+            arr.clear();
+            for (int i = 0; i < arrTemp3.size(); i++) {
+                if (arrTemp3.get(i).getCategory().getTitle().toLowerCase().equals(category)) {
+                    arr.add(arrTemp3.get(i));
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
 
     public void setOnItemInputClickListener(OnItemInputClickListener onItemInputClickListener) {
         this.onItemInputClickListener = onItemInputClickListener;

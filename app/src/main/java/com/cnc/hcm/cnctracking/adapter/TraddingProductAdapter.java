@@ -125,16 +125,16 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
             ArrayList<TraddingProduct.Result> arrTemp2 = new ArrayList<>();
             arrTemp2.addAll(arr);
             arr.clear();
-            for (int i = 0; i < arrTemp2.size(); i++) {
-                if (arrTemp2.get(i).getBrand().getName().toLowerCase().equals(branch)) {
-                    arr.add(arrTemp2.get(i));
-                }
-            }
             for (int i = 0; i < arrTemp.size(); i++) {
                 if (arrTemp.get(i).getName().toString().toLowerCase(Locale.getDefault()).contains(text)) {
                     arr.add(arrTemp.get(i));
                 }
             }
+//            for (int i = 0; i < arrTemp2.size(); i++) {
+//                if (arrTemp2.get(i).getBrand().getName().toLowerCase().equals(branch)) {
+//                    arr.add(arrTemp2.get(i));
+//                }
+//            }
         } else {
             arr.addAll(arrTemp);
         }

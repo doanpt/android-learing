@@ -6,7 +6,6 @@ package com.cnc.hcm.cnctracking.model;
 
 public class SearchModel {
     private String text, category, branch;
-    private boolean isOnlyText=true;
     public SearchModel() {
     }
 
@@ -14,14 +13,6 @@ public class SearchModel {
         this.text = text;
         this.category = category;
         this.branch = branch;
-    }
-
-    public boolean isOnlyText() {
-        return isOnlyText;
-    }
-
-    public void setOnlyText(boolean onlyText) {
-        isOnlyText = onlyText;
     }
 
     public String getText() {

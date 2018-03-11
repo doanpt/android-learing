@@ -19,6 +19,8 @@ import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.event.OnItemInputClickListener;
+import com.cnc.hcm.cnctracking.model.SearchModel;
+import com.cnc.hcm.cnctracking.model.SearchServiceModel;
 import com.cnc.hcm.cnctracking.model.Services;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
@@ -34,7 +36,7 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class ListServiceFragment extends Fragment implements
-        OnItemInputClickListener {
+        OnItemInputClickListener, ListProductAndServiceActivity.OnTextChangeServiceListener {
 
     private static final String TAGG = ListServiceFragment.class.getSimpleName();
     private MyRecyclerView rcServices;
@@ -51,6 +53,9 @@ public class ListServiceFragment extends Fragment implements
         initObjects();
         getListService();
         activity = (ListProductAndServiceActivity) getActivity();
+        if (activity != null) {
+            activity.setOnTextChangeServiceListener(this);
+        }
     }
 
     private void getListService() {
@@ -108,5 +113,12 @@ public class ListServiceFragment extends Fragment implements
         intentResult.putExtra(Conts.KEY_CHECK_TYPE_RESULT, Conts.KEY_SERVICE);
         activity.setResult(Activity.RESULT_OK, intentResult);
         activity.finish();
+    }
+
+    @Override
+    public void onTextChange(SearchServiceModel model) {
+        if (adapter != null) {
+            adapter.filter(model);
+        }
     }
 }

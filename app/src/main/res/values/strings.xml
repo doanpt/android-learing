@@ -95,6 +95,7 @@
     <string name="spn_category_default">Chọn loại thiết bị</string>
     <string name="close">Đóng</string>
     <string name="view_task">Xem</string>
+    <string name="spn_category_service_default">Chọn loại dịch vụ</string>
 
 
 </resources>
