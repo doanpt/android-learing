@@ -7,14 +7,6 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.widget.Toast;
 
-import com.cnc.hcm.cnctracking.event.OnResultTimeDistance;
-import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
-import com.cnc.hcm.cnctracking.model.GetTaskListResult;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -26,12 +18,6 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 /**
  * Created by giapmn on 9/15/17.
  */
@@ -39,9 +25,9 @@ import okhttp3.Response;
 public class CommonMethod {
 
     public static String formatTimeFromServerToString(String inputTime) {
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
-        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        format.setTimeZone(timeZone);
         Date date = null;
         try {
             date = format.parse(inputTime);
@@ -53,9 +39,9 @@ public class CommonMethod {
     }
 
     public static String formatTimeAppointmentDateBeforThirtyMinute(String inputTime) {
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
-        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        format.setTimeZone(timeZone);
         Date date = null;
         try {
             date = format.parse(inputTime);
@@ -70,9 +56,9 @@ public class CommonMethod {
     }
 
     public static Date formatTimeFromServerToDate(String inputTime) {
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
-        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        format.setTimeZone(timeZone);
         Date date = null;
         try {
             date = format.parse(inputTime);
@@ -85,7 +71,7 @@ public class CommonMethod {
     public static Date formatTimeFromServerToDate2(String inputTime) {
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL2);
         TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
+        format.setTimeZone(timeZone);
         Date date = null;
         try {
             date = format.parse(inputTime);
@@ -97,16 +83,25 @@ public class CommonMethod {
 
     public static String formatTimeToString(long time) {
         Date date = new Date(time);
-        return new SimpleDateFormat("dd/MM/yy HH:mm:ss").format(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        simpleDateFormat.setTimeZone(timeZone);
+        return simpleDateFormat.format(date);
     }
 
     public static String formatFullTimeToString(Date date) {
-        return new SimpleDateFormat(Conts.FORMAT_DATE_FULL).format(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        simpleDateFormat.setTimeZone(timeZone);
+        return simpleDateFormat.format(date);
     }
 
     public static String formatDateToString(long time) {
         Date date = new Date(time);
-        return new SimpleDateFormat("HH:mm").format(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        simpleDateFormat.setTimeZone(timeZone);
+        return simpleDateFormat.format(date);
     }
 
     public static String formatCurrency(long number) {
@@ -122,24 +117,34 @@ public class CommonMethod {
 
     public static String formatTimeToMonth(long time) {
         Date date = new Date(time);
-        return new SimpleDateFormat("MM").format(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM");
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        simpleDateFormat.setTimeZone(timeZone);
+        return simpleDateFormat.format(date);
     }
 
     public static String formatTimeToYear(long time) {
         Date date = new Date(time);
-        return new SimpleDateFormat("yyyy").format(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        simpleDateFormat.setTimeZone(timeZone);
+        return simpleDateFormat.format(date);
     }
 
     public static String formatTimeStandand(Date date) {
-        return new SimpleDateFormat("dd/MM/yyyy").format(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        simpleDateFormat.setTimeZone(timeZone);
+        return simpleDateFormat.format(date);
     }
 
     public static Calendar getInstanceCalendar() {
-        return Calendar.getInstance(TimeZone.getTimeZone(Conts.TIME_ZONE_VN));
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        return Calendar.getInstance(timeZone);
     }
 
     public static void actionFindWayInMapApp(Context context, double latitude_cur, double longitude_cur, double latitude, double longitude) {
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+        Intent intent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://maps.google.com/maps?saddr=" + latitude_cur + "," + longitude_cur + "&daddr=" + latitude + "," + longitude));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
