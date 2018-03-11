@@ -151,9 +151,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         String idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL);
         if (idTask != null && !idTask.equals(Conts.BLANK)) {
             if (dialogDetailTaskFragment != null) {
-                dialogDetailTaskFragment.setIdTask(idTask);
-                dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
-                dialogDetailTaskFragment.setExpaned(true);
+                showTaskDetail(idTask);
             }
         }
     }
@@ -366,28 +364,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                 }
                             }
                             if (startDate.equals(endDate)) {
-                                Calendar calendarParam = CommonMethod.getInstanceCalendar();
-                                Date inputParam = CommonMethod.formatTimeFromServerToDate(startDate);
-                                calendarParam.setTime(inputParam);
-
-                                int yearParam = calendarParam.get(Calendar.YEAR);
-                                int monthParam = calendarParam.get(Calendar.MONTH);
-                                int dayParam = calendarParam.get(Calendar.DAY_OF_MONTH);
-
-                                Calendar calendar = CommonMethod.getInstanceCalendar();
-                                int currentYear = calendar.get(Calendar.YEAR);
-                                int currentMonth = calendar.get(Calendar.MONTH);
-                                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-
-                                if (yearParam == currentYear
-                                        && monthParam == currentMonth
-                                        && dayParam == currentDay) {
+                                if (CommonMethod.checkCurrentDay(startDate)) {
                                     if (gpsService != null) {
                                         gpsService.setListTaskToDay(arrItemTask);
                                     }
                                 }
                             }
-
                             initMarkerOnMap();
                         }
                         updateQuantityTask();
@@ -444,13 +426,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         }
 
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 500 milliseconds
-        v.vibrate(1500);
-
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-        r.play();
+        notiRingtoneTypeAndVibrator(RingtoneManager.TYPE_NOTIFICATION, 1500);
 
     }
 
@@ -900,11 +876,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
 
         String idTask = taskListAdapter.getItem(position).getTaskResult()._id;
-        dialogDetailTaskFragment.setIdTask(idTask);
-        dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
-        dialogDetailTaskFragment.setExpaned(true);
-
+        showTaskDetail(idTask);
         updateStatusIsRead(idTask, position);
+    }
+
+    public void showTaskDetail(String idTask) {
+        if (dialogDetailTaskFragment != null) {
+            dialogDetailTaskFragment.setIdTask(idTask);
+            dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
+            dialogDetailTaskFragment.setExpaned(true);
+        }
     }
 
     private void updateStatusIsRead(String idTask, final int position) {
@@ -1077,8 +1058,22 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void showDialogAppointmentTask(ItemTask item) {
-//        DialogNotiTaskAppointment notiTaskAppointment = new DialogNotiTaskAppointment(getApplicationContext());
-//        notiTaskAppointment.setData(item.getTaskResult().title, appointmentDate);
-//        notiTaskAppointment.show();
+        DialogNotiTaskAppointment notiTaskAppointment = new DialogNotiTaskAppointment(MainActivity.this);
+        notiTaskAppointment.setData(item);
+        notiTaskAppointment.show();
+
+        notiRingtoneTypeAndVibrator(RingtoneManager.TYPE_ALARM, 3000);
     }
+
+
+    private void notiRingtoneTypeAndVibrator(int ringtoneType, int timeVibrate){
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        v.vibrate(timeVibrate);
+
+        Uri notification = RingtoneManager.getDefaultUri(ringtoneType);
+        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+        r.play();
+    }
+
 }

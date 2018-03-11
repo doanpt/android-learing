@@ -93,6 +93,8 @@
     <string name="content_dialog_inform4">Bạn phải hoàn thành bước 3 trước</string>
     <string name="spn_branch_default">Chọn nhà sản xuất</string>
     <string name="spn_category_default">Chọn loại thiết bị</string>
+    <string name="close">Đóng</string>
+    <string name="view_task">Xem</string>
 
 
 </resources>

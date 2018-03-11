@@ -1,5 +1,8 @@
 package com.cnc.hcm.cnctracking.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class GetTaskListResult {
     public long statusCode;
     public String message;
@@ -15,7 +18,6 @@ public class GetTaskListResult {
         public long __v;
         public String _id;
         public String title;
-        public Service service;
         public Customer customer;
         public String note;
         public String createdDate;
@@ -27,11 +29,12 @@ public class GetTaskListResult {
         public Executive executive[];
         public String appointmentDate;
         public Address address;
+        public RecommendedServices recommendedServices[];
 
-        public Result(String _id, String title, Service service, Customer customer, String note, long __v, String createdDate, Recipient recipient, boolean isRead, Invoice invoice, Status status, Process[] process, Executive[] executive, String appointmentDate, Address address) {
+        public Result(String _id, String title, Customer customer, String note, long __v, String createdDate, Recipient recipient, boolean isRead, Invoice invoice, Status status, Process[] process,
+                      Executive[] executive, String appointmentDate, Address address, RecommendedServices recommendedServices[]) {
             this._id = _id;
             this.title = title;
-            this.service = service;
             this.customer = customer;
             this.note = note;
             this.__v = __v;
@@ -44,6 +47,67 @@ public class GetTaskListResult {
             this.executive = executive;
             this.appointmentDate = appointmentDate;
             this.address = address;
+            this.recommendedServices = recommendedServices;
+        }
+
+        public class RecommendedServices {
+
+            @SerializedName("service")
+            @Expose
+            private Service service;
+            @SerializedName("device")
+            @Expose
+            private String device;
+            @SerializedName("_id")
+            @Expose
+            private String id;
+            @SerializedName("isDefault")
+            @Expose
+            private Boolean isDefault;
+            @SerializedName("quantity")
+            @Expose
+            private Integer quantity;
+
+            public Service getService() {
+                return service;
+            }
+
+            public void setService(Service service) {
+                this.service = service;
+            }
+
+            public String getDevice() {
+                return device;
+            }
+
+            public void setDevice(String device) {
+                this.device = device;
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public Boolean getIsDefault() {
+                return isDefault;
+            }
+
+            public void setIsDefault(Boolean isDefault) {
+                this.isDefault = isDefault;
+            }
+
+            public Integer getQuantity() {
+                return quantity;
+            }
+
+            public void setQuantity(Integer quantity) {
+                this.quantity = quantity;
+            }
+
         }
 
         public static class Service {

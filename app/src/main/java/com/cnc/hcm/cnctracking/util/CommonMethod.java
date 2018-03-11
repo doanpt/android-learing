@@ -39,7 +39,7 @@ import okhttp3.Response;
 public class CommonMethod {
 
     public static String formatTimeFromServerToString(String inputTime) {
-        TimeZone timeZone = TimeZone.getDefault();
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
@@ -53,7 +53,7 @@ public class CommonMethod {
     }
 
     public static String formatTimeAppointmentDateBeforThirtyMinute(String inputTime) {
-        TimeZone timeZone = TimeZone.getDefault();
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
@@ -70,7 +70,7 @@ public class CommonMethod {
     }
 
     public static Date formatTimeFromServerToDate(String inputTime) {
-        TimeZone timeZone = TimeZone.getDefault();
+        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
@@ -188,6 +188,38 @@ public class CommonMethod {
             return addressList.get(0);
         }
         return null;
+    }
+
+    public static boolean checkCurrentDay(String paramDay) {
+        if (paramDay.contains(".")) {
+            try {
+                paramDay = paramDay.substring(0, paramDay.lastIndexOf(".")) + "Z";
+            } catch (StringIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+        boolean isToday = false;
+        Calendar calendarParam = getInstanceCalendar();
+        Date inputParam = formatTimeFromServerToDate(paramDay);
+        if (inputParam != null) {
+            calendarParam.setTime(inputParam);
+
+            int yearParam = calendarParam.get(Calendar.YEAR);
+            int monthParam = calendarParam.get(Calendar.MONTH);
+            int dayParam = calendarParam.get(Calendar.DAY_OF_MONTH);
+
+            Calendar calendar = getInstanceCalendar();
+            int currentYear = calendar.get(Calendar.YEAR);
+            int currentMonth = calendar.get(Calendar.MONTH);
+            int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            if (yearParam == currentYear
+                    && monthParam == currentMonth
+                    && dayParam == currentDay) {
+                isToday = true;
+            }
+        }
+        return isToday;
     }
 
 }

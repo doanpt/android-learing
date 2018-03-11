@@ -141,19 +141,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         }
     };
 
-
-    private String getDestination() {
-        String result = Conts.BLANK;
-        if (arrTask.size() > Conts.DEFAULT_VALUE_INT_0) {
-            StringBuilder builder = new StringBuilder();
-            for (ItemTask itemWork : arrTask) {
-                builder.append(itemWork.getTaskResult().customer.address.location.latitude + "," + itemWork.getTaskResult().customer.address.location.longitude + "|");
-            }
-            result = builder.toString().substring(Conts.DEFAULT_VALUE_INT_0, builder.toString().lastIndexOf("|"));
-        }
-        return result;
-    }
-
     @Override
     public void editData(int index, String distance, String duration) {
         if (arrTask != null && arrTask.size() > 0) {

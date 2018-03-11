@@ -99,7 +99,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private Notification mNotification;
 
     private ArrayList<TrackLocation> arrTrackLocation;
-    private ArrayList<ItemTask> arrNewTask;
 
     private Gson gson = new Gson();
     private APIService mService;
@@ -162,12 +161,14 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     if (isUserLogin) {
                         if (intent != null) {
                             String idTask = intent.getStringExtra(KEY_ID_OPEND_DETAIL_TASK);
-
-                            Intent intentShowDetailTask = new Intent(this, MainActivity.class);
-                            intentShowDetailTask.putExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL, idTask);
-                            intentShowDetailTask.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intentShowDetailTask);
-
+                            if (mainActivity != null) {
+                                mainActivity.showTaskDetail(idTask);
+                            } else {
+                                Intent intentShowDetailTask = new Intent(this, MainActivity.class);
+                                intentShowDetailTask.putExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL, idTask);
+                                intentShowDetailTask.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intentShowDetailTask);
+                            }
                             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                             manager.cancel(0);
                         }
@@ -195,7 +196,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        arrNewTask = new ArrayList<>();
         arrTrackLocation = new ArrayList<>();
     }
 
@@ -513,18 +513,32 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             }
 
             if (timeMinute >= 60) {
-                String currentTime = CommonMethod.formatDateToString(CommonMethod.getInstanceCalendar().getTimeInMillis());
-                Log.d(TAGG, "runnableUpdateUI, CurrentTime: " + currentTime);
-                for (ItemTask item : listTaskToDay) {
+                for (final ItemTask item : listTaskToDay) {
                     String appointmentDate = item.getTaskResult().appointmentDate.substring(0, item.getTaskResult().appointmentDate.lastIndexOf(".")) + "Z";
                     String timeItemTask = CommonMethod.formatTimeAppointmentDateBeforThirtyMinute(appointmentDate);
                     Log.d(TAGG, "runnableUpdateUI, Time before 30': " + timeItemTask);
+                    String currentTime = CommonMethod.formatDateToString(CommonMethod.getInstanceCalendar().getTimeInMillis());
 
                     if (timeItemTask.equals(currentTime)) {
-                        if (mainActivity!=null){
-                            mainActivity.showDialogAppointmentTask(item);
+                        if (mainActivity != null) {
+                            mainActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mainActivity.showDialogAppointmentTask(item);
+                                }
+                            });
                         }
-                        CommonMethod.makeToast(getApplicationContext(), "Ticket " + item.getTaskResult().title + " còn 30 phút nữa sẽ đến lịch hẹn");
+
+
+                        GetTaskListResult.Result.RecommendedServices recommendedServices = getRecommendedServiceDefault(item.getTaskResult().recommendedServices);
+                        if (recommendedServices != null && recommendedServices.getService() != null) {
+                            addNotification(item.getTaskResult()._id, item.getTaskResult().title, recommendedServices.getService().name);
+                        } else {
+                            addNotification(item.getTaskResult()._id, item.getTaskResult().title, "Dịch vụ");
+                        }
+                        addNotification(item.getTaskResult()._id,
+                                "Ticket " + item.getTaskResult().title + " " + "còn 30 phút nữa đến lịch hẹn.",
+                                "Đã đến lịch hẹn");
                     }
                 }
                 timeMinute = 0;
@@ -560,7 +574,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private Emitter.Listener eventError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
+//            connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
             Log.d(TAGG, "ConnectSocket eventError");
             Log.d(TAGG, "ConnectSocket eventError");
         }
@@ -591,9 +605,15 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             Log.d(TAGG, "eventNewTask");
             final GetTaskListResult.Result result = gson.fromJson(args[0].toString(), GetTaskListResult.Result.class);
             if (result != null) {
-                arrNewTask.add(new ItemTask(result));
-                addNotification(result._id, result.title, result.service.name);
-
+                if (CommonMethod.checkCurrentDay(result.appointmentDate) && listTaskToDay != null) {
+                    listTaskToDay.add(new ItemTask(result));
+                }
+                GetTaskListResult.Result.RecommendedServices recommendedServices = getRecommendedServiceDefault(result.recommendedServices);
+                if (recommendedServices != null && recommendedServices.getService() != null) {
+                    addNotification(result._id, result.title, recommendedServices.getService().name);
+                } else {
+                    addNotification(result._id, result.title, "Dịch vụ");
+                }
                 if (mainActivity != null) {
                     mainActivity.runOnUiThread(new Runnable() {
                         @Override
@@ -609,7 +629,18 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         }
     };
 
-    private Emitter.Listener eventCancelTask = new Emitter.Listener(){
+    private GetTaskListResult.Result.RecommendedServices getRecommendedServiceDefault(GetTaskListResult.Result.RecommendedServices[] recommendedServices) {
+        if (recommendedServices != null && recommendedServices.length > 0) {
+            for (int i = 0; i < recommendedServices.length; i++) {
+                if (recommendedServices[i].getIsDefault()) {
+                    return recommendedServices[i];
+                }
+            }
+        }
+        return null;
+    }
+
+    private Emitter.Listener eventCancelTask = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             try {
@@ -629,7 +660,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         }
     };
 
-    private Emitter.Listener eventUnassignedTask = new Emitter.Listener(){
+    private Emitter.Listener eventUnassignedTask = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             try {
@@ -779,10 +810,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     public void setProductDetailActivity(ProductDetailActivity productDetailActivity) {
         this.productDetailActivity = productDetailActivity;
-    }
-
-    public ArrayList<ItemTask> getArrNewTask() {
-        return arrNewTask;
     }
 
     public void setListTaskToDay(ArrayList<ItemTask> listTaskToDay) {

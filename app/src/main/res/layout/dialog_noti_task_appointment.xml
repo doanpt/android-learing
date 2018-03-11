@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="320dp"
-    android:layout_height="400dp"
+    android:layout_height="380dp"
     android:background="@android:color/white"
     android:orientation="vertical">
 
@@ -27,13 +27,14 @@
             android:textSize="40sp" />
 
         <TextView
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
             android:id="@+id/tv_title_task_dialog_noti_appointment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="4"
             android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:text="Ticket sdhjsdfdfdkfjdskfdkjfdkfdkfjdfkddsfgdsdgdgdgdff" />
+            android:paddingRight="25dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -47,7 +48,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorAccent"
-            android:text="Đóng"
+            android:text="@string/close"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -61,7 +62,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorAccent"
-            android:text="Xem"
+            android:text="@string/view_task"
             android:textColor="@android:color/white" />
     </LinearLayout>
 </LinearLayout>
