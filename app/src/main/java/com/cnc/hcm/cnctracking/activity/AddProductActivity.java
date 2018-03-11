@@ -237,7 +237,6 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                     break;
                 }
             }
-            mProgressDialog.cancel();
             List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
             arrHeads.add(new MHead(Conts.KEY_CUSTOMER_ID, customerId));
@@ -253,13 +252,13 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                 public void onResponse(Call<AddProductResult> call, Response<AddProductResult> response) {
                     //TODO :FIX ERROR ADD
                     Long status = response.body().getStatusCode();
-                    mProgressDialog.dismiss();
                     if (status == Conts.RESPONSE_STATUS_OK) {
                         List<MHead> arrHeads = new ArrayList<>();
                         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
                         arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, qrCode));
                         addProduct2_4(arrHeads, qrCode);
                     } else {
+                        mProgressDialog.dismiss();
                         CommonMethod.makeToast(AddProductActivity.this, "Add product error!");
                     }
                 }

@@ -1,5 +1,7 @@
 package com.cnc.hcm.cnctracking.activity;
 
+import android.app.ProgressDialog;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -60,6 +62,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
     private ArrayList<ProductListResult.Product> listProduct;
     private ArrayList<CategoryListResult.Category> listCategory;
     private Spinner spnManufacuture, spnCategory, spnServiceCategory;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,23 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
         initViews();
     }
 
+    public void showLoadingDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+            }
+        }, 5000);
+    }
+
     private void initViews() {
         imvBack = findViewById(R.id.imv_back);
         imgSearch = findViewById(R.id.img_search);
@@ -100,6 +120,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
         imgExitProductSearch = findViewById(R.id.img_product_back_to_list);
         imgExitServiceSearch = findViewById(R.id.img_service_back_to_list);
+        showLoadingDialog();
         ApiUtils.getAPIService(arrHeads).getListManufactures().enqueue(new Callback<ProductListResult>() {
             @Override
             public void onResponse(Call<ProductListResult> call, Response<ProductListResult> response) {
@@ -117,6 +138,9 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             @Override
             public void onFailure(Call<ProductListResult> call, Throwable t) {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
                 Toast.makeText(ListProductAndServiceActivity.this, "Get lise product  for search fail", Toast.LENGTH_SHORT).show();
             }
         });
@@ -137,6 +161,9 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             @Override
             public void onFailure(Call<CategoryListResult> call, Throwable t) {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
                 Toast.makeText(ListProductAndServiceActivity.this, "Get lise category  for search fail", Toast.LENGTH_SHORT).show();
             }
         });
@@ -157,6 +184,9 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             @Override
             public void onFailure(Call<Services> call, Throwable t) {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
                 Toast.makeText(ListProductAndServiceActivity.this, "Get lise service  for search fail", Toast.LENGTH_SHORT).show();
             }
         });
@@ -300,8 +330,9 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             }
         });
-
-
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
     private void searchServiceCategory() {

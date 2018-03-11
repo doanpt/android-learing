@@ -17,7 +17,7 @@
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:text="@string/text_title_no_gps"
+            android:text="@string/loadding"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -29,7 +29,7 @@
             android:layout_marginTop="-10dp"
             android:layout_weight="1"
             android:padding="15dp"
-            android:text="@string/text_gps_not_found"
+            android:text="@string/loading"
             android:textColor="@android:color/black" />
 
         <LinearLayout

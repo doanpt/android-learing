@@ -1,5 +1,6 @@
 package com.cnc.hcm.cnctracking.activity;
 
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -88,6 +90,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private boolean isNewProduct = false;
     private DialogInfor dialogInfor;
     private String note = "";
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +104,25 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         getData();
     }
 
+    public void showLoadingDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+            }
+        }, 5000);
+    }
+
     private void getData() {
+        showLoadingDialog();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
         arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceID));
@@ -123,6 +144,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 Toast.makeText(ProductDetailActivity.this, "Get Detail failure", Toast.LENGTH_SHORT).show();
             }
         });
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
     public void visiableRecycler() {

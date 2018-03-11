@@ -33,7 +33,7 @@
                 android:id="@+id/tv_work_name_work_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tủ lạnh samsung hết ga"
+                android:text="The job name"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:text="18/1/2018 Số 1 Phạm Văn Bạch, Hà Nội"
+                android:text="Address"
                 android:textColor="#AAfffff2"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -116,7 +116,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingLeft="5dp"
-                            android:text="Máy lạnh ejh e4353"
+                            android:text="Device name"
                             android:textColor="#ffffff"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -127,7 +127,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:padding="5dp"
-                            android:text="41234123443124321234"
+                            android:text="Device code"
                             android:textColor="#ffffff"
                             android:textSize="16sp" />
                     </LinearLayout>
