@@ -95,7 +95,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
     private List<TaskDetailLoadedListener> mTaskDetailLoadedListener = new ArrayList<>();
     private TextView tv_completed_ticket;
-    private Socket mSocket;
     private Handler mHandler;
 
     public void setTaskDetailLoadedListener(TaskDetailLoadedListener taskDetailLoadedListener) {
@@ -142,56 +141,12 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         View view = inflater.inflate(R.layout.dialog_bottom_sheet, container);
         initViews(view);
         mHandler = new Handler();
-        initSocket();
-        connectSocket();
         mTaskDetailLoadedListener.clear();
 
         return view;
     }
 
-    private void disconnectSocket() {
-        if (mSocket != null && mSocket.connected()) {
-            mSocket.disconnect();
-            mSocket = null;
-        }
-    }
-
-    private void connectSocket() {
-        if (mSocket != null && !mSocket.connected()) {
-            mSocket.on(Conts.SOCKET_EVENT_CANCEL_TASK, new Emitter.Listener(){
-                @Override
-                public void call(Object... args) {
-                    try {
-                        Log.d(TAG, "SOCKET_EVENT_CANCEL_TASK -> data: " + args[0]);
-                        ItemCancelTask itemCancelTask = new Gson().fromJson(args[0].toString(), ItemCancelTask.class);
-                        showDialogCancelTicket(itemCancelTask.content, itemCancelTask.data._id);
-                    } catch (Exception e) {
-                        Log.e(TAG, "SOCKET_EVENT_CANCEL_TASK -> e: " + e);
-                    }
-                }
-            });
-            mSocket.on(Conts.SOCKET_EVENT_UNASSIGNED_TASK, new Emitter.Listener(){
-                @Override
-                public void call(Object... args) {
-                    try {
-                        Log.d(TAG, "SOCKET_EVENT_UNASSIGNED_TASK -> data: " + args[0]);
-                        showDialogUnAssignedTask(idTask);
-                    } catch (Exception e) {
-                        Log.e(TAG, "SOCKET_EVENT_UNASSIGNED_TASK -> e: " + e);
-                    }
-                }
-            });
-            mSocket.on(Conts.SOCKET_EVENT_ERROR, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Log.d(TAG, "SOCKET_EVENT_ERROR -> data: " + (args != null && args.length > 0 ? args[0] : args));
-                }
-            });
-            mSocket.connect();
-        }
-    }
-
-    private void showDialogUnAssignedTask(final String idTask) {
+    public void showDialogUnAssignedTask(final String idTask) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -208,7 +163,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                     public void onClick(View view) {
                         dialog.dismiss();
                         DialogDetailTaskFragment.this.dismiss();
-                        getMainActivity().onUnAssignedTask(idTask);
                     }
                 });
 
@@ -217,7 +171,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         });
     }
 
-    private void showDialogCancelTicket(String message, final String idTask) {
+    public void showDialogCancelTicket(String message, final String idTask) {
         if (TextUtils.isEmpty(message)) {
             message = "Đơn hàng bị hủy.";
         }
@@ -239,22 +193,12 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                     public void onClick(View view) {
                         dialog.dismiss();
                         DialogDetailTaskFragment.this.dismiss();
-                        getMainActivity().onTaskCanceled(idTask);
                     }
                 });
 
                 dialog.show();
             }
         });
-    }
-
-    private void initSocket() {
-        try {
-            String url = Conts.URL_BASE + "?token=" + UserInfo.getInstance(getContext()).getAccessToken();
-            mSocket = IO.socket(url);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
     }
 
     private void initViews(View view) {
@@ -411,7 +355,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        disconnectSocket();
         dismisDialogLoading();
     }
 
@@ -509,26 +452,42 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
     private void handleCompleteWordAction() {
         boolean isComplete = true;
+        String message = "Đang xử lý hoàn thành ticket";
+        try {
+            Log.d(TAG, "onTaskDetailLoaded, invoice.status._id: " + getTaskDetailResult.result.invoice.status._id);
+            if (getTaskDetailResult.result.invoice.status._id <= 1) {
+                isComplete = false;
+                message = "Khách hàng phải thanh toán trước khi đóng ticket";
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "onTaskDetailLoaded(), Exception1: " + e);
+            message = "Lỗi khi check trạng thái thanh toán";
+        }
+
         try {
             GetTaskDetailResult.Result.Process[] process = getTaskDetailResult.result.process;
             if (process == null || process.length < 1) {
                 isComplete = false;
+                message = "Chưa có thiết bị nào được sửa chữa";
             } else {
                 for (int i = 0; i < process.length; i++) {
                     if (process[i].status._id < 3) {
                         isComplete = false;
+                        message = "Thiết bị thứ " + (i + 1) + " chưa được sửa xong";
                         break;
                     }
                 }
             }
         } catch (Exception e) {
+            Log.e(TAG, "onTaskDetailLoaded(), Exception2: " + e);
+            message = "Lỗi khi check trạng thái từng thiết bị";
         }
 
         if (isComplete) {
             finishTicket();
         }
 
-        CommonMethod.makeToast(getActivity(), isComplete ? "Đã hoàn thành ticket" : "Không tìm thấy thiết bị bảo trì hoặc tồn tại thiết bị chưa được bảo trì xong");
+        CommonMethod.makeToast(getActivity(), message);
         fabMenu.collapse();
     }
 

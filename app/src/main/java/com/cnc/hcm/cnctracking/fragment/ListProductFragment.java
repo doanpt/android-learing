@@ -20,6 +20,7 @@ import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.event.OnItemInputClickListener;
+import com.cnc.hcm.cnctracking.model.SearchModel;
 import com.cnc.hcm.cnctracking.model.TraddingProduct;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
@@ -74,13 +75,6 @@ public class ListProductFragment extends Fragment implements ListProductAndServi
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         return view;
-    }
-
-    @Override
-    public void onTextChange(CharSequence str) {
-        if (adapter != null) {
-            adapter.filter(str.toString());
-        }
     }
 
     private void getListTraddingProduct() {
@@ -138,5 +132,12 @@ public class ListProductFragment extends Fragment implements ListProductAndServi
         intentResult.putExtra(Conts.KEY_CHECK_TYPE_RESULT, Conts.KEY_PRODUCT);
         activity.setResult(Activity.RESULT_OK, intentResult);
         activity.finish();
+    }
+
+    @Override
+    public void onTextChange(SearchModel searchModel) {
+        if (adapter != null) {
+            adapter.filter(searchModel);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.cnc.hcm.cnctracking.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
  */
 
 public class ProductProcessAdapter extends RecyclerView.Adapter<ProductProcessAdapter.ProductHolder> {
+    private static final String TAG = ProductProcessAdapter.class.getSimpleName();
     private ArrayList<TraddingProduct.Result> arrProduct = new ArrayList<>();
     private Context mContext;
 
@@ -41,9 +43,15 @@ public class ProductProcessAdapter extends RecyclerView.Adapter<ProductProcessAd
     public void onBindViewHolder(ProductHolder holder, int position) {
         TraddingProduct.Result item = arrProduct.get(position);
         holder.tvName.setText(item.getName() + "");
-        holder.tvAmount.setText(item.getQuantity() +" "+item.getUnit().getTitle());
+        holder.tvAmount.setText(item.getQuantity() +" "+ (item.getUnit() != null ? item.getUnit().getTitle() : Conts.BLANK));
         holder.tvPrice.setText(item.getPrice() + "");
-        int total = Integer.parseInt(item.getQuantity() + "") * Integer.parseInt(item.getPrice().toString() + "");
+        int price = 0;
+        try {
+            price = Integer.parseInt(item.getPrice().toString() + "");
+        } catch (Exception e) {
+            Log.e(TAG, "onBindViewHolder", e);
+        }
+        int total = Integer.parseInt(item.getQuantity() + "") * price;
         holder.tvTotalPrice.setText(total + "");
     }
 

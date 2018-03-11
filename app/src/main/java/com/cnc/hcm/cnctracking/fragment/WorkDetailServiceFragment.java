@@ -4,12 +4,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.adapter.WorkDetailRequireRecyclerViewAdapter;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailServiceRecyclerViewAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
@@ -33,6 +39,7 @@ import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,23 +52,28 @@ public class WorkDetailServiceFragment extends Fragment implements
     private static final String TAG = WorkDetailServiceFragment.class.getSimpleName();
 
     private RelativeLayout rlExpandHeaderBill;
-    private LinearLayout ll_content_bill;
+//    private LinearLayout ll_content_bill;
     private LinearLayout tv_detail_work_call_action;
     private LinearLayout tv_detail_work_sms_action;
     private LinearLayout tv_detail_work_address_action;
-    private ImageView imv_expand_bill;
+//    private ImageView imv_expand_bill;
     private TextView tv_detail_work_contact_name;
     private TextView tv_detail_work_contact_phone;
+    private TextView tv_number_service;
+    private TextView tv_number_device;
+    private TextView tv_note;
     private TextView tv_total_value;
     private TextView tv_vat;
     private TextView tv_have_to_pay;
     private TextView tv_detail_work_total_payment;
     private TextView btn_confirm_charge;
     private RecyclerView rv_service;
+    private RecyclerView rv_require;
 
 //    private OnPayCompletedListener onPayCompletedListener;
 
     private WorkDetailServiceRecyclerViewAdapter mWorkDetailServiceRecyclerViewAdapter;
+    private WorkDetailRequireRecyclerViewAdapter mWorkDetailRequireRecyclerViewAdapter;
 
     public WorkDetailServiceFragment() {
     }
@@ -75,8 +87,8 @@ public class WorkDetailServiceFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_work_detail_service, container, false);
-        ll_content_bill = (LinearLayout) view.findViewById(R.id.ll_content_bill);
-        imv_expand_bill = (ImageView) view.findViewById(R.id.imv_expand_bill);
+//        ll_content_bill = (LinearLayout) view.findViewById(R.id.ll_content_bill);
+//        imv_expand_bill = (ImageView) view.findViewById(R.id.imv_expand_bill);
         rlExpandHeaderBill = (RelativeLayout) view.findViewById(R.id.rl_expand_header_bill);
         rlExpandHeaderBill.setOnClickListener(this);
 
@@ -86,12 +98,21 @@ public class WorkDetailServiceFragment extends Fragment implements
         tv_detail_work_sms_action = (LinearLayout) view.findViewById(R.id.tv_detail_work_sms_action);
         tv_detail_work_address_action = (LinearLayout) view.findViewById(R.id.tv_detail_work_address_action);
 
+        tv_note = view.findViewById(R.id.tv_note);
+        tv_number_service = view.findViewById(R.id.tv_number_service);
+        tv_number_device = view.findViewById(R.id.tv_number_device);
         tv_total_value = (TextView) view.findViewById(R.id.tv_total_value);
         tv_vat = (TextView) view.findViewById(R.id.tv_vat);
         tv_have_to_pay = (TextView) view.findViewById(R.id.tv_have_to_pay);
         tv_detail_work_total_payment = (TextView) view.findViewById(R.id.tv_detail_work_total_payment);
         btn_confirm_charge = view.findViewById(R.id.btn_confirm_charge);
         btn_confirm_charge.setOnClickListener(this);
+
+        rv_require = view.findViewById(R.id.rv_require);
+        rv_require.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        mWorkDetailRequireRecyclerViewAdapter = new WorkDetailRequireRecyclerViewAdapter(getContext());
+        rv_require.setAdapter(mWorkDetailRequireRecyclerViewAdapter);
+
         rv_service = (RecyclerView) view.findViewById(R.id.rv_service);
         rv_service.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mWorkDetailServiceRecyclerViewAdapter = new WorkDetailServiceRecyclerViewAdapter(getContext());
@@ -198,7 +219,7 @@ public class WorkDetailServiceFragment extends Fragment implements
                 Toast.makeText(getActivity(), "Not found the work address.", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            Log.e(TAG, "onTaskDetailLoaded(), Exception1: " + e);
+            Log.e(TAG, "onTaskDetailLoaded(), Exception2: " + e);
         }
 
         try {
@@ -213,6 +234,46 @@ public class WorkDetailServiceFragment extends Fragment implements
                     handleActions(getTaskDetailResult.result.customer.phone);
                 }
             }
+        } catch (Exception e) {
+            Log.e(TAG, "onTaskDetailLoaded(), Exception3: " + e);
+        }
+
+        try {
+            String noteLable = "Ghi chú: ";
+            String note = noteLable;
+            if (getTaskDetailResult.result.note != null) {
+                note += getTaskDetailResult.result.note;
+            }
+
+            SpannableStringBuilder ssBuilder = new SpannableStringBuilder(note);
+            ssBuilder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimaryDark)), 0, noteLable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ssBuilder.setSpan(new StyleSpan(Typeface.BOLD), 0, noteLable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            tv_note.setText(ssBuilder);
+        } catch (Exception e) {
+            Log.e(TAG, "onTaskDetailLoaded(), Exception4: " + e);
+        }
+
+        try {
+            GetTaskDetailResult.Result.RecommendedServices[] recommendedServices = getTaskDetailResult.result.recommendedServices;
+            mWorkDetailRequireRecyclerViewAdapter.updateRequireList(Arrays.asList(recommendedServices));
+
+            int totalService = 0;
+            int totalDevice = 0;
+            for (GetTaskDetailResult.Result.RecommendedServices item : recommendedServices) {
+                if (item != null) {
+                    totalService += 1;
+                    totalDevice += item.quantity;
+                }
+            }
+
+            tv_number_service.setText(totalService + Conts.BLANK);
+            tv_number_device.setText(totalDevice + Conts.BLANK);
+        } catch (Exception e) {
+            Log.e(TAG, "onTaskDetailLoaded(), Exception5: " + e);
+        }
+
+        try {
             List<ItemPrice> itemPrices = new ArrayList<>();
 //            if (getTaskDetailResult.result.service != null) {
 //                itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, getTaskDetailResult.result.service._id, getTaskDetailResult.result.service.name, getTaskDetailResult.result.service.tax, getTaskDetailResult.result.service.price, 1));
@@ -259,7 +320,7 @@ public class WorkDetailServiceFragment extends Fragment implements
             mWorkDetailServiceRecyclerViewAdapter.updateServiceList(itemPrices);
 
         } catch (Exception e) {
-            Log.e(TAG, "onTaskDetailLoaded(), Exception: " + e);
+            Log.e(TAG, "onTaskDetailLoaded(), Exception6: " + e);
         }
     }
 

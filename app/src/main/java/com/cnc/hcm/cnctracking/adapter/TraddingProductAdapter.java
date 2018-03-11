@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.event.OnItemInputClickListener;
+import com.cnc.hcm.cnctracking.model.SearchModel;
 import com.cnc.hcm.cnctracking.model.TraddingProduct;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -106,16 +107,54 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
     }
 
 
-    public void filter(String str) {
+    public void filter(SearchModel model) {
         arr.clear();
-        str = str.toLowerCase(Locale.getDefault());
+        String text, branch, category;
+        text = model.getText().toLowerCase();
+        branch = model.getBranch().toLowerCase();
+        category = model.getCategory().toLowerCase();
+        text = text.toLowerCase(Locale.getDefault());
+        boolean isText = false;
+        boolean isBranch = false;
+        boolean isCategory = false;
+        isText = "".equals(model.getText()) ? false : true;
+        isBranch = branch.equals(context.getResources().getString(R.string.spn_branch_default).toLowerCase()) ? false : true;
+        isCategory = category.equals(context.getResources().getString(R.string.spn_category_default).toLowerCase()) ? false : true;
 
-        if (str.equals(Conts.BLANK)) {
-            arr.addAll(arrTemp);
-        } else {
+        if (isText == true) {
+            ArrayList<TraddingProduct.Result> arrTemp2 = new ArrayList<>();
+            arrTemp2.addAll(arr);
+            arr.clear();
+            for (int i = 0; i < arrTemp2.size(); i++) {
+                if (arrTemp2.get(i).getBrand().getName().toLowerCase().equals(branch)) {
+                    arr.add(arrTemp2.get(i));
+                }
+            }
             for (int i = 0; i < arrTemp.size(); i++) {
-                if (arrTemp.get(i).getName().toString().toLowerCase(Locale.getDefault()).contains(str)) {
+                if (arrTemp.get(i).getName().toString().toLowerCase(Locale.getDefault()).contains(text)) {
                     arr.add(arrTemp.get(i));
+                }
+            }
+        } else {
+            arr.addAll(arrTemp);
+        }
+        if (isBranch == true) {
+            ArrayList<TraddingProduct.Result> arrTemp2 = new ArrayList<>();
+            arrTemp2.addAll(arr);
+            arr.clear();
+            for (int i = 0; i < arrTemp2.size(); i++) {
+                if (arrTemp2.get(i).getBrand().getName().toLowerCase().equals(branch)) {
+                    arr.add(arrTemp2.get(i));
+                }
+            }
+        }
+        if (isCategory == true) {
+            ArrayList<TraddingProduct.Result> arrTemp3 = new ArrayList<>();
+            arrTemp3.addAll(arr);
+            arr.clear();
+            for (int i = 0; i < arrTemp3.size(); i++) {
+                if (arrTemp3.get(i).getCategory().getTitle().toLowerCase().equals(category)) {
+                    arr.add(arrTemp3.get(i));
                 }
             }
         }

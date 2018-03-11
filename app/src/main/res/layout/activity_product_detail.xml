@@ -92,6 +92,7 @@
                 <LinearLayout
                     android:id="@+id/ll_device_infor"
                     android:layout_width="match_parent"
+
                     android:layout_height="60dp"
                     android:background="@color/colorPrimary"
                     android:gravity="center_vertical"
@@ -101,6 +102,7 @@
                         android:id="@+id/img_device_image"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
                         android:layout_weight="0.7" />
 
                     <LinearLayout
@@ -302,7 +304,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:maxLines="2"
-                                android:text="Máy lạnh không hoạt đông, dộng cơ bị hỏng Máy lạnh không hoạt đông, dộng cơ bị hỏng Máy lạnh không hoạt đông, dộng cơ bị hỏng" />
+                                android:text="Chưa có ghi chú" />
                         </LinearLayout>
 
                         <FrameLayout

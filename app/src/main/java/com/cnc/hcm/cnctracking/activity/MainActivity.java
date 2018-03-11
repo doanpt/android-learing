@@ -56,6 +56,7 @@ import com.cnc.hcm.cnctracking.fragment.MonthViewFragment;
 import com.cnc.hcm.cnctracking.fragment.YearsViewFragment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
+import com.cnc.hcm.cnctracking.model.ItemCancelTask;
 import com.cnc.hcm.cnctracking.model.ItemMarkedMap;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.model.ResponseCNC;
@@ -1031,27 +1032,48 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         return gpsService;
     }
 
+    public void onCancelTicket(ItemCancelTask itemCancelTask) {
+        if (itemCancelTask == null) {
+            return;
+        }
 
-    public void onTaskCanceled(String idTask) {
+        if (dialogDetailTaskFragment != null && dialogDetailTaskFragment.isVisible()) {
+            dialogDetailTaskFragment.showDialogCancelTicket(itemCancelTask.content, itemCancelTask.data._id);
+        } else {
+            Toast.makeText(MainActivity.this, itemCancelTask.content + Conts.BLANK, Toast.LENGTH_SHORT).show();
+        }
+
         for (ItemTask itemTask : arrItemTask) {
-            if (TextUtils.equals(idTask, itemTask.getTaskResult()._id)) {
+            if (TextUtils.equals(itemCancelTask.data._id, itemTask.getTaskResult()._id)) {
                 itemTask.getTaskResult().status._id = Conts.TYPE_CANCEL_TASK;
                 taskListAdapter.notiDataChange(arrItemTask);
                 // TODO update các item khác nếu cần. ex: taskCount,...
                 return;
             }
         }
+
     }
 
-    public void onUnAssignedTask(String idTask) {
+    public void onUnAssignedTask(ItemCancelTask itemCancelTask) {
+        if (itemCancelTask == null) {
+            return;
+        }
+
+        if (dialogDetailTaskFragment != null && dialogDetailTaskFragment.isVisible()) {
+            dialogDetailTaskFragment.showDialogCancelTicket(itemCancelTask.content, itemCancelTask.data._id);
+        } else {
+            Toast.makeText(MainActivity.this, itemCancelTask.content + Conts.BLANK, Toast.LENGTH_SHORT).show();
+        }
+
         for (ItemTask itemTask : arrItemTask) {
-            if (TextUtils.equals(idTask, itemTask.getTaskResult()._id)) {
+            if (TextUtils.equals(itemCancelTask.data._id, itemTask.getTaskResult()._id)) {
                 arrItemTask.remove(itemTask);
                 taskListAdapter.notiDataChange(arrItemTask);
                 // TODO update các item khác nếu cần. ex: taskCount,...
                 return;
             }
         }
+
     }
 
     public void showDialogAppointmentTask(ItemTask item) {

@@ -36,6 +36,7 @@ import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.dialog.DialogNotiTaskAppointment;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
+import com.cnc.hcm.cnctracking.model.ItemCancelTask;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LocationBackupFile;
@@ -542,6 +543,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             mSocket.on(Conts.SOCKET_EVENT_LOGIN_OTHER_DEVICE, eventLoginOtherDevice);
             mSocket.on(Conts.SOCKET_EVENT_ERROR, eventError);
 
+            mSocket.on(Conts.SOCKET_EVENT_CANCEL_TASK, eventCancelTask);
+            mSocket.on(Conts.SOCKET_EVENT_UNASSIGNED_TASK, eventUnassignedTask);
+
 //            mSocket.emit(Conts.SOCKET_EVENT_JOIN, token, new Ack() {
 //                @Override
 //                public void call(Object... args) {
@@ -601,6 +605,46 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
                 Log.d(TAGG, "eventNewTask: " + args[0].toString());
                 Log.d(TAGG, "eventNewTask");
+            }
+        }
+    };
+
+    private Emitter.Listener eventCancelTask = new Emitter.Listener(){
+        @Override
+        public void call(Object... args) {
+            try {
+                Log.d(TAGG, "eventCancelTask -> data: " + args[0]);
+                final ItemCancelTask itemCancelTask = new Gson().fromJson(args[0].toString(), ItemCancelTask.class);
+                if (mainActivity != null) {
+                    mainActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainActivity.onCancelTicket(itemCancelTask);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                Log.e(TAGG, "eventCancelTask -> e: " + e);
+            }
+        }
+    };
+
+    private Emitter.Listener eventUnassignedTask = new Emitter.Listener(){
+        @Override
+        public void call(Object... args) {
+            try {
+                Log.d(TAGG, "eventUnassignedTask -> data: " + args[0]);
+                final ItemCancelTask itemCancelTask = new Gson().fromJson(args[0].toString(), ItemCancelTask.class);
+                if (mainActivity != null) {
+                    mainActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainActivity.onUnAssignedTask(itemCancelTask);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                Log.e(TAGG, "eventUnassignedTask -> e: " + e);
             }
         }
     };
