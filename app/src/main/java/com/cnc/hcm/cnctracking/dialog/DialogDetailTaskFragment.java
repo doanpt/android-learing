@@ -15,16 +15,19 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.AddProductActivity;
+import com.cnc.hcm.cnctracking.activity.ChangeTimeActivity;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
 import com.cnc.hcm.cnctracking.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailPageAdapter;
@@ -63,12 +66,13 @@ import retrofit2.Response;
 
 @SuppressLint("ValidFragment")
 public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
-        implements View.OnClickListener {
+        implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
     private static final String TAG = DialogDetailTaskFragment.class.getSimpleName();
 
     // Float action button
     private LinearLayout llViewControl;
+    private LinearLayout llTaskTime;
     private FrameLayout flBlurView;
     private FloatingActionsMenu fabMenu;
     private TextView tvComplete;
@@ -146,7 +150,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         return view;
     }
 
-    public void showDialogUnAssignedTask(final String idTask) {
+    public void showDialogUnAssignedTask() {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -171,7 +175,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         });
     }
 
-    public void showDialogCancelTicket(String message, final String idTask) {
+    public void showDialogCancelTicket(String message) {
         if (TextUtils.isEmpty(message)) {
             message = "Đơn hàng bị hủy.";
         }
@@ -219,6 +223,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
         // Float action button
         llViewControl = (LinearLayout) view.findViewById(R.id.view_control);
+        llTaskTime = (LinearLayout) view.findViewById(R.id.ll_task_time);
+        llTaskTime.setOnClickListener(this);
         flBlurView = (FrameLayout) view.findViewById(R.id.blurView);
         fabMenu = (FloatingActionsMenu) view.findViewById(R.id.fab_menu);
         fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
@@ -403,30 +409,13 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 setExpaned(false);
                 break;
             case R.id.ll_find_way:
-
-                GetTaskDetailResult.Result result = getTaskDetailResult.result;
-                if (mainActivity != null && result != null) {
-                    if (result.address != null) {
-                        if (result.address.location != null) {
-                            CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
-                                    mainActivity.getLongtitude(), result.address.location.latitude, result.address.location.longitude);
-                        } else {
-                            String locationName = result.address.street;
-                            Address address = CommonMethod.getLocationFromLocationName(getContext(), locationName);
-                            if (address != null) {
-                                CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
-                                        mainActivity.getLongtitude(), address.getLatitude(), address.getLongitude());
-                            }
-                        }
-                    } else {
-                        if (result.customer != null && result.customer.address != null && result.customer.address.location != null) {
-
-                            CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
-                                    mainActivity.getLongtitude(), result.customer.address.location.latitude, result.customer.address.location.longitude);
-                        }
-                    }
-                }
-
+                handleFindWayAction();
+                break;
+            case R.id.ll_task_time:
+                PopupMenu popup = new PopupMenu(getMainActivity(), view);
+                popup.getMenuInflater().inflate(R.menu.task_time_popup_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(this);
+                popup.show();
                 break;
             case R.id.tv_complete_work_float_button:
                 handleCompleteWordAction();
@@ -447,6 +436,52 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 integrator.initiateScan();
                 fabMenu.collapse();
                 break;
+        }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.menu_item_task_change_time:
+                handleTaskChangeTimeAction();
+                break;
+        }
+        return true;
+    }
+
+    private void handleTaskChangeTimeAction() {
+        Intent intentNote = new Intent(getMainActivity(), ChangeTimeActivity.class);
+        try {
+            intentNote.putExtra(Conts.KEY_ID_TASK, idTask);
+            intentNote.putExtra(Conts.KEY_WORK_TIME, getTaskDetailResult.result.appointmentDate);
+        } catch (Exception e) {
+            Log.e(TAG, "handleTaskChangeTimeAction(), Exception: " + e);
+        }
+        startActivityForResult(intentNote, ChangeTimeActivity.CODE_CHANGE_TIME);
+    }
+
+    private void handleFindWayAction() {
+        GetTaskDetailResult.Result result = getTaskDetailResult.result;
+        if (mainActivity != null && result != null) {
+            if (result.address != null) {
+                if (result.address.location != null) {
+                    CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
+                            mainActivity.getLongtitude(), result.address.location.latitude, result.address.location.longitude);
+                } else {
+                    String locationName = result.address.street;
+                    Address address = CommonMethod.getLocationFromLocationName(getContext(), locationName);
+                    if (address != null) {
+                        CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
+                                mainActivity.getLongtitude(), address.getLatitude(), address.getLongitude());
+                    }
+                }
+            } else {
+                if (result.customer != null && result.customer.address != null && result.customer.address.location != null) {
+
+                    CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
+                            mainActivity.getLongtitude(), result.customer.address.location.latitude, result.customer.address.location.longitude);
+                }
+            }
         }
     }
 

@@ -60,6 +60,7 @@
         <activity
             android:name=".activity.AddNoteActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
+        <activity android:name=".activity.ChangeTimeActivity"/>
     </application>
 
 </manifest>

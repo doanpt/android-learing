@@ -5,10 +5,12 @@ import com.cnc.hcm.cnctracking.model.AddContainProductResult;
 import com.cnc.hcm.cnctracking.model.AddProductItem;
 import com.cnc.hcm.cnctracking.model.AddProductResult;
 import com.cnc.hcm.cnctracking.model.CategoryListResult;
+import com.cnc.hcm.cnctracking.model.ChangeTicketAppointmentResult;
 import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
 import com.cnc.hcm.cnctracking.model.CompleteTicketResponse;
 import com.cnc.hcm.cnctracking.model.ConfirmChargeResponse;
 import com.cnc.hcm.cnctracking.model.CountTaskResult;
+import com.cnc.hcm.cnctracking.model.GetChangeTicketAppointmentReasonsResult;
 import com.cnc.hcm.cnctracking.model.GetProductDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
@@ -104,4 +106,10 @@ public interface APIService {
 
     @GET(Conts.PATH_GET_SERVICES)
     Call<Services> getServices();
+
+    @GET(Conts.PATH_REASONS_CHANGE_TICKET_APPOINTMENT_DATE)
+    Call<GetChangeTicketAppointmentReasonsResult> getChangeTicketAppointmentReasons();
+
+    @PATCH(Conts.PATH_CHANGE_TICKET_APPOINTMENT_DATE)
+    Call<ChangeTicketAppointmentResult> changeTicketAppointment(@Path("id") String idTask);
 }

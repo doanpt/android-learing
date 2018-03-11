@@ -1036,7 +1036,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
 
         if (dialogDetailTaskFragment != null && dialogDetailTaskFragment.isVisible()) {
-            dialogDetailTaskFragment.showDialogCancelTicket(itemCancelTask.content, itemCancelTask.data._id);
+            dialogDetailTaskFragment.showDialogCancelTicket(itemCancelTask.content);
         } else {
             Toast.makeText(MainActivity.this, itemCancelTask.content + Conts.BLANK, Toast.LENGTH_SHORT).show();
         }
@@ -1058,7 +1058,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
 
         if (dialogDetailTaskFragment != null && dialogDetailTaskFragment.isVisible()) {
-            dialogDetailTaskFragment.showDialogCancelTicket(itemCancelTask.content, itemCancelTask.data._id);
+            dialogDetailTaskFragment.showDialogUnAssignedTask();
         } else {
             Toast.makeText(MainActivity.this, itemCancelTask.content + Conts.BLANK, Toast.LENGTH_SHORT).show();
         }

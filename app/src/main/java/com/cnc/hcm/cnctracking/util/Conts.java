@@ -60,7 +60,8 @@ public class Conts {
     public static final String PATH_CONFIRM_CHARGE = "/task/{id}/confirm-charge";
     public static final String PATH_GET_TRADING_PRODUCT = "/trading-products";
     public static final String PATH_GET_SERVICES = "/services";
-
+    public static final String PATH_REASONS_CHANGE_TICKET_APPOINTMENT_DATE = "/reasons/change-ticket-appointment-date";
+    public static final String PATH_CHANGE_TICKET_APPOINTMENT_DATE = "/task/{id}/change-appointment-date";
 
     public static final String KEY_AUTHORIZATION = "Authorization";
     public static final String KEY_CUSTOMER_ID = "customerId";
@@ -88,6 +89,7 @@ public class Conts {
     public static final String KEY_ID_TASK = "KEY_ID_TASK";
     public static final String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
     public static final String FORMAT_DATE_FULL = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String FORMAT_DATE_FULL2 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final String FORMAT_TIME_FULL = "T00:00:00Z";
     public static final String KEY_START_DATE = "startDate";
     public static final String KEY_END_DATE = "endDate";
@@ -108,5 +110,7 @@ public class Conts {
     public static final String KEY_CHECK_TYPE_RESULT = "KEY_SERVICE";
     public static final String KEY_RESULT_ADD_NOTE = "KEY_RESULT_ADD_NOTE";
     public static final String KEY_CURRENT_NOTE = "KEY_CURRENT_NOTE";
+    public static final String KEY_APPOINTMENT_DATE = "appointmentDate";
+    public static final String KEY_REASON_ID = "reasonId";
     public static final String TIME_ZONE_VN = "Asia/Ho_Chi_Minh";
 }
