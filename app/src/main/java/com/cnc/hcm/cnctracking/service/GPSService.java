@@ -161,7 +161,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     if (isUserLogin) {
                         if (intent != null) {
                             String idTask = intent.getStringExtra(KEY_ID_OPEND_DETAIL_TASK);
-                            if (mainActivity != null) {
+                            if (mainActivity != null && mainActivity.isMainActive()) {
                                 mainActivity.showTaskDetail(idTask);
                             } else {
                                 Intent intentShowDetailTask = new Intent(this, MainActivity.class);

@@ -126,6 +126,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ArrayList<ItemMarkedMap> arrMarkedTask = new ArrayList<>();
     private boolean isNetworkConnected;
     private int quantityNewTask, quantityDoingTask, quantityCompletedTask;
+    private boolean isMainActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +146,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         checkUserLoginOnOtherDevice();
         initMap();
         checkExistIdTask();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isMainActive = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isMainActive = false;
     }
 
     private void checkExistIdTask() {
@@ -1013,6 +1026,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         return gpsService;
     }
 
+    public boolean isMainActive() {
+        return isMainActive;
+    }
+
     public void onCancelTicket(ItemCancelTask itemCancelTask) {
         if (itemCancelTask == null) {
             return;
@@ -1066,7 +1083,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-    private void notiRingtoneTypeAndVibrator(int ringtoneType, int timeVibrate){
+    private void notiRingtoneTypeAndVibrator(int ringtoneType, int timeVibrate) {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         v.vibrate(timeVibrate);
