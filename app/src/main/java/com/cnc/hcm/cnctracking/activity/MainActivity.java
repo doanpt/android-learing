@@ -427,7 +427,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void receiverNewTask(GetTaskListResult.Result result) {
 
-        String currenDate = CommonMethod.formatTimeStandand(Calendar.getInstance().getTime());
+        String currenDate = CommonMethod.formatTimeStandand(CommonMethod.getInstanceCalendar().getTime());
 
         String appointmentDate = result.appointmentDate.substring(0, result.appointmentDate.lastIndexOf(".")) + "Z";
         Date appmentDate = CommonMethod.formatTimeFromServerToDate(appointmentDate);
@@ -500,7 +500,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
     public void callViewCalendar(int typeView) {
-        long time = Calendar.getInstance().getTime().getTime();
+        long time = CommonMethod.getInstanceCalendar().getTime().getTime();
         switch (typeView) {
             case Conts.TYPE_VIEW_BY_MONTH:
                 SettingApp.getInstance(MainActivity.this).setTypeView(Conts.TYPE_VIEW_BY_MONTH);
@@ -586,8 +586,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         break;
                     case Conts.TYPE_VIEW_BY_YEARS:
                         if (yearsViewFragment != null) {
-                            int month = Calendar.getInstance().get(Calendar.MONTH);
-                            int yeah = Calendar.getInstance().get(Calendar.YEAR);
+                            int month = CommonMethod.getInstanceCalendar().get(Calendar.MONTH);
+                            int yeah = CommonMethod.getInstanceCalendar().get(Calendar.YEAR);
                             yearsViewFragment.setMonth(month);
                             yearsViewFragment.getCountTask(yeah);
                         }
@@ -677,7 +677,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         PopupMenu popup = new PopupMenu(MainActivity.this, view);
         popup.getMenuInflater().inflate(R.menu.years_menu, popup.getMenu());
 
-        int currentYears = Calendar.getInstance().get(Calendar.YEAR);
+        int currentYears = CommonMethod.getInstanceCalendar().get(Calendar.YEAR);
         int previousYears = currentYears - Conts.DEFAULT_VALUE_INT_1;
         int nextYears = currentYears + Conts.DEFAULT_VALUE_INT_1;
 

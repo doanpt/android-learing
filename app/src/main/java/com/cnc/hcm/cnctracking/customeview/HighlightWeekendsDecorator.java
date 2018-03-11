@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.prolificinteractive.materialcalendarview.until.CommonMethod;
 
 import java.util.Calendar;
 
@@ -15,7 +16,7 @@ import java.util.Calendar;
  */
 public class HighlightWeekendsDecorator implements DayViewDecorator {
 
-    private final Calendar calendar = Calendar.getInstance();
+    private final Calendar calendar = CommonMethod.getInstanceCalendar();
     private final Drawable highlightDrawable;
     private static final int color = Color.parseColor("#0288D1");
 

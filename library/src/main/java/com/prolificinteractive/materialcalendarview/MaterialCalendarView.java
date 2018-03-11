@@ -32,6 +32,7 @@ import com.prolificinteractive.materialcalendarview.format.DayFormatter;
 import com.prolificinteractive.materialcalendarview.format.MonthArrayTitleFormatter;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.prolificinteractive.materialcalendarview.format.WeekDayFormatter;
+import com.prolificinteractive.materialcalendarview.until.CommonMethod;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -296,8 +297,8 @@ public class MaterialCalendarView extends ViewGroup {
                             VERTICAL));
 
             if (firstDayOfWeek < 0) {
-                //Allowing use of Calendar.getInstance() here as a performance optimization
-                firstDayOfWeek = Calendar.getInstance().getFirstDayOfWeek();
+                //Allowing use of CommonMethod.getInstanceCalendar() here as a performance optimization
+                firstDayOfWeek = CommonMethod.getInstanceCalendar().getFirstDayOfWeek();
             }
 
             newState()
@@ -1390,10 +1391,10 @@ public class MaterialCalendarView extends ViewGroup {
         final OnRangeSelectedListener listener = rangeListener;
         final List<CalendarDay> days = new ArrayList<>();
 
-        final Calendar counter = Calendar.getInstance();
+        final Calendar counter = CommonMethod.getInstanceCalendar();
         counter.setTime(firstDay.getDate());  //  start from the first day and increment
 
-        final Calendar end = Calendar.getInstance();
+        final Calendar end = CommonMethod.getInstanceCalendar();
         end.setTime(lastDay.getDate());  //  for comparison
 
         while (counter.before(end) || counter.equals(end)) {
@@ -1835,7 +1836,7 @@ public class MaterialCalendarView extends ViewGroup {
 
     public class StateBuilder {
         private CalendarMode calendarMode = CalendarMode.MONTHS;
-        private int firstDayOfWeek = Calendar.getInstance().getFirstDayOfWeek();
+        private int firstDayOfWeek = CommonMethod.getInstanceCalendar().getFirstDayOfWeek();
         private boolean cacheCurrentPosition = false;
         private CalendarDay minDate = null;
         private CalendarDay maxDate = null;

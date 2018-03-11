@@ -109,9 +109,9 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         calendarView.setTopbarVisible(false);
         calendarView.setShowOtherDates(MaterialCalendarView.SHOW_ALL);
         calendarView.setSelectionMode(SELECTION_MODE_SINGLE);
-        Calendar instance1 = Calendar.getInstance();
+        Calendar instance1 = CommonMethod.getInstanceCalendar();
         instance1.set(instance1.get(Calendar.YEAR) - 1, Calendar.JANUARY, 1);
-        Calendar instance2 = Calendar.getInstance();
+        Calendar instance2 = CommonMethod.getInstanceCalendar();
         instance2.set(instance2.get(Calendar.YEAR) + 1, Calendar.DECEMBER, 31);
         calendarView.state().edit()
                 .setMinimumDate(instance1.getTime())
@@ -145,7 +145,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
 
 
     public String gotoCurrentDate() {
-        Calendar instance = Calendar.getInstance();
+        Calendar instance = CommonMethod.getInstanceCalendar();
         oneDayDecorator.setDate(instance.getTime());
         calendarView.invalidateDecorators();
         String dateSelected = CommonMethod.formatFullTimeToString(instance.getTime());
@@ -266,7 +266,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
     public List<String> getAllDateInYear() {
         List<String> allDate = new ArrayList<>();
         for (int i = -1; i < 2; i++) {
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar = CommonMethod.getInstanceCalendar();
             calendar.set(Calendar.DATE, 01);
             calendar.set(Calendar.MONTH, 01);
             calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + i);

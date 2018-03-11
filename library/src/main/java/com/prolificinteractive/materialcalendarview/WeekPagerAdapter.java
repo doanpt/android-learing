@@ -2,6 +2,8 @@ package com.prolificinteractive.materialcalendarview;
 
 import android.support.annotation.NonNull;
 
+import com.prolificinteractive.materialcalendarview.until.CommonMethod;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -79,7 +81,7 @@ public class WeekPagerAdapter extends CalendarPagerAdapter<WeekView> {
          * Necessary because of how Calendar handles getting the first day of week internally.
          */
         private CalendarDay getFirstDayOfWeek(@NonNull CalendarDay min, int wantedFirstDayOfWeek) {
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar = CommonMethod.getInstanceCalendar();
             min.copyTo(calendar);
             while (calendar.get(Calendar.DAY_OF_WEEK) != wantedFirstDayOfWeek) {
                 calendar.add(Calendar.DAY_OF_WEEK, -1);

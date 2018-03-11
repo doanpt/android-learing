@@ -115,9 +115,6 @@ public class CommonMethod {
     public static String formatTimeToYear(long time) {
         Date date = new Date(time);
         return new SimpleDateFormat("yyyy").format(date);
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(time);
-//        return String.valueOf(calendar.get(Calendar.YEAR));
     }
 
     public static String formatTimeStandand(Date date) {
@@ -151,7 +148,7 @@ public class CommonMethod {
 
     public static String[] getStartEndDate(int currentMonth, int years) {
         String[] arr = new String[2];
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = getInstanceCalendar();
         String month = currentMonth < 9 ? ("0" + (currentMonth + 1)) : ((currentMonth + 1) + Conts.BLANK);
         String dateFirstOfMonthTemp = years + "-" + month + "-01" + Conts.FORMAT_TIME_FULL;
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);

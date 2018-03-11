@@ -67,8 +67,8 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        years = Calendar.getInstance().get(Calendar.YEAR);
-        month = Calendar.getInstance().get(Calendar.MONTH);
+        years = CommonMethod.getInstanceCalendar().get(Calendar.YEAR);
+        month = CommonMethod.getInstanceCalendar().get(Calendar.MONTH);
     }
 
     @Override
@@ -303,7 +303,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
 
     private List<String> getAllDateInYear(int inputYears) {
         List<String> allDate = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = CommonMethod.getInstanceCalendar();
         calendar.set(Calendar.DATE, 01);
         calendar.set(Calendar.MONTH, 01);
         calendar.set(Calendar.YEAR, inputYears);

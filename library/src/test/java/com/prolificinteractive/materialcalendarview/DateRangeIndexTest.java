@@ -1,5 +1,7 @@
 package com.prolificinteractive.materialcalendarview;
 
+import com.prolificinteractive.materialcalendarview.until.CommonMethod;
+
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -23,11 +25,11 @@ public class DateRangeIndexTest {
 
     @Test
     public void testBigRange() {
-        Calendar minCal = Calendar.getInstance();
+        Calendar minCal = CommonMethod.getInstanceCalendar();
         minCal.set(1000, 0, 1);
         CalendarDay minDay = CalendarDay.from(minCal);
 
-        Calendar maxCal = Calendar.getInstance();
+        Calendar maxCal = CommonMethod.getInstanceCalendar();
         maxCal.set(3000, 0, 1);
         CalendarDay maxDay = CalendarDay.from(maxCal);
 
