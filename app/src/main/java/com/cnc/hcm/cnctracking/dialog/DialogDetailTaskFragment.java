@@ -274,13 +274,17 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     @Override
     public void onResume() {
         super.onResume();
+        setExpaned(true);
         Log.e("VIM", "onResume(), idTask: " + idTask);
+        loadInforTask();
+    }
+
+    public void loadInforTask(){
         viewPager.setCurrentItem(0);
         tryGetTaskDetail(UserInfo.getInstance(getActivity().getApplicationContext()).getAccessToken(), idTask);
         if (fabMenu != null && fabMenu.isExpanded()) {
             fabMenu.collapse();
         }
-
     }
 
     private void tryGetTaskDetail(String accessToken, String idTask) {
