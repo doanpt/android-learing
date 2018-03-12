@@ -25,9 +25,9 @@ import java.util.concurrent.TimeUnit;
 public class CommonMethod {
 
     public static String formatTimeFromServerToString(String inputTime) {
-        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        format.setTimeZone(timeZone);
+        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
         try {
             date = format.parse(inputTime);
@@ -39,9 +39,9 @@ public class CommonMethod {
     }
 
     public static String formatTimeAppointmentDateBeforThirtyMinute(String inputTime) {
-        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        format.setTimeZone(timeZone);
+        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
         try {
             date = format.parse(inputTime);
@@ -56,9 +56,9 @@ public class CommonMethod {
     }
 
     public static Date formatTimeFromServerToDate(String inputTime) {
-        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        format.setTimeZone(timeZone);
+        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
         try {
             date = format.parse(inputTime);
@@ -71,7 +71,7 @@ public class CommonMethod {
     public static Date formatTimeFromServerToDate2(String inputTime) {
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL2);
         TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        format.setTimeZone(timeZone);
+        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
         try {
             date = format.parse(inputTime);
@@ -83,25 +83,16 @@ public class CommonMethod {
 
     public static String formatTimeToString(long time) {
         Date date = new Date(time);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        simpleDateFormat.setTimeZone(timeZone);
-        return simpleDateFormat.format(date);
+        return new SimpleDateFormat("dd/MM/yy HH:mm:ss").format(date);
     }
 
     public static String formatFullTimeToString(Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        simpleDateFormat.setTimeZone(timeZone);
-        return simpleDateFormat.format(date);
+        return new SimpleDateFormat(Conts.FORMAT_DATE_FULL).format(date);
     }
 
     public static String formatDateToString(long time) {
         Date date = new Date(time);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        simpleDateFormat.setTimeZone(timeZone);
-        return simpleDateFormat.format(date);
+        return new SimpleDateFormat("HH:mm").format(date);
     }
 
     public static String formatCurrency(long number) {
@@ -117,34 +108,24 @@ public class CommonMethod {
 
     public static String formatTimeToMonth(long time) {
         Date date = new Date(time);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM");
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        simpleDateFormat.setTimeZone(timeZone);
-        return simpleDateFormat.format(date);
+        return new SimpleDateFormat("MM").format(date);
     }
 
     public static String formatTimeToYear(long time) {
         Date date = new Date(time);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        simpleDateFormat.setTimeZone(timeZone);
-        return simpleDateFormat.format(date);
+        return new SimpleDateFormat("yyyy").format(date);
     }
 
     public static String formatTimeStandand(Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        simpleDateFormat.setTimeZone(timeZone);
-        return simpleDateFormat.format(date);
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
     }
 
     public static Calendar getInstanceCalendar() {
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
-        return Calendar.getInstance(timeZone);
+        return Calendar.getInstance(TimeZone.getTimeZone(Conts.TIME_ZONE_VN));
     }
 
     public static void actionFindWayInMapApp(Context context, double latitude_cur, double longitude_cur, double latitude, double longitude) {
-        Intent intent = new Intent(Intent.ACTION_VIEW,
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                 Uri.parse("http://maps.google.com/maps?saddr=" + latitude_cur + "," + longitude_cur + "&daddr=" + latitude + "," + longitude));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
