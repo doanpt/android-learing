@@ -362,6 +362,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     public void onDestroy() {
         super.onDestroy();
         dismisDialogLoading();
+        setExpaned(false);
     }
 
     //TODO edit them at here
@@ -406,7 +407,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             case R.id.tv_detail_task:
                 setExpaned(true);
                 showExpaned();
-                setExpaned(false);
                 break;
             case R.id.ll_find_way:
                 handleFindWayAction();
@@ -448,6 +448,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         }
         return true;
     }
+
 
     private void handleTaskChangeTimeAction() {
         Intent intentNote = new Intent(getMainActivity(), ChangeTimeActivity.class);

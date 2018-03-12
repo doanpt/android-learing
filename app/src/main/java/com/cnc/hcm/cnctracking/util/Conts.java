@@ -99,6 +99,8 @@ public class Conts {
     public static final String SOCKET_EVENT_ERROR = "error";
     public static final String SOCKET_EVENT_CANCEL_TASK = "cancel task";
     public static final String SOCKET_EVENT_UNASSIGNED_TASK = "unassigned task";
+    public static final String SOCKET_EVENT_DISCONNECT = "disconnect";
+
 
     public static final String KEY_WORK_NAME = "KEY_WORK_NAME";
     public static final String KEY_WORK_LOCATION = "KEY_WORK_LOCATION";

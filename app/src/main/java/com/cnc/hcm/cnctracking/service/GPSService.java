@@ -190,12 +190,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     }
 
     private void initObject() {
-        try {
-            String url = Conts.URL_BASE + "?token=" + UserInfo.getInstance(getApplicationContext()).getAccessToken();
-            mSocket = IO.socket(url);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+
         arrTrackLocation = new ArrayList<>();
     }
 
@@ -520,7 +515,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     String currentTime = CommonMethod.formatDateToString(CommonMethod.getInstanceCalendar().getTimeInMillis());
 
                     if (timeItemTask.equals(currentTime)) {
-                        if (mainActivity != null) {
+                        if (mainActivity != null && mainActivity.isMainActive()) {
                             mainActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -542,6 +537,10 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     }
                 }
                 timeMinute = 0;
+                if (mSocket!=null && !mSocket.connected()){
+                    CommonMethod.makeToast(getApplicationContext(), "No connect to Socket server");
+                    Log.d(TAGG, "No connect to Socket server");
+                }
             }
             handler.postDelayed(runnableUpdateUI, 1000);
         }
@@ -552,11 +551,18 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     }
 
     public void connectSocket(String token) {
+        try {
+            String url = Conts.URL_BASE + "?token=" + token;
+            mSocket = IO.socket(url);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            CommonMethod.makeToast(this, e.getMessage().toString());
+        }
         if (mSocket != null && !mSocket.connected()) {
             mSocket.on(Conts.SOCKET_EVENT_NEW_TASK, eventNewTask);
             mSocket.on(Conts.SOCKET_EVENT_LOGIN_OTHER_DEVICE, eventLoginOtherDevice);
             mSocket.on(Conts.SOCKET_EVENT_ERROR, eventError);
-
+            mSocket.on(Conts.SOCKET_EVENT_DISCONNECT, eventDisconnect);
             mSocket.on(Conts.SOCKET_EVENT_CANCEL_TASK, eventCancelTask);
             mSocket.on(Conts.SOCKET_EVENT_UNASSIGNED_TASK, eventUnassignedTask);
 
@@ -571,10 +577,20 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         }
     }
 
+    private Emitter.Listener eventDisconnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.d(TAGG, "Socket disconnect");
+            CommonMethod.makeToast(GPSService.this, "Socket disconnect");
+            connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
+            CommonMethod.makeToast(GPSService.this, "reconnect socket");
+        }
+    };
+
     private Emitter.Listener eventError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-//            connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
+            CommonMethod.makeToast(GPSService.this, "Connect Socket EROR");
             Log.d(TAGG, "ConnectSocket eventError");
             Log.d(TAGG, "ConnectSocket eventError");
         }

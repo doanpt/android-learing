@@ -54,4 +54,8 @@ public class ViewPagerBottomSheetDialogFragment extends BottomSheetDialogFragmen
     public void setExpaned(boolean expaned) {
         isExpaned = expaned;
     }
+
+    public boolean isExpaned() {
+        return isExpaned;
+    }
 }

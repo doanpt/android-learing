@@ -894,7 +894,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void showTaskDetail(String idTask) {
-        if (dialogDetailTaskFragment != null) {
+        if (dialogDetailTaskFragment != null && !dialogDetailTaskFragment.isExpaned()) {
             dialogDetailTaskFragment.setIdTask(idTask);
             dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
             dialogDetailTaskFragment.setExpaned(true);
