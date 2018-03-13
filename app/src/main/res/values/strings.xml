@@ -96,6 +96,10 @@
     <string name="close">Đóng</string>
     <string name="view_task">Xem</string>
     <string name="spn_category_service_default">Chọn loại dịch vụ</string>
+    <string name="cancel">Hủy</string>
+    <string name="save">Lưu</string>
+    <string name="schedule_appointment_date">Lịch hẹn:</string>
+    <string name="reason_change">Lý do thay đổi:</string>
 
 
 </resources>

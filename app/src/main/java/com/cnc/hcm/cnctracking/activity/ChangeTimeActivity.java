@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -116,8 +117,12 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
                         }
                         rbString += ".";
                         RadioButton rb = new RadioButton(this);
+                        rb.setTextSize(15f);
                         rb.setText(rbString);
+                        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.bottomMargin = 20;
                         rg_reason.addView(rb);
+
                     }
                 }
             }
