@@ -98,6 +98,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_product_detail);
         //11/01/2017 ADD by HoangIT START
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        showLoadingDialog();
         initObject();
         //11/01/2017 ADD by HoangIT END
         initViews();
@@ -122,13 +123,15 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getData() {
-        showLoadingDialog();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
         arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceID));
         ApiUtils.getAPIService(arrHeads).getDetailProduct(idTask).enqueue(new Callback<GetProductDetailResult>() {
             @Override
             public void onResponse(Call<GetProductDetailResult> call, Response<GetProductDetailResult> response) {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
                 Long code = response.body().getStatusCode();
                 Log.d(TAGG, "getData.onResponse, code: " + code);
                 if (code == Conts.RESPONSE_STATUS_OK) {
@@ -140,13 +143,13 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onFailure(Call<GetProductDetailResult> call, Throwable t) {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
                 Log.e(TAGG, "getData.onResponse", t);
                 Toast.makeText(ProductDetailActivity.this, "Get Detail failure", Toast.LENGTH_SHORT).show();
             }
         });
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
     }
 
     public void visiableRecycler() {
@@ -340,6 +343,14 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
         imvBack = (ImageView) findViewById(R.id.img_back_work_detail);
         imvBack.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+        super.onPause();
     }
 
     @Override
