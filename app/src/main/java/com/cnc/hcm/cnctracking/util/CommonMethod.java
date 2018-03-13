@@ -25,9 +25,10 @@ import java.util.concurrent.TimeUnit;
 public class CommonMethod {
 
     public static String formatTimeFromServerToString(String inputTime) {
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
-        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
+        TimeZone timeZoneDefault = TimeZone.getDefault();
+        TimeZone timeZone = TimeZone.getTimeZone(timeZoneDefault.getDisplayName());
+        format.setTimeZone(timeZone);
         Date date = null;
         try {
             date = format.parse(inputTime);
@@ -39,8 +40,8 @@ public class CommonMethod {
     }
 
     public static String formatTimeAppointmentDateBeforThirtyMinute(String inputTime) {
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        TimeZone timeZone = TimeZone.getDefault();
         format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
         try {
@@ -56,8 +57,8 @@ public class CommonMethod {
     }
 
     public static Date formatTimeFromServerToDate(String inputTime) {
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        TimeZone timeZone = TimeZone.getDefault();
         format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
         try {
@@ -70,7 +71,7 @@ public class CommonMethod {
 
     public static Date formatTimeFromServerToDate2(String inputTime) {
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL2);
-        TimeZone timeZone = TimeZone.getTimeZone(Conts.TIME_ZONE_VN);
+        TimeZone timeZone = TimeZone.getDefault();
         format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
         Date date = null;
         try {
@@ -121,7 +122,7 @@ public class CommonMethod {
     }
 
     public static Calendar getInstanceCalendar() {
-        return Calendar.getInstance(TimeZone.getTimeZone(Conts.TIME_ZONE_VN));
+        return Calendar.getInstance();
     }
 
     public static void actionFindWayInMapApp(Context context, double latitude_cur, double longitude_cur, double latitude, double longitude) {

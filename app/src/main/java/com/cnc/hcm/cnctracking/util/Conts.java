@@ -114,5 +114,4 @@ public class Conts {
     public static final String KEY_CURRENT_NOTE = "KEY_CURRENT_NOTE";
     public static final String KEY_APPOINTMENT_DATE = "appointmentDate";
     public static final String KEY_REASON_ID = "reasonId";
-    public static final String TIME_ZONE_VN = "Asia/Ho_Chi_Minh";
 }

@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -33,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -144,7 +141,7 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     }
 
     private void updateDateTimeUI() {
-        tv_time.setText(CommonMethod.formatDateToString(mCalendar.getTime().getTime()));
+        tv_time.setText(CommonMethod.formatDateToString(mCalendar.getTimeInMillis()));
         tv_date.setText(CommonMethod.formatTimeStandand(mCalendar.getTime()));
     }
 
@@ -164,7 +161,9 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_time:
-                TimePickerDialog timePickerDialog = new TimePickerDialog(this, this, mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), true);
+                int hour = mCalendar.get(Calendar.HOUR_OF_DAY);
+                int minute = mCalendar.get(Calendar.MINUTE);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(this, this, hour, minute, true);
                 timePickerDialog.show();
                 break;
             case R.id.tv_date:
@@ -191,7 +190,11 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
         showDialogLoadding();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(this).getAccessToken()));
-        arrHeads.add(new MHead(Conts.KEY_APPOINTMENT_DATE, CommonMethod.formatFullTimeToString(mCalendar.getTime())));
+        long seventHour = TimeUnit.HOURS.toMillis(7);
+        long time = mCalendar.getTimeInMillis() - seventHour;
+        mCalendar.setTimeInMillis(time);
+        String appointmentDateChange = CommonMethod.formatFullTimeToString(mCalendar.getTime());
+        arrHeads.add(new MHead(Conts.KEY_APPOINTMENT_DATE, appointmentDateChange));
         arrHeads.add(new MHead(Conts.KEY_REASON_ID, mReason));
         ApiUtils.getAPIService(arrHeads).changeTicketAppointment(mIdTask).enqueue(new Callback<ChangeTicketAppointmentResult>() {
             @Override
