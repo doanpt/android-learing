@@ -54,7 +54,6 @@ import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.dialog.DialogOptionFilter;
 import com.cnc.hcm.cnctracking.fragment.MonthViewFragment;
 import com.cnc.hcm.cnctracking.fragment.YearsViewFragment;
-import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemCancelTask;
 import com.cnc.hcm.cnctracking.model.ItemMarkedMap;
@@ -127,6 +126,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private boolean isNetworkConnected;
     private int quantityNewTask, quantityDoingTask, quantityCompletedTask;
     private boolean isMainActive;
+    private String dateSelected = Conts.BLANK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -705,6 +705,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ChangeTimeActivity.CODE_CHANGE_TIME:
+                if (resultCode == RESULT_OK) {
+                    String accessToken = UserInfo.getInstance(getApplicationContext()).getAccessToken();
+                    if (dateSelected.equals(Conts.BLANK)) {
+                        Calendar instance = CommonMethod.getInstanceCalendar();
+                        String dateSelected = CommonMethod.formatFullTimeToString(instance.getTime());
+                        tryGetTaskList(accessToken, dateSelected, dateSelected);
+                    } else {
+                        tryGetTaskList(accessToken, dateSelected, dateSelected);
+                    }
+                }
+                break;
+        }
         if (dialogDetailTaskFragment != null) {
             dialogDetailTaskFragment.onActivityResult(requestCode, resultCode, data);
         }
@@ -1098,4 +1112,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         r.play();
     }
 
+    public void setDateSelected(String dateSelected) {
+        this.dateSelected = dateSelected;
+    }
 }

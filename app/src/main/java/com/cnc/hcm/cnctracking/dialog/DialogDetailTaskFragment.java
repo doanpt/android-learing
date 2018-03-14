@@ -279,7 +279,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         loadInforTask();
     }
 
-    public void loadInforTask(){
+    public void loadInforTask() {
         viewPager.setCurrentItem(0);
         tryGetTaskDetail(UserInfo.getInstance(getActivity().getApplicationContext()).getAccessToken(), idTask);
         if (fabMenu != null && fabMenu.isExpanded()) {
@@ -462,7 +462,9 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         } catch (Exception e) {
             Log.e(TAG, "handleTaskChangeTimeAction(), Exception: " + e);
         }
-        startActivityForResult(intentNote, ChangeTimeActivity.CODE_CHANGE_TIME);
+        if (mainActivity != null) {
+            mainActivity.startActivityForResult(intentNote, ChangeTimeActivity.CODE_CHANGE_TIME);
+        }
     }
 
     private void handleFindWayAction() {
