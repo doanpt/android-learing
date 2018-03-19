@@ -211,8 +211,8 @@ public class WorkDetailServiceFragment extends Fragment implements
         }
 
         try {
-            if (getTaskDetailResult.result.address != null && getTaskDetailResult.result.address.location != null) {
-                handleActions(getTaskDetailResult.result.address.location.latitude, getTaskDetailResult.result.address.location.longitude);
+            if (getTaskDetailResult.result.address != null && getTaskDetailResult.result.address.getLocation() != null) {
+                handleActions(getTaskDetailResult.result.address.getLocation().latitude, getTaskDetailResult.result.address.getLocation().longitude);
             } else if (getTaskDetailResult.result.customer.address != null && getTaskDetailResult.result.customer.address.location != null) {
                 handleActions(getTaskDetailResult.result.customer.address.location.latitude, getTaskDetailResult.result.customer.address.location.longitude);
             } else {

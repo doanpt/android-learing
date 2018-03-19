@@ -548,28 +548,118 @@ public class GetTaskListResult {
             }
         }
 
-        public static class Address {
-            public String street;
-            public String district;
-            public String province;
-            public Location location;
+        public class Address {
 
-            public Address(String street, String district, String province, Location location) {
+            @SerializedName("street")
+            @Expose
+            private String street;
+            @SerializedName("district")
+            @Expose
+            private District district;
+            @SerializedName("province")
+            @Expose
+            private String province;
+            @SerializedName("location")
+            @Expose
+            private Customer.Address.Location location;
+
+            public String getStreet() {
+                return street;
+            }
+
+            public void setStreet(String street) {
                 this.street = street;
+            }
+
+            public District getDistrict() {
+                return district;
+            }
+
+            public void setDistrict(District district) {
                 this.district = district;
+            }
+
+            public String getProvince() {
+                return province;
+            }
+
+            public void setProvince(String province) {
                 this.province = province;
+            }
+
+            public Customer.Address.Location getLocation() {
+                return location;
+            }
+
+            public void setLocation(Customer.Address.Location location) {
                 this.location = location;
             }
 
-            public static class Location {
-                public double latitude;
-                public double longitude;
+        }
 
-                public Location(double latitude, double longitude) {
-                    this.latitude = latitude;
-                    this.longitude = longitude;
-                }
+        public class District {
+
+            @SerializedName("_id")
+            @Expose
+            private Integer id;
+            @SerializedName("province")
+            @Expose
+            private Province province;
+            @SerializedName("name")
+            @Expose
+            private String name;
+
+            public Integer getId() {
+                return id;
             }
+
+            public void setId(Integer id) {
+                this.id = id;
+            }
+
+            public Province getProvince() {
+                return province;
+            }
+
+            public void setProvince(Province province) {
+                this.province = province;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+        }
+
+        public class Province {
+
+            @SerializedName("_id")
+            @Expose
+            private Integer id;
+            @SerializedName("name")
+            @Expose
+            private String name;
+
+            public Integer getId() {
+                return id;
+            }
+
+            public void setId(Integer id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
         }
     }
 }

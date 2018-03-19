@@ -55,7 +55,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         GetTaskListResult.Result result = itemTask.getTaskResult();
         holder.tvTitleWork.setText(result.title);
         if (itemTask.getTaskResult().address != null) {
-            holder.tvAddressWork.setText(result.address.street);
+            holder.tvAddressWork.setText(result.address.getStreet());
         } else {
             holder.tvAddressWork.setText(result.customer.address.street);
         }

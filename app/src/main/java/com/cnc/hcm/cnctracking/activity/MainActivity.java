@@ -463,11 +463,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
             GetTaskListResult.Result result = task.getTaskResult();
             if (result.address != null) {
-                if (result.address.location != null) {
-                    addMarkerMap(result._id, result.address.location.latitude,
-                            result.address.location.longitude, result.address.street, bitmapDescriptor);
+                if (result.address.getLocation() != null) {
+                    addMarkerMap(result._id, result.address.getLocation().latitude,
+                            result.address.getLocation().longitude, result.address.getStreet(), bitmapDescriptor);
                 } else {
-                    String locationName = result.address.street;
+                    String locationName = result.address.getStreet();
                     Address address = CommonMethod.getLocationFromLocationName(MainActivity.this, locationName);
                     if (address != null) {
                         addMarkerMap(result._id, address.getLatitude(), address.getLongitude(), locationName, bitmapDescriptor);

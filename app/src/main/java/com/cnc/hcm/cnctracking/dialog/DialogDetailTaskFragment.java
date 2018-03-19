@@ -308,6 +308,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             public void onFailure(Call<GetTaskDetailResult> call, Throwable t) {
                 dismisDialogLoading();
                 Log.e(TAG, "tryGetTaskDetail.onFailure() --> " + t);
+                t.printStackTrace();
+                CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage().toString() : "onFailure");
             }
         });
     }
@@ -322,7 +324,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                     tv_time_item_work.setText(time);
                 }
                 if (getTaskDetailResult.result.address != null) {
-                    tv_address_item_work.setText(getTaskDetailResult.result.address.street + "");
+                    tv_address_item_work.setText(getTaskDetailResult.result.address.getStreet() + "");
                 } else if (getTaskDetailResult.result.customer.address != null) {
                     tv_address_item_work.setText(getTaskDetailResult.result.customer.address.street + "");
                 }
@@ -471,11 +473,11 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         GetTaskDetailResult.Result result = getTaskDetailResult.result;
         if (mainActivity != null && result != null) {
             if (result.address != null) {
-                if (result.address.location != null) {
+                if (result.address.getLocation() != null) {
                     CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
-                            mainActivity.getLongtitude(), result.address.location.latitude, result.address.location.longitude);
+                            mainActivity.getLongtitude(), result.address.getLocation().latitude, result.address.getLocation().longitude);
                 } else {
-                    String locationName = result.address.street;
+                    String locationName = result.address.getStreet();
                     Address address = CommonMethod.getLocationFromLocationName(getContext(), locationName);
                     if (address != null) {
                         CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
@@ -662,7 +664,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                     workTime += CommonMethod.formatTimeFromServerToString(date);
                 }
                 if (getTaskDetailResult.result.address != null) {
-                    workLocation += getTaskDetailResult.result.address.street;
+                    workLocation += getTaskDetailResult.result.address.getStreet();
                 } else if (getTaskDetailResult.result.customer.address != null) {
                     workLocation += getTaskDetailResult.result.customer.address.street;
                 }

@@ -93,7 +93,7 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
                 if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
                     productDetail.putExtra(Conts.KEY_WORK_NAME, getTaskDetailResult.result.title + "");
                     if (getTaskDetailResult.result.address != null) {
-                        productDetail.putExtra(Conts.KEY_WORK_LOCATION, getTaskDetailResult.result.address.street + "");
+                        productDetail.putExtra(Conts.KEY_WORK_LOCATION, getTaskDetailResult.result.address.getStreet() + "");
                     } else if (getTaskDetailResult.result.customer.address != null) {
                         productDetail.putExtra(Conts.KEY_WORK_LOCATION, getTaskDetailResult.result.customer.address.street + "");
                     }
