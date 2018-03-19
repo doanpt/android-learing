@@ -552,7 +552,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             IO.Options options = new IO.Options();
             options.forceNew = true;
             options.query = "token=" + token;
-            options.reconnection = true;
             options.timeout = 30000l;
             mSocket = IO.socket(url, options);
         } catch (URISyntaxException e) {
