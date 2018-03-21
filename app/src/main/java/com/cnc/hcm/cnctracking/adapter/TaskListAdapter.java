@@ -2,8 +2,6 @@ package com.cnc.hcm.cnctracking.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
-import com.cnc.hcm.cnctracking.event.OnResultTimeDistance;
 import com.cnc.hcm.cnctracking.model.GetTaskListResult;
 import com.cnc.hcm.cnctracking.model.ItemTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
@@ -26,7 +23,7 @@ import java.util.ArrayList;
  * Created by giapmn on 12/21/17.
  */
 
-public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> implements OnResultTimeDistance {
+public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
     private static final int NOTIDATA_SET_CHANGE = 32;
     private static final String TAGG = TaskListAdapter.class.getSimpleName();
@@ -35,8 +32,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     private ArrayList<ItemTask> arrTaskTemp = new ArrayList<>();
 
     private OnItemWorkClickListener onItemWorkClickListener;
-    private double latitude;
-    private double longitude;
 
 
     public TaskListAdapter(Context context) {
@@ -110,50 +105,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         notifyDataSetChanged();
         filter(SettingApp.getInstance(context).getTypeFilterList());
     }
-
-    public void updateDistanceForTask(boolean isNetworkConnected, double latitude, double longitude) {
-        if (latitude != 0 && longitude != 0) {
-            this.latitude = latitude;
-            this.longitude = longitude;
-//            CommonMethod.jsonRequestUpdateDistance(isNetworkConnected, latitude, longitude, getDestination(), TaskListAdapter.this);
-        }
-    }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case NOTIDATA_SET_CHANGE:
-                    notifyDataSetChanged();
-                    break;
-            }
-        }
-    };
-    private Runnable runableNotiDataSetChange = new Runnable() {
-        @Override
-        public void run() {
-
-            Message message = new Message();
-            message.what = NOTIDATA_SET_CHANGE;
-            message.setTarget(handler);
-            message.sendToTarget();
-        }
-    };
-
-    @Override
-    public void editData(int index, String distance, String duration) {
-        if (arrTask != null && arrTask.size() > 0) {
-            arrTask.get(index).setDistanceToMyLocation(distance);
-            arrTask.get(index).setTimeGoToMyLocation(duration);
-        }
-    }
-
-    @Override
-    public void postToHandle() {
-        handler.post(runableNotiDataSetChange);
-    }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

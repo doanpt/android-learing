@@ -190,7 +190,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         arrTrackLocation = new ArrayList<>();
     }
 
-    public void startLocation() {
+    private void startLocation() {
         LocationParams params = new LocationParams.Builder().setAccuracy(LocationAccuracy.HIGH).setDistance(MIN_DISTANCE_GET_GPS).build();
 //        provider = new LocationGooglePlayServicesProvider();
 //        provider.setCheckLocationSettings(true);
@@ -305,9 +305,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             updateNotification("GPS not found");
             Log.d(TAGG, "onLocationUpdated " + "GPS_NOT_FOUND, " + longitude + ", " + latitude);
         }
-        if (mainActivity != null) {
-            mainActivity.appendText("");
-        }
     }
 
     private void removeGPSAfterUpload(int size) {
@@ -346,7 +343,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         }
     }
 
-    public void updateLocation(final ItemTrackLocation location) {
+    private void updateLocation(final ItemTrackLocation location) {
         isUploading = true;
         mService.updateLocation(location).enqueue(new Callback<UpdateLocationResponseStatus>() {
             @Override
@@ -405,10 +402,10 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 Log.e(TAGG, "updateLocation.onFailure()");
                 if (t != null) {
                     try {
-                        locationBackupFile = new LocationResponseUpload(4004, "Upload fail:\n" + t.getCause() + "\n---" + t.getMessage().toString() + "\n---" + t.getStackTrace().toString() + " \n size Total Array:" + arrTrackLocation.size() + " -- size arr push:" + location.getTrackLocation().size(), System.currentTimeMillis());
+                        locationBackupFile = new LocationResponseUpload(4004, "Upload fail:\n" + t.getCause() + "\n---" + t.getMessage() + "\n---" + t.getStackTrace().toString() + " \n size Total Array:" + arrTrackLocation.size() + " -- size arr push:" + location.getTrackLocation().size(), System.currentTimeMillis());
 //                        t.printStackTrace();
                     } catch (Exception e) {
-                        locationBackupFile = new LocationResponseUpload(4004, "Upload fail:\n" + t.getCause() + "\n---" + t.getMessage() + "\n---" + t.getStackTrace() + " \n size Total Array:" + arrTrackLocation.size() + " -- size arr push:" + location.getTrackLocation().size(), System.currentTimeMillis());
+                        locationBackupFile = new LocationResponseUpload(4004, "Upload fail:\n" + t.getCause() + "\n---" + t.getMessage() + "\n---" + t.getStackTrace().toString() + " \n size Total Array:" + arrTrackLocation.size() + " -- size arr push:" + location.getTrackLocation().size(), System.currentTimeMillis());
                     } finally {
                         saveLocationToFile(Environment.getExternalStorageDirectory() + "/CoolBackup/" + Conts.FILE_RESPONSE, locationBackupFile);
                         if (isNetworkConnected) {
@@ -469,17 +466,16 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     }
 
 
-    public void startThread() {
+    private void startThread() {
         String token = UserInfo.getInstance(this).getAccessToken();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, token));
         mService = ApiUtils.getAPIService(arrHeads);
         Log.d(TAGG, "Call connect in Service");
-//        connectSocket(token);
         handler.post(runnableUpdateUI);
     }
 
-    Runnable runnableUpdateUI = new Runnable() {
+    private Runnable runnableUpdateUI = new Runnable() {
         int timeMinute = 0;
 
         @Override
@@ -546,13 +542,13 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         return mSocket;
     }
 
-    public void connectSocket(String token) {
+    private void connectSocket(String token) {
         try {
             String url = Conts.URL_BASE;
             IO.Options options = new IO.Options();
             options.forceNew = true;
             options.query = "token=" + token;
-            options.timeout = 30000l;
+            options.timeout = 30000L;
             mSocket = IO.socket(url, options);
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -740,7 +736,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     }
 
-    public void updateNotification(String content) {
+    private void updateNotification(String content) {
         int api = Build.VERSION.SDK_INT;
 
         remoteViews.setTextViewText(R.id.notif_content, content);
@@ -771,11 +767,11 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         manager.notify(0, builder.build());
     }
 
-    public void setLongitude(double longitude) {
+    private void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public void setLatitude(double latitude) {
+    private void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
@@ -796,7 +792,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         return accuracy;
     }
 
-    public void setAccuracy(float accuracy) {
+    private void setAccuracy(float accuracy) {
         this.accuracy = accuracy;
     }
 

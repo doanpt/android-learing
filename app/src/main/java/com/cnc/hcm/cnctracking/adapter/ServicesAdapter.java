@@ -10,10 +10,8 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.event.OnItemInputClickListener;
-import com.cnc.hcm.cnctracking.model.SearchModel;
 import com.cnc.hcm.cnctracking.model.SearchServiceModel;
 import com.cnc.hcm.cnctracking.model.Services;
-import com.cnc.hcm.cnctracking.model.TraddingProduct;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.squareup.picasso.Picasso;
@@ -117,12 +115,12 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         isText = "".equals(model.getName()) ? false : true;
         isCategory = category.equals(context.getResources().getString(R.string.spn_category_service_default).toLowerCase()) ? false : true;
 
-        if (isText == true) {
+        if (isText) {
             ArrayList<Services.Result> arrTemp2 = new ArrayList<>();
             arrTemp2.addAll(arr);
             arr.clear();
             for (int i = 0; i < arrTemp.size(); i++) {
-                if (arrTemp.get(i).getName().toString().toLowerCase(Locale.getDefault()).contains(text)) {
+                if (arrTemp.get(i).getName().toLowerCase(Locale.getDefault()).contains(text)) {
                     arr.add(arrTemp.get(i));
                 }
             }
@@ -134,7 +132,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         } else {
             arr.addAll(arrTemp);
         }
-        if (isCategory == true) {
+        if (isCategory) {
             ArrayList<Services.Result> arrTemp3 = new ArrayList<>();
             arrTemp3.addAll(arr);
             arr.clear();

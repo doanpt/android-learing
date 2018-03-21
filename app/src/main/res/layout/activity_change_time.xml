@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
@@ -47,7 +48,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginVertical="16dp"
             android:text="@string/schedule_appointment_date"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            tools:targetApi="o"/>
 
         <TextView
             android:id="@+id/tv_date"
@@ -58,7 +60,8 @@
             android:layout_marginVertical="16dp"
             android:text="31/12/2018"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:targetApi="o"/>
 
         <TextView
             android:id="@+id/tv_time"
@@ -69,7 +72,8 @@
             android:layout_toLeftOf="@id/tv_date"
             android:text="12:30"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:targetApi="o"/>
     </RelativeLayout>
 
     <FrameLayout
@@ -92,7 +96,7 @@
         <RadioGroup
             android:id="@+id/rg_reason"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="16dp">
         </RadioGroup>
     </ScrollView>

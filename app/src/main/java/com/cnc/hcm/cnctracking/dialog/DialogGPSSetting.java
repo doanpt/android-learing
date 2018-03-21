@@ -20,8 +20,6 @@ import com.cnc.hcm.cnctracking.R;
 
 public class DialogGPSSetting extends Dialog implements View.OnClickListener {
 
-    private Button btnGPS;
-
     private Context context;
 
     public DialogGPSSetting(@NonNull Context context) {
@@ -35,7 +33,7 @@ public class DialogGPSSetting extends Dialog implements View.OnClickListener {
     }
 
     private void initView() {
-        btnGPS = (Button) findViewById(R.id.btn_gps_setting);
+        Button btnGPS = (Button) findViewById(R.id.btn_gps_setting);
         btnGPS.setOnClickListener(this);
     }
 

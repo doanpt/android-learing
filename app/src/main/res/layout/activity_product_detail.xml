@@ -153,7 +153,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/step_1_complete" />
+                            android:src="@drawable/ic_step_1_complete" />
 
                         <FrameLayout
                             android:layout_width="1dp"
@@ -209,7 +209,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/step_2_complete" />
+                            android:src="@drawable/ic_step_2_complete" />
 
                         <FrameLayout
                             android:layout_width="1dp"
@@ -328,7 +328,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/step_3_complete" />
+                            android:src="@drawable/ic_step_3_complete" />
 
                         <FrameLayout
                             android:layout_width="1dp"

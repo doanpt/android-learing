@@ -282,13 +282,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
             gpsService.setMainActivity(MainActivity.this);
-
-            //FIXME this code which is commented could remove if you want
-//            if (gpsService.getmSocket() == null || !gpsService.getmSocket().connected()) {
-//                String token = UserInfo.getInstance(MainActivity.this).getAccessToken();
-//                Log.d("GPSService","Call connect in MainActivity");
-//                gpsService.connectSocket(token);
-//            }
             Log.d(TAG, "ServiceConnection at MainActivity");
         }
 
@@ -308,26 +301,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            switch (action) {
-                case Conts.ACTION_NETWORK_CHANGE:
-                    ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                    NetworkInfo activeNetInfor = connectivityManager.getActiveNetworkInfo();
-                    isNetworkConnected = activeNetInfor != null && activeNetInfor.isConnectedOrConnecting();
-                    if (tvStatusNetwork != null)
-                        if (isNetworkConnected) {
-                            tvStatusNetwork.setTextColor(getResources().getColor(R.color.color_text_status));
-                            tvStatusNetwork.setText(getResources().getString(R.string.On));
-                            if (gpsService != null) {
-                                updateDistanceTo4TabWork();
+            if (action != null) {
+                switch (action) {
+                    case Conts.ACTION_NETWORK_CHANGE:
+                        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                        NetworkInfo activeNetInfor = connectivityManager.getActiveNetworkInfo();
+                        isNetworkConnected = activeNetInfor != null && activeNetInfor.isConnectedOrConnecting();
+                        if (tvStatusNetwork != null)
+                            if (isNetworkConnected) {
+                                tvStatusNetwork.setTextColor(getResources().getColor(R.color.color_text_status));
+                                tvStatusNetwork.setText(getResources().getString(R.string.On));
+                            } else {
+                                tvStatusNetwork.setTextColor(getResources().getColor(android.R.color.darker_gray));
+                                tvStatusNetwork.setText(getResources().getString(R.string.Off));
                             }
-
-                        } else {
-                            tvStatusNetwork.setTextColor(getResources().getColor(android.R.color.darker_gray));
-                            tvStatusNetwork.setText(getResources().getString(R.string.Off));
-                        }
-                    break;
+                        break;
+                }
             }
-
         }
     };
 
@@ -354,10 +344,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
                     arrItemTask.clear();
                     if (getTaskListResult != null) {
-                        GetTaskListResult.Result[] result1 = getTaskListResult.result;
-                        if (result1 != null && result1.length > 0) {
-                            for (int index = 0; index < result1.length; index++) {
-                                ItemTask itemTask = new ItemTask(result1[index]);
+                        GetTaskListResult.Result[] result = getTaskListResult.result;
+                        if (result != null && result.length > 0) {
+                            for (GetTaskListResult.Result itemResult : result) {
+                                ItemTask itemTask = new ItemTask(itemResult);
                                 arrItemTask.add(itemTask);
                                 switch ((int) itemTask.getTaskResult().status._id) {
                                     case Conts.TYPE_COMPLETE_TASK:
@@ -402,7 +392,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public void onFailure(Call<GetTaskListResult> call, Throwable t) {
                 Log.e(TAG, "tryGetTaskList.onFailure() --> " + t);
                 t.printStackTrace();
-                CommonMethod.makeToast(MainActivity.this, t.getMessage() != null ? t.getMessage().toString() : "onFailure");
+                CommonMethod.makeToast(MainActivity.this, t.getMessage() != null ? t.getMessage() : "onFailure");
                 dismisProgressLoading();
             }
         });
@@ -489,7 +479,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-    public void callViewCalendar(int typeView) {
+    private void callViewCalendar(int typeView) {
         long time = CommonMethod.getInstanceCalendar().getTime().getTime();
         switch (typeView) {
             case Conts.TYPE_VIEW_BY_MONTH:
@@ -689,7 +679,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         popup.show();
     }
 
-    public void setCurrentItemViewPager(int position) {
+    private void setCurrentItemViewPager(int position) {
         if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_COLLAPSED) {
             bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
         }
@@ -743,7 +733,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void showMessageRequestLogout() {
         final DialogNotification dialog = new DialogNotification(MainActivity.this);
         dialog.setHiddenBtnExit();
-        dialog.setContentMessage("Tài khoản này đã được đăng nhập trên thiết bị khác. Ứng dụng sẽ đăng xuất tài khoản. Vui lòng đăng nhập lại để tiếp tục sử dụng.");
+        dialog.setContentMessage(getString(R.string.account_login_other_device));
         dialog.setCancelable(false);
         dialog.setOnClickDialogNotificationListener(new DialogNotification.OnClickDialogNotificationListener() {
             @Override
@@ -798,11 +788,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             LatLng myLocation = new LatLng(latitude, longitude);
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
         }
-
-        updateDistanceTo4TabWork();
     }
 
-    public void addMarkerMap(String idTask, double latitude, double longitude, String addName, BitmapDescriptor bitmapDescriptor) {
+    private void addMarkerMap(String idTask, double latitude, double longitude, String addName, BitmapDescriptor bitmapDescriptor) {
         if (mMap != null) {
             //BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
             LatLng myLocation = new LatLng(latitude, longitude);
@@ -833,11 +821,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         return 0;
     }
 
-    private void updateDistanceTo4TabWork() {
-        if (taskListAdapter != null && gpsService != null) {
-            taskListAdapter.updateDistanceForTask(isNetworkConnected, gpsService.getLatitude(), gpsService.getLongitude());
-        }
-    }
+
 
     private void createFileBackup() {
         try {
@@ -888,10 +872,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 startActivity(intent);
             }
         }, 1000);
-    }
-
-    public void appendText(String str) {
-//        tvStatus.append("\n" + str);
     }
 
     @Override
@@ -974,7 +954,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    public void callFragment(Fragment fragment) {
+    private void callFragment(Fragment fragment) {
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment, fragment);
@@ -1105,7 +1085,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void notiRingtoneTypeAndVibrator(int ringtoneType, int timeVibrate) {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
-        v.vibrate(timeVibrate);
+        if (v != null)
+            v.vibrate(timeVibrate);
 
         Uri notification = RingtoneManager.getDefaultUri(ringtoneType);
         Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);

@@ -40,7 +40,6 @@ import retrofit2.Response;
 public class ChangeTimeActivity extends Activity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     private static final String TAG = ChangeTimeActivity.class.getSimpleName();
     public static final int CODE_CHANGE_TIME = 123;
-    private Button btn_save, btn_cancel;
     private TextView tv_time;
     private TextView tv_date;
     private RadioGroup rg_reason;
@@ -55,8 +54,8 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_time);
 
-        btn_save = findViewById(R.id.btn_save);
-        btn_cancel = findViewById(R.id.btn_cancel);
+        Button btn_save = findViewById(R.id.btn_save);
+        Button btn_cancel = findViewById(R.id.btn_cancel);
         tv_time = findViewById(R.id.tv_time);
         tv_date = findViewById(R.id.tv_date);
         rg_reason = findViewById(R.id.rg_reason);

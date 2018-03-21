@@ -105,7 +105,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         getData();
     }
 
-    public void showLoadingDialog() {
+    private void showLoadingDialog() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage(getResources().getString(R.string.loadding));
@@ -134,7 +134,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 }
                 Long code = response.body().getStatusCode();
                 Log.d(TAGG, "getData.onResponse, code: " + code);
-                if (code == Conts.RESPONSE_STATUS_OK) {
+                if (code!=null && code == Conts.RESPONSE_STATUS_OK) {
                     displayDetailWork(response.body());
                 } else {
                     Toast.makeText(ProductDetailActivity.this, "Get Detail error", Toast.LENGTH_SHORT).show();
@@ -152,7 +152,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         });
     }
 
-    public void visiableRecycler() {
+    private void visiableRecycler() {
         if (arrInit.size() == 0) {
             initRecycler.setVisibility(View.GONE);
         } else {
@@ -189,14 +189,14 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         String path;
         try {
             if (body.getResult().getDevice().getDetail().getPhoto() == null) {
-                path = body.getResult().getDevice().getDetail().getBrand().getPhoto().toString();
+                path = body.getResult().getDevice().getDetail().getBrand().getPhoto();
             } else {
                 path = body.getResult().getDevice().getDetail().getPhoto().toString();
             }
         } catch (Exception e) {
             path = "";
         }
-        Picasso.with(ProductDetailActivity.this).load(Conts.URL_BASE + path).placeholder(R.drawable.errror_image).error(R.drawable.errror_image).into(imgDevice);
+        Picasso.with(ProductDetailActivity.this).load(Conts.URL_BASE + path).placeholder(R.drawable.ic_errror_image).error(R.drawable.ic_errror_image).into(imgDevice);
         arrInit.clear();
         arrProcess.clear();
         arrFinish.clear();
@@ -457,7 +457,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
                 Long status = response.body().getStatusCode();
                 Log.d(TAGG, "completeWork.onResponse, status: " + status);
-                if (status == Conts.RESPONSE_STATUS_OK) {
+                if (status!=null && status == Conts.RESPONSE_STATUS_OK) {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Complete OK!!!");
 //                    llComplete.setVisibility(View.VISIBLE);
                     fabMenu.setVisibility(View.GONE);
@@ -606,7 +606,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     Long code = response.body().getStatusCode();
 
                     Log.d(TAGG, "uploadPhoto.onResponse, code: " + code);
-                    if (code == Conts.RESPONSE_STATUS_OK) {
+                    if (code!=null && code == Conts.RESPONSE_STATUS_OK) {
                         final String url = response.body().getResult().getImageURL();
                         List<MHead> arrNewHeads = new ArrayList<>();
                         arrNewHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
@@ -657,7 +657,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
                 Long status = response.body().getStatusCode();
                 Log.d(TAGG, "updateProcess.onResponse, status: " + status);
-                if (status == Conts.RESPONSE_STATUS_OK) {
+                if (status!=null && status == Conts.RESPONSE_STATUS_OK) {
                     if (requestCode == KEY_STEP_ONE) {
                         arrInit.add(param.getBefore().getPhotos().get(param.getBefore().getPhotos().size() - 1));
                         initAdapter.notifyDataSetChanged();
@@ -671,7 +671,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                         arrService.add(service);
                         serviceAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_PROCESS_PRODUCT) {
-                        if (isNewProduct == true) {
+                        if (isNewProduct) {
                             arrTrading.add(product);
                         } else {
                             for (int i = 0; i < arrTrading.size(); i++) {
@@ -709,7 +709,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
     private File saveBitmapFile(Bitmap bitmap, String name) {
         String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
-        OutputStream outStream = null;
+        OutputStream outStream;
         // String temp = null;
         File file = new File(extStorageDirectory, "/CoolBackup/" + name + ".png");
         if (file.exists()) {

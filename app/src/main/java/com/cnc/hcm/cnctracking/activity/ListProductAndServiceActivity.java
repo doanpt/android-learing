@@ -84,7 +84,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
         initViews();
     }
 
-    public void showLoadingDialog() {
+    private void showLoadingDialog() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage(getResources().getString(R.string.loadding));
@@ -125,13 +125,17 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
             @Override
             public void onResponse(Call<ProductListResult> call, Response<ProductListResult> response) {
                 Long status = response.body().getStatusCode();
-                if (status == 200) {
+                if (status != null && status == 200) {
                     arrManufactures.clear();
                     listProduct = (ArrayList<ProductListResult.Product>) response.body().getResult();
                     arrManufactures.add("Chọn nhà sản xuất");
-                    for (ProductListResult.Product p : listProduct) {
-                        arrManufactures.add(p.getName());
-                        manufactureAdapter.notifyDataSetChanged();
+                    if (listProduct != null) {
+                        for (ProductListResult.Product p : listProduct) {
+                            arrManufactures.add(p.getName());
+                            manufactureAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Log.d("ListProductAndServiceAc", "FATA ListProductAndServiceAc, initViews(), listProduct = null");
                     }
                 }
             }
@@ -148,13 +152,17 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
             @Override
             public void onResponse(Call<CategoryListResult> call, Response<CategoryListResult> response) {
                 Long status = response.body().getStatusCode();
-                if (status == 200) {
+                if (status != null && status == 200) {
                     arrCategory.clear();
                     arrCategory.add("Chọn loại thiết bị");
                     listCategory = (ArrayList<CategoryListResult.Category>) response.body().getResult();
-                    for (CategoryListResult.Category category : listCategory) {
-                        arrCategory.add(category.getTitle());
-                        categoryAdapter.notifyDataSetChanged();
+                    if (listCategory != null) {
+                        for (CategoryListResult.Category category : listCategory) {
+                            arrCategory.add(category.getTitle());
+                            categoryAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Log.d("ListProductAndServiceAc", "FATA ListProductAndServiceAc, initViews(), listCategory = null");
                     }
                 }
             }
@@ -171,13 +179,17 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
             @Override
             public void onResponse(Call<Services> call, Response<Services> response) {
                 Integer status = response.body().getStatusCode();
-                if (status == 200) {
+                if (status!=null && status == 200) {
                     arrServices.clear();
                     arrServices.add("Chọn loại dịch vụ");
                     listServices = (ArrayList<Services.Result>) response.body().getResult();
-                    for (Services.Result service : listServices) {
-                        arrServices.add(service.getCategory().getTitle());
-                        servicesAdapter.notifyDataSetChanged();
+                    if (listServices != null) {
+                        for (Services.Result service : listServices) {
+                            arrServices.add(service.getCategory().getTitle());
+                            servicesAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Log.d("ListProductAndServiceAc", "FATA ListProductAndServiceAc, initViews(), listServices = null");
                     }
                 }
             }

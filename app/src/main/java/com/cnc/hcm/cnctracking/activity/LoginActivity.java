@@ -44,8 +44,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText edtEmail;
     private EditText edtPassword;
     private TextView btnLogin;
-    private TextView tvClearId;
-    private TextView tvClearPass;
 
 
     private APIService mService;
@@ -72,7 +70,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA};
                 requestPermissions(permissions, REQUEST_CODE_LOCATION_UPDATE);
-                return;
             }
         } else {
             initView();
@@ -99,8 +96,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         edtEmail = (EditText) findViewById(R.id.edt_input_email);
         edtPassword = (EditText) findViewById(R.id.edt_input_password);
-        tvClearId = (TextView) findViewById(R.id.tv_clear_text_id);
-        tvClearPass = (TextView) findViewById(R.id.tv_clear_text_pass);
+        TextView tvClearId = (TextView) findViewById(R.id.tv_clear_text_id);
+        TextView tvClearPass = (TextView) findViewById(R.id.tv_clear_text_pass);
         btnLogin = (TextView) findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tvClearPass.setOnClickListener(this);
     }
 
-    public void login(boolean isLoginAuto) {
+    private void login(boolean isLoginAuto) {
         Log.d(TAG, "Login()");
 
         if (!validate()) {
@@ -175,7 +172,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    public void onLoginSuccess(String accessToken, String message) {
+    private void onLoginSuccess(String accessToken, String message) {
 //        mProgressDialog.dismiss();
         btnLogin.setEnabled(true);
 
@@ -186,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getDataUserProfile(accessToken);
     }
 
-    public void onLoginFailed(boolean isLoginAuto, String message) {
+    private void onLoginFailed(boolean isLoginAuto, String message) {
         mProgressDialog.dismiss();
         if (!isLoginAuto) {
             btnLogin.setEnabled(true);
@@ -194,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public boolean validate() {
+    private boolean validate() {
         boolean valid = true;
 
         String email = edtEmail.getText().toString();

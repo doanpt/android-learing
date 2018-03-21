@@ -121,12 +121,12 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
         isBranch = branch.equals(context.getResources().getString(R.string.spn_branch_default).toLowerCase()) ? false : true;
         isCategory = category.equals(context.getResources().getString(R.string.spn_category_default).toLowerCase()) ? false : true;
 
-        if (isText == true) {
+        if (isText) {
             ArrayList<TraddingProduct.Result> arrTemp2 = new ArrayList<>();
             arrTemp2.addAll(arr);
             arr.clear();
             for (int i = 0; i < arrTemp.size(); i++) {
-                if (arrTemp.get(i).getName().toString().toLowerCase(Locale.getDefault()).contains(text)) {
+                if (arrTemp.get(i).getName().toLowerCase(Locale.getDefault()).contains(text)) {
                     arr.add(arrTemp.get(i));
                 }
             }
@@ -138,7 +138,7 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
         } else {
             arr.addAll(arrTemp);
         }
-        if (isBranch == true) {
+        if (isBranch) {
             ArrayList<TraddingProduct.Result> arrTemp2 = new ArrayList<>();
             arrTemp2.addAll(arr);
             arr.clear();
@@ -148,7 +148,7 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
                 }
             }
         }
-        if (isCategory == true) {
+        if (isCategory) {
             ArrayList<TraddingProduct.Result> arrTemp3 = new ArrayList<>();
             arrTemp3.addAll(arr);
             arr.clear();

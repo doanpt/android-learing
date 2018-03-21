@@ -23,7 +23,8 @@
                 android:background="@color/colorPrimary"
                 android:orientation="horizontal"
                 android:paddingBottom="5dp"
-                android:paddingTop="5dp">
+                android:paddingTop="5dp"
+                android:baselineAligned="false">
 
                 <FrameLayout
                     android:layout_width="60dp"
@@ -61,7 +62,7 @@
                 </FrameLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -100,8 +101,9 @@
                         android:layout_marginHorizontal="12dp"
                         android:paddingVertical="10dp"
                         android:paddingHorizontal="18dp"
-                        android:background="@drawable/boder_task_time"
-                        android:orientation="horizontal">
+                        android:background="@drawable/border_task_time"
+                        android:orientation="horizontal"
+                        tools:targetApi="o">
 
                         <ImageView
                             android:id="@+id/imv_time"
@@ -112,7 +114,7 @@
 
                         <TextView
                             android:id="@+id/tv_time_item_work"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="right|center_vertical"
@@ -166,7 +168,8 @@
                     android:layout_weight="1"
                     android:background="@color/colorPrimaryDark"
                     android:elevation="10dp"
-                    android:visibility="visible">
+                    android:visibility="visible"
+                    tools:targetApi="lollipop">
 
                     <ImageView
                         android:id="@+id/imv_icon_infor"

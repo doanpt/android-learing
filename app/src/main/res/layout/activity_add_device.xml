@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
 
     <LinearLayout
@@ -20,7 +19,7 @@
             android:src="@drawable/ic_back_while" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -34,7 +33,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_view_hover"
             android:padding="15dp"
-            android:src="@drawable/checking" />
+            android:src="@drawable/ic_checking" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,7 +48,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="5dp"
-            android:src="@drawable/refrigerator" />
+            android:src="@drawable/ic_refrigerator" />
 
         <EditText
             android:id="@+id/edt_device_name"
@@ -72,7 +71,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="12dp"
-            android:src="@drawable/factory" />
+            android:src="@drawable/ic_factory" />
 
         <Spinner
             android:id="@+id/edt_category"
@@ -98,7 +97,7 @@
         <!--&lt;!&ndash;android:layout_height="20dp"&ndash;&gt;-->
         <!--&lt;!&ndash;android:layout_gravity="right|center_vertical"&ndash;&gt;-->
         <!--&lt;!&ndash;android:layout_marginRight="10dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:src="@drawable/drop_down_arrow" />&ndash;&gt;-->
+        <!--&lt;!&ndash;android:src="@drawaic_drop_down_arrowrrow" />&ndash;&gt;-->
         <!--</FrameLayout>-->
     </LinearLayout>
 
@@ -114,7 +113,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="12dp"
-            android:src="@drawable/factory" />
+            android:src="@drawable/ic_factory" />
 
         <Spinner
             android:id="@+id/edt_manufacture"
@@ -139,7 +138,7 @@
         <!--&lt;!&ndash;android:layout_height="20dp"&ndash;&gt;-->
         <!--&lt;!&ndash;android:layout_gravity="right|center_vertical"&ndash;&gt;-->
         <!--&lt;!&ndash;android:layout_marginRight="10dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:src="@drawable/drop_down_arrow" />&ndash;&gt;-->
+        <!--&lt;!&ndash;android:src="@drawaic_drop_down_arrowrrow" />&ndash;&gt;-->
         <!--</FrameLayout>-->
     </LinearLayout>
 
@@ -155,7 +154,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="12dp"
-            android:src="@drawable/qr_code" />
+            android:src="@drawable/ic_qr_code" />
 
         <FrameLayout
             android:layout_width="0dp"
@@ -175,7 +174,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/camera_barcode" />
+                android:src="@drawable/ic_camera_barcode" />
         </FrameLayout>
 
     </LinearLayout>

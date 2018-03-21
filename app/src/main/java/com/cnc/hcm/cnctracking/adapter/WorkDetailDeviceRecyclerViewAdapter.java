@@ -49,7 +49,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
     }
 
     @Override
-    public void onBindViewHolder(WorkDetailDeviceRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final WorkDetailDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
         final GetTaskDetailResult.Result.Process process = processes.get(position);
         try {
             holder.tv_title.setText(process.device.detail.name + "");
@@ -62,11 +62,11 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
             Picasso.with(mContext).load(Conts.URL_BASE + iconPath).into(holder.iv_icon);
             }
             if (TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.user._id)) {
-                holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.step_1_complete : (process.status._id == 2 ? R.drawable.step_2_complete : R.drawable.step_3_complete));
+                holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.ic_step_1_complete : (process.status._id == 2 ? R.drawable.ic_step_2_complete : R.drawable.ic_step_3_complete));
                 holder.item_product.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onClick(v, position);
+                        mListener.onClick(v, holder.getAdapterPosition());
                     }
                 });
             } else {

@@ -19,7 +19,6 @@ import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.event.OnItemInputClickListener;
-import com.cnc.hcm.cnctracking.model.SearchModel;
 import com.cnc.hcm.cnctracking.model.SearchServiceModel;
 import com.cnc.hcm.cnctracking.model.Services;
 import com.cnc.hcm.cnctracking.util.Conts;

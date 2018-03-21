@@ -15,8 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static Retrofit retrofitToken = null;
-
     private static Retrofit retrofitLogin = null;
 
     public static Retrofit getClientToken(final List<MHead> arrHeads) {
@@ -32,7 +30,7 @@ public class RetrofitClient {
             }
         }).build();
 
-        retrofitToken = new Retrofit.Builder()
+        Retrofit retrofitToken = new Retrofit.Builder()
                 .baseUrl(Conts.BASE_URL)
                 .client(httpClient)
                 .addConverterFactory(GsonConverterFactory.create())

@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -131,12 +130,16 @@ public class AddProductActivity extends Activity implements View.OnClickListener
             @Override
             public void onResponse(Call<ProductListResult> call, Response<ProductListResult> response) {
                 Long status = response.body().getStatusCode();
-                if (status == 200) {
+                if (status != null && status == 200) {
                     arrManufactures.clear();
                     listProduct = (ArrayList<ProductListResult.Product>) response.body().getResult();
-                    for (ProductListResult.Product p : listProduct) {
-                        arrManufactures.add(p.getName());
-                        manufactureAdapter.notifyDataSetChanged();
+                    if (listProduct != null) {
+                        for (ProductListResult.Product p : listProduct) {
+                            arrManufactures.add(p.getName());
+                            manufactureAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Log.d(TAGG, "FATA AddProductActivity, getInformation(), listProduct = null");
                     }
                 }
             }
@@ -150,12 +153,16 @@ public class AddProductActivity extends Activity implements View.OnClickListener
             @Override
             public void onResponse(Call<CategoryListResult> call, Response<CategoryListResult> response) {
                 Long status = response.body().getStatusCode();
-                if (status == 200) {
+                if (status != null && status == 200) {
                     arrCategory.clear();
                     listCategory = (ArrayList<CategoryListResult.Category>) response.body().getResult();
-                    for (CategoryListResult.Category category : listCategory) {
-                        arrCategory.add(category.getTitle());
-                        categoryAdapter.notifyDataSetChanged();
+                    if (listCategory != null) {
+                        for (CategoryListResult.Category category : listCategory) {
+                            arrCategory.add(category.getTitle());
+                            categoryAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Log.d(TAGG, "FATA AddProductActivity, getInformation(), listCategory = null");
                     }
                 }
             }
@@ -252,7 +259,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                 public void onResponse(Call<AddProductResult> call, Response<AddProductResult> response) {
                     //TODO :FIX ERROR ADD
                     Long status = response.body().getStatusCode();
-                    if (status == Conts.RESPONSE_STATUS_OK) {
+                    if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                         List<MHead> arrHeads = new ArrayList<>();
                         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
                         arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, qrCode));
@@ -272,7 +279,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
         }
     }
 
-    public void showLoadingDialog() {
+    private void showLoadingDialog() {
         mProgressDialog = new ProgressDialog(AddProductActivity.this);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage(getResources().getString(R.string.loadding));
@@ -292,8 +299,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
-            if (result.getContents() == null) {
-            } else {
+            if (result.getContents() != null) {
                 showLoadingDialog();
                 final String content = result.getContents();
                 String format = result.getFormatName();
@@ -308,7 +314,7 @@ public class AddProductActivity extends Activity implements View.OnClickListener
                     public void onResponse(Call<CheckContainProductResult> call, Response<CheckContainProductResult> response) {
                         Long status = response.body().getStatusCode();
                         Log.d("ABD", status + "   ");
-                        if (status == Conts.RESPONSE_STATUS_OK) {
+                        if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                             arrHeads.clear();
                             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
                             Log.d("HEAD", "ac:" + accessToken);

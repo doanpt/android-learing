@@ -100,6 +100,10 @@
     <string name="save">Lưu</string>
     <string name="schedule_appointment_date">Lịch hẹn:</string>
     <string name="reason_change">Lý do thay đổi:</string>
+    <string name="you_are_remove_from_ticket">Bạn đã bị xóa khỏi ticket</string>
+    <string name="input_note">Nhập ghi chú</string>
+    <string name="enter_your_note">Enter your note</string>
+    <string name="account_login_other_device">Tài khoản này đã được đăng nhập trên thiết bị khác. Ứng dụng sẽ đăng xuất tài khoản. Vui lòng đăng nhập lại để tiếp tục sử dụng.</string>
 
 
 </resources>

@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.model.TraddingProduct;
 import com.cnc.hcm.cnctracking.util.Conts;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 

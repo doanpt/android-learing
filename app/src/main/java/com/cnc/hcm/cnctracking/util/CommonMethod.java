@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -35,8 +36,7 @@ public class CommonMethod {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        String time = CommonMethod.formatDateToString(date.getTime());
-        return time;
+        return CommonMethod.formatDateToString(date.getTime());
     }
 
     public static String formatTimeAppointmentDateBeforThirtyMinute(String inputTime) {
@@ -52,8 +52,7 @@ public class CommonMethod {
         long thirtyMinute = TimeUnit.MINUTES.toMillis(30);
         long timeAfterMinus = date.getTime() - thirtyMinute;
         date.setTime(timeAfterMinus);
-        String time = CommonMethod.formatDateToString(date.getTime());
-        return time;
+        return CommonMethod.formatDateToString(date.getTime());
     }
 
     public static Date formatTimeFromServerToDate(String inputTime) {
@@ -132,14 +131,6 @@ public class CommonMethod {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
         context.startActivity(intent);
-    }
-
-    public static void actionCall(Context context, String phoneNo) {
-        context.startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNo, null)));
-    }
-
-    public static void actionSMS(Context context, String phoneNo) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNo, null)));
     }
 
     public static void makeToast(Context context, String title) {

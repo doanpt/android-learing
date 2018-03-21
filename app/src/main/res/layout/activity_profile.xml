@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
@@ -45,7 +46,8 @@
             app:tabIndicatorHeight="1dp"
             app:tabSelectedTextColor="@color/colorPrimaryFullScreen"
             app:tabTextAppearance="@android:style/TextAppearance.Widget.TextView"
-            app:tabTextColor="@android:color/darker_gray">
+            app:tabTextColor="@android:color/darker_gray"
+            tools:targetApi="lollipop">
 
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
@@ -84,7 +86,7 @@
             android:src="@drawable/ic_back_while"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
 

@@ -42,7 +42,7 @@
                     android:id="@+id/iv_status"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@drawable/step_1_complete" />
+                    android:src="@drawable/ic_step_1_complete" />
 
                 <TextView
                     android:id="@+id/tv_status"

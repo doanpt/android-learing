@@ -26,8 +26,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private static final String TAG = ProfileActivity.class.getSimpleName();
     private static final int DEFAULT_TAB_POSITION = 0;
-    private ImageView imvBack, imvMore;
-    private ImageView imvEditProfile;
     private CircleImageView imvAvatar;
     private TextView tvName;
 
@@ -51,9 +49,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initViews() {
-        imvBack = (ImageView) findViewById(R.id.imv_back_profile);
-        imvMore = (ImageView) findViewById(R.id.imv_more_profile);
-        imvEditProfile = (ImageView) findViewById(R.id.imv_edit_profile);
+        ImageView imvBack = (ImageView) findViewById(R.id.imv_back_profile);
+        ImageView imvMore = (ImageView) findViewById(R.id.imv_more_profile);
+        ImageView imvEditProfile = (ImageView) findViewById(R.id.imv_edit_profile);
         imvAvatar = (CircleImageView) findViewById(R.id.imv_avatar_profile);
         tvName = (TextView) findViewById(R.id.tv_name_profile);
         viewPagerProfile = (ViewPager) findViewById(R.id.viewpager_profile);

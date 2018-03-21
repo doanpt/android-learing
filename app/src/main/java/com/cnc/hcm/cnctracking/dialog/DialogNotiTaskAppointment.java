@@ -21,7 +21,6 @@ public class DialogNotiTaskAppointment extends Dialog implements View.OnClickLis
 
     private Context context;
     private TextView tvTimeAppointment, tvTitleTask;
-    private Button btnCancel, btnViewTask;
     private MainActivity mainActivity;
     private ItemTask itemTask;
 
@@ -39,9 +38,9 @@ public class DialogNotiTaskAppointment extends Dialog implements View.OnClickLis
         tvTimeAppointment = (TextView) findViewById(R.id.tv_time_appointment_task);
         tvTitleTask = (TextView) findViewById(R.id.tv_title_task_dialog_noti_appointment);
 
-        btnCancel = (Button) findViewById(R.id.btn_cancel_noti);
+        Button btnCancel = (Button) findViewById(R.id.btn_cancel_noti);
         btnCancel.setOnClickListener(this);
-        btnViewTask = (Button) findViewById(R.id.btn_view_task);
+        Button btnViewTask = (Button) findViewById(R.id.btn_view_task);
         btnViewTask.setOnClickListener(this);
     }
 

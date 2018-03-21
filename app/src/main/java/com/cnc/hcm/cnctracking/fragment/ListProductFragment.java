@@ -105,7 +105,7 @@ public class ListProductFragment extends Fragment implements ListProductAndServi
         });
     }
 
-    public void showProgressLoadding() {
+    private void showProgressLoadding() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
             mProgressDialog = null;
@@ -117,7 +117,7 @@ public class ListProductFragment extends Fragment implements ListProductAndServi
         mProgressDialog.show();
     }
 
-    public void dismisProgressLoading() {
+    private void dismisProgressLoading() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }

@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
-import com.cnc.hcm.cnctracking.model.ItemPrice;
-import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 
 import java.util.ArrayList;

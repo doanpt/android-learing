@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,27 +38,19 @@ import com.cnc.hcm.cnctracking.model.AddContainProductResult;
 import com.cnc.hcm.cnctracking.model.CheckContainProductResult;
 import com.cnc.hcm.cnctracking.model.CompleteTicketResponse;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
-import com.cnc.hcm.cnctracking.model.ItemCancelTask;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.zxing.common.StringUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetDialogFragment;
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -161,7 +152,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 View view = getLayoutInflater().inflate(R.layout.dialog_cancel, null);
                 dialog.setView(view);
                 TextView tv_message = view.findViewById(R.id.tv_message);
-                tv_message.setText("Bạn đã bị xóa khỏi ticket");
+                tv_message.setText(getContext().getResources().getString(R.string.you_are_remove_from_ticket));
                 view.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -253,7 +244,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         tv_address_item_work = view.findViewById(R.id.tv_address_item_work);
         tv_time_item_work = view.findViewById(R.id.tv_time_item_work);
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         viewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mWorkDetailPageAdapter = new WorkDetailPageAdapter(getChildFragmentManager());
         WorkDetailServiceFragment workDetailServiceFragment = new WorkDetailServiceFragment();
@@ -309,7 +299,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 dismisDialogLoading();
                 Log.e(TAG, "tryGetTaskDetail.onFailure() --> " + t);
                 t.printStackTrace();
-                CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage().toString() : "onFailure");
+                CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage() : "onFailure");
             }
         });
     }
@@ -568,8 +558,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
-            if (result.getContents() == null) {
-            } else {
+            if (result.getContents() != null) {
                 final String content = result.getContents();
                 try {
                     GetTaskDetailResult.Result.Process[] processes = getTaskDetailResult.result.process;
@@ -626,9 +615,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             @Override
             public void onFailure(Call<AddContainProductResult> call, Throwable t) {
                 String cause = "";
-                if (t != null) {
-                    cause = t.getCause().toString();
-                }
+                cause = t.getCause().toString();
                 CommonMethod.makeToast(getActivity(), "addProductContain() -> onFailure:" + cause);
             }
         });

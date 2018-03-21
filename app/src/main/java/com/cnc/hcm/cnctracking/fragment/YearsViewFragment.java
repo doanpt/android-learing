@@ -148,7 +148,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     }
 
 
-    public void handleActionGetTaskByFilterDate(int position, int years) {
+    private void handleActionGetTaskByFilterDate(int position, int years) {
         if (position != -1) {
             setSelected(position);
             String[] arrayDate = CommonMethod.getStartEndDate(position, years);
@@ -183,8 +183,8 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
         }
         List<String> listDateInYears = getAllDateInYear(years);
         if (listDateInYears != null && listDateInYears.size() > 0) {
-            String startDate = listDateInYears.get(0).toString();
-            String endDate = listDateInYears.get(listDateInYears.size() - 1).toString();
+            String startDate = listDateInYears.get(0);
+            String endDate = listDateInYears.get(listDateInYears.size() - 1);
 
             final List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getContext()).getAccessToken()));
@@ -276,7 +276,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
                 public void onFailure(Call<CountTaskResult> call, Throwable t) {
                     Log.e(TAG, "tryGetCountTask.onFailure() --> " + t);
                     t.printStackTrace();
-                    CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage().toString() : "onFailure");
+                    CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage() : "onFailure");
                     if (mainActivity != null) {
                         mainActivity.dismisProgressLoading();
                     }
@@ -304,8 +304,8 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     private List<String> getAllDateInYear(int inputYears) {
         List<String> allDate = new ArrayList<>();
         Calendar calendar = CommonMethod.getInstanceCalendar();
-        calendar.set(Calendar.DATE, 01);
-        calendar.set(Calendar.MONTH, 01);
+        calendar.set(Calendar.DATE, 1);
+        calendar.set(Calendar.MONTH, 1);
         calendar.set(Calendar.YEAR, inputYears);
 
         int years = calendar.get(Calendar.YEAR);

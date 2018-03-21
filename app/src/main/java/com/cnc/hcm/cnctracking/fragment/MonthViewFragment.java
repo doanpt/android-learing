@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.MainActivity;
-import com.cnc.hcm.cnctracking.activity.SplashActivity;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.customeview.MySelectorDecorator;
@@ -35,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -69,11 +67,6 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
 
 
     public MonthViewFragment() {
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -132,7 +125,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
 
     private void setBorderDateSelected(int currentDate) {
         for (int index = 0; index < listWeek.size(); index++) {
-            String time = listWeek.get(index).toString();
+            String time = listWeek.get(index);
             Date dateTemp = CommonMethod.formatTimeFromServerToDate(time);
             int dateIndex = dateTemp.getDate();
             if (dateIndex == currentDate) {
@@ -163,8 +156,8 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
             mainActivity.showProgressLoadding();
         }
 
-        for (int i = 0; i < listTextViewSelected.length; i++) {
-            listTextViewSelected[i].setVisibility(View.INVISIBLE);
+        for (TextView aListTextViewSelected : listTextViewSelected) {
+            aListTextViewSelected.setVisibility(View.INVISIBLE);
         }
 
         String dateOfWeek = CommonMethod.formatFullTimeToString(date.getDate());
@@ -174,18 +167,18 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         Log.d(TAG, "AllDate: " + arrAllDate.size());
         listWeek.clear();
         for (int i = 0; i < arrAllDate.size(); i++) {
-            if (arrAllDate.get(i).toString().equals(dateOfWeek)) {
+            if (arrAllDate.get(i).equals(dateOfWeek)) {
                 for (int j = 0; j < 7; j++) {
                     listWeek.add(arrAllDate.get(i + j));
-                    Log.d(TAG, "DateOfWeek: " + arrAllDate.get(i + j).toString());
+                    Log.d(TAG, "DateOfWeek: " + arrAllDate.get(i + j));
                     listTextView[j].setText(getContext().getResources().getString(R.string.text_am_1));
                 }
                 break;
             }
         }
         if (listWeek != null && listWeek.size() > 0) {
-            String startDate = listWeek.get(0).toString();
-            String endDate = listWeek.get(listWeek.size() - 1).toString();
+            String startDate = listWeek.get(0);
+            String endDate = listWeek.get(listWeek.size() - 1);
             Log.d(TAG, "DateOfWeek: StartDate" + startDate);
             Log.d(TAG, "DateOfWeek: EndDate" + endDate);
 
@@ -235,7 +228,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
                 public void onFailure(Call<CountTaskResult> call, Throwable t) {
                     Log.e(TAG, "tryGetCountTask.onFailure() --> " + t);
                     t.printStackTrace();
-                    CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage().toString() : "onFailure");
+                    CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage() : "onFailure");
                     if (mainActivity != null) {
                         mainActivity.dismisProgressLoading();
                     }
@@ -266,12 +259,12 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
 
     }
 
-    public List<String> getAllDateInYear() {
+    private List<String> getAllDateInYear() {
         List<String> allDate = new ArrayList<>();
         for (int i = -1; i < 2; i++) {
             Calendar calendar = CommonMethod.getInstanceCalendar();
-            calendar.set(Calendar.DATE, 01);
-            calendar.set(Calendar.MONTH, 01);
+            calendar.set(Calendar.DATE, 1);
+            calendar.set(Calendar.MONTH, 1);
             calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + i);
 
             int years = calendar.get(Calendar.YEAR);

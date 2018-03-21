@@ -37,7 +37,7 @@ public class UserInforFragment extends Fragment {
         loadUserProfile();
     }
 
-    public void loadUserProfile() {
+    private void loadUserProfile() {
         mTvFullName.setText(UserInfo.getInstance(getContext()).getUsername());
         mTvEmail.setText(UserInfo.getInstance(getContext()).getUserEmail());
         mTvPhone.setText(UserInfo.getInstance(getContext()).getUserPhoneNo());

@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,11 +51,11 @@ public class WorkDetailServiceFragment extends Fragment implements
     private static final String TAG = WorkDetailServiceFragment.class.getSimpleName();
 
     private RelativeLayout rlExpandHeaderBill;
-//    private LinearLayout ll_content_bill;
+    //    private LinearLayout ll_content_bill;
     private LinearLayout tv_detail_work_call_action;
     private LinearLayout tv_detail_work_sms_action;
     private LinearLayout tv_detail_work_address_action;
-//    private ImageView imv_expand_bill;
+    //    private ImageView imv_expand_bill;
     private TextView tv_detail_work_contact_name;
     private TextView tv_detail_work_contact_phone;
     private TextView tv_number_service;
@@ -76,11 +75,6 @@ public class WorkDetailServiceFragment extends Fragment implements
     private WorkDetailRequireRecyclerViewAdapter mWorkDetailRequireRecyclerViewAdapter;
 
     public WorkDetailServiceFragment() {
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -168,7 +162,7 @@ public class WorkDetailServiceFragment extends Fragment implements
                     public void onResponse(Call<ConfirmChargeResponse> call, Response<ConfirmChargeResponse> response) {
                         if (response.isSuccessful()) {
                             ConfirmChargeResponse confirmChargeResponse = response.body();
-                            if (confirmChargeResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
+                            if (confirmChargeResponse != null && confirmChargeResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
                                 CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thành công");
                                 btn_confirm_charge.setEnabled(false);
                                 btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
@@ -325,7 +319,7 @@ public class WorkDetailServiceFragment extends Fragment implements
     }
 
     private void handleActions(final double targetLatitude, final double targetLongitude) {
-        DialogDetailTaskFragment dialogDetailTaskFragment = (DialogDetailTaskFragment)getParentFragment();
+        DialogDetailTaskFragment dialogDetailTaskFragment = (DialogDetailTaskFragment) getParentFragment();
         final double latitude = dialogDetailTaskFragment.getMainActivity().getLatitude();
         final double longtitude = dialogDetailTaskFragment.getMainActivity().getLongtitude();
         tv_detail_work_address_action.setOnClickListener(new View.OnClickListener() {

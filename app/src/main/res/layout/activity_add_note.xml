@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
-            android:text="Hủy"
+            android:text="@string/cancel"
             android:textColor="#f2f5f2"
             android:textSize="20sp" />
 
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
-            android:text="Lưu"
+            android:text="@string/save"
 
             android:textColor="#f2f5f2"
             android:textSize="20sp" />
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:text="Nhập ghi chú"
+        android:text="@string/input_note"
         android:textColor="#33000000"
         android:textSize="25sp" />
 
@@ -60,5 +60,5 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:gravity="top|left"
-        android:hint="Enter your note" />
+        android:hint="@string/enter_your_note" />
 </LinearLayout>

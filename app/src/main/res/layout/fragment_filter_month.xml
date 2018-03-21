@@ -164,7 +164,7 @@
                 android:id="@+id/tv_border_select_t2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_date_selected"/>
+                android:background="@drawable/border_date_selected"/>
         </LinearLayout>
 
         <LinearLayout
@@ -174,7 +174,7 @@
                 android:id="@+id/tv_border_select_t3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_date_selected"/>
+                android:background="@drawable/border_date_selected"/>
         </LinearLayout>
 
         <LinearLayout
@@ -184,7 +184,7 @@
                 android:id="@+id/tv_border_select_t4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_date_selected"/>
+                android:background="@drawable/border_date_selected"/>
         </LinearLayout>
 
         <LinearLayout
@@ -194,7 +194,7 @@
                 android:id="@+id/tv_border_select_t5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_date_selected"/>
+                android:background="@drawable/border_date_selected"/>
         </LinearLayout>
 
         <LinearLayout
@@ -204,7 +204,7 @@
                 android:id="@+id/tv_border_select_t6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_date_selected"/>
+                android:background="@drawable/border_date_selected"/>
         </LinearLayout>
 
         <LinearLayout
@@ -214,7 +214,7 @@
                 android:id="@+id/tv_border_select_t7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_date_selected"/>
+                android:background="@drawable/border_date_selected"/>
         </LinearLayout>
 
         <LinearLayout
@@ -224,7 +224,7 @@
                 android:id="@+id/tv_border_select_cn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_date_selected"/>
+                android:background="@drawable/border_date_selected"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

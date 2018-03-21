@@ -20,8 +20,6 @@ import com.cnc.hcm.cnctracking.R;
 
 public class DialogNetworkSetting extends Dialog implements View.OnClickListener {
 
-    private Button btnWifj;
-    private Button btn3G;
     private Button btnCancel;
 
     private Context context;
@@ -37,9 +35,9 @@ public class DialogNetworkSetting extends Dialog implements View.OnClickListener
     }
 
     private void initView() {
-        btnWifj = (Button) findViewById(R.id.btn_wifj_setting);
+        Button btnWifj = (Button) findViewById(R.id.btn_wifj_setting);
         btnWifj.setOnClickListener(this);
-        btn3G = (Button) findViewById(R.id.btn_3g_settting);
+        Button btn3G = (Button) findViewById(R.id.btn_3g_settting);
         btn3G.setOnClickListener(this);
         btnCancel = (Button) findViewById(R.id.btn_cancel);
         btnCancel.setOnClickListener(this);
@@ -63,7 +61,7 @@ public class DialogNetworkSetting extends Dialog implements View.OnClickListener
         }
     }
 
-    public void hideBtnCancel() {
+    private void hideBtnCancel() {
         btnCancel.setVisibility(View.GONE);
     }
 

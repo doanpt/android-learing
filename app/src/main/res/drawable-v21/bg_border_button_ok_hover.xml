@@ -2,5 +2,5 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
         android:color="@color/color_view_hover_ok"
         android:shape="rectangle">
-    <item android:drawable="@drawable/bg_border_button_ok"></item>
+    <item android:drawable="@drawable/bg_border_button_ok"/>
 </ripple>

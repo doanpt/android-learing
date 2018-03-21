@@ -53,7 +53,7 @@
                 android:id="@+id/ll_tab_work_new_not_read"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_ll_type_work">
+                android:background="@drawable/border_ll_type_work">
 
                 <ImageView
                     android:layout_width="30dp"
@@ -76,7 +76,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/boder_ll_type_work">
+                android:background="@drawable/border_ll_type_work">
 
                 <ImageView
                     android:layout_width="30dp"
@@ -97,7 +97,7 @@
                 android:id="@+id/ll_tab_work_complete"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/boder_ll_type_work">
+                android:background="@drawable/border_ll_type_work">
 
                 <ImageView
                     android:layout_width="30dp"
@@ -131,12 +131,12 @@
                 <TextView
                     android:id="@+id/tv_month_calendar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:text="01"
                     android:textColor="@android:color/white"
-                    android:textSize="40dp"
+                    android:textSize="40sp"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -200,7 +200,7 @@
         <com.cnc.hcm.cnctracking.customeview.MyRecyclerView
             android:id="@+id/rc_task"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@android:color/white"/>
     </LinearLayout>
