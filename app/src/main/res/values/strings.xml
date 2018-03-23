@@ -104,6 +104,9 @@
     <string name="input_note">Nhập ghi chú</string>
     <string name="enter_your_note">Enter your note</string>
     <string name="account_login_other_device">Tài khoản này đã được đăng nhập trên thiết bị khác. Ứng dụng sẽ đăng xuất tài khoản. Vui lòng đăng nhập lại để tiếp tục sử dụng.</string>
+    <string name="type_service">Loại dịch vụ</string>
+    <string name="manufacture">Nhà sản xuất</string>
+    <string name="type_product">Loại sản phẩm</string>
 
 
 </resources>

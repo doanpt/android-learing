@@ -1,7 +1,12 @@
 package com.cnc.hcm.cnctracking.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -11,6 +16,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -109,8 +115,8 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
         llServiceSearch = findViewById(R.id.ll_search_service_visible);
         llProductSearch = findViewById(R.id.ll_product_search_visible);
         llTitle.setVisibility(View.VISIBLE);
-        llServiceSearch.setVisibility(View.GONE);
-        llProductSearch.setVisibility(View.GONE);
+        llServiceSearch.setVisibility(View.INVISIBLE);
+        llProductSearch.setVisibility(View.INVISIBLE);
 
         tvServiceClear = findViewById(R.id.tv_service_clear_text_search);
         tvProductClear = findViewById(R.id.tv_product_clear_text_search);
@@ -179,7 +185,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
             @Override
             public void onResponse(Call<Services> call, Response<Services> response) {
                 Integer status = response.body().getStatusCode();
-                if (status!=null && status == 200) {
+                if (status != null && status == 200) {
                     arrServices.clear();
                     arrServices.add("Chọn loại dịch vụ");
                     listServices = (ArrayList<Services.Result>) response.body().getResult();
@@ -214,6 +220,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
         tvProductClear.setOnClickListener(this);
         tvServiceClear.setOnClickListener(this);
         imgExitProductSearch.setOnClickListener(this);
+        imgExitServiceSearch.setOnClickListener(this);
         edtProductSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -357,7 +364,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
     }
 
     private void search() {
-        if (onTextChangeProductListener != null) {
+        if (onTextChangeProductListener != null && spnManufacuture.getSelectedItem() != null && spnCategory.getSelectedItem() != null) {
             SearchModel searchModel = new SearchModel();
             searchModel.setText(edtProductSearch.getText().toString());
             searchModel.setBranch(spnManufacuture.getSelectedItem().toString());
@@ -380,35 +387,86 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
                 edtProductSearch.setText(Conts.BLANK);
                 break;
             case R.id.img_search:
-                if (viewPager.getCurrentItem() == 0) {
-                    llProductSearch.setVisibility(View.VISIBLE);
-                    llServiceSearch.setVisibility(View.GONE);
-                    llTitle.setVisibility(View.GONE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (viewPager.getCurrentItem() == 0) {
+                        revealTextSeach(llProductSearch);
+                    } else {
+                        revealTextSeach(llServiceSearch);
+                    }
                 } else {
-                    llProductSearch.setVisibility(View.GONE);
-                    llServiceSearch.setVisibility(View.VISIBLE);
-                    llTitle.setVisibility(View.GONE);
+                    if (viewPager.getCurrentItem() == 0) {
+                        llProductSearch.setVisibility(View.VISIBLE);
+                        llServiceSearch.setVisibility(View.GONE);
+                        llTitle.setVisibility(View.GONE);
+                    } else {
+                        llProductSearch.setVisibility(View.GONE);
+                        llServiceSearch.setVisibility(View.VISIBLE);
+                        llTitle.setVisibility(View.GONE);
+                    }
                 }
                 break;
             case R.id.img_product_back_to_list:
             case R.id.img_service_back_to_list:
-                llProductSearch.setVisibility(View.GONE);
-                llServiceSearch.setVisibility(View.GONE);
-                llTitle.setVisibility(View.VISIBLE);
+                backpressLayoutSearch();
                 break;
         }
     }
 
     @Override
     public void onBackPressed() {
+
         if (llServiceSearch.getVisibility() == View.VISIBLE || llProductSearch.getVisibility() == View.VISIBLE) {
-            llProductSearch.setVisibility(View.GONE);
-            llServiceSearch.setVisibility(View.GONE);
-            llTitle.setVisibility(View.VISIBLE);
+            backpressLayoutSearch();
         } else {
             setResult(RESULT_CANCELED);
             finish();
         }
+    }
+
+    private void backpressLayoutSearch() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (llProductSearch.getVisibility() == View.VISIBLE) {
+                hideTextSeach(llProductSearch);
+            }
+
+            if (llServiceSearch.getVisibility() == View.VISIBLE) {
+                hideTextSeach(llServiceSearch);
+            }
+
+        } else {
+            llProductSearch.setVisibility(View.GONE);
+            llServiceSearch.setVisibility(View.GONE);
+            llTitle.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void revealTextSeach(View view) {
+        int cx = view.getRight() - 30;
+        int cy = view.getBottom() - 60;
+
+        int finalRadius = Math.max(view.getWidth(), view.getHeight());
+        Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
+        view.setVisibility(View.VISIBLE);
+        anim.start();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void hideTextSeach(final View view) {
+        int cx = view.getRight() - 30;
+        int cy = view.getBottom() - 60;
+        int initialRadius = view.getWidth();
+        Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0);
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                view.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        anim.start();
+
     }
 
     public interface OnTextChangeProductListener {
