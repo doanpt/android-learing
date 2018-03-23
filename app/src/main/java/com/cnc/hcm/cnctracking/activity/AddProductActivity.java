@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -47,7 +48,7 @@ import retrofit2.Response;
  * Created by Android on 1/3/2018.
  */
 
-public class AddProductActivity extends Activity implements View.OnClickListener {
+public class AddProductActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAGG = AddProductActivity.class.getSimpleName();
     private EditText edtDeviceName;
     private Spinner edtManufacture, edtCategory;

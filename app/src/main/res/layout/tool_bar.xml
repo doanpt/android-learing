@@ -11,7 +11,7 @@
         android:layout_height="56dp"
         android:orientation="horizontal">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/imv_menu"
             android:layout_width="56dp"
             android:layout_height="match_parent"
@@ -28,7 +28,7 @@
             android:textColor="@android:color/white"
             android:textSize="20sp"/>
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/imv_filter_list_on_action_bar"
             android:layout_width="56dp"
             android:layout_height="match_parent"

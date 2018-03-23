@@ -159,7 +159,7 @@
                     android:layout_height="40dp"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/imv_filter_list"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"

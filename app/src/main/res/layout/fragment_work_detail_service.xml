@@ -54,7 +54,7 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_gravity="center"
@@ -139,7 +139,7 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_gravity="center"
@@ -172,7 +172,7 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_gravity="center"
@@ -223,7 +223,7 @@
                     android:orientation="horizontal"
                     android:padding="8dp">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         app:srcCompat="@drawable/ic_marker_disable" />
@@ -251,7 +251,7 @@
                     android:orientation="horizontal"
                     android:padding="8dp">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         app:srcCompat="@drawable/ic_task_disable" />
@@ -367,7 +367,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/imv_expand_require"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -503,7 +503,7 @@
 
                 </LinearLayout>
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/imv_expand_bill"
                     android:layout_width="24dp"
                     android:layout_height="24dp"

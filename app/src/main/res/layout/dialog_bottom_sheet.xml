@@ -36,7 +36,7 @@
                         android:gravity="center_horizontal"
                         android:paddingTop="10dp">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:padding="7dp"
                             android:id="@+id/imv_back_detail_task_dialog_bottom"
                             android:layout_width="40dp"
@@ -171,7 +171,7 @@
                     android:visibility="visible"
                     tools:targetApi="lollipop">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/imv_icon_infor"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
