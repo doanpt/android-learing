@@ -166,7 +166,7 @@
                         android:layout_alignParentRight="true"
                         android:background="@drawable/bg_view_hover"
                         android:padding="10dp"
-                        android:src="@drawable/ic_filter_list"/>
+                        app:srcCompat="@drawable/ic_filter_list"/>
 
                     <TextView
                         android:id="@+id/tv_change_view_month_year"

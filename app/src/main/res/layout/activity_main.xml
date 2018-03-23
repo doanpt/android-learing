@@ -145,7 +145,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="-15dp"
                         android:padding="12dp"
-                        android:src="@drawable/ic_location"/>
+                        app:srcCompat="@drawable/ic_location"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -215,7 +215,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="-15dp"
                         android:padding="12dp"
-                        android:src="@drawable/ic_settings"/>
+                        app:srcCompat="@drawable/ic_settings"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -243,7 +243,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="-15dp"
                         android:padding="12dp"
-                        android:src="@drawable/ic_help"/>
+                        app:srcCompat="@drawable/ic_help"/>
 
                     <TextView
                         android:layout_width="0dp"

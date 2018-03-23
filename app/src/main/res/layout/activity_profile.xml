@@ -44,7 +44,7 @@
             android:layout_height="48dp"
             android:elevation="9dp"
             app:tabIndicatorHeight="1dp"
-            app:tabSelectedTextColor="@color/colorPrimaryFullScreen"
+            app:tabSelectedTextColor="@color/colorPrimary"
             app:tabTextAppearance="@android:style/TextAppearance.Widget.TextView"
             app:tabTextColor="@android:color/darker_gray"
             tools:targetApi="lollipop">
@@ -83,7 +83,7 @@
             android:layout_height="match_parent"
             android:background="?android:selectableItemBackground"
             android:padding="15dp"
-            android:src="@drawable/ic_back_while"/>
+            app:srcCompat="@drawable/ic_back_while"/>
 
         <TextView
             android:layout_width="0dp"
@@ -96,7 +96,7 @@
             android:layout_height="match_parent"
             android:background="?android:selectableItemBackground"
             android:padding="18dp"
-            android:src="@drawable/ic_more_edit"/>
+            app:srcCompat="@drawable/ic_more_edit"/>
 
         <ImageView
             android:id="@+id/imv_more_profile"
@@ -104,6 +104,6 @@
             android:layout_height="match_parent"
             android:background="?android:selectableItemBackground"
             android:padding="15dp"
-            android:src="@drawable/ic_more"/>
+            app:srcCompat="@drawable/ic_more"/>
     </LinearLayout>
 </FrameLayout>

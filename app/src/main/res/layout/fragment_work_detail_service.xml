@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+             android:layout_height="wrap_content"
+             xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -57,7 +58,7 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_sms" />
+                        app:srcCompat="@drawable/ic_contacts_message" />
 
                     <TextView
                         android:id="@+id/tv_sms"
@@ -142,7 +143,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_info_username" />
+                            app:srcCompat="@drawable/ic_info_username" />
 
                         <TextView
                             android:id="@+id/tv_detail_work_contact_name"
@@ -175,7 +176,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_call_disable" />
+                            app:srcCompat="@drawable/ic_call_disable" />
 
                         <TextView
                             android:id="@+id/tv_detail_work_contact_phone"
@@ -225,7 +226,7 @@
                     <ImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:src="@drawable/ic_marker_disable" />
+                        app:srcCompat="@drawable/ic_marker_disable" />
 
                     <TextView
                         android:id="@+id/tv_detail_work_contact_address"
@@ -253,7 +254,7 @@
                     <ImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:src="@drawable/ic_task_disable" />
+                        app:srcCompat="@drawable/ic_task_disable" />
 
                     <TextView
                         android:id="@+id/tv_detail_work_note"
@@ -373,7 +374,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_chevron_right"
+                    app:srcCompat="@drawable/ic_chevron_right"
                     android:visibility="gone" />
 
             </RelativeLayout>
@@ -509,7 +510,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_chevron_right"
+                    app:srcCompat="@drawable/ic_chevron_right"
                     android:visibility="gone" />
             </RelativeLayout>
 

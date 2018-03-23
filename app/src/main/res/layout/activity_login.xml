@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EEEEEE"
-    android:fitsSystemWindows="true"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="24dp">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="#EEEEEE"
+              android:fitsSystemWindows="true"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:padding="24dp">
 
     <ImageView
         android:layout_width="120dp"
@@ -46,7 +47,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:padding="2dp"
-            android:src="@drawable/ic_username" />
+            app:srcCompat="@drawable/ic_username" />
 
         <TextView
             android:id="@+id/tv_clear_text_id"
@@ -79,7 +80,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:padding="2dp"
-            android:src="@drawable/ic_password" />
+            app:srcCompat="@drawable/ic_password" />
 
         <TextView
             android:id="@+id/tv_clear_text_pass"

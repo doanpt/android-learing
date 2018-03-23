@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
 
     <LinearLayout
@@ -16,7 +17,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_view_hover"
             android:padding="15dp"
-            android:src="@drawable/ic_back_while" />
+            app:srcCompat="@drawable/ic_back_while" />
 
         <TextView
             android:layout_width="0dp"
@@ -33,7 +34,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_view_hover"
             android:padding="15dp"
-            android:src="@drawable/ic_checking" />
+            app:srcCompat="@drawable/ic_checking" />
     </LinearLayout>
 
     <LinearLayout
@@ -79,26 +80,6 @@
             android:layout_height="match_parent"
             android:hint="@string/edt_hint_category"
             android:textSize="20sp" />
-        <!--<FrameLayout-->
-        <!--android:id="@+id/frame_category"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1">-->
-
-        <!--<Spinner-->
-        <!--android:id="@+id/edt_category"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:hint="@string/edt_hint_category"-->
-        <!--android:textSize="20sp" />-->
-
-        <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="20dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="20dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_gravity="right|center_vertical"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_marginRight="10dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:src="@drawaic_drop_down_arrowrrow" />&ndash;&gt;-->
-        <!--</FrameLayout>-->
     </LinearLayout>
 
     <LinearLayout
@@ -120,26 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textSize="20sp" />
-        <!--<FrameLayout-->
-        <!--android:id="@+id/frame_manufacture"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1">-->
 
-        <!--<Spinner-->
-        <!--android:id="@+id/edt_manufacture"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:hint="@string/edt_hint_manufacture"-->
-        <!--android:textSize="20sp" />-->
-
-        <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="20dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="20dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_gravity="right|center_vertical"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_marginRight="10dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:src="@drawaic_drop_down_arrowrrow" />&ndash;&gt;-->
-        <!--</FrameLayout>-->
     </LinearLayout>
 
     <LinearLayout
@@ -174,7 +136,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/ic_camera_barcode" />
+                app:srcCompat="@drawable/ic_camera_barcode"/>
         </FrameLayout>
 
     </LinearLayout>

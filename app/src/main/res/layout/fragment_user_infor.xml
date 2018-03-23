@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:card_view="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
 
     <LinearLayout
@@ -32,7 +33,7 @@
 
                     <ImageView
                         style="@style/StyleImageIconItemUserInfor"
-                        android:src="@drawable/ic_contact_mail_company" />
+                        app:srcCompat="@drawable/ic_account"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -51,17 +52,17 @@
                                 <TextView
                                     android:id="@+id/tv_full_name"
                                     style="@style/StyleTextViewUserInfor"
-                                    android:text="hoangss@cnc.com" />
+                                    android:text="hoangss@cnc.com"/>
 
                                 <!--<TextView-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:text="@string/company" />-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:text="@string/company" />-->
                             </LinearLayout>
 
                         </LinearLayout>
 
-                        <TextView style="@style/StyleLine" />
+                        <TextView style="@style/StyleLine"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -70,7 +71,7 @@
 
                     <ImageView
                         style="@style/StyleImageIconItemUserInfor"
-                        android:src="@drawable/ic_contacts_name" />
+                        app:srcCompat="@drawable/ic_contacts_name"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -89,13 +90,13 @@
                                 <TextView
                                     android:id="@+id/tv_email"
                                     style="@style/StyleTextViewUserInfor"
-                                    android:text="Hoang IT" />
+                                    android:text="Hoang IT"/>
 
                             </LinearLayout>
 
                         </LinearLayout>
 
-                        <TextView style="@style/StyleLine" />
+                        <TextView style="@style/StyleLine"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -104,7 +105,7 @@
 
                     <ImageView
                         style="@style/StyleImageIconItemUserInfor"
-                        android:src="@drawable/ic_contact_phone" />
+                        app:srcCompat="@drawable/ic_contact_phone"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -123,20 +124,20 @@
                                 <TextView
                                     android:id="@+id/tv_phone"
                                     style="@style/StyleTextViewUserInfor"
-                                    android:text="0974356883" />
+                                    android:text="0974356883"/>
 
                                 <!--<TextView-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:text="@string/home" />-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:text="@string/home" />-->
                             </LinearLayout>
 
                             <ImageView
                                 style="@style/StyleImageIconItemUserInfor"
-                                android:src="@drawable/ic_contacts_message" />
+                                app:srcCompat="@drawable/ic_contacts_message"/>
                         </LinearLayout>
 
-                        <TextView style="@style/StyleLine" />
+                        <TextView style="@style/StyleLine"/>
                     </LinearLayout>
                 </LinearLayout>
 

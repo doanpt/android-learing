@@ -534,7 +534,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     Log.d(TAGG, "No connect to Socket server");
                 }
             }
-            handler.postDelayed(runnableUpdateUI, 1000);
+            if (UserInfo.getInstance(getApplicationContext()).getIsLogin()) {
+                handler.postDelayed(runnableUpdateUI, 1000);
+            }
         }
     };
 
