@@ -104,12 +104,12 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="-15dp"
                         android:padding="15dp"
-                        android:src="@drawable/ic_internet"/>
+                        app:srcCompat="@drawable/ic_internet"/>
 
                     <TextView
                         android:layout_width="0dp"

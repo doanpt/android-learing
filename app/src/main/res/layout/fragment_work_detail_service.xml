@@ -30,11 +30,11 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_call" />
+                        app:srcCompat="@drawable/ic_call" />
 
                     <TextView
                         android:id="@+id/tv_call"
@@ -78,11 +78,11 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_address" />
+                        app:srcCompat="@drawable/ic_address" />
 
                     <TextView
                         android:id="@+id/tv_addr"

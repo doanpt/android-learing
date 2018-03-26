@@ -49,7 +49,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="5dp"
-            android:src="@drawable/ic_refrigerator" />
+            app:srcCompat="@drawable/ic_refrigerator" />
 
         <EditText
             android:id="@+id/edt_device_name"
@@ -72,7 +72,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="12dp"
-            android:src="@drawable/ic_factory" />
+            app:srcCompat="@drawable/ic_factory" />
 
         <Spinner
             android:id="@+id/edt_category"
@@ -94,7 +94,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="12dp"
-            android:src="@drawable/ic_factory" />
+            app:srcCompat="@drawable/ic_factory" />
 
         <Spinner
             android:id="@+id/edt_manufacture"
@@ -116,7 +116,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="12dp"
-            android:src="@drawable/ic_qr_code" />
+            app:srcCompat="@drawable/ic_qr_code" />
 
         <FrameLayout
             android:layout_width="0dp"

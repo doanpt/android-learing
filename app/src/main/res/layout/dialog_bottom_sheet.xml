@@ -105,14 +105,15 @@
                         android:orientation="horizontal"
                         tools:targetApi="o">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/imv_time"
                             android:layout_width="24dp"
                             android:scaleType="centerInside"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_time_while"/>
+                            app:srcCompat="@drawable/ic_time_while"/>
 
                         <TextView
+                            android:layout_marginLeft="5dp"
                             android:id="@+id/tv_time_item_work"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"

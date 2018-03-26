@@ -89,11 +89,11 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:padding="5dp"
-                    android:src="@drawable/ic_time"/>
+                    app:srcCompat="@drawable/ic_time"/>
 
                 <TextView
                     android:id="@+id/tv_time_item_work"

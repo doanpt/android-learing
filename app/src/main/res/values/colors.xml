@@ -27,4 +27,5 @@
 
     <color name="color_title_work">#212121</color>
     <color name="colorPrimaryGray">#BBDEFB</color>
+    <color name="color_disable">#9E9E9E</color>
 </resources>
