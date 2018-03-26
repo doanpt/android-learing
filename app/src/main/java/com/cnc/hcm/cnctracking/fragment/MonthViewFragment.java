@@ -64,6 +64,7 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
     private MainActivity mainActivity;
     private List<String> arrAllDate = new ArrayList<>();
     private List<String> listWeek = new ArrayList<>();
+    private int currentDay;
 
 
     public MonthViewFragment() {
@@ -138,13 +139,16 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
 
 
     public String gotoCurrentDate() {
+        if (calendarView.getPagerToday() != calendarView.getCurrentPager()) {
+            calendarView.setItemPagerToday();
+        }
         Calendar instance = CommonMethod.getInstanceCalendar();
         String dateSelected = CommonMethod.formatFullTimeToString(instance.getTime());
 
         calendarView.setSelectedDate(instance.getTime());
         oneDayDecorator.setDate(instance.getTime());
         calendarView.invalidateDecorators();
-        int currentDay = instance.get(Calendar.DAY_OF_MONTH);
+        currentDay = instance.get(Calendar.DAY_OF_MONTH);
         setBorderDateSelected(currentDay);
         return dateSelected;
     }
@@ -240,6 +244,8 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
             }
             CommonMethod.makeToast(getContext(), "listWeek " + listWeek);
         }
+
+        setBorderDateSelected(currentDay);
     }
 
     @Override
@@ -255,7 +261,8 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
             mainActivity.setDateSelected(dateSelected);
             mainActivity.tryGetTaskList(accessToken, dateSelected, dateSelected);
         }
-        setBorderDateSelected(date.getDay());
+        currentDay = date.getDay();
+        setBorderDateSelected(currentDay);
 
     }
 

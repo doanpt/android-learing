@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -180,6 +181,10 @@ public class MaterialCalendarView extends ViewGroup {
     private CalendarDay currentMonth;
     private LinearLayout topbar;
     private CalendarMode calendarMode;
+
+    private int pagerToday = -1;
+    private boolean isPagerToday;
+
     /**
      * Used for the dynamic calendar height.
      */
@@ -207,6 +212,7 @@ public class MaterialCalendarView extends ViewGroup {
             updateUi();
 
             dispatchOnMonthChanged(currentMonth);
+
         }
 
         @Override
@@ -215,8 +221,31 @@ public class MaterialCalendarView extends ViewGroup {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            if (!isPagerToday) {
+                pagerToday = pager.getCurrentItem();
+                Log.d("onPageScrolled", "pagerToday: " + pagerToday);
+                isPagerToday = true;
+            }
         }
     };
+
+    public int getPagerToday() {
+        return pagerToday;
+    }
+
+    public int getCurrentPager() {
+        int currentItem = -1;
+        if (pager != null) {
+            currentItem = pager.getCurrentItem();
+        }
+        return currentItem;
+    }
+
+    public void setItemPagerToday() {
+        if (pagerToday != -1) {
+            pager.setCurrentItem(pagerToday);
+        }
+    }
 
 
     private CalendarDay minDate = null;
