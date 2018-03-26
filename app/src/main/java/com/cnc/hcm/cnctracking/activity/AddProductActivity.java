@@ -379,6 +379,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     edtDeviceName.setText("");
                     edtBarcode.setText("");
                     startActivity(productDetail);
+                    finish();
                     Log.d("ABDonResponse", status + "  200 ");
                 } else {
                     Toast.makeText(AddProductActivity.this, "Add contain product error", Toast.LENGTH_SHORT).show();

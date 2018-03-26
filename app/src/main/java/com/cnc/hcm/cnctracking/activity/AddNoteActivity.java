@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.util.Conts;
@@ -24,20 +25,20 @@ public class AddNoteActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
-        Button btnSave = findViewById(R.id.btn_save);
-        Button btnCancel = findViewById(R.id.btn_cancel);
+        ImageView imvSave = findViewById(R.id.img_add_note);
+        ImageView imvCancel = findViewById(R.id.img_back);
         edtInputNote = findViewById(R.id.edt_input_note);
         note = getIntent().getStringExtra(Conts.KEY_CURRENT_NOTE);
         edtInputNote.setText(note);
         edtInputNote.requestFocus();
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        imvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setResult(RESULT_CANCELED);
                 finish();
             }
         });
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        imvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();

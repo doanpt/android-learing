@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -54,8 +55,8 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_time);
 
-        Button btn_save = findViewById(R.id.btn_save);
-        Button btn_cancel = findViewById(R.id.btn_cancel);
+        ImageView imvSave = findViewById(R.id.img_change_time);
+        ImageView imvCancel = findViewById(R.id.img_back);
         tv_time = findViewById(R.id.tv_time);
         tv_date = findViewById(R.id.tv_date);
         rg_reason = findViewById(R.id.rg_reason);
@@ -75,8 +76,8 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
 
         tv_time.setOnClickListener(this);
         tv_date.setOnClickListener(this);
-        btn_cancel.setOnClickListener(this);
-        btn_save.setOnClickListener(this);
+        imvSave.setOnClickListener(this);
+        imvCancel.setOnClickListener(this);
     }
 
     private void loadListAvailableReason() {
@@ -175,10 +176,10 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
                 datePickerDialog.show();
                 break;
 
-            case R.id.btn_save:
+            case R.id.img_change_time:
                 tryToSaveChangedTime();
                 break;
-            case R.id.btn_cancel:
+            case R.id.img_back:
                 setResult(RESULT_CANCELED);
                 finish();
                 break;

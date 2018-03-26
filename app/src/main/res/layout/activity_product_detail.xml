@@ -106,6 +106,7 @@
                         android:layout_weight="0.7" />
 
                     <LinearLayout
+                        android:paddingLeft="10dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
@@ -115,21 +116,19 @@
                             android:id="@+id/tv_device_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="5dp"
                             android:text="Device name"
-                            android:textColor="#ffffff"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"/>
 
                         <TextView
+                            android:paddingBottom="5dp"
                             android:id="@+id/tv_device_code"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:padding="5dp"
                             android:text="Device code"
-                            android:textColor="#ffffff"
-                            android:textSize="16sp" />
+                            android:textColor="#AAfffff2"
+                            android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
 
