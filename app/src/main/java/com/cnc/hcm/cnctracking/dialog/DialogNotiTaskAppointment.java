@@ -65,7 +65,7 @@ public class DialogNotiTaskAppointment extends Dialog implements View.OnClickLis
     public void setData(ItemTask itemTask) {
         this.itemTask = itemTask;
         if (tvTimeAppointment != null && tvTitleTask != null && itemTask != null) {
-            String appointmentDate = itemTask.getTaskResult().appointmentDate.substring(0, itemTask.getTaskResult().appointmentDate.lastIndexOf(".")) + "Z";
+            String appointmentDate = itemTask.getTaskResult().appointmentDate;
             String time = CommonMethod.formatTimeFromServerToString(appointmentDate);
 
             tvTitleTask.setText("Ticket " + itemTask.getTaskResult().title + " " + "còn 30 phút nữa đến lịch hẹn.");

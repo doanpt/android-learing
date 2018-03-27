@@ -308,7 +308,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         try {
             if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
                 tv_title_item_work.setText(getTaskDetailResult.result.title + "");
-                String date = getTaskDetailResult.result.appointmentDate.substring(0, getTaskDetailResult.result.appointmentDate.lastIndexOf(".")) + "Z";
+                String date = getTaskDetailResult.result.appointmentDate;
                 if (!TextUtils.isEmpty(date)) {
                     String time = CommonMethod.formatTimeFromServerToString(date);
                     tv_time_item_work.setText(time);
@@ -646,7 +646,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         try {
             if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
                 workName += getTaskDetailResult.result.title;
-                String date = getTaskDetailResult.result.appointmentDate.substring(0, getTaskDetailResult.result.appointmentDate.lastIndexOf(".")) + "Z";
+                String date = getTaskDetailResult.result.appointmentDate;
                 if (!TextUtils.isEmpty(date)) {
                     workTime += CommonMethod.formatTimeFromServerToString(date);
                 }

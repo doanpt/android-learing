@@ -511,7 +511,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
             if (timeMinute >= 60) {
                 for (final ItemTask item : listTaskToDay) {
-                    String appointmentDate = item.getTaskResult().appointmentDate.substring(0, item.getTaskResult().appointmentDate.lastIndexOf(".")) + "Z";
+                    String appointmentDate = item.getTaskResult().appointmentDate;
                     String timeItemTask = CommonMethod.formatTimeAppointmentDateBeforThirtyMinute(appointmentDate);
                     Log.d(TAGG, "runnableUpdateUI, Time before 30': " + timeItemTask);
                     String currentTime = CommonMethod.formatDateToString(CommonMethod.getInstanceCalendar().getTimeInMillis());

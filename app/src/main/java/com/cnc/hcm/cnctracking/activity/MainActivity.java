@@ -438,7 +438,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         String currenDate = CommonMethod.formatTimeStandand(CommonMethod.getInstanceCalendar().getTime());
 
-        String appointmentDate = result.appointmentDate.substring(0, result.appointmentDate.lastIndexOf(".")) + "Z";
+        String appointmentDate = result.appointmentDate;
         Date appmentDate = CommonMethod.formatTimeFromServerToDate(appointmentDate);
         String appDate = CommonMethod.formatTimeStandand(appmentDate);
 

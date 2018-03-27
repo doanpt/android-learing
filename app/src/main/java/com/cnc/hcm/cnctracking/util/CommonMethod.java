@@ -68,19 +68,6 @@ public class CommonMethod {
         return date;
     }
 
-    public static Date formatTimeFromServerToDate2(String inputTime) {
-        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL2);
-        TimeZone timeZone = TimeZone.getDefault();
-        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
-        Date date = null;
-        try {
-            date = format.parse(inputTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
-
     public static String formatTimeToString(long time) {
         Date date = new Date(time);
         return new SimpleDateFormat("dd/MM/yy HH:mm:ss").format(date);
@@ -182,13 +169,6 @@ public class CommonMethod {
     }
 
     public static boolean checkCurrentDay(String paramDay) {
-        if (paramDay.contains(".")) {
-            try {
-                paramDay = paramDay.substring(0, paramDay.lastIndexOf(".")) + "Z";
-            } catch (StringIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-        }
         boolean isToday = false;
         Calendar calendarParam = getInstanceCalendar();
         Date inputParam = formatTimeFromServerToDate(paramDay);

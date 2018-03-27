@@ -67,7 +67,7 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
         String time = getIntent().getStringExtra(Conts.KEY_WORK_TIME);
         mIdTask = getIntent().getStringExtra(Conts.KEY_ID_TASK);
         if (!TextUtils.isEmpty(time)) {
-            Date date = CommonMethod.formatTimeFromServerToDate2(time);
+            Date date = CommonMethod.formatTimeFromServerToDate(time);
 
             mCalendar = CommonMethod.getInstanceCalendar();
             mCalendar.setTime(date);

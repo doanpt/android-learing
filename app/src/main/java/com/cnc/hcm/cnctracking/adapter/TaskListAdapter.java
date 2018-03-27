@@ -2,6 +2,7 @@ package com.cnc.hcm.cnctracking.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,9 @@ import java.util.ArrayList;
  */
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     private static final int NOTIDATA_SET_CHANGE = 32;
     private static final String TAGG = TaskListAdapter.class.getSimpleName();
@@ -76,7 +80,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         //K can thiet nua
         //holder.tvDistance.setText(itemTask.getDistanceToMyLocation());
 
-        String appointmentDate = itemTask.getTaskResult().appointmentDate.substring(0, itemTask.getTaskResult().appointmentDate.lastIndexOf(".")) + "Z";
+        String appointmentDate = itemTask.getTaskResult().appointmentDate;
         String time = CommonMethod.formatTimeFromServerToString(appointmentDate);
         holder.tvTime.setText(time);
 
@@ -109,7 +113,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private LinearLayout llOnClickItem;
-        private ImageView imvNotiTypeWork;
+        private ImageView imvNotiTypeWork, imvClock;
         private TextView tvTitleWork, tvAddressWork, tvTime;
 
         public ViewHolder(View view) {
@@ -120,6 +124,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             tvTitleWork = (TextView) itemView.findViewById(R.id.tv_title_item_work);
             tvAddressWork = (TextView) itemView.findViewById(R.id.tv_address_item_work);
             tvTime = (TextView) itemView.findViewById(R.id.tv_time_item_work);
+            imvClock = itemView.findViewById(R.id.imv_clock_item_work);
 //            tvDistance = (TextView) itemView.findViewById(R.id.tv_distance_item_work);
         }
 
