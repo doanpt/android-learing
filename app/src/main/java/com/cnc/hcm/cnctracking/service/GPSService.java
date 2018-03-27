@@ -43,6 +43,9 @@ import com.cnc.hcm.cnctracking.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
@@ -60,9 +63,7 @@ import io.nlopez.smartlocation.OnReverseGeocodingListener;
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
 import io.nlopez.smartlocation.location.config.LocationParams;
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -112,6 +113,15 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     private boolean isNetworkConnected;
     private Socket mSocket;
+
+    {
+        try {
+            String url = Conts.URL_BASE + "?token=" + UserInfo.getInstance(GPSService.this).getAccessToken();
+            mSocket = IO.socket(url);
+        } catch (URISyntaxException e) {
+        }
+    }
+
     private String addressName;
     private String cityName;
     private boolean isUploading;
@@ -437,7 +447,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 case ACTION_NETWORK_CHANGE:
                     isNetworkConnected = getNetworkConntected();
                     if (isNetworkConnected) {
-                        connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
+                        connectSocket();
                         int size = arrTrackLocation.size();
                         if (size >= MINXIMUM_PACKAGE && !isUploading) {
                             pushDataGPSToServer();
@@ -544,18 +554,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         return mSocket;
     }
 
-    private void connectSocket(String token) {
-        try {
-            String url = Conts.URL_BASE;
-            IO.Options options = new IO.Options();
-            options.forceNew = true;
-            options.query = "token=" + token;
-            options.timeout = 30000L;
-            mSocket = IO.socket(url, options);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            CommonMethod.makeToast(getApplicationContext(), "connectSocket, " + e.getMessage());
-        }
+    private void connectSocket() {
         if (mSocket != null && !mSocket.connected()) {
             mSocket.on(Conts.SOCKET_EVENT_NEW_TASK, eventNewTask)
                     .on(Conts.SOCKET_EVENT_LOGIN_OTHER_DEVICE, eventLoginOtherDevice)
@@ -571,16 +570,15 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private void disconnectSocket() {
         if (mSocket != null) {
             mSocket.disconnect();
-            mSocket = null;
         }
     }
 
     private Emitter.Listener eventDisconnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.d(TAGG, "Socket disconnect");
-            if (isNetworkConnected){
-                connectSocket(UserInfo.getInstance(GPSService.this).getAccessToken());
+            Log.d(TAGG, "Socket disconnect, " + args.toString());
+            if (isNetworkConnected) {
+                connectSocket();
                 Log.d(TAGG, "Socket reconnect");
             }
         }
@@ -589,8 +587,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private Emitter.Listener eventError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.d(TAGG, "ConnectSocket eventError");
-            Log.d(TAGG, "ConnectSocket eventError");
+            Log.d(TAGG, "ConnectSocket eventError, " + args.toString());
         }
     };
 
