@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +35,7 @@ public class CommonMethod {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return CommonMethod.formatDateToString(date.getTime());
+        return CommonMethod.formatHourMinuteToString(date.getTime());
     }
 
     public static String formatTimeAppointmentDateBeforThirtyMinute(String inputTime) {
@@ -52,7 +51,7 @@ public class CommonMethod {
         long thirtyMinute = TimeUnit.MINUTES.toMillis(30);
         long timeAfterMinus = date.getTime() - thirtyMinute;
         date.setTime(timeAfterMinus);
-        return CommonMethod.formatDateToString(date.getTime());
+        return CommonMethod.formatHourMinuteToString(date.getTime());
     }
 
     public static Date formatDateAppointmentDateBeforThirtyMinute(String inputTime) {
@@ -93,7 +92,11 @@ public class CommonMethod {
         return new SimpleDateFormat(Conts.FORMAT_DATE_FULL).format(date);
     }
 
-    public static String formatDateToString(long time) {
+    public static String formatDateToString(Date date) {
+        return new SimpleDateFormat(Conts.FORMAT_DATE).format(date);
+    }
+
+    public static String formatHourMinuteToString(long time) {
         Date date = new Date(time);
         return new SimpleDateFormat("HH:mm").format(date);
     }

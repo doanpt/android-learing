@@ -724,7 +724,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     String accessToken = UserInfo.getInstance(getApplicationContext()).getAccessToken();
                     if (dateSelected.equals(Conts.BLANK)) {
                         Calendar instance = CommonMethod.getInstanceCalendar();
-                        String dateSelected = CommonMethod.formatFullTimeToString(instance.getTime());
+                        String dateSelected = CommonMethod.formatDateToString(instance.getTime()) + Conts.FORMAT_TIME_FULL;
                         tryGetTaskList(accessToken, dateSelected, dateSelected);
                     } else {
                         tryGetTaskList(accessToken, dateSelected, dateSelected);

@@ -514,7 +514,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     String appointmentDate = item.getTaskResult().appointmentDate;
                     String timeItemTask = CommonMethod.formatTimeAppointmentDateBeforThirtyMinute(appointmentDate);
                     Log.d(TAGG, "runnableUpdateUI, Time before 30': " + timeItemTask);
-                    String currentTime = CommonMethod.formatDateToString(CommonMethod.getInstanceCalendar().getTimeInMillis());
+                    String currentTime = CommonMethod.formatHourMinuteToString(CommonMethod.getInstanceCalendar().getTimeInMillis());
 
                     if (timeItemTask.equals(currentTime)) {
                         if (mainActivity != null && mainActivity.isMainActive()) {

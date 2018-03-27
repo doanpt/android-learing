@@ -89,6 +89,7 @@ public class Conts {
     public static final String KEY_ID_TASK = "KEY_ID_TASK";
     public static final String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
     public static final String FORMAT_DATE_FULL = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String FORMAT_DATE = "yyyy-MM-dd";
     public static final String FORMAT_TIME_FULL = "T00:00:00.000Z";
     public static final String KEY_START_DATE = "startDate";
     public static final String KEY_END_DATE = "endDate";

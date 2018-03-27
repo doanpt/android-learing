@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -166,7 +165,7 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     }
 
     private void updateDateTimeUI() {
-        tv_time.setText(CommonMethod.formatDateToString(mCalendar.getTimeInMillis()));
+        tv_time.setText(CommonMethod.formatHourMinuteToString(mCalendar.getTimeInMillis()));
         tv_date.setText(CommonMethod.formatTimeStandand(mCalendar.getTime()));
     }
 
