@@ -1,6 +1,7 @@
 package com.cnc.hcm.cnctracking.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
@@ -86,7 +87,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
             if (currentDate.compareTo(dateBefor30Minute) >= 0) {
                 holder.imvAlarmAppointment.setVisibility(View.VISIBLE);
-
+                if (currentDate.compareTo(dateAppointment) < 0) {
+                    holder.imvAlarmAppointment.setColorFilter(Color.YELLOW);
+                } else {
+                    holder.imvAlarmAppointment.setColorFilter(Color.RED);
+                }
             } else {
                 holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
             }
