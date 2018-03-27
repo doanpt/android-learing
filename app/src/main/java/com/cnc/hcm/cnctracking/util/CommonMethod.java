@@ -55,6 +55,22 @@ public class CommonMethod {
         return CommonMethod.formatDateToString(date.getTime());
     }
 
+    public static Date formatDateAppointmentDateBeforThirtyMinute(String inputTime) {
+        SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
+        TimeZone timeZone = TimeZone.getDefault();
+        format.setTimeZone(TimeZone.getTimeZone(timeZone.getDisplayName()));
+        Date date = null;
+        try {
+            date = format.parse(inputTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long thirtyMinute = TimeUnit.MINUTES.toMillis(30);
+        long timeAfterMinus = date.getTime() - thirtyMinute;
+        date.setTime(timeAfterMinus);
+        return date;
+    }
+
     public static Date formatTimeFromServerToDate(String inputTime) {
         SimpleDateFormat format = new SimpleDateFormat(Conts.FORMAT_DATE_FULL);
         TimeZone timeZone = TimeZone.getDefault();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.SettingApp;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by giapmn on 12/21/17.
@@ -61,12 +65,33 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         long idTypeWork = result.status._id;
         if (idTypeWork == Conts.TYPE_DOING_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_doing);
+            holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
+
         } else if (idTypeWork == Conts.TYPE_COMPLETE_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_done);
+            holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
+
         } else if (idTypeWork == Conts.TYPE_CANCEL_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_cancel);
+            holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
+
         } else if (idTypeWork == Conts.TYPE_NEW_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_new);
+
+            String appointmentDate = itemTask.getTaskResult().appointmentDate;
+
+            Date currentDate = CommonMethod.getInstanceCalendar().getTime();
+            Date dateBefor30Minute = CommonMethod.formatDateAppointmentDateBeforThirtyMinute(appointmentDate);
+            Date dateAppointment = CommonMethod.formatTimeFromServerToDate(appointmentDate);
+
+            if (currentDate.compareTo(dateBefor30Minute) >= 0) {
+                holder.imvAlarmAppointment.setVisibility(View.VISIBLE);
+
+            } else {
+                holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
+            }
+
+
         }
 
         boolean isRead = result.isRead;
@@ -113,7 +138,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private LinearLayout llOnClickItem;
-        private ImageView imvNotiTypeWork, imvClock;
+        private ImageView imvNotiTypeWork, imvClock, imvAlarmAppointment;
         private TextView tvTitleWork, tvAddressWork, tvTime;
 
         public ViewHolder(View view) {
@@ -125,6 +150,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             tvAddressWork = (TextView) itemView.findViewById(R.id.tv_address_item_work);
             tvTime = (TextView) itemView.findViewById(R.id.tv_time_item_work);
             imvClock = itemView.findViewById(R.id.imv_clock_item_work);
+            imvAlarmAppointment = itemView.findViewById(R.id.imv_alarm_appointment);
 //            tvDistance = (TextView) itemView.findViewById(R.id.tv_distance_item_work);
         }
 
