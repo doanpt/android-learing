@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.model.ChangeTicketAppointmentResult;
 import com.cnc.hcm.cnctracking.model.GetChangeTicketAppointmentReasonsResult;
 import com.cnc.hcm.cnctracking.util.CommonMethod;
@@ -48,13 +49,15 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     private String mReason;
     private GetChangeTicketAppointmentReasonsResult mGetChangeTicketAppointmentReasonsResult;
     private ProgressDialog mProgressDialog;
+    private DialogNotification dialogNotification;
+
     private String mIdTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_time);
-
+        initObjects();
         ImageView imvSave = findViewById(R.id.img_change_time);
         ImageView imvCancel = findViewById(R.id.img_back);
         tv_time = findViewById(R.id.tv_time);
@@ -78,6 +81,23 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
         tv_date.setOnClickListener(this);
         imvSave.setOnClickListener(this);
         imvCancel.setOnClickListener(this);
+    }
+
+    private void initObjects() {
+        dialogNotification = new DialogNotification(this);
+        dialogNotification.setTitle(getString(R.string.error_occurred));
+        dialogNotification.setTextBtnOK(getString(R.string.try_again));
+        dialogNotification.setOnClickDialogNotificationListener(new DialogNotification.OnClickDialogNotificationListener() {
+            @Override
+            public void onClickButtonOK() {
+                tryToSaveChangedTime();
+            }
+
+            @Override
+            public void onClickButtonExit() {
+
+            }
+        });
     }
 
     private void loadListAvailableReason() {
@@ -201,6 +221,11 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
         String appointmentDateChange = CommonMethod.formatFullTimeToString(mCalendar.getTime());
         arrHeads.add(new MHead(Conts.KEY_APPOINTMENT_DATE, appointmentDateChange));
         arrHeads.add(new MHead(Conts.KEY_REASON_ID, mReason));
+
+        changeTicketAppointment(arrHeads);
+    }
+
+    private void changeTicketAppointment(List<MHead> arrHeads) {
         ApiUtils.getAPIService(arrHeads).changeTicketAppointment(mIdTask).enqueue(new Callback<ChangeTicketAppointmentResult>() {
             @Override
             public void onResponse(Call<ChangeTicketAppointmentResult> call, Response<ChangeTicketAppointmentResult> response) {
@@ -216,7 +241,11 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
             @Override
             public void onFailure(Call<ChangeTicketAppointmentResult> call, Throwable t) {
                 dismisDialogLoading();
-                Log.e(TAG, "loadListAvailableReason.onFailure() --> " + t);
+                Log.e(TAG, "changeTicketAppointment.onFailure() --> " + t);
+                if (dialogNotification != null) {
+                    dialogNotification.setContentMessage("changeTicketAppointment.onFailure()\n" + t.getMessage());
+                    dialogNotification.show();
+                }
             }
         });
     }
@@ -234,7 +263,7 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         try {
-            mReason = mGetChangeTicketAppointmentReasonsResult.result.get(i%mGetChangeTicketAppointmentReasonsResult.result.size() - 1)._id;
+            mReason = mGetChangeTicketAppointmentReasonsResult.result.get(i % mGetChangeTicketAppointmentReasonsResult.result.size() - 1)._id;
             Log.e(TAG, "onCheckedChanged() --> id: " + mReason + ", i: " + i);
         } catch (Exception e) {
             Log.e(TAG, "onCheckedChanged() --> e: " + e);

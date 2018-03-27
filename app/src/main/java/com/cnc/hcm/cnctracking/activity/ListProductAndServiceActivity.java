@@ -30,6 +30,7 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.FragmentAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.fragment.ListProductFragment;
 import com.cnc.hcm.cnctracking.fragment.ListServiceFragment;
 import com.cnc.hcm.cnctracking.model.CategoryListResult;
@@ -69,11 +70,19 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
     private ArrayList<CategoryListResult.Category> listCategory;
     private Spinner spnManufacuture, spnCategory, spnServiceCategory;
     private ProgressDialog mProgressDialog;
+    private DialogNotification dialogNotification;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_product_and_service);
+        initObjects();
+
+        initViews();
+    }
+
+    private void initObjects() {
         arrHeads = new ArrayList<>();
         arrManufactures = new ArrayList<>();
         arrCategory = new ArrayList<>();
@@ -87,7 +96,23 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
         accessToken = UserInfo.getInstance(getApplicationContext()).getAccessToken();
         arrHeads.clear();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-        initViews();
+
+        dialogNotification = new DialogNotification(this);
+        dialogNotification.setTitle(getString(R.string.error_occurred));
+        dialogNotification.setTextBtnOK(getString(R.string.try_again));
+        dialogNotification.setOnClickDialogNotificationListener(new DialogNotification.OnClickDialogNotificationListener() {
+            @Override
+            public void onClickButtonOK() {
+                showLoadingDialog();
+                getListServices();
+            }
+
+            @Override
+            public void onClickButtonExit() {
+
+            }
+        });
+
     }
 
     private void showLoadingDialog() {
@@ -104,7 +129,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
                     mProgressDialog.dismiss();
                 }
             }
-        }, 5000);
+        }, 10000);
     }
 
     private void initViews() {
@@ -181,33 +206,11 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
                 Toast.makeText(ListProductAndServiceActivity.this, "Get lise category  for search fail", Toast.LENGTH_SHORT).show();
             }
         });
-        ApiUtils.getAPIService(arrHeads).getServices().enqueue(new Callback<Services>() {
-            @Override
-            public void onResponse(Call<Services> call, Response<Services> response) {
-                Integer status = response.body().getStatusCode();
-                if (status != null && status == 200) {
-                    arrServices.clear();
-                    arrServices.add("Chọn loại dịch vụ");
-                    listServices = (ArrayList<Services.Result>) response.body().getResult();
-                    if (listServices != null) {
-                        for (Services.Result service : listServices) {
-                            arrServices.add(service.getCategory().getTitle());
-                            servicesAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        Log.d("ListProductAndServiceAc", "FATA ListProductAndServiceAc, initViews(), listServices = null");
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Services> call, Throwable t) {
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
-                Toast.makeText(ListProductAndServiceActivity.this, "Get lise service  for search fail", Toast.LENGTH_SHORT).show();
-            }
-        });
+        //Get list services
+        getListServices();
+
+
         spnCategory = findViewById(R.id.spn_product_product_type);
         spnManufacuture = findViewById(R.id.spn_product_manufacture);
         spnServiceCategory = findViewById(R.id.spn_service_product_type);
@@ -352,6 +355,39 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    private void getListServices() {
+        ApiUtils.getAPIService(arrHeads).getServices().enqueue(new Callback<Services>() {
+            @Override
+            public void onResponse(Call<Services> call, Response<Services> response) {
+                Integer status = response.body().getStatusCode();
+                if (status != null && status == 200) {
+                    arrServices.clear();
+                    arrServices.add("Chọn loại dịch vụ");
+                    listServices = (ArrayList<Services.Result>) response.body().getResult();
+                    if (listServices != null) {
+                        for (Services.Result service : listServices) {
+                            arrServices.add(service.getCategory().getTitle());
+                            servicesAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Log.d("ListProductAndServiceAc", "FATA ListProductAndServiceAc, initViews(), listServices = null");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Services> call, Throwable t) {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                if (dialogNotification != null) {
+                    dialogNotification.setContentMessage("getServices().onFailure()\n" + t.getMessage());
+                    dialogNotification.show();
+                }
+            }
+        });
     }
 
     private void searchServiceCategory() {

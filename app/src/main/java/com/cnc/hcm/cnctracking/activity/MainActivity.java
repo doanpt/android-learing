@@ -119,6 +119,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private DialogDetailTaskFragment dialogDetailTaskFragment;
     private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
+    private DialogNotification dialogNotification;
     private TaskListAdapter taskListAdapter;
 
     private ArrayList<ItemTask> arrItemTask = new ArrayList<>();
@@ -127,6 +128,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private int quantityNewTask, quantityDoingTask, quantityCompletedTask;
     private boolean isMainActive;
     private String dateSelected = Conts.BLANK;
+    private String startDate;
+    private String endDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +180,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         taskListAdapter = new TaskListAdapter(this);
         taskListAdapter.setOnItemWorkClickListener(this);
+
+        dialogNotification = new DialogNotification(this);
+        dialogNotification.setTitle(getString(R.string.error_occurred));
+        dialogNotification.setTextBtnOK(getString(R.string.try_again));
+        dialogNotification.setOnClickDialogNotificationListener(new DialogNotification.OnClickDialogNotificationListener() {
+            @Override
+            public void onClickButtonOK() {
+                tryGetTaskList(UserInfo.getInstance(MainActivity.this).getAccessToken(), startDate, endDate);
+            }
+
+            @Override
+            public void onClickButtonExit() {
+
+            }
+        });
     }
 
     private void initViews() {
@@ -323,6 +341,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
     public void tryGetTaskList(String accessToken, final String startDate, final String endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
         showProgressLoadding();
         final List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
@@ -392,8 +412,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public void onFailure(Call<GetTaskListResult> call, Throwable t) {
                 Log.e(TAG, "tryGetTaskList.onFailure() --> " + t);
                 t.printStackTrace();
-                CommonMethod.makeToast(MainActivity.this, t.getMessage() != null ? t.getMessage() : "onFailure");
                 dismisProgressLoading();
+                if (dialogNotification != null) {
+                    dialogNotification.setContentMessage("tryGetTaskList.onFailure()\n" + t.getMessage());
+                    dialogNotification.show();
+                }
             }
         });
     }
@@ -820,7 +843,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
         return 0;
     }
-
 
 
     private void createFileBackup() {

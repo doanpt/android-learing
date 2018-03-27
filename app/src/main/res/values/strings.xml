@@ -107,6 +107,8 @@
     <string name="type_service">Loại dịch vụ</string>
     <string name="manufacture">Nhà sản xuất</string>
     <string name="type_product">Loại sản phẩm</string>
+    <string name="error_occurred">Có lỗi xảy ra</string>
+    <string name="try_again">Thử lại</string>
 
 
 </resources>
