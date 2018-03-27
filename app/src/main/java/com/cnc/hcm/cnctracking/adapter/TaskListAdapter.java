@@ -67,15 +67,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         if (idTypeWork == Conts.TYPE_DOING_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_doing);
             holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
-
         } else if (idTypeWork == Conts.TYPE_COMPLETE_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_done);
             holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
-
         } else if (idTypeWork == Conts.TYPE_CANCEL_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_cancel);
             holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
-
         } else if (idTypeWork == Conts.TYPE_NEW_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_new);
 
@@ -88,15 +85,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             if (currentDate.compareTo(dateBefor30Minute) >= 0) {
                 holder.imvAlarmAppointment.setVisibility(View.VISIBLE);
                 if (currentDate.compareTo(dateAppointment) < 0) {
-                    holder.imvAlarmAppointment.setColorFilter(Color.YELLOW);
+                    holder.imvAlarmAppointment.setColorFilter(Color.parseColor("#FFC107"));
                 } else {
-                    holder.imvAlarmAppointment.setColorFilter(Color.RED);
+                    holder.imvAlarmAppointment.setColorFilter(context.getResources().getColor(android.R.color.holo_red_light));
                 }
             } else {
                 holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
             }
-
-
         }
 
         boolean isRead = result.isRead;
