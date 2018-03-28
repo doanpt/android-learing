@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,7 +56,9 @@ public class WorkDetailServiceFragment extends Fragment implements
     private LinearLayout tv_detail_work_call_action;
     private LinearLayout tv_detail_work_sms_action;
     private LinearLayout tv_detail_work_address_action;
+    private LinearLayout llExpandService;
     //    private ImageView imv_expand_bill;
+    private ImageView imvExpandService;
     private TextView tv_detail_work_contact_name;
     private TextView tv_detail_work_contact_phone;
     private TextView tv_number_service;
@@ -83,6 +86,11 @@ public class WorkDetailServiceFragment extends Fragment implements
         View view = inflater.inflate(R.layout.fragment_work_detail_service, container, false);
 //        ll_content_bill = (LinearLayout) view.findViewById(R.id.ll_content_bill);
 //        imv_expand_bill = (ImageView) view.findViewById(R.id.imv_expand_bill);
+
+        llExpandService = view.findViewById(R.id.ll_require_expand);
+        imvExpandService = view.findViewById(R.id.imv_expand_require);
+        imvExpandService.setOnClickListener(this);
+
         rlExpandHeaderBill = (RelativeLayout) view.findViewById(R.id.rl_expand_header_bill);
         rlExpandHeaderBill.setOnClickListener(this);
 
@@ -145,6 +153,15 @@ public class WorkDetailServiceFragment extends Fragment implements
 //                    imv_expand_bill.setImageResource(R.drawable.ic_chevron_right);
 //                }
 //                break;
+            case R.id.imv_expand_require:
+                if (llExpandService.getVisibility()==View.GONE){
+                    llExpandService.setVisibility(View.VISIBLE);
+                    imvExpandService.setImageResource(R.drawable.ic_expand_task_details);
+                } else {
+                    llExpandService.setVisibility(View.GONE);
+                    imvExpandService.setImageResource(R.drawable.ic_chevron_right);
+                }
+                break;
         }
     }
 
