@@ -41,15 +41,17 @@
         android:gravity="center_vertical">
 
         <TextView
+            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginVertical="16dp"
             android:text="@string/schedule_appointment_date"
-            android:textSize="18sp"
+            android:textSize="16sp"
             tools:targetApi="o"/>
 
         <TextView
+            android:textColor="@android:color/black"
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,10 +60,10 @@
             android:layout_marginVertical="16dp"
             android:text="31/12/2018"
             android:textSize="18sp"
-            android:textStyle="bold"
             tools:targetApi="o"/>
 
         <TextView
+            android:textColor="@android:color/black"
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,16 +72,12 @@
             android:layout_toLeftOf="@id/tv_date"
             android:text="12:30"
             android:textSize="18sp"
-            android:textStyle="bold"
             tools:targetApi="o"/>
     </RelativeLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#1A000000"/>
 
     <TextView
+        android:textColor="@android:color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

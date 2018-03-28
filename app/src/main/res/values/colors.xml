@@ -29,4 +29,5 @@
     <color name="colorPrimaryGray">#BBDEFB</color>
     <color name="color_disable">#9E9E9E</color>
     <color name="color_time_clock">#424242</color>
+    <color name="color_line_dark">#1A000000</color>
 </resources>

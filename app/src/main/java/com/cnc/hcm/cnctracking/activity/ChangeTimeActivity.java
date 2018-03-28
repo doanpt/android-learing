@@ -10,8 +10,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -49,8 +52,9 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     private GetChangeTicketAppointmentReasonsResult mGetChangeTicketAppointmentReasonsResult;
     private ProgressDialog mProgressDialog;
     private DialogNotification dialogNotification;
-
     private String mIdTask;
+
+    private ArrayList<CheckBox> arrReasonCheckbox = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,9 +129,11 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
 
     private void onListAvailableReasonLoaded() {
         if (mGetChangeTicketAppointmentReasonsResult != null) {
-            List<GetChangeTicketAppointmentReasonsResult.Result> result = mGetChangeTicketAppointmentReasonsResult.result;
+            final List<GetChangeTicketAppointmentReasonsResult.Result> result = mGetChangeTicketAppointmentReasonsResult.result;
             if (result != null) {
-                for (GetChangeTicketAppointmentReasonsResult.Result item : result) {
+                arrReasonCheckbox.clear();
+                for (int i = 0; i < result.size(); i++) {
+                    GetChangeTicketAppointmentReasonsResult.Result item = result.get(i);
                     String rbString = Conts.BLANK;
                     if (item != null) {
                         rbString += item.reason;
@@ -135,12 +141,40 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
                             rbString += "; " + item.action.title;
                         }
                         rbString += ".";
-                        RadioButton rb = new RadioButton(this);
-                        rb.setTextSize(15f);
-                        rb.setText(rbString);
+
+                        LinearLayout linearLayout = new LinearLayout(this);
+                        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 170));
+                        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+                        TextView tvLine = new TextView(this);
+                        tvLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 4));
+                        tvLine.setBackgroundColor(getResources().getColor(R.color.color_line_dark));
+
+                        linearLayout.addView(tvLine);
+
+                        CheckBox cbxReason = new CheckBox(this);
                         RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.bottomMargin = 20;
-                        rg_reason.addView(rb);
+                        params.topMargin = 20;
+                        cbxReason.setLayoutParams(params);
+                        cbxReason.setTextSize(14f);
+                        cbxReason.setText(rbString);
+                        final int finalI = i;
+                        cbxReason.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                try {
+                                    if (b) {
+                                        mReason = result.get(finalI % (result.size() - 1))._id;
+                                    }
+                                } catch (Exception e) {
+                                    Log.e(TAG, "onCheckedChanged() --> e: " + e);
+                                }
+                            }
+                        });
+                        arrReasonCheckbox.add(cbxReason);
+                        linearLayout.addView(cbxReason);
+                        rg_reason.addView(linearLayout);
 
                     }
                 }
@@ -206,7 +240,7 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     }
 
     private void tryToSaveChangedTime() {
-        if (TextUtils.isEmpty(mReason)) {
+        if (!checkReasonEmpty()) {
             Toast.makeText(ChangeTimeActivity.this, "Bạn phải chọn lý do thay đổi trước", Toast.LENGTH_LONG).show();
             return;
         }
@@ -222,6 +256,15 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
         arrHeads.add(new MHead(Conts.KEY_REASON_ID, mReason));
 
         changeTicketAppointment(arrHeads);
+    }
+
+    private boolean checkReasonEmpty() {
+        for (int i = 0; i < arrReasonCheckbox.size(); i++) {
+            if (arrReasonCheckbox.get(i).isChecked()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void changeTicketAppointment(List<MHead> arrHeads) {
