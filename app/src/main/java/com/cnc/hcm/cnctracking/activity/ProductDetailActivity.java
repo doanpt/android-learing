@@ -6,13 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -45,8 +51,11 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -91,6 +100,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private DialogInfor dialogInfor;
     private String note = "";
     private ProgressDialog mProgressDialog;
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,14 +122,12 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         mProgressDialog.setCancelable(false);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
-            }
-        }, 5000);
+    }
+
+    private void dismisLoadingDialog(){
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
     private void getData() {
@@ -129,12 +137,10 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         ApiUtils.getAPIService(arrHeads).getDetailProduct(idTask).enqueue(new Callback<GetProductDetailResult>() {
             @Override
             public void onResponse(Call<GetProductDetailResult> call, Response<GetProductDetailResult> response) {
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
+                dismisLoadingDialog();
                 Long code = response.body().getStatusCode();
                 Log.d(TAGG, "getData.onResponse, code: " + code);
-                if (code!=null && code == Conts.RESPONSE_STATUS_OK) {
+                if (code != null && code == Conts.RESPONSE_STATUS_OK) {
                     displayDetailWork(response.body());
                 } else {
                     Toast.makeText(ProductDetailActivity.this, "Get Detail error", Toast.LENGTH_SHORT).show();
@@ -143,9 +149,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onFailure(Call<GetProductDetailResult> call, Throwable t) {
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
+                dismisLoadingDialog();
                 Log.e(TAGG, "getData.onResponse", t);
                 Toast.makeText(ProductDetailActivity.this, "Get Detail failure", Toast.LENGTH_SHORT).show();
             }
@@ -347,9 +351,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
     @Override
     protected void onPause() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
+        dismisLoadingDialog();
         super.onPause();
     }
 
@@ -457,7 +459,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
                 Long status = response.body().getStatusCode();
                 Log.d(TAGG, "completeWork.onResponse, status: " + status);
-                if (status!=null && status == Conts.RESPONSE_STATUS_OK) {
+                if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Complete OK!!!");
 //                    llComplete.setVisibility(View.VISIBLE);
                     fabMenu.setVisibility(View.GONE);
@@ -475,8 +477,97 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     private void takePicture(int keyResult) {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, keyResult);
+//        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(cameraIntent, keyResult);
+
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+                photoFile.delete();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.cnc.hcm.cnctracking.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, keyResult);
+            }
+        }
+
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private Bitmap setPic() {
+        // Get the dimensions of the Screen
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int targetW = displayMetrics.widthPixels;
+        int targetH = displayMetrics.heightPixels;
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bounds);
+        int photoW = bounds.outWidth;
+        int photoH = bounds.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+
+        // Decode the image file into a Bitmap sized to fill the View
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+        bmOptions.inDither = true;
+        bmOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        Bitmap rotaBitmap = null;
+        try {
+            ExifInterface exif = new ExifInterface(mCurrentPhotoPath);
+            String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+            int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
+
+            int rotationAngle = 0;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_90) rotationAngle = 90;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_180) rotationAngle = 180;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_270) rotationAngle = 270;
+
+            Matrix matrix = new Matrix();
+            matrix.setRotate(rotationAngle, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
+            rotaBitmap = Bitmap.createBitmap(bitmap, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return rotaBitmap;
     }
 
     @Override
@@ -589,10 +680,10 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     private void checkResultSteps(final int requestCode, int resultCode, Intent data) {
-        Bitmap photo;
+        showLoadingDialog();
         File file = null;
-        if (data != null) {
-            photo = (Bitmap) data.getExtras().get("data");
+        Bitmap photo = setPic();
+        if (photo != null) {
             file = saveBitmapFile(photo, System.currentTimeMillis() + "");
         }
         if (file != null) {
@@ -606,7 +697,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     Long code = response.body().getStatusCode();
 
                     Log.d(TAGG, "uploadPhoto.onResponse, code: " + code);
-                    if (code!=null && code == Conts.RESPONSE_STATUS_OK) {
+                    if (code != null && code == Conts.RESPONSE_STATUS_OK) {
                         final String url = response.body().getResult().getImageURL();
                         List<MHead> arrNewHeads = new ArrayList<>();
                         arrNewHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
@@ -643,21 +734,29 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
                 @Override
                 public void onFailure(Call<UploadImageResult> call, Throwable t) {
+                    dismisLoadingDialog();
                     CommonMethod.makeToast(ProductDetailActivity.this, "Upload onFailure");
                 }
             });
         } else {
+            dismisLoadingDialog();
             CommonMethod.makeToast(ProductDetailActivity.this, "Get image error");
         }
+
     }
 
     private void uploadProcess(List<MHead> arrHeads, String idTask, final SubmitProcessParam param, final int requestCode, final TraddingProduct.Result product, final Services.Result service) {
+
+        if (mProgressDialog!=null){
+            mProgressDialog.setMessage("Update process...");
+        }
+
         ApiUtils.getAPIService(arrHeads).updateProcess(idTask, param).enqueue(new Callback<UpdateProcessResult>() {
             @Override
             public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
                 Long status = response.body().getStatusCode();
                 Log.d(TAGG, "updateProcess.onResponse, status: " + status);
-                if (status!=null && status == Conts.RESPONSE_STATUS_OK) {
+                if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     if (requestCode == KEY_STEP_ONE) {
                         arrInit.add(param.getBefore().getPhotos().get(param.getBefore().getPhotos().size() - 1));
                         initAdapter.notifyDataSetChanged();
@@ -691,6 +790,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 } else {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Update Process Error");
                 }
+                dismisLoadingDialog();
             }
 
             @Override
@@ -702,6 +802,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 } else if (requestCode == KEY_STEP_THREE) {
                     arrFinish.remove(arrFinish.size() - 1);
                 }
+                dismisLoadingDialog();
                 CommonMethod.makeToast(ProductDetailActivity.this, "Update process Error, onFailure");
             }
         });
@@ -711,16 +812,16 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
         OutputStream outStream;
         // String temp = null;
-        File file = new File(extStorageDirectory, "/CoolBackup/" + name + ".png");
+        File file = new File(extStorageDirectory, "/CoolBackup/" + name + ".jpg");
         if (file.exists()) {
             file.delete();
-            file = new File(extStorageDirectory, "/CoolBackup/" + name + ".png");
+            file = new File(extStorageDirectory, "/CoolBackup/" + name + ".jpg");
 
         }
 
         try {
             outStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
             outStream.flush();
             outStream.close();
         } catch (Exception e) {
