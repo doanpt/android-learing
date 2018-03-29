@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.ProductDetailActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".activity.ProductDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,23 +20,23 @@
             android:layout_gravity="top"
             android:layout_weight="0.7"
             android:padding="16dp"
-            app:srcCompat="@drawable/ic_arrow" />
+            app:srcCompat="@drawable/ic_arrow"/>
 
         <LinearLayout
-            android:paddingTop="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="10dp">
 
             <TextView
-                android:maxLines="2"
                 android:id="@+id/tv_work_name_work_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="2"
                 android:text="The job"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tv_location_work_detail"
@@ -45,7 +45,7 @@
                 android:maxLines="2"
                 android:text="Addresss"
                 android:textColor="#AAfffff2"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +63,7 @@
                 android:gravity="center"
                 android:paddingTop="5dp"
                 android:text="7h30"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"/>
 
             <!--<TextView-->
             <!--android:id="@+id/tv_distance_work_detail"-->
@@ -104,14 +104,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:layout_weight="0.7" />
+                        android:layout_weight="0.7"/>
 
                     <LinearLayout
-                        android:paddingLeft="10dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp">
 
                         <TextView
                             android:id="@+id/tv_device_name"
@@ -122,14 +122,14 @@
                             android:textSize="18sp"/>
 
                         <TextView
-                            android:paddingBottom="5dp"
                             android:id="@+id/tv_device_code"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
+                            android:paddingBottom="5dp"
                             android:text="Device code"
                             android:textColor="#AAfffff2"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -138,7 +138,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    android:text="12:20 22/02/2017" />
+                    android:text="12:20 22/02/2017"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -153,13 +153,13 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/ic_step_1_complete" />
+                            android:src="@drawable/ic_step_1_complete"/>
 
                         <FrameLayout
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:background="#1A000000" />
+                            android:background="#1A000000"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -174,7 +174,7 @@
                             android:layout_height="wrap_content"
                             android:text="Hiện trang ban đầu"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -192,7 +192,7 @@
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000" />
+                            android:background="#1A000000"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -209,13 +209,13 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/ic_step_2_complete" />
+                            android:src="@drawable/ic_step_2_complete"/>
 
                         <FrameLayout
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:background="#1A000000" />
+                            android:background="#1A000000"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -230,14 +230,15 @@
                             android:layout_height="wrap_content"
                             android:text="Quá trình thực hiện"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                         <TextView
+                            android:id="@+id/tv_title_process_condition"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Ảnh trạng thái hư"
-                            android:textColor="#33000000" />
+                            android:textColor="#33000000"/>
 
 
                         <android.support.v7.widget.RecyclerView
@@ -248,16 +249,18 @@
 
 
                         <FrameLayout
+                            android:id="@+id/fl_line_process_condition"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000" />
+                            android:background="#1A000000"/>
 
                         <TextView
+                            android:id="@+id/tv_title_list_service"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Dịch vụ"
-                            android:textColor="#33000000" />
+                            android:textColor="#33000000"/>
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/rv_list_service"
@@ -266,16 +269,18 @@
                             android:visibility="gone"></android.support.v7.widget.RecyclerView>
 
                         <FrameLayout
+                            android:id="@+id/fl_line_service"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000" />
+                            android:background="#1A000000"/>
 
                         <TextView
+                            android:id="@+id/tv_title_list_product"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Sản phẩm"
-                            android:textColor="#33000000" />
+                            android:textColor="#33000000"/>
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/rv_list_product"
@@ -284,11 +289,13 @@
                             android:visibility="gone"></android.support.v7.widget.RecyclerView>
 
                         <FrameLayout
+                            android:id="@+id/fl_line_product"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000" />
+                            android:background="#1A000000"/>
 
                         <LinearLayout
+                            android:id="@+id/ll_detail_work_note"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
@@ -297,20 +304,20 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Ghi chú"
-                                android:textColor="#33000000" />
+                                android:textColor="#33000000"/>
 
                             <TextView
                                 android:id="@+id/tv_detail_work_note"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:maxLines="2"
-                                android:text="Chưa có ghi chú" />
+                                android:text="Chưa có ghi chú"/>
                         </LinearLayout>
 
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000" />
+                            android:background="#1A000000"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -328,13 +335,13 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/ic_step_3_complete" />
+                            android:src="@drawable/ic_step_3_complete"/>
 
                         <FrameLayout
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:background="#1A000000" />
+                            android:background="#1A000000"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -349,7 +356,7 @@
                             android:layout_height="wrap_content"
                             android:text="Hoàn thành"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -368,7 +375,7 @@
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#1A000000" />
+                            android:background="#1A000000"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -388,7 +395,7 @@
                         android:gravity="center"
                         android:text="Hoàn thành"
                         android:textColor="@android:color/holo_blue_light"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -408,7 +415,7 @@
                             android:paddingRight="4dp"
                             android:paddingTop="4dp"
                             android:text="Bắt đầu"
-                            android:textColor="@android:color/darker_gray" />
+                            android:textColor="@android:color/darker_gray"/>
 
                         <TextView
                             android:layout_width="0dp"
@@ -420,7 +427,7 @@
                             android:paddingRight="4dp"
                             android:paddingTop="4dp"
                             android:text="Kết thúc"
-                            android:textColor="@android:color/darker_gray" />
+                            android:textColor="@android:color/darker_gray"/>
 
                         <TextView
                             android:layout_width="0dp"
@@ -432,7 +439,7 @@
                             android:paddingRight="4dp"
                             android:paddingTop="4dp"
                             android:text="Thời gian"
-                            android:textColor="@android:color/darker_gray" />
+                            android:textColor="@android:color/darker_gray"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -454,7 +461,7 @@
                             android:paddingRight="4dp"
                             android:paddingTop="4dp"
                             android:text="12:00 22/12/2018"
-                            android:textColor="@android:color/darker_gray" />
+                            android:textColor="@android:color/darker_gray"/>
 
                         <TextView
                             android:id="@+id/tv_end_date"
@@ -467,7 +474,7 @@
                             android:paddingRight="4dp"
                             android:paddingTop="4dp"
                             android:text="14h00 24/12/2025"
-                            android:textColor="@android:color/darker_gray" />
+                            android:textColor="@android:color/darker_gray"/>
 
                         <TextView
                             android:id="@+id/tv_total_time"
@@ -480,7 +487,7 @@
                             android:paddingRight="4dp"
                             android:paddingTop="4dp"
                             android:text="2h30p"
-                            android:textColor="@android:color/darker_gray" />
+                            android:textColor="@android:color/darker_gray"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -492,7 +499,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#40000000"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/fab_menu"
@@ -510,7 +517,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_brush"
                 app:fab_size="mini"
-                app:fab_title="Ghi chú" />
+                app:fab_title="Ghi chú"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_product"
@@ -519,7 +526,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_fab_map"
                 app:fab_size="mini"
-                app:fab_title="Sản phẩm" />
+                app:fab_title="Sản phẩm"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_step_three"
@@ -528,7 +535,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_camera"
                 app:fab_size="mini"
-                app:fab_title="Bước 3" />
+                app:fab_title="Bước 3"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_step_two"
@@ -537,7 +544,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_camera"
                 app:fab_size="mini"
-                app:fab_title="Bước 2" />
+                app:fab_title="Bước 2"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_step_one"
@@ -546,7 +553,7 @@
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_icon="@drawable/ic_camera"
                 app:fab_size="mini"
-                app:fab_title="Bước 1" />
+                app:fab_title="Bước 1"/>
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
@@ -572,7 +579,7 @@
                 android:paddingRight="8dp"
                 android:paddingTop="4dp"
                 android:text="@string/text_complete"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"/>
         </LinearLayout>
 
         <TextView
@@ -587,6 +594,6 @@
             android:text="@string/title_complete_work"
             android:textColor="#ffffff"
             android:textSize="25sp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </RelativeLayout>
 </LinearLayout>

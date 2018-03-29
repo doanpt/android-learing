@@ -89,7 +89,10 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private ProductDetailAdapter initAdapter, processAdapter, finishAdapter;
     private ProductProcessAdapter productAdapter;
     private ServiceProcessAdapter serviceAdapter;
-    private RecyclerView initRecycler, processRecycler, finishRecycler, listServiceRecycler, listProductRecycler;
+    private RecyclerView rvInitRecycler, rvProcessRecycler, rvFinishRecycler, rvListServiceRecycler, rvListProductRecycler;
+    private TextView tvTitleProcess, tvTitleListService, tvTitleListProduct;
+    private LinearLayout llDetailWorkNote;
+    private FrameLayout flLineService, flLineProduct, flLineProcess;
     private String accessToken, deviceID, idTask, workName, address, timeWork;
     //    private LinearLayout llComplete;
     private TextView tvStartDate, tvEndDate, tvTotalTime;
@@ -98,7 +101,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private ArrayList<SubmitProcessParam.Product> arrPushProcess2Product;
     private boolean isNewProduct = false;
     private DialogInfor dialogInfor;
-    private String note = "";
+    private String note = Conts.BLANK;
     private ProgressDialog mProgressDialog;
     private String mCurrentPhotoPath;
 
@@ -124,7 +127,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         mProgressDialog.show();
     }
 
-    private void dismisLoadingDialog(){
+    private void dismisLoadingDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
@@ -158,30 +161,50 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
     private void visiableRecycler() {
         if (arrInit.size() == 0) {
-            initRecycler.setVisibility(View.GONE);
+            rvInitRecycler.setVisibility(View.GONE);
         } else {
-            initRecycler.setVisibility(View.VISIBLE);
+            rvInitRecycler.setVisibility(View.VISIBLE);
         }
         if (arrProcess.size() == 0) {
-            processRecycler.setVisibility(View.GONE);
+            rvProcessRecycler.setVisibility(View.GONE);
+            tvTitleProcess.setVisibility(View.GONE);
+            flLineProcess.setVisibility(View.GONE);
         } else {
-            processRecycler.setVisibility(View.VISIBLE);
+            rvProcessRecycler.setVisibility(View.VISIBLE);
+            tvTitleProcess.setVisibility(View.VISIBLE);
+            flLineProcess.setVisibility(View.VISIBLE);
         }
         if (arrFinish.size() == 0) {
-            finishRecycler.setVisibility(View.GONE);
+            rvFinishRecycler.setVisibility(View.GONE);
         } else {
-            finishRecycler.setVisibility(View.VISIBLE);
+            rvFinishRecycler.setVisibility(View.VISIBLE);
         }
         if (arrTrading.size() == 0) {
-            listProductRecycler.setVisibility(View.GONE);
+            rvListProductRecycler.setVisibility(View.GONE);
+            tvTitleListProduct.setVisibility((View.GONE));
+            flLineProduct.setVisibility(View.GONE);
         } else {
-            listProductRecycler.setVisibility(View.VISIBLE);
+            rvListProductRecycler.setVisibility(View.VISIBLE);
+            tvTitleListProduct.setVisibility((View.VISIBLE));
+            flLineProduct.setVisibility(View.VISIBLE);
         }
         if (arrService.size() == 0) {
-            listServiceRecycler.setVisibility(View.GONE);
+            rvListServiceRecycler.setVisibility(View.GONE);
+            tvTitleListService.setVisibility(View.GONE);
+            flLineService.setVisibility(View.GONE);
         } else {
-            listServiceRecycler.setVisibility(View.VISIBLE);
+            rvListServiceRecycler.setVisibility(View.VISIBLE);
+            tvTitleListService.setVisibility(View.VISIBLE);
+            flLineService.setVisibility(View.VISIBLE);
         }
+
+        if (note.equals(Conts.BLANK)) {
+            llDetailWorkNote.setVisibility(View.GONE);
+        } else {
+            llDetailWorkNote.setVisibility(View.VISIBLE);
+            tvNoteWork.setText(note);
+        }
+
     }
 
     private void displayDetailWork(GetProductDetailResult body) {
@@ -311,33 +334,33 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         finishAdapter = new ProductDetailAdapter(this, arrFinish);
         productAdapter = new ProductProcessAdapter(this, arrTrading);
         serviceAdapter = new ServiceProcessAdapter(this, arrService);
-        initRecycler = findViewById(R.id.rv_initial_condition);
-        processRecycler = findViewById(R.id.rv_process_condition);
-        finishRecycler = findViewById(R.id.rv_finish_condition);
-        listServiceRecycler = findViewById(R.id.rv_list_service);
-        listProductRecycler = findViewById(R.id.rv_list_product);
+        rvInitRecycler = findViewById(R.id.rv_initial_condition);
+        rvProcessRecycler = findViewById(R.id.rv_process_condition);
+        rvFinishRecycler = findViewById(R.id.rv_finish_condition);
+        rvListServiceRecycler = findViewById(R.id.rv_list_service);
+        rvListProductRecycler = findViewById(R.id.rv_list_product);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         layoutManager.scrollToPosition(0);
-        initRecycler.setLayoutManager(layoutManager);
+        rvInitRecycler.setLayoutManager(layoutManager);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         layoutManager1.scrollToPosition(0);
-        processRecycler.setLayoutManager(layoutManager1);
+        rvProcessRecycler.setLayoutManager(layoutManager1);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         layoutManager2.scrollToPosition(0);
-        finishRecycler.setLayoutManager(layoutManager2);
+        rvFinishRecycler.setLayoutManager(layoutManager2);
         LinearLayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         layoutManager.scrollToPosition(0);
-        listProductRecycler.setLayoutManager(layoutManager3);
+        rvListProductRecycler.setLayoutManager(layoutManager3);
         LinearLayoutManager layoutManager4 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         layoutManager.scrollToPosition(0);
-        listServiceRecycler.setLayoutManager(layoutManager4);
+        rvListServiceRecycler.setLayoutManager(layoutManager4);
 
-        initRecycler.setAdapter(initAdapter);
-        processRecycler.setAdapter(processAdapter);
-        finishRecycler.setAdapter(finishAdapter);
-        listProductRecycler.setAdapter(productAdapter);
-        listServiceRecycler.setAdapter(serviceAdapter);
+        rvInitRecycler.setAdapter(initAdapter);
+        rvProcessRecycler.setAdapter(processAdapter);
+        rvFinishRecycler.setAdapter(finishAdapter);
+        rvListProductRecycler.setAdapter(productAdapter);
+        rvListServiceRecycler.setAdapter(serviceAdapter);
 
         fabNote.setOnClickListener(this);
         fabProduct.setOnClickListener(this);
@@ -347,6 +370,15 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
         imvBack = (ImageView) findViewById(R.id.img_back_work_detail);
         imvBack.setOnClickListener(this);
+
+        tvTitleProcess = (TextView) findViewById(R.id.tv_title_process_condition);
+        tvTitleListService = (TextView) findViewById(R.id.tv_title_list_service);
+        tvTitleListProduct = (TextView) findViewById(R.id.tv_title_list_product);
+        llDetailWorkNote = (LinearLayout) findViewById(R.id.ll_detail_work_note);
+
+        flLineService = (FrameLayout) findViewById(R.id.fl_line_service);
+        flLineProduct = (FrameLayout) findViewById(R.id.fl_line_product);
+        flLineProcess = (FrameLayout) findViewById(R.id.fl_line_process_condition);
     }
 
     @Override
@@ -747,7 +779,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
     private void uploadProcess(List<MHead> arrHeads, String idTask, final SubmitProcessParam param, final int requestCode, final TraddingProduct.Result product, final Services.Result service) {
 
-        if (mProgressDialog!=null){
+        if (mProgressDialog != null) {
             mProgressDialog.setMessage("Update process...");
         }
 
