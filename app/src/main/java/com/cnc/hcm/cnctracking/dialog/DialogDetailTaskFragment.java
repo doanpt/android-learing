@@ -349,7 +349,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     }
 
     private void dismisDialogLoading() {
-        if (mProgressDialog.isShowing()) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
     }

@@ -19,6 +19,7 @@ import com.cnc.hcm.cnctracking.model.ItemTrackLocation;
 import com.cnc.hcm.cnctracking.model.LoginResponseStatus;
 import com.cnc.hcm.cnctracking.model.ProcessDeviceResult;
 import com.cnc.hcm.cnctracking.model.ProductListResult;
+import com.cnc.hcm.cnctracking.model.RemoveDeviceFromTaskResult;
 import com.cnc.hcm.cnctracking.model.ResponseCNC;
 import com.cnc.hcm.cnctracking.model.Services;
 import com.cnc.hcm.cnctracking.model.SubmitProcessParam;
@@ -112,4 +113,7 @@ public interface APIService {
 
     @PATCH(Conts.PATH_CHANGE_TICKET_APPOINTMENT_DATE)
     Call<ChangeTicketAppointmentResult> changeTicketAppointment(@Path("id") String idTask);
+
+    @PATCH(Conts.PATH_REMOVE_DEVICE_FROM_TASK)
+    Call<RemoveDeviceFromTaskResult> removeDeviceFromTask(@Path("id") String taskId);
 }

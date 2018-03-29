@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/border_dialog_custome"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_marginVertical="48dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="cancel cancel cancel cancel cancel cancel cancel cancel cancel cancel"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="56dp"
+            android:text="Hủy"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="56dp"
+            android:background="@color/colorPrimaryDarkDark"/>
+
+        <Button
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:id="@+id/btn_confirm"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="56dp"
+            android:text="Xác nhận"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

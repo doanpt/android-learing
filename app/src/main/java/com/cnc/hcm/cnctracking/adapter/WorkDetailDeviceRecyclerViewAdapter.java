@@ -5,14 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.event.RecyclerViewItemClickListener;
+import com.cnc.hcm.cnctracking.event.RecyclerViewMenuItemClickListener;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
@@ -27,19 +31,23 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
 
     private static final String TAG = WorkDetailDeviceRecyclerViewAdapter.class.getSimpleName();
 
-    private List<GetTaskDetailResult.Result.Process> processes = new ArrayList<>();
-
-    public List<GetTaskDetailResult.Result.Process> getProcesses() {
-        return processes;
-    }
+    private final List<GetTaskDetailResult.Result.Process> processes;
 
     private final RecyclerViewItemClickListener mListener;
 
+    private final RecyclerViewMenuItemClickListener mMenuItemClickListener;
+
     private final Context mContext;
 
-    public WorkDetailDeviceRecyclerViewAdapter(RecyclerViewItemClickListener listener, Context context) {
+    public WorkDetailDeviceRecyclerViewAdapter(RecyclerViewItemClickListener listener, RecyclerViewMenuItemClickListener menuItemClickListener, Context context) {
         mListener = listener;
+        mMenuItemClickListener = menuItemClickListener;
         mContext = context;
+        processes = new ArrayList<>();
+    }
+
+    public List<GetTaskDetailResult.Result.Process> getProcesses() {
+        return processes;
     }
 
     @Override
@@ -49,7 +57,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
     }
 
     @Override
-    public void onBindViewHolder(final WorkDetailDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final WorkDetailDeviceRecyclerViewAdapter.ViewHolder holder, final int position) {
         final GetTaskDetailResult.Result.Process process = processes.get(position);
         try {
             holder.tv_title.setText(process.device.detail.name + "");
@@ -62,7 +70,8 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
             Picasso.with(mContext).load(Conts.URL_BASE + iconPath).into(holder.iv_icon);
             }
             if (TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.user._id)) {
-                holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.ic_step_1_complete : (process.status._id == 2 ? R.drawable.ic_step_2_complete : R.drawable.ic_step_3_complete));
+                holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.ic_step_1_complete
+                        : (process.status._id == 2 ? R.drawable.ic_step_2_complete : R.drawable.ic_step_3_complete));
                 holder.item_product.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -82,6 +91,27 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
                     Picasso.with(mContext).load(Conts.URL_BASE + process.user.photo).into(holder.iv_user_added_device);
                 }
             }
+            holder.tv_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (process.before == null || process.before.photos == null || process.before.photos.length == 0) {
+                        PopupMenu popup = new PopupMenu(mContext, view);
+                        popup.getMenuInflater().inflate(R.menu.task_device_popup_menu, popup.getMenu());
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                Log.e(TAG, "tv_more.setOnMenuItemClickListener()");
+                                mMenuItemClickListener.onRecyclerViewMenuItemClicked(position, menuItem);
+                                return true;
+                            }
+                        });
+                        popup.show();
+                    } else {
+                        Log.e(TAG, "tv_more.onClick()");
+                        Toast.makeText(mContext, "Không thể chọn xóa do thiết bị đang trong quá trình sửa chữa!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
         } catch (Exception e) {
             Log.e(TAG, "onBindViewHolder()", e);
         }
@@ -94,8 +124,20 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
 
     public void updateDeviceList(List<GetTaskDetailResult.Result.Process> processes) {
         if (processes != null) {
-            this.processes = processes;
+            this.processes.clear();
+            this.processes.addAll(processes);
             notifyDataSetChanged();
+        }
+    }
+
+    public void removeDeviceAtPosition(int position) {
+        Log.e(TAG, "removeDeviceAtPosition(), position: " + position);
+        try {
+            if (position >= 0 && position < processes.size())
+            this.processes.remove(position);
+            notifyDataSetChanged();
+        } catch (Exception e) {
+            Log.e(TAG, "removeDeviceAtPosition() -> Exception: ", e);
         }
     }
 
@@ -104,20 +146,20 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         private RelativeLayout item_product;
         private ImageView iv_icon;
         private ImageView iv_status;
-//        private ImageView iv_history;
         private CircleImageView iv_user_added_device;
         private TextView tv_title;
         private TextView tv_status;
+        private TextView tv_more;
 
         public ViewHolder(View itemView) {
             super(itemView);
             item_product = itemView.findViewById(R.id.item_product);
             iv_icon = itemView.findViewById(R.id.iv_icon);
             iv_status = itemView.findViewById(R.id.iv_status);
-//            iv_history = itemView.findViewById(R.id.iv_history);
             iv_user_added_device = itemView.findViewById(R.id.iv_user_added_device);
             tv_title = itemView.findViewById(R.id.tv_title);
             tv_status = itemView.findViewById(R.id.tv_status);
+            tv_more = itemView.findViewById(R.id.tv_more);
         }
     }
 }

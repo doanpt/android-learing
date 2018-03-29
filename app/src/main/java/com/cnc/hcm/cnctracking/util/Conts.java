@@ -62,6 +62,7 @@ public class Conts {
     public static final String PATH_GET_SERVICES = "/services";
     public static final String PATH_REASONS_CHANGE_TICKET_APPOINTMENT_DATE = "/reasons/change-ticket-appointment-date";
     public static final String PATH_CHANGE_TICKET_APPOINTMENT_DATE = "/task/{id}/change-appointment-date";
+    public static final String PATH_REMOVE_DEVICE_FROM_TASK = "/task/{id}/remove-device";
 
     public static final String KEY_AUTHORIZATION = "Authorization";
     public static final String KEY_CUSTOMER_ID = "customerId";

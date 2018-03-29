@@ -1,5 +1,7 @@
 package com.cnc.hcm.cnctracking.fragment;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,21 +11,34 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctracking.adapter.WorkDetailDeviceRecyclerViewAdapter;
+import com.cnc.hcm.cnctracking.api.ApiUtils;
+import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.event.RecyclerViewItemClickListener;
+import com.cnc.hcm.cnctracking.event.RecyclerViewMenuItemClickListener;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctracking.model.RemoveDeviceFromTaskResult;
+import com.cnc.hcm.cnctracking.util.CommonMethod;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTaskFragment.TaskDetailLoadedListener, RecyclerViewItemClickListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTaskFragment.TaskDetailLoadedListener, RecyclerViewItemClickListener, RecyclerViewMenuItemClickListener {
 
     private static final String TAG = WorkDetailDeviceFragment.class.getSimpleName();
 
@@ -32,6 +47,8 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
     private WorkDetailDeviceRecyclerViewAdapter mWorkDetailDeviceRecyclerViewAdapter;
 
     private String saveTaskId;
+
+    private ProgressDialog mProgressDialog;
 
     public WorkDetailDeviceFragment() {
     }
@@ -42,7 +59,7 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
         View view = inflater.inflate(R.layout.fragment_work_detail_device, container, false);
         rv_device = view.findViewById(R.id.rv_device);
         rv_device.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        mWorkDetailDeviceRecyclerViewAdapter = new WorkDetailDeviceRecyclerViewAdapter(this, getActivity());
+        mWorkDetailDeviceRecyclerViewAdapter = new WorkDetailDeviceRecyclerViewAdapter(this, this, getActivity());
         rv_device.setAdapter(mWorkDetailDeviceRecyclerViewAdapter);
 
         ((DialogDetailTaskFragment)getParentFragment()).setTaskDetailLoadedListener(this);
@@ -70,6 +87,104 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onRecyclerViewMenuItemClicked(int position, MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.menu_item_task_remove_device:
+                showDialogConfirmRemovingDevice(position);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void showDialogConfirmRemovingDevice(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_confirm_removing_device, null);
+        dialog.setView(view);
+        TextView tv_message = view.findViewById(R.id.tv_message);
+        tv_message.setText(getContext().getResources().getString(R.string.confirm_removing_device));
+        view.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        view.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                tryToRemoveDevice(position, mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id);
+            }
+        });
+        dialog.show();
+    }
+
+    private void tryToRemoveDevice(final int position, String deviceId) {
+        showDialogLoadding();
+        String accessToken = UserInfo.getInstance(getActivity()).getAccessToken();
+        Log.e(TAG, "tryToRemoveDevice(), accessToken: " + accessToken + ", idTask: " + saveTaskId + ", deviceId: " + deviceId);
+        List<MHead> arrHeads = new ArrayList<>();
+        arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
+        arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceId));
+        ApiUtils.getAPIService(arrHeads).removeDeviceFromTask(saveTaskId).enqueue(new Callback<RemoveDeviceFromTaskResult>() {
+            @Override
+            public void onResponse(Call<RemoveDeviceFromTaskResult> call, Response<RemoveDeviceFromTaskResult> response) {
+                int statusCode = response.code();
+                if (response.isSuccessful()) {
+                    RemoveDeviceFromTaskResult result = response.body();
+                    Log.e(TAG, "tryToRemoveDevice.onResponse(), statusCode: " + statusCode + ", result: " + result);
+                    onDeviceRemovedFromTask(position, result);
+                    dismisDialogLoading();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RemoveDeviceFromTaskResult> call, Throwable t) {
+                dismisDialogLoading();
+                Log.e(TAG, "tryToRemoveDevice.onFailure() --> " + t);
+                t.printStackTrace();
+                CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage() : "onFailure");
+            }
+        });
+    }
+
+    private void onDeviceRemovedFromTask(int position, RemoveDeviceFromTaskResult result) {
+        try {
+            if (result != null && result.getStatusCode() == 200) {
+                CommonMethod.makeToast(getContext(), "Xóa thiết bị thành công");
+                mWorkDetailDeviceRecyclerViewAdapter.removeDeviceAtPosition(position);
+            } else {
+                CommonMethod.makeToast(getContext(), "Không thể xóa thiết bị. Lý do từ server trả về: " + result.getMessage());
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "onTaskInfoLoaded() --> Exception occurs.", e);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dismisDialogLoading();
+    }
+
+    private void showDialogLoadding() {
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
+        mProgressDialog.show();
+    }
+
+    private void dismisDialogLoading() {
+        if (mProgressDialog!= null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
     }
 

@@ -109,6 +109,7 @@
     <string name="type_product">Loại sản phẩm</string>
     <string name="error_occurred">Có lỗi xảy ra</string>
     <string name="try_again">Thử lại</string>
+    <string name="confirm_removing_device">Bạn muốn xóa thiết bị này</string>
 
 
 </resources>
