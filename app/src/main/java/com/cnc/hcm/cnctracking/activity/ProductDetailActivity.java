@@ -12,6 +12,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
@@ -36,6 +37,7 @@ import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogInfor;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
+import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.model.GetProductDetailResult;
 import com.cnc.hcm.cnctracking.model.Services;
 import com.cnc.hcm.cnctracking.model.SubmitProcessParam;
@@ -104,6 +106,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private String note = Conts.BLANK;
     private ProgressDialog mProgressDialog;
     private String mCurrentPhotoPath;
+    private DialogNotification dialogNotification;
+    private int requestCode;
+    private File fileImageProcess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,6 +265,26 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         dialogGPSSetting = new DialogGPSSetting(this);
         dialogNetworkSetting = new DialogNetworkSetting(this);
         dialogInfor = new DialogInfor(this);
+
+        dialogNotification = new DialogNotification(this);
+        dialogNotification.setTitle(getString(R.string.error_occurred));
+        dialogNotification.setTextBtnOK(getString(R.string.try_again));
+        dialogNotification.setOnClickDialogNotificationListener(new DialogNotification.OnClickDialogNotificationListener() {
+            @Override
+            public void onClickButtonOK() {
+                if (mProgressDialog != null) {
+                    mProgressDialog.setMessage(getResources().getString(R.string.loadding));
+                    mProgressDialog.show();
+                }
+
+                uploadPhoto(fileImageProcess, requestCode);
+            }
+
+            @Override
+            public void onClickButtonExit() {
+
+            }
+        });
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -614,7 +639,16 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             case KEY_STEP_ONE:
             case KEY_STEP_TWO:
             case KEY_STEP_THREE:
-                checkResultSteps(requestCode, resultCode, data);
+                if (mProgressDialog != null) {
+                    mProgressDialog.setMessage(getResources().getString(R.string.loadding));
+                    mProgressDialog.show();
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkResultSteps(requestCode);
+                    }
+                }).start();
                 break;
             case KEY_ADD_NOTE:
                 checkDataFromNoteActivity(resultCode, data);
@@ -711,13 +745,22 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void checkResultSteps(final int requestCode, int resultCode, Intent data) {
-        showLoadingDialog();
-        File file = null;
+    private void checkResultSteps(final int requestCode) {
+        this.requestCode = requestCode;
         Bitmap photo = setPic();
         if (photo != null) {
-            file = saveBitmapFile(photo, System.currentTimeMillis() + "");
+            fileImageProcess = saveBitmapFile(photo, System.currentTimeMillis() + "");
         }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                uploadPhoto(fileImageProcess, requestCode);
+            }
+        });
+    }
+
+    private void uploadPhoto(File file, final int requestCode) {
         if (file != null) {
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
@@ -760,26 +803,30 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                         Log.d("ABC", idTask + " " + param.getProcess());
                         uploadProcess(arrNewHeads, idTask, param, requestCode, null, null);
                     } else {
-                        CommonMethod.makeToast(ProductDetailActivity.this, "Upload error");
+                        CommonMethod.makeToast(ProductDetailActivity.this, "Upload error, status code = " + code);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<UploadImageResult> call, Throwable t) {
                     dismisLoadingDialog();
-                    CommonMethod.makeToast(ProductDetailActivity.this, "Upload onFailure");
+                    t.printStackTrace();
+                    if (dialogNotification != null) {
+                        dialogNotification.setContentMessage("uploadPhoto.onFailure()\n" + t.getMessage());
+                        dialogNotification.show();
+                    }
                 }
             });
         } else {
             dismisLoadingDialog();
             CommonMethod.makeToast(ProductDetailActivity.this, "Get image error");
         }
-
     }
 
-    private void uploadProcess(List<MHead> arrHeads, String idTask, final SubmitProcessParam param, final int requestCode, final TraddingProduct.Result product, final Services.Result service) {
 
-        if (mProgressDialog != null) {
+    private void uploadProcess(final List<MHead> arrHeads, final String idTask, final SubmitProcessParam param, final int requestCode, final TraddingProduct.Result product, final Services.Result service) {
+
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.setMessage("Update process...");
         }
 
@@ -818,9 +865,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                         tvNoteWork.setText(note);
                     }
                     visiableRecycler();
-                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Step OK!!!");
+                    CommonMethod.makeToast(ProductDetailActivity.this, "Success!");
                 } else {
-                    CommonMethod.makeToast(ProductDetailActivity.this, "Update Process Error");
+                    CommonMethod.makeToast(ProductDetailActivity.this, "Error status: " + status);
                 }
                 dismisLoadingDialog();
             }
@@ -834,8 +881,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 } else if (requestCode == KEY_STEP_THREE) {
                     arrFinish.remove(arrFinish.size() - 1);
                 }
+                t.printStackTrace();
                 dismisLoadingDialog();
-                CommonMethod.makeToast(ProductDetailActivity.this, "Update process Error, onFailure");
+                CommonMethod.makeToast(ProductDetailActivity.this, "Update process Error: " + t.getMessage());
             }
         });
     }

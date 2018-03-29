@@ -39,8 +39,9 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
     @Override
     public void onBindViewHolder(ProductHolder holder, int position) {
         String urlImage = arrUrl.get(position);
-        Picasso.with(mContext).load(Conts.URL_BASE+urlImage).placeholder(R.mipmap.ic_launcher)// Place holder image from drawable folder
-                .error(R.mipmap.ic_launcher).resize(110, 110).centerCrop()
+        Picasso.with(mContext).load(Conts.URL_BASE+urlImage)
+                .placeholder(R.drawable.ic_bg_place_holder).resize(110, 110).centerCrop()
+                .error(R.drawable.ic_bg_place_error).resize(110, 110).centerCrop()
                 .into(holder.img);
     }
 
