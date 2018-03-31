@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.event.RecyclerViewItemClickListener;
 import com.cnc.hcm.cnctracking.event.RecyclerViewMenuItemClickListener;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
@@ -67,9 +68,11 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
                 iconPath = process.device.detail.brand.photo;
             }
             if (!TextUtils.isEmpty(iconPath)) {
-            Picasso.with(mContext).load(Conts.URL_BASE + iconPath).into(holder.iv_icon);
+                Picasso.with(mContext).load(Conts.URL_BASE + iconPath).into(holder.iv_icon);
             }
-            if (TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.user._id)) {
+
+            final boolean isOwner = TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.user._id);
+            if (isOwner) {
                 holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.ic_step_1_complete
                         : (process.status._id == 2 ? R.drawable.ic_step_2_complete : R.drawable.ic_step_3_complete));
                 holder.item_product.setOnClickListener(new View.OnClickListener() {
@@ -91,10 +94,11 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
                     Picasso.with(mContext).load(Conts.URL_BASE + process.user.photo).into(holder.iv_user_added_device);
                 }
             }
+
             holder.tv_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (process.before == null || process.before.photos == null || process.before.photos.length == 0) {
+                    if (isOwner && (process.before == null || process.before.photos == null || process.before.photos.length == 0)) {
                         PopupMenu popup = new PopupMenu(mContext, view);
                         popup.getMenuInflater().inflate(R.menu.task_device_popup_menu, popup.getMenu());
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -107,8 +111,8 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
                         });
                         popup.show();
                     } else {
-                        Log.e(TAG, "tv_more.onClick()");
-                        Toast.makeText(mContext, "Không thể chọn xóa do thiết bị đang trong quá trình sửa chữa!", Toast.LENGTH_LONG).show();
+                        mMenuItemClickListener.onRecyclerViewMenuItemClickedFailue(!isOwner ? "Không thể chọn xóa do thiết bị này do nhân viên khác thực hiện!"
+                                : "Không thể chọn xóa do thiết bị đang trong quá trình sửa chữa!");
                     }
                 }
             });

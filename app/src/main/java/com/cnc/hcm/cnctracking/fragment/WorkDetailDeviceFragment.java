@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.activity.ProductDetailActivity;
@@ -22,6 +23,7 @@ import com.cnc.hcm.cnctracking.adapter.WorkDetailDeviceRecyclerViewAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
+import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.event.RecyclerViewItemClickListener;
 import com.cnc.hcm.cnctracking.event.RecyclerViewMenuItemClickListener;
 import com.cnc.hcm.cnctracking.model.GetTaskDetailResult;
@@ -49,6 +51,8 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
     private String saveTaskId;
 
     private ProgressDialog mProgressDialog;
+
+    private DialogNotification mDialogNotification;
 
     public WorkDetailDeviceFragment() {
     }
@@ -101,6 +105,11 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
         }
     }
 
+    @Override
+    public void onRecyclerViewMenuItemClickedFailue(String message) {
+        showDialogNotification(message);
+    }
+
     private void showDialogConfirmRemovingDevice(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setCancelable(false);
@@ -140,8 +149,8 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
                 if (response.isSuccessful()) {
                     RemoveDeviceFromTaskResult result = response.body();
                     Log.e(TAG, "tryToRemoveDevice.onResponse(), statusCode: " + statusCode + ", result: " + result);
-                    onDeviceRemovedFromTask(position, result);
                     dismisDialogLoading();
+                    onDeviceRemovedFromTask(position, result);
                 }
             }
 
@@ -155,16 +164,22 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
         });
     }
 
-    private void onDeviceRemovedFromTask(int position, RemoveDeviceFromTaskResult result) {
+    private void onDeviceRemovedFromTask(final int position, final RemoveDeviceFromTaskResult result) {
         try {
-            if (result != null && result.getStatusCode() == 200) {
-                CommonMethod.makeToast(getContext(), "Xóa thiết bị thành công");
-                mWorkDetailDeviceRecyclerViewAdapter.removeDeviceAtPosition(position);
-            } else {
-                CommonMethod.makeToast(getContext(), "Không thể xóa thiết bị. Lý do từ server trả về: " + result.getMessage());
-            }
+            Log.e(TAG, "onDeviceRemovedFromTask. getStatusCode: " + result.getStatusCode() + ", getMessage: " + result.getMessage());
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (result != null && result.getStatusCode() == 200) {
+                        Toast.makeText(getActivity(), "Xóa thiết bị thành công", Toast.LENGTH_LONG).show();
+                        mWorkDetailDeviceRecyclerViewAdapter.removeDeviceAtPosition(position);
+                    } else {
+                        Toast.makeText(getActivity(), "Không thể xóa thiết bị. Lý do từ server trả về: " + result.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
         } catch (Exception e) {
-            Log.e(TAG, "onTaskInfoLoaded() --> Exception occurs.", e);
+            Log.e(TAG, "onDeviceRemovedFromTask() --> Exception occurs.", e);
         }
     }
 
@@ -172,9 +187,11 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
     public void onDestroy() {
         super.onDestroy();
         dismisDialogLoading();
+        dismisDialogNotification();
     }
 
     private void showDialogLoadding() {
+        dismisDialogLoading();
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setCancelable(false);
         mProgressDialog.setIndeterminate(true);
@@ -187,6 +204,23 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
             mProgressDialog.dismiss();
         }
     }
+
+    private void showDialogNotification(String massage) {
+        dismisDialogNotification();
+        mDialogNotification = new DialogNotification(getActivity());
+        mDialogNotification.setCancelable(true);
+        mDialogNotification.setContentMessage(massage);
+        mDialogNotification.setHiddenBtnOK();
+        mDialogNotification.setTextBtnExit("OK");
+        mDialogNotification.show();
+    }
+
+    public void dismisDialogNotification() {
+        if (mDialogNotification != null && mDialogNotification.isShowing()) {
+            mDialogNotification.dismiss();
+        }
+    }
+
 
     private void processDevice(int position) {
         Log.d(TAG, "item_product.onClick(), taskId: " + saveTaskId + ", deviceId: " + mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id);
