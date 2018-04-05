@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -127,7 +128,7 @@ public class CommonMethod {
     }
 
     public static Calendar getInstanceCalendar() {
-        return Calendar.getInstance();
+        return Calendar.getInstance(Locale.UK);
     }
 
     public static void actionFindWayInMapApp(Context context, double latitude_cur, double longitude_cur, double latitude, double longitude) {

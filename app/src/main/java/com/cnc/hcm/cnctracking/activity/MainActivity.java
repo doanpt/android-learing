@@ -138,7 +138,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initObject();
         initViews();
         createFileBackup();
-        UserInfo.getInstance(this).setMainActivityActive(true);
         registerBroadcastReciver();
         if (!isServiceRunning(GPSService.class)) {
             Intent intent = new Intent(this, GPSService.class);
@@ -173,6 +172,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void initObject() {
+        UserInfo.getInstance(this).setMainActivityActive(true);
         dialogNetworkSetting = new DialogNetworkSetting(this);
         dialogGPSSetting = new DialogGPSSetting(this);
         dialogDetailTaskFragment = new DialogDetailTaskFragment();
@@ -485,7 +485,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     if (address != null) {
                         addMarkerMap(result._id, address.getLatitude(), address.getLongitude(), locationName, bitmapDescriptor);
                     } else {
-                        Toast.makeText(this, "Error Address null :" + result.title, Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "Error in addMarkerMap and task.getTaskResult().address = null");
                     }
                 }
@@ -494,7 +493,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     addMarkerMap(result._id, result.customer.address.location.latitude,
                             result.customer.address.location.longitude, result.customer.address.street, bitmapDescriptor);
                 } else {
-                    Toast.makeText(this, "Error Address CUSTOMER null :" + result.title, Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error in addMarkerMap and task.getTaskResult().address CUSTOMER = null");
                 }
             }
@@ -721,13 +719,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         switch (requestCode) {
             case ChangeTimeActivity.CODE_CHANGE_TIME:
                 if (resultCode == RESULT_OK) {
+                    int typeView = SettingApp.getInstance(this).getTypeView();
                     String accessToken = UserInfo.getInstance(getApplicationContext()).getAccessToken();
-                    if (dateSelected.equals(Conts.BLANK)) {
-                        Calendar instance = CommonMethod.getInstanceCalendar();
-                        String dateSelected = CommonMethod.formatDateToString(instance.getTime()) + Conts.FORMAT_TIME_FULL;
-                        tryGetTaskList(accessToken, dateSelected, dateSelected);
-                    } else {
-                        tryGetTaskList(accessToken, dateSelected, dateSelected);
+
+                    switch (typeView) {
+                        case Conts.TYPE_VIEW_BY_MONTH:
+                            if (dateSelected.equals(Conts.BLANK)) {
+                                Calendar instance = CommonMethod.getInstanceCalendar();
+                                String dateSelected = CommonMethod.formatDateToString(instance.getTime()) + Conts.FORMAT_TIME_FULL;
+                                tryGetTaskList(accessToken, dateSelected, dateSelected);
+                            } else {
+                                tryGetTaskList(accessToken, dateSelected, dateSelected);
+                            }
+                            break;
+                        case Conts.TYPE_VIEW_BY_YEARS:
+                            tryGetTaskList(accessToken, startDate, endDate);
+
+                            break;
                     }
                 }
                 break;
