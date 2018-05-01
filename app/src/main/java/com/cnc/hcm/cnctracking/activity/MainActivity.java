@@ -73,6 +73,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.squareup.picasso.Picasso;
 
@@ -131,6 +133,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private String startDate;
     private String endDate;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +176,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void initObject() {
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        //READMI below code to using firebase analyze and report custom log to analyze
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+        //below code to report custom crash
+//        FirebaseCrash.log("SQL database failed to initialize");
+//        FirebaseCrash.log(user.getEmailAddress() + " purchased product " + product.getID());
+
         UserInfo.getInstance(this).setMainActivityActive(true);
         dialogNetworkSetting = new DialogNetworkSetting(this);
         dialogGPSSetting = new DialogGPSSetting(this);
