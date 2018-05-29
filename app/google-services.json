@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "362707832805",
+    "firebase_url": "https://cnctrackingt3h.firebaseio.com",
+    "project_id": "cnctrackingt3h",
+    "storage_bucket": "cnctrackingt3h.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362707832805:android:2d4350064618471d",
+        "android_client_info": {
+          "package_name": "com.cnc.hcm.cnctrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362707832805-7ck88ojbsr33vkfjnh8fn3qsrsbh1de0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cnc.hcm.cnctrack",
+            "certificate_hash": "064ae33f6666697e6e3e069b7c718b05981cc4ec"
+          }
+        },
+        {
+          "client_id": "362707832805-cac5s2ar01bnonacneckpq3mqdgm0k5h.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "362707832805-cac5s2ar01bnonacneckpq3mqdgm0k5h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJiiAh203mU2Q8kcpduqjfthQYaNwo4Iw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362707832805-cac5s2ar01bnonacneckpq3mqdgm0k5h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
