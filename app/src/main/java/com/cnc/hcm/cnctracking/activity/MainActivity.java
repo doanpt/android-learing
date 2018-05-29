@@ -23,6 +23,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.TaskListAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.base.BaseActivity;
 import com.cnc.hcm.cnctracking.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctracking.dialog.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
@@ -92,8 +94,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener,
-        OnMapReadyCallback, GoogleMap.OnMarkerClickListener, TaskListAdapter.OnItemWorkClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener,
+        OnMapReadyCallback, GoogleMap.OnMarkerClickListener, TaskListAdapter.OnItemWorkClickListener, BaseActivity.OnNetworkConnectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_UPDATE = 4234;
@@ -110,7 +112,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private CircleImageView imvAvatar;
     private ImageView imvMenuDrawer, imvFilterActionBar, imvProfile, imvFilter;
     private DrawerLayout drawer;
-    private ProgressDialog mProgressDialog;
     private MyRecyclerView rcTask;
 
     private MonthViewFragment monthViewFragment;
@@ -119,14 +120,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Fragment[] listFrag;
     private GPSService gpsService;
     private DialogDetailTaskFragment dialogDetailTaskFragment;
-    private DialogNetworkSetting dialogNetworkSetting;
+
     private DialogGPSSetting dialogGPSSetting;
     private DialogNotification dialogNotification;
     private TaskListAdapter taskListAdapter;
 
     private ArrayList<ItemTask> arrItemTask = new ArrayList<>();
     private ArrayList<ItemMarkedMap> arrMarkedTask = new ArrayList<>();
-    private boolean isNetworkConnected;
     private int quantityNewTask, quantityDoingTask, quantityCompletedTask;
     private boolean isMainActive;
     private String dateSelected = Conts.BLANK;
@@ -136,13 +136,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void onViewReady(@Nullable Bundle savedInstanceState) {
         initObject();
         initViews();
         createFileBackup();
-        registerBroadcastReciver();
         if (!isServiceRunning(GPSService.class)) {
             Intent intent = new Intent(this, GPSService.class);
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
@@ -155,15 +152,22 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     @Override
+    public int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         isMainActive = true;
+        setOnNetworkConnectedListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isMainActive = false;
+        setOnNetworkConnectedListener(null);
     }
 
     private void checkExistIdTask() {
@@ -191,7 +195,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 //        FirebaseCrash.log(user.getEmailAddress() + " purchased product " + product.getID());
 
         UserInfo.getInstance(this).setMainActivityActive(true);
-        dialogNetworkSetting = new DialogNetworkSetting(this);
         dialogGPSSetting = new DialogGPSSetting(this);
         dialogDetailTaskFragment = new DialogDetailTaskFragment();
         dialogDetailTaskFragment.setMainActivity(MainActivity.this);
@@ -324,36 +327,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             Log.d(TAG, "onServiceDisconnected at MainActivity");
-        }
-    };
-
-    private void registerBroadcastReciver() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Conts.ACTION_NETWORK_CHANGE);
-        registerReceiver(receiver, filter);
-    }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action != null) {
-                switch (action) {
-                    case Conts.ACTION_NETWORK_CHANGE:
-                        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                        NetworkInfo activeNetInfor = connectivityManager.getActiveNetworkInfo();
-                        isNetworkConnected = activeNetInfor != null && activeNetInfor.isConnectedOrConnecting();
-                        if (tvStatusNetwork != null)
-                            if (isNetworkConnected) {
-                                tvStatusNetwork.setTextColor(getResources().getColor(R.color.color_text_status));
-                                tvStatusNetwork.setText(getResources().getString(R.string.On));
-                            } else {
-                                tvStatusNetwork.setTextColor(getResources().getColor(android.R.color.darker_gray));
-                                tvStatusNetwork.setText(getResources().getString(R.string.Off));
-                            }
-                        break;
-                }
-            }
         }
     };
 
@@ -624,25 +597,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    private void showDialogNetworkSetting() {
-        if (dialogNetworkSetting != null && !dialogNetworkSetting.isShowing() && !MainActivity.this.isDestroyed()) {
-            dialogNetworkSetting.show();
-        }
-    }
-
-    private void dismisDialogNetworkSetting() {
-        if (dialogNetworkSetting != null && dialogNetworkSetting.isShowing() && !MainActivity.this.isDestroyed()) {
-            dialogNetworkSetting.dismiss();
-        }
-    }
-
-    public void handleNetworkSetting(boolean isNetworkConnected) {
-        if (isNetworkConnected) {
-            dismisDialogNetworkSetting();
-        } else {
-            showDialogNetworkSetting();
-        }
-    }
 
     private void showDialogGPSSetting() {
         if (dialogGPSSetting != null && !dialogGPSSetting.isShowing() && !MainActivity.this.isDestroyed()) {
@@ -729,7 +683,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onDestroy();
         UserInfo.getInstance(this).setMainActivityActive(false);
         unbindService(serviceConnection);
-        unregisterReceiver(receiver);
     }
 
     @Override
@@ -1009,28 +962,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         fragmentTransaction.commit();
     }
 
-    public void showProgressLoadding() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-            mProgressDialog = null;
-        }
-        mProgressDialog = new ProgressDialog(MainActivity.this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
-        mProgressDialog.show();
-    }
-
-    public void dismisProgressLoading() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
-
-    public boolean isNetworkConnected() {
-        return isNetworkConnected;
-    }
-
     @Override
     public boolean onMarkerClick(Marker marker) {
 
@@ -1143,5 +1074,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void setDateSelected(String dateSelected) {
         this.dateSelected = dateSelected;
+    }
+
+    @Override
+    public void onNetworkConnected() {
+        if (tvStatusNetwork != null) {
+            tvStatusNetwork.setTextColor(getResources().getColor(R.color.color_text_status));
+            tvStatusNetwork.setText(getResources().getString(R.string.On));
+        }
+    }
+
+    @Override
+    public void onNetworkDisconnect() {
+        if (tvStatusNetwork != null) {
+            tvStatusNetwork.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            tvStatusNetwork.setText(getResources().getString(R.string.Off));
+        }
     }
 }

@@ -496,16 +496,13 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
             //Check network connection
             if (mainActivity != null) {
-                mainActivity.handleNetworkSetting(isNetworkConnected);
                 mainActivity.handleGPSSetting(statusGPS);
             }
             if (addProductActivity != null) {
-                addProductActivity.handleNetworkSetting(isNetworkConnected);
                 addProductActivity.handleGPSSetting(statusGPS);
             }
 
             if (productDetailActivity != null) {
-                productDetailActivity.handleNetworkSetting(isNetworkConnected);
                 productDetailActivity.handleGPSSetting(statusGPS);
             }
 

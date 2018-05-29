@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.base.BaseActivity;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
 import com.cnc.hcm.cnctracking.model.AddContainProductResult;
@@ -48,7 +49,7 @@ import retrofit2.Response;
  * Created by Android on 1/3/2018.
  */
 
-public class AddProductActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddProductActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAGG = AddProductActivity.class.getSimpleName();
     private EditText edtDeviceName;
     private Spinner edtManufacture, edtCategory;
@@ -65,15 +66,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private ArrayList<ProductListResult.Product> listProduct;
     private ArrayList<CategoryListResult.Category> listCategory;
     private DialogGPSSetting dialogGPSSetting;
-    private DialogNetworkSetting dialogNetworkSetting;
     private GPSService gpsService;
     private String titleWork, addressWork, timeWork;
     private ProgressDialog mProgressDialog;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_device);
+    public void onViewReady(@Nullable Bundle savedInstanceState) {
         //11/01/2017 ADD by HoangIT START
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         initObject();
@@ -85,10 +83,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         getInformation();
     }
 
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_add_device;
+    }
+
     //11/01/2017 ADD by HoangIT START
     private void initObject() {
         dialogGPSSetting = new DialogGPSSetting(this);
-        dialogNetworkSetting = new DialogNetworkSetting(this);
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -398,27 +400,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 Toast.makeText(AddProductActivity.this, "onFailure 2.4:" + cause, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    //11/01/2017 ADD by HoangIT START
-    private void showDialogNetworkSetting() {
-        if (dialogNetworkSetting != null && !dialogNetworkSetting.isShowing() && !AddProductActivity.this.isDestroyed()) {
-            dialogNetworkSetting.show();
-        }
-    }
-
-    private void dismisDialogNetworkSetting() {
-        if (dialogNetworkSetting != null && dialogNetworkSetting.isShowing() && !AddProductActivity.this.isDestroyed()) {
-            dialogNetworkSetting.dismiss();
-        }
-    }
-
-    public void handleNetworkSetting(boolean isNetworkConnected) {
-        if (isNetworkConnected) {
-            dismisDialogNetworkSetting();
-        } else {
-            showDialogNetworkSetting();
-        }
     }
 
     private void showDialogGPSSetting() {

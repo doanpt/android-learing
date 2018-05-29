@@ -1,6 +1,5 @@
 package com.cnc.hcm.cnctracking.activity;
 
-import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,11 +11,10 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -34,9 +32,9 @@ import com.cnc.hcm.cnctracking.adapter.ProductProcessAdapter;
 import com.cnc.hcm.cnctracking.adapter.ServiceProcessAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.base.BaseActivity;
 import com.cnc.hcm.cnctracking.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogInfor;
-import com.cnc.hcm.cnctracking.dialog.DialogNetworkSetting;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.model.GetProductDetailResult;
 import com.cnc.hcm.cnctracking.model.Services;
@@ -67,7 +65,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProductDetailActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAGG = ProductDetailActivity.class.getSimpleName();
     private static final int KEY_STEP_ONE = 1;
@@ -82,7 +80,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private FloatingActionsMenu fabMenu;
     private TextView tvCompleteWork, tvDeviceCode, tvDeviceName, tvName, tvLocation, tvHour, tvProductID, llCompleteWork, tvNoteWork;
     private FloatingActionButton fabNote, fabProduct, fabStep1, fabStep2, fabStep3;
-    private DialogNetworkSetting dialogNetworkSetting;
     private DialogGPSSetting dialogGPSSetting;
     private GPSService gpsService;
     private ArrayList<String> arrInit, arrProcess, arrFinish;
@@ -104,39 +101,27 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     private boolean isNewProduct = false;
     private DialogInfor dialogInfor;
     private String note = Conts.BLANK;
-    private ProgressDialog mProgressDialog;
     private String mCurrentPhotoPath;
     private DialogNotification dialogNotification;
     private int requestCode;
     private File fileImageProcess;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_detail);
+    public void onViewReady(@Nullable Bundle savedInstanceState) {
         //11/01/2017 ADD by HoangIT START
         bindService(new Intent(this, GPSService.class), serviceConnection, Context.BIND_AUTO_CREATE);
-        showLoadingDialog();
+        showProgressLoadding();
         initObject();
         //11/01/2017 ADD by HoangIT END
         initViews();
         getData();
     }
 
-    private void showLoadingDialog() {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.show();
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_product_detail;
     }
 
-    private void dismisLoadingDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
 
     private void getData() {
         List<MHead> arrHeads = new ArrayList<>();
@@ -145,7 +130,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         ApiUtils.getAPIService(arrHeads).getDetailProduct(idTask).enqueue(new Callback<GetProductDetailResult>() {
             @Override
             public void onResponse(Call<GetProductDetailResult> call, Response<GetProductDetailResult> response) {
-                dismisLoadingDialog();
+                dismisProgressLoading();
                 Long code = response.body().getStatusCode();
                 Log.d(TAGG, "getData.onResponse, code: " + code);
                 if (code != null && code == Conts.RESPONSE_STATUS_OK) {
@@ -157,7 +142,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void onFailure(Call<GetProductDetailResult> call, Throwable t) {
-                dismisLoadingDialog();
+                dismisProgressLoading();
                 Log.e(TAGG, "getData.onResponse", t);
                 Toast.makeText(ProductDetailActivity.this, "Get Detail failure", Toast.LENGTH_SHORT).show();
             }
@@ -263,7 +248,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         workName = passData.getStringExtra(Conts.KEY_WORK_NAME);
         Log.d("doan.pt", accessToken + " " + deviceID + " " + idTask + " detail-getextra");
         dialogGPSSetting = new DialogGPSSetting(this);
-        dialogNetworkSetting = new DialogNetworkSetting(this);
         dialogInfor = new DialogInfor(this);
 
         dialogNotification = new DialogNotification(this);
@@ -272,11 +256,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         dialogNotification.setOnClickDialogNotificationListener(new DialogNotification.OnClickDialogNotificationListener() {
             @Override
             public void onClickButtonOK() {
-                if (mProgressDialog != null) {
-                    mProgressDialog.setMessage(getResources().getString(R.string.loadding));
-                    mProgressDialog.show();
-                }
-
+                showProgressLoadding();
                 uploadPhoto(fileImageProcess, requestCode);
             }
 
@@ -408,7 +388,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
     @Override
     protected void onPause() {
-        dismisLoadingDialog();
+        dismisProgressLoading();
         super.onPause();
     }
 
@@ -639,10 +619,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
             case KEY_STEP_ONE:
             case KEY_STEP_TWO:
             case KEY_STEP_THREE:
-                if (mProgressDialog != null) {
-                    mProgressDialog.setMessage(getResources().getString(R.string.loadding));
-                    mProgressDialog.show();
-                }
+                showProgressLoadding();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -809,7 +786,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
 
                 @Override
                 public void onFailure(Call<UploadImageResult> call, Throwable t) {
-                    dismisLoadingDialog();
+                    dismisProgressLoading();
                     t.printStackTrace();
                     if (dialogNotification != null) {
                         dialogNotification.setContentMessage("uploadPhoto.onFailure()\n" + t.getMessage());
@@ -818,17 +795,14 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 }
             });
         } else {
-            dismisLoadingDialog();
+            dismisProgressLoading();
             CommonMethod.makeToast(ProductDetailActivity.this, "Get image error");
         }
     }
 
 
     private void uploadProcess(final List<MHead> arrHeads, final String idTask, final SubmitProcessParam param, final int requestCode, final TraddingProduct.Result product, final Services.Result service) {
-
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.setMessage("Update process...");
-        }
+        updateMessageProgressDialog("Update process...");
 
         ApiUtils.getAPIService(arrHeads).updateProcess(idTask, param).enqueue(new Callback<UpdateProcessResult>() {
             @Override
@@ -869,7 +843,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 } else {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Error status: " + status);
                 }
-                dismisLoadingDialog();
+                dismisProgressLoading();
             }
 
             @Override
@@ -882,7 +856,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                     arrFinish.remove(arrFinish.size() - 1);
                 }
                 t.printStackTrace();
-                dismisLoadingDialog();
+                dismisProgressLoading();
                 CommonMethod.makeToast(ProductDetailActivity.this, "Update process Error: " + t.getMessage());
             }
         });
@@ -915,26 +889,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         fabMenu.collapse();
     }
 
-    //11/01/2017 ADD by HoangIT START
-    private void showDialogNetworkSetting() {
-        if (dialogNetworkSetting != null && !dialogNetworkSetting.isShowing() && !ProductDetailActivity.this.isDestroyed()) {
-            dialogNetworkSetting.show();
-        }
-    }
-
-    private void dismisDialogNetworkSetting() {
-        if (dialogNetworkSetting != null && dialogNetworkSetting.isShowing() && !ProductDetailActivity.this.isDestroyed()) {
-            dialogNetworkSetting.dismiss();
-        }
-    }
-
-    public void handleNetworkSetting(boolean isNetworkConnected) {
-        if (isNetworkConnected) {
-            dismisDialogNetworkSetting();
-        } else {
-            showDialogNetworkSetting();
-        }
-    }
 
     private void showDialogGPSSetting() {
         if (dialogGPSSetting != null && !dialogGPSSetting.isShowing() && !ProductDetailActivity.this.isDestroyed()) {
