@@ -3,18 +3,18 @@ package com.cnc.hcm.cnctracking.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.base.BaseActivity;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+    public void onViewReady(@Nullable Bundle savedInstanceState) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -31,5 +31,8 @@ public class SplashActivity extends AppCompatActivity {
         }, 500);
     }
 
-
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_splash;
+    }
 }

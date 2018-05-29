@@ -11,20 +11,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.cnc.hcm.cnctracking.R;
+import com.cnc.hcm.cnctracking.base.BaseActivity;
 import com.cnc.hcm.cnctracking.util.Conts;
 
 /**
  * Created by Android on 06/03/2018.
  */
 
-public class AddNoteActivity extends AppCompatActivity {
+public class AddNoteActivity extends BaseActivity {
     private EditText edtInputNote;
     private String note;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_note);
+    public void onViewReady(@Nullable Bundle savedInstanceState) {
         ImageView imvSave = findViewById(R.id.img_add_note);
         ImageView imvCancel = findViewById(R.id.img_back);
         edtInputNote = findViewById(R.id.edt_input_note);
@@ -48,6 +47,11 @@ public class AddNoteActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_add_note;
     }
 
     @Override

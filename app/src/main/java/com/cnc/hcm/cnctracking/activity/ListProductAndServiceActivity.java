@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,7 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.FragmentAdapter;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.base.BaseActivity;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.fragment.ListProductFragment;
 import com.cnc.hcm.cnctracking.fragment.ListServiceFragment;
@@ -48,7 +50,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListProductAndServiceActivity extends AppCompatActivity implements View.OnClickListener {
+public class ListProductAndServiceActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView imvBack, imgSearch, imgExitProductSearch, imgExitServiceSearch;
     private LinearLayout llTitle, llProductSearch, llServiceSearch;
@@ -69,17 +71,18 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
     private ArrayList<ProductListResult.Product> listProduct;
     private ArrayList<CategoryListResult.Category> listCategory;
     private Spinner spnManufacuture, spnCategory, spnServiceCategory;
-    private ProgressDialog mProgressDialog;
     private DialogNotification dialogNotification;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_product_and_service);
+    public void onViewReady(@Nullable Bundle savedInstanceState) {
         initObjects();
-
         initViews();
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_list_product_and_service;
     }
 
     private void initObjects() {
@@ -116,18 +119,11 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
     }
 
     private void showLoadingDialog() {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.show();
+        showProgressLoadding();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
+                dismisProgressLoading();
             }
         }, 10000);
     }
@@ -173,9 +169,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             @Override
             public void onFailure(Call<ProductListResult> call, Throwable t) {
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
+                dismisProgressLoading();
                 Toast.makeText(ListProductAndServiceActivity.this, "Get lise product  for search fail", Toast.LENGTH_SHORT).show();
             }
         });
@@ -200,9 +194,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             @Override
             public void onFailure(Call<CategoryListResult> call, Throwable t) {
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
+                dismisProgressLoading();
                 Toast.makeText(ListProductAndServiceActivity.this, "Get lise category  for search fail", Toast.LENGTH_SHORT).show();
             }
         });
@@ -352,9 +344,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             }
         });
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
+        dismisProgressLoading();
     }
 
     private void getListServices() {
@@ -379,9 +369,7 @@ public class ListProductAndServiceActivity extends AppCompatActivity implements 
 
             @Override
             public void onFailure(Call<Services> call, Throwable t) {
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
+                dismisProgressLoading();
                 if (dialogNotification != null) {
                     dialogNotification.setContentMessage("getServices().onFailure()\n" + t.getMessage());
                     dialogNotification.show();

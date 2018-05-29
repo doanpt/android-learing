@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.api.APIService;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.base.BaseActivity;
 import com.cnc.hcm.cnctracking.model.GetUserProfileResponseStatus;
 import com.cnc.hcm.cnctracking.model.LoginResponseStatus;
 import com.cnc.hcm.cnctracking.model.UserProfile;
@@ -36,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_UPDATE = 12132;
@@ -51,11 +53,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private List<MHead> arrHead;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    public void onViewReady(@Nullable Bundle savedInstanceState) {
         checkPermistion();
         arrHead = new ArrayList<>();
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_login;
     }
 
     private void checkPermistion() {

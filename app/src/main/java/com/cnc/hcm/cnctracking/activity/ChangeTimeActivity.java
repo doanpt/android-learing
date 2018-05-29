@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.api.ApiUtils;
 import com.cnc.hcm.cnctracking.api.MHead;
+import com.cnc.hcm.cnctracking.base.BaseActivity;
 import com.cnc.hcm.cnctracking.dialog.DialogNotification;
 import com.cnc.hcm.cnctracking.model.ChangeTicketAppointmentResult;
 import com.cnc.hcm.cnctracking.model.GetChangeTicketAppointmentReasonsResult;
@@ -41,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChangeTimeActivity extends Activity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+public class ChangeTimeActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     private static final String TAG = ChangeTimeActivity.class.getSimpleName();
     public static final int CODE_CHANGE_TIME = 123;
     private TextView tv_time;
@@ -57,9 +58,7 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     private ArrayList<CheckBox> arrReasonCheckbox = new ArrayList<>();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_time);
+    public void onViewReady(@Nullable Bundle savedInstanceState) {
         initObjects();
         ImageView imvSave = findViewById(R.id.img_change_time);
         ImageView imvCancel = findViewById(R.id.img_back);
@@ -86,6 +85,11 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
         imvCancel.setOnClickListener(this);
     }
 
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_change_time;
+    }
+
     private void initObjects() {
         dialogNotification = new DialogNotification(this);
         dialogNotification.setTitle(getString(R.string.error_occurred));
@@ -104,7 +108,7 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     }
 
     private void loadListAvailableReason() {
-        showDialogLoadding();
+        showProgressLoadding();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(this).getAccessToken()));
         ApiUtils.getAPIService(arrHeads).getChangeTicketAppointmentReasons().enqueue(new Callback<GetChangeTicketAppointmentReasonsResult>() {
@@ -115,13 +119,13 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
                     mGetChangeTicketAppointmentReasonsResult = response.body();
                     Log.e(TAG, "loadListAvailableReason.onResponse(), statusCode: " + statusCode + ", mGetChangeTicketAppointmentReasonsResult: " + mGetChangeTicketAppointmentReasonsResult);
                     onListAvailableReasonLoaded();
-                    dismisDialogLoading();
+                    dismisProgressLoading();
                 }
             }
 
             @Override
             public void onFailure(Call<GetChangeTicketAppointmentReasonsResult> call, Throwable t) {
-                dismisDialogLoading();
+                dismisProgressLoading();
                 Log.e(TAG, "loadListAvailableReason.onFailure() --> " + t);
             }
         });
@@ -182,21 +186,6 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
         }
     }
 
-    private void showDialogLoadding() {
-        dismisDialogLoading();
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
-        mProgressDialog.show();
-    }
-
-    private void dismisDialogLoading() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
 
     private void updateDateTimeUI() {
         tv_time.setText(CommonMethod.formatHourMinuteToString(mCalendar.getTimeInMillis()));
@@ -212,7 +201,7 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dismisDialogLoading();
+        dismisProgressLoading();
     }
 
     @Override
@@ -245,7 +234,7 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
             return;
         }
 
-        showDialogLoadding();
+        showProgressLoadding();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(this).getAccessToken()));
         long seventHour = TimeUnit.HOURS.toMillis(7);
@@ -276,13 +265,13 @@ public class ChangeTimeActivity extends Activity implements View.OnClickListener
                     ChangeTicketAppointmentResult changeTicketAppointmentResult = response.body();
                     Log.e(TAG, "loadListAvailableReason.onResponse(), statusCode: " + statusCode + ", changeTicketAppointmentResult: " + changeTicketAppointmentResult);
                     onTicketAppointmentChanged(changeTicketAppointmentResult);
-                    dismisDialogLoading();
+                    dismisProgressLoading();
                 }
             }
 
             @Override
             public void onFailure(Call<ChangeTicketAppointmentResult> call, Throwable t) {
-                dismisDialogLoading();
+                dismisProgressLoading();
                 Log.e(TAG, "changeTicketAppointment.onFailure() --> " + t);
                 if (dialogNotification != null) {
                     dialogNotification.setContentMessage("changeTicketAppointment.onFailure()\n" + t.getMessage());

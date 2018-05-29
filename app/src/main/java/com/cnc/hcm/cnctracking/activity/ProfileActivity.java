@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctracking.R;
 import com.cnc.hcm.cnctracking.adapter.ProfileFragmentAdapter;
+import com.cnc.hcm.cnctracking.base.BaseActivity;
 import com.cnc.hcm.cnctracking.util.Conts;
 import com.cnc.hcm.cnctracking.util.UserInfo;
 import com.squareup.picasso.Picasso;
@@ -22,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by giapmn on 10/2/17.
  */
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProfileActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = ProfileActivity.class.getSimpleName();
     private static final int DEFAULT_TAB_POSITION = 0;
@@ -32,11 +33,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ViewPager viewPagerProfile;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+    public void onViewReady(@Nullable Bundle savedInstanceState) {
         initViews();
         loadDatas();
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_profile;
     }
 
     private void loadDatas() {
