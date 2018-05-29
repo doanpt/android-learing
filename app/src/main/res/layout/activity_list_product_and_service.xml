@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.cnc.hcm.cnctracking.activity.ListProductAndServiceActivity">
+              tools:context="com.cnc.hcm.cnctrack.activity.ListProductAndServiceActivity">
 
     <FrameLayout
         android:layout_width="match_parent"

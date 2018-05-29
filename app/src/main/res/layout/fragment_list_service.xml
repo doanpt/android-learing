@@ -3,11 +3,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:gravity="center"
-              tools:context="com.cnc.hcm.cnctracking.fragment.ListServiceFragment">
+              tools:context="com.cnc.hcm.cnctrack.fragment.ListServiceFragment">
 
-    <com.cnc.hcm.cnctracking.customeview.MyRecyclerView
+    <com.cnc.hcm.cnctrack.customeview.MyRecyclerView
         android:id="@+id/rc_services"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.cnc.hcm.cnctracking.customeview.MyRecyclerView>
+        android:layout_height="match_parent"></com.cnc.hcm.cnctrack.customeview.MyRecyclerView>
 
 </LinearLayout>

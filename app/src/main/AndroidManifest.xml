@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cnc.hcm.cnctracking">
+    package="com.cnc.hcm.cnctrack">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -24,16 +24,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.AddProductActivity" />
+        <activity android:name="com.cnc.hcm.cnctrack.activity.LoginActivity" />
+        <activity android:name="com.cnc.hcm.cnctrack.activity.MainActivity" />
+        <activity android:name="com.cnc.hcm.cnctrack.activity.AddProductActivity" />
 
         <service
-            android:name=".service.GPSService"
+            android:name="com.cnc.hcm.cnctrack.service.GPSService"
             android:stopWithTask="false" />
 
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="com.cnc.hcm.cnctrack.activity.SplashActivity"
             android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,10 +42,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ProfileActivity"
+            android:name="com.cnc.hcm.cnctrack.activity.ProfileActivity"
             android:theme="@style/ThemeProfile" />
 
-        <receiver android:name=".receiver.BroadcastRecever">
+        <receiver android:name="com.cnc.hcm.cnctrack.receiver.BroadcastRecever">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -54,14 +54,14 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.ProductDetailActivity"></activity>
-        <activity android:name=".activity.ListProductAndServiceActivity"></activity>
-        <activity android:name=".activity.AddNoteActivity"/>
-        <activity android:name=".activity.ChangeTimeActivity"/>
+        <activity android:name="com.cnc.hcm.cnctrack.activity.ProductDetailActivity"></activity>
+        <activity android:name="com.cnc.hcm.cnctrack.activity.ListProductAndServiceActivity"></activity>
+        <activity android:name="com.cnc.hcm.cnctrack.activity.AddNoteActivity"/>
+        <activity android:name="com.cnc.hcm.cnctrack.activity.ChangeTimeActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.cnc.hcm.cnctracking.fileprovider"
+            android:authorities="com.cnc.hcm.cnctrack.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
