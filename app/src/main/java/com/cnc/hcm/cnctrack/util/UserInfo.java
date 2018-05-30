@@ -38,7 +38,9 @@ public class UserInfo {
 
 
     public String getAccessToken() {
-        return sharedPreferences.getString(KEY_ACCESS_TOKEN, Conts.BLANK);
+        if (sharedPreferences != null)
+            return sharedPreferences.getString(KEY_ACCESS_TOKEN, Conts.BLANK);
+        return Conts.BLANK;
     }
 
     private void setAccessToken(String accessToken) {
