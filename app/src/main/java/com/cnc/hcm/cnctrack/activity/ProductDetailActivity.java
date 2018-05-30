@@ -533,7 +533,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.cnc.hcm.cnctracking.fileprovider",
+                        "com.cnc.hcm.cnctrack.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, keyResult);
