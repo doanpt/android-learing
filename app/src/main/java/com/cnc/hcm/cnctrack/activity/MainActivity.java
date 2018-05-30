@@ -434,6 +434,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 taskListAdapter.notiDataChange(arrItemTask);
             }
 
+            addMarkedTask(result, BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_new));
         }
 
         notiRingtoneTypeAndVibrator(RingtoneManager.TYPE_NOTIFICATION, 1500);
@@ -459,26 +460,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
             }
             GetTaskListResult.Result result = task.getTaskResult();
-            if (result.address != null) {
-                if (result.address.getLocation() != null) {
-                    addMarkerMap(result._id, result.address.getLocation().latitude,
-                            result.address.getLocation().longitude, result.address.getStreet(), bitmapDescriptor);
-                } else {
-                    String locationName = result.address.getStreet();
-                    Address address = CommonMethod.getLocationFromLocationName(MainActivity.this, locationName);
-                    if (address != null) {
-                        addMarkerMap(result._id, address.getLatitude(), address.getLongitude(), locationName, bitmapDescriptor);
-                    } else {
-                        Log.e(TAG, "Error in addMarkerMap and task.getTaskResult().address = null");
-                    }
-                }
+            addMarkedTask(result, bitmapDescriptor);
+        }
+    }
+
+    private void addMarkedTask(GetTaskListResult.Result result, BitmapDescriptor bitmapDescriptor) {
+        if (result.address != null) {
+            if (result.address.getLocation() != null) {
+                addMarkerMap(result._id, result.address.getLocation().latitude,
+                        result.address.getLocation().longitude, result.address.getStreet(), bitmapDescriptor);
             } else {
-                if (result.customer != null && result.customer.address != null && result.customer.address.location != null) {
-                    addMarkerMap(result._id, result.customer.address.location.latitude,
-                            result.customer.address.location.longitude, result.customer.address.street, bitmapDescriptor);
+                String locationName = result.address.getStreet();
+                Address address = CommonMethod.getLocationFromLocationName(MainActivity.this, locationName);
+                if (address != null) {
+                    addMarkerMap(result._id, address.getLatitude(), address.getLongitude(), locationName, bitmapDescriptor);
                 } else {
-                    Log.e(TAG, "Error in addMarkerMap and task.getTaskResult().address CUSTOMER = null");
+                    Log.e(TAG, "Error in addMarkerMap and task.getTaskResult().address = null");
                 }
+            }
+        } else {
+            if (result.customer != null && result.customer.address != null && result.customer.address.location != null) {
+                addMarkerMap(result._id, result.customer.address.location.latitude,
+                        result.customer.address.location.longitude, result.customer.address.street, bitmapDescriptor);
+            } else {
+                Log.e(TAG, "Error in addMarkerMap and task.getTaskResult().address CUSTOMER = null");
             }
         }
     }

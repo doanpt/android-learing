@@ -32,7 +32,7 @@ public class UserInfo {
 
     private UserInfo(Context context) {
         if (context != null) {
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         }
     }
 

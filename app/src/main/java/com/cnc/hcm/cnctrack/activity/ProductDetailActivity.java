@@ -213,7 +213,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         } catch (Exception e) {
             path = "";
         }
-        Picasso.with(ProductDetailActivity.this).load(Conts.URL_BASE + path).placeholder(R.drawable.ic_errror_image).error(R.drawable.ic_errror_image).into(imgDevice);
+        Picasso.with(ProductDetailActivity.this).load(Conts.URL_BASE + path).placeholder(R.drawable.ic_bg_place_holder).error(R.drawable.ic_errror_image).into(imgDevice);
         arrInit.clear();
         arrProcess.clear();
         arrFinish.clear();

@@ -26,6 +26,7 @@ import com.cnc.hcm.cnctrack.base.BaseActivity;
 import com.cnc.hcm.cnctrack.model.GetUserProfileResponseStatus;
 import com.cnc.hcm.cnctrack.model.LoginResponseStatus;
 import com.cnc.hcm.cnctrack.model.UserProfile;
+import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
 
@@ -192,6 +193,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (!isLoginAuto) {
             btnLogin.setEnabled(true);
             Snackbar.make(btnLogin, "Login fail: " + message, Snackbar.LENGTH_LONG).show();
+            CommonMethod.reportCrashToFirebase("Login fail: " + message);
         }
     }
 

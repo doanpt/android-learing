@@ -63,7 +63,6 @@ import io.nlopez.smartlocation.OnReverseGeocodingListener;
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.location.config.LocationAccuracy;
 import io.nlopez.smartlocation.location.config.LocationParams;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -119,6 +118,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             String url = Conts.URL_BASE + "?token=" + UserInfo.getInstance(GPSService.this).getAccessToken();
             mSocket = IO.socket(url);
         } catch (URISyntaxException e) {
+            e.printStackTrace();
+            CommonMethod.reportCrashToFirebase(e.getMessage());
         }
     }
 
@@ -537,7 +538,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 }
                 timeMinute = 0;
                 if (mSocket != null && !mSocket.connected()) {
-                    CommonMethod.makeToast(getApplicationContext(), "No connect to Socket server");
                     Log.d(TAGG, "No connect to Socket server");
                 }
             }
@@ -567,13 +567,21 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private void disconnectSocket() {
         if (mSocket != null) {
             mSocket.disconnect();
+            mSocket.off(Conts.SOCKET_EVENT_NEW_TASK, eventNewTask)
+                    .off(Conts.SOCKET_EVENT_LOGIN_OTHER_DEVICE, eventLoginOtherDevice)
+                    .off(Conts.SOCKET_EVENT_ERROR, eventError)
+                    .off(Conts.SOCKET_EVENT_DISCONNECT, eventDisconnect)
+                    .off(Conts.SOCKET_EVENT_CANCEL_TASK, eventCancelTask)
+                    .off(Conts.SOCKET_EVENT_UNASSIGNED_TASK, eventUnassignedTask);
         }
     }
 
     private Emitter.Listener eventDisconnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.d(TAGG, "Socket disconnect, " + args.toString());
+            String message = "Socket disconnect, " + args.toString();
+            Log.d(TAGG, message);
+            CommonMethod.reportCrashToFirebase(message);
             if (isNetworkConnected) {
                 connectSocket();
                 Log.d(TAGG, "Socket reconnect");
@@ -584,7 +592,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private Emitter.Listener eventError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.d(TAGG, "ConnectSocket eventError, " + args.toString());
+            String message = "ConnectSocket eventError, " + args.toString();
+            CommonMethod.reportCrashToFirebase(message);
+            Log.d(TAGG, message);
         }
     };
 

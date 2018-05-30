@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.google.firebase.crash.FirebaseCrash;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -141,7 +144,9 @@ public class CommonMethod {
     }
 
     public static void makeToast(Context context, String title) {
-        Toast.makeText(context, title, Toast.LENGTH_LONG).show();
+        if (context != null && !TextUtils.isEmpty(title)) {
+            Toast.makeText(context, title, Toast.LENGTH_LONG).show();
+        }
     }
 
     public static String[] getStartEndDate(int currentMonth, int years) {
@@ -211,6 +216,11 @@ public class CommonMethod {
             }
         }
         return isToday;
+    }
+
+    public static void reportCrashToFirebase(String exeption) {
+        Exception exception = new Exception(exeption);
+        FirebaseCrash.report(exception);
     }
 
 }
