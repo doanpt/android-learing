@@ -1,6 +1,7 @@
 package com.cnc.hcm.cnctrack.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -10,8 +11,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Address;
 import android.location.Location;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Build;
@@ -87,6 +90,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private static final float MIN_DISTANCE_GET_GPS = 20f;
     private static final int MAXIMUM_PACKAGE = 100;
     private static final int MINXIMUM_PACKAGE = 5;
+
+    public static final String PRIMARY_CHANNEL = "default";
+    public static final String SECONDARY_CHANNEL = "second";
 
 
     private NotificationManager notificationManager;
@@ -189,6 +195,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        createNotificationChannel();
         initObject();
         registerBroadcast();
         startThread();
@@ -197,7 +204,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     }
 
     private void initObject() {
-
         arrTrackLocation = new ArrayList<>();
     }
 
@@ -712,10 +718,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
         remoteViews = new RemoteViews(getPackageName(), R.layout.item_3button_small);
         remoteViews.setTextViewText(R.id.notif_content, "" + latitude + ", " + longitude + ", " + accuracy);
-
         remoteViews.setOnClickPendingIntent(R.id.notif_icon, piOpen);
-
-        mBuilder = new NotificationCompat.Builder(this);
 
         CharSequence ticker = "Tracking location";
         int apiVersion = Build.VERSION.SDK_INT;
@@ -730,7 +733,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             startForeground(NOTIFI_ID, mNotification);
 
         } else if (apiVersion >= Build.VERSION_CODES.HONEYCOMB) {
-
+            mBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL);
             mBuilder.setSmallIcon(R.mipmap.ic_launcher)
                     .setAutoCancel(false)
                     .setOngoing(true)
@@ -756,21 +759,47 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     }
 
     private void addNotification(String idTask, String titleTask, String serviceName) {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(titleTask)
-                        .setContentText(serviceName);
 
         Intent intentOpen = new Intent(ACTION_DETAIL_TASK);
         intentOpen.setClass(this, GPSService.class);
         intentOpen.putExtra(KEY_ID_OPEND_DETAIL_TASK, idTask);
         PendingIntent piOpen = PendingIntent.getService(this, 0, intentOpen, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(piOpen);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, SECONDARY_CHANNEL)
+                .setSmallIcon(getSmallIcon())
+                .setContentTitle(titleTask)
+                .setContentText(serviceName)
+                .setSound(defaultSoundUri)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(piOpen);
 
         // Add as notification
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());
+    }
+
+    /**
+     * Get the small icon for this app
+     *
+     * @return The small icon resource id
+     */
+    private int getSmallIcon() {
+        return R.mipmap.ic_launcher;
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "channel_name_android_O";
+            String description = "channel_description_android_O";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(SECONDARY_CHANNEL, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     private void setLongitude(double longitude) {

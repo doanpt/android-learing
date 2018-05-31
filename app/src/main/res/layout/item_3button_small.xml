@@ -37,7 +37,7 @@
         android:maxLines="1"
         android:paddingBottom="15dp"
         android:text="Content"
-        android:textColor="#575757"
+        android:textColor="#868686"
         android:textSize="13sp" />
 
     <!--<ImageView-->
