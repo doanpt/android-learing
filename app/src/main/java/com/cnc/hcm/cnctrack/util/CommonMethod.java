@@ -223,4 +223,13 @@ public class CommonMethod {
         FirebaseCrash.report(exception);
     }
 
+    /**
+     * Get the small icon for this app
+     *
+     * @return The small icon resource id
+     */
+    public static int getSmallIcon() {
+        return com.cnc.hcm.cnctrack.R.mipmap.ic_launcher;
+    }
+
 }

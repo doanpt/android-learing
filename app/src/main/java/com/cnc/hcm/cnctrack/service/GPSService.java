@@ -91,10 +91,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private static final int MAXIMUM_PACKAGE = 100;
     private static final int MINXIMUM_PACKAGE = 5;
 
-    public static final String PRIMARY_CHANNEL = "default";
-    public static final String SECONDARY_CHANNEL = "second";
-
-
     private NotificationManager notificationManager;
     private NotificationCompat.Builder mBuilder;
     private RemoteViews remoteViews;
@@ -733,7 +729,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             startForeground(NOTIFI_ID, mNotification);
 
         } else if (apiVersion >= Build.VERSION_CODES.HONEYCOMB) {
-            mBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL);
+            mBuilder = new NotificationCompat.Builder(this, Conts.PRIMARY_CHANNEL);
             mBuilder.setSmallIcon(R.mipmap.ic_launcher)
                     .setAutoCancel(false)
                     .setOngoing(true)
@@ -767,8 +763,8 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, SECONDARY_CHANNEL)
-                .setSmallIcon(getSmallIcon())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Conts.SECONDARY_CHANNEL)
+                .setSmallIcon(CommonMethod.getSmallIcon())
                 .setContentTitle(titleTask)
                 .setContentText(serviceName)
                 .setSound(defaultSoundUri)
@@ -780,21 +776,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         manager.notify(0, builder.build());
     }
 
-    /**
-     * Get the small icon for this app
-     *
-     * @return The small icon resource id
-     */
-    private int getSmallIcon() {
-        return R.mipmap.ic_launcher;
-    }
-
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "channel_name_android_O";
             String description = "channel_description_android_O";
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(SECONDARY_CHANNEL, name, importance);
+            NotificationChannel channel = new NotificationChannel(Conts.SECONDARY_CHANNEL, name, importance);
             channel.setDescription(description);
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);

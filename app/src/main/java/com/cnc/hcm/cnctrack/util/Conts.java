@@ -115,4 +115,8 @@ public class Conts {
     public static final String KEY_CURRENT_NOTE = "KEY_CURRENT_NOTE";
     public static final String KEY_APPOINTMENT_DATE = "appointmentDate";
     public static final String KEY_REASON_ID = "reasonId";
+
+
+    public static final String PRIMARY_CHANNEL = "default";
+    public static final String SECONDARY_CHANNEL = "second";
 }

@@ -12,6 +12,7 @@ public class SettingApp {
     private static final String KEY_FILTER_LIST = "KEY_FILTER_LIST";
     private static final String KEY_TYPE_VIEW_BY_MONTH_OR_YEAR = "KEY_TYPE_VIEW_BY_MONTH_OR_YEAR";
 
+    private static final String KEY_COUNT_RESTART_APP = "KEY_COUNT_RESTART_APP";
 
     private static SettingApp settingApp;
     private SharedPreferences sharedPreferences;
@@ -44,6 +45,15 @@ public class SettingApp {
 
     public int getTypeView() {
         return sharedPreferences.getInt(KEY_TYPE_VIEW_BY_MONTH_OR_YEAR, Conts.TYPE_VIEW_BY_MONTH);
+    }
+
+
+    public void setCountRestart(int count) {
+        putInt(KEY_COUNT_RESTART_APP, count);
+    }
+
+    public int getCountRestart() {
+        return sharedPreferences.getInt(KEY_COUNT_RESTART_APP, Conts.DEFAULT_VALUE_INT_0);
     }
 
     private void putInt(String key, int value) {

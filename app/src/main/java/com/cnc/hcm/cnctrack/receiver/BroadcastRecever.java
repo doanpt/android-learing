@@ -1,13 +1,18 @@
 package com.cnc.hcm.cnctrack.receiver;
 
 import android.app.ActivityManager;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.cnc.hcm.cnctrack.service.GPSService;
+import com.cnc.hcm.cnctrack.util.CommonMethod;
+import com.cnc.hcm.cnctrack.util.Conts;
+import com.cnc.hcm.cnctrack.util.SettingApp;
 import com.cnc.hcm.cnctrack.util.UserInfo;
 
 
@@ -28,6 +33,8 @@ public class BroadcastRecever extends BroadcastReceiver {
                 Intent intentService = new Intent(context, GPSService.class);
                 intentService.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 context.startService(intentService);
+
+                addNotification(context);
             }
         }
         Log.d(TAGG, "BroadcastRecever: " + intent.getAction());
@@ -41,6 +48,19 @@ public class BroadcastRecever extends BroadcastReceiver {
             }
         }
         return false;
+    }
+
+    private void addNotification(Context context) {
+        SettingApp.getInstance(context).setCountRestart(SettingApp.getInstance(context).getCountRestart() + 1);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Conts.SECONDARY_CHANNEL)
+                .setSmallIcon(CommonMethod.getSmallIcon())
+                .setContentTitle("System restart")
+                .setContentText("CNC khởi động lại lần thứ: " + SettingApp.getInstance(context).getCountRestart())
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        // Add as notification
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(1, builder.build());
     }
 
 }
