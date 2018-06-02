@@ -135,6 +135,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 Log.d(TAGG, "getData.onResponse, code: " + code);
                 if (code != null && code == Conts.RESPONSE_STATUS_OK) {
                     displayDetailWork(response.body());
+                } else if (code != null && code == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    showMessageRequestLogout();
                 } else {
                     Toast.makeText(ProductDetailActivity.this, "Get Detail error", Toast.LENGTH_SHORT).show();
                 }
@@ -275,13 +277,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             if (gpsService != null) {
                 gpsService.setProductDetailActivity(ProductDetailActivity.this);
             }
-
+            setGpsService(gpsService);
             Log.d(TAGG, "ServiceConnection at ProductDetailActivity, gpsService:= " + gpsService);
 
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            setGpsService(null);
             Log.d(TAGG, "onServiceDisconnected at ProductDetailActivity");
         }
     };
@@ -501,8 +504,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 //                    llComplete.setVisibility(View.VISIBLE);
                     fabMenu.setVisibility(View.GONE);
                     tvCompleteWork.setVisibility(View.VISIBLE);
+                } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    showMessageRequestLogout();
                 } else {
-                    CommonMethod.makeToast(ProductDetailActivity.this, "Complete error!!!");
+                    CommonMethod.makeToast(ProductDetailActivity.this, "Complete Error!!!");
                 }
             }
 
@@ -779,6 +784,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         }
                         Log.d("ABC", idTask + " " + param.getProcess());
                         uploadProcess(arrNewHeads, idTask, param, requestCode, null, null);
+                    } else if (code != null && code == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                        showMessageRequestLogout();
                     } else {
                         CommonMethod.makeToast(ProductDetailActivity.this, "Upload error, status code = " + code);
                     }
@@ -840,6 +847,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     }
                     visiableRecycler();
                     CommonMethod.makeToast(ProductDetailActivity.this, "Success!");
+                } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    showMessageRequestLogout();
                 } else {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Error status: " + status);
                 }

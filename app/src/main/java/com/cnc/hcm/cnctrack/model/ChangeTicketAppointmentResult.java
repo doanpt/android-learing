@@ -10,16 +10,16 @@ import com.google.gson.annotations.SerializedName;
 public class ChangeTicketAppointmentResult {
     @SerializedName("statusCode")
     @Expose
-    private Long statusCode;
+    private long statusCode;
     @SerializedName("message")
     @Expose
     private String message;
 
-    public Long getStatusCode() {
+    public long getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(Long statusCode) {
+    public void setStatusCode(long statusCode) {
         this.statusCode = statusCode;
     }
 

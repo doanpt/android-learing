@@ -112,12 +112,16 @@ public class ChangeTimeActivity extends BaseActivity implements View.OnClickList
         ApiUtils.getAPIService(arrHeads).getChangeTicketAppointmentReasons().enqueue(new Callback<GetChangeTicketAppointmentReasonsResult>() {
             @Override
             public void onResponse(Call<GetChangeTicketAppointmentReasonsResult> call, Response<GetChangeTicketAppointmentReasonsResult> response) {
-                int statusCode = response.code();
+                dismisProgressLoading();
+                int statusCode = response.body().statusCode;
                 if (response.isSuccessful()) {
-                    mGetChangeTicketAppointmentReasonsResult = response.body();
-                    Log.e(TAG, "loadListAvailableReason.onResponse(), statusCode: " + statusCode + ", mGetChangeTicketAppointmentReasonsResult: " + mGetChangeTicketAppointmentReasonsResult);
-                    onListAvailableReasonLoaded();
-                    dismisProgressLoading();
+                    if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                        mGetChangeTicketAppointmentReasonsResult = response.body();
+                        Log.e(TAG, "loadListAvailableReason.onResponse(), statusCode: " + statusCode + ", mGetChangeTicketAppointmentReasonsResult: " + mGetChangeTicketAppointmentReasonsResult);
+                        onListAvailableReasonLoaded();
+                    } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                        showMessageRequestLogout();
+                    }
                 }
             }
 
@@ -258,12 +262,16 @@ public class ChangeTimeActivity extends BaseActivity implements View.OnClickList
         ApiUtils.getAPIService(arrHeads).changeTicketAppointment(mIdTask).enqueue(new Callback<ChangeTicketAppointmentResult>() {
             @Override
             public void onResponse(Call<ChangeTicketAppointmentResult> call, Response<ChangeTicketAppointmentResult> response) {
-                int statusCode = response.code();
+                dismisProgressLoading();
+                long statusCode = response.body().getStatusCode();
                 if (response.isSuccessful()) {
-                    ChangeTicketAppointmentResult changeTicketAppointmentResult = response.body();
-                    Log.e(TAG, "loadListAvailableReason.onResponse(), statusCode: " + statusCode + ", changeTicketAppointmentResult: " + changeTicketAppointmentResult);
-                    onTicketAppointmentChanged(changeTicketAppointmentResult);
-                    dismisProgressLoading();
+                    if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                        ChangeTicketAppointmentResult changeTicketAppointmentResult = response.body();
+                        Log.e(TAG, "loadListAvailableReason.onResponse(), statusCode: " + statusCode + ", changeTicketAppointmentResult: " + changeTicketAppointmentResult);
+                        onTicketAppointmentChanged(changeTicketAppointmentResult);
+                    } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                        showMessageRequestLogout();
+                    }
                 }
             }
 

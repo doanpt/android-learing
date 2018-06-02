@@ -314,11 +314,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
             gpsService.setMainActivity(MainActivity.this);
+            setGpsService(gpsService);
             Log.d(TAG, "ServiceConnection at MainActivity");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            setGpsService(null);
             Log.d(TAG, "onServiceDisconnected at MainActivity");
         }
     };
@@ -335,56 +337,59 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         ApiUtils.getAPIService(arrHeads).getTaskList().enqueue(new Callback<GetTaskListResult>() {
             @Override
             public void onResponse(Call<GetTaskListResult> call, Response<GetTaskListResult> response) {
-                int statusCode = response.code();
+                long statusCode = response.body().statusCode;
                 Log.e(TAG, "tryGetTaskList.onResponse(), statusCode: " + statusCode);
-
                 if (response.isSuccessful()) {
-                    quantityNewTask = 0;
-                    quantityDoingTask = 0;
-                    quantityCompletedTask = 0;
-                    clearData();
-                    Log.e(TAG, "tryGetTaskList.onResponse(), --> response: " + response.toString());
-                    GetTaskListResult getTaskListResult = response.body();
-                    Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
-                    arrItemTask.clear();
-                    if (getTaskListResult != null) {
-                        GetTaskListResult.Result[] result = getTaskListResult.result;
-                        if (result != null && result.length > 0) {
-                            for (GetTaskListResult.Result itemResult : result) {
-                                ItemTask itemTask = new ItemTask(itemResult);
-                                arrItemTask.add(itemTask);
-                                switch ((int) itemTask.getTaskResult().status._id) {
-                                    case Conts.TYPE_COMPLETE_TASK:
-                                        quantityCompletedTask++;
-                                        break;
-                                    case Conts.TYPE_DOING_TASK:
-                                        quantityDoingTask++;
-                                        break;
-                                    case Conts.TYPE_NEW_TASK:
-                                        quantityNewTask++;
-                                        break;
-                                }
-                                String idTask = MainActivity.this.getIntent().getStringExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL);
-                                if (itemTask.getTaskResult()._id.equals(idTask) && !itemTask.getTaskResult().isRead) {
-                                    itemTask.getTaskResult().isRead = true;
-                                    updateStatusIsRead(idTask, -1);
-                                }
-                            }
-                            if (startDate.equals(endDate)) {
-                                if (CommonMethod.checkCurrentDay(startDate)) {
-                                    if (gpsService != null) {
-                                        gpsService.setListTaskToDay(arrItemTask);
+                    if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                        quantityNewTask = 0;
+                        quantityDoingTask = 0;
+                        quantityCompletedTask = 0;
+                        clearData();
+                        Log.e(TAG, "tryGetTaskList.onResponse(), --> response: " + response.toString());
+                        GetTaskListResult getTaskListResult = response.body();
+                        Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
+                        arrItemTask.clear();
+                        if (getTaskListResult != null) {
+                            GetTaskListResult.Result[] result = getTaskListResult.result;
+                            if (result != null && result.length > 0) {
+                                for (GetTaskListResult.Result itemResult : result) {
+                                    ItemTask itemTask = new ItemTask(itemResult);
+                                    arrItemTask.add(itemTask);
+                                    switch ((int) itemTask.getTaskResult().status._id) {
+                                        case Conts.TYPE_COMPLETE_TASK:
+                                            quantityCompletedTask++;
+                                            break;
+                                        case Conts.TYPE_DOING_TASK:
+                                            quantityDoingTask++;
+                                            break;
+                                        case Conts.TYPE_NEW_TASK:
+                                            quantityNewTask++;
+                                            break;
+                                    }
+                                    String idTask = MainActivity.this.getIntent().getStringExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL);
+                                    if (itemTask.getTaskResult()._id.equals(idTask) && !itemTask.getTaskResult().isRead) {
+                                        itemTask.getTaskResult().isRead = true;
+                                        updateStatusIsRead(idTask, -1);
                                     }
                                 }
+                                if (startDate.equals(endDate)) {
+                                    if (CommonMethod.checkCurrentDay(startDate)) {
+                                        if (gpsService != null) {
+                                            gpsService.setListTaskToDay(arrItemTask);
+                                        }
+                                    }
+                                }
+                                initMarkerOnMap();
                             }
-                            initMarkerOnMap();
+                            updateQuantityTask();
+                        } else {
+                            CommonMethod.makeToast(MainActivity.this, "Không có công việc nào cả");
                         }
-                        updateQuantityTask();
-                    } else {
-                        CommonMethod.makeToast(MainActivity.this, "Không có công việc nào cả");
+                        taskListAdapter.notiDataChange(arrItemTask);
+                    } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                        showMessageRequestLogout();
                     }
                     dismisProgressLoading();
-                    taskListAdapter.notiDataChange(arrItemTask);
                 } else {
                     CommonMethod.makeToast(MainActivity.this, response.toString());
                     dismisProgressLoading();
@@ -730,26 +735,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         super.onBackPressed();
     }
 
-    public void showMessageRequestLogout() {
-        final DialogNotification dialog = new DialogNotification(MainActivity.this);
-        dialog.setHiddenBtnExit();
-        dialog.setContentMessage(getString(R.string.account_login_other_device));
-        dialog.setCancelable(false);
-        dialog.setOnClickDialogNotificationListener(new DialogNotification.OnClickDialogNotificationListener() {
-            @Override
-            public void onClickButtonOK() {
-                actionLogout();
-            }
-
-            @Override
-            public void onClickButtonExit() {
-
-            }
-        });
-        dialog.show();
-    }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -851,28 +836,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    private void actionLogout() {
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this, R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(getResources().getString(R.string.text_logout));
-        progressDialog.show();
-
-        new android.os.Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                UserInfo.getInstance(MainActivity.this).setUserInfoLogout();
-                UserInfo.getInstance(MainActivity.this).setUploadFirstTime(true);
-                if (gpsService != null) {
-                    gpsService.disconnectService();
-                }
-                progressDialog.dismiss();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        }, 1000);
-    }
-
     @Override
     public void onClickItemWork(int position) {
         if (position == Conts.DEFAULT_VALUE_INT_INVALID) {
@@ -907,14 +870,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onResponse(Call<ResponseCNC> call, Response<ResponseCNC> response) {
                 Log.e(TAG, "updateStatusIsRead.onResponse(), statusCode: " + response.code());
+                Log.e(TAG, "updateStatusIsRead.onResponse(), --> response: " + response.toString());
                 if (response.isSuccessful()) {
-                    Log.e(TAG, "updateStatusIsRead.onResponse(), --> response: " + response.toString());
-                    ResponseCNC responseCNC = response.body();
-                    if (responseCNC.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
-                        if (position > 0) {
-                            taskListAdapter.getItem(position).getTaskResult().isRead = true;
-                            taskListAdapter.notifyItemChanged(position);
-                        }
+                    int statusCode = response.body().getStatusCode();
+                    switch (statusCode) {
+                        case Conts.RESPONSE_STATUS_OK:
+                            ResponseCNC responseCNC = response.body();
+                            if (responseCNC.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
+                                if (position > 0) {
+                                    taskListAdapter.getItem(position).getTaskResult().isRead = true;
+                                    taskListAdapter.notifyItemChanged(position);
+                                }
+                            }
+                            break;
+                        case Conts.RESPONSE_STATUS_TOKEN_WRONG:
+                            showMessageRequestLogout();
+                            break;
                     }
                 }
             }

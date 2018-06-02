@@ -98,13 +98,14 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             if (gpsService != null) {
                 gpsService.setAddProductActivity(AddProductActivity.this);
             }
-
+            setGpsService(gpsService);
             Log.d(TAGG, "ServiceConnection at AddProductActivity, gpsService:= " + gpsService);
 
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            setGpsService(null);
             Log.d(TAGG, "onServiceDisconnected at AddProductActivity");
         }
     };
@@ -130,7 +131,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onResponse(Call<ProductListResult> call, Response<ProductListResult> response) {
                 Long status = response.body().getStatusCode();
-                if (status != null && status == 200) {
+                if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrManufactures.clear();
                     listProduct = (ArrayList<ProductListResult.Product>) response.body().getResult();
                     if (listProduct != null) {
@@ -141,6 +142,8 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                     } else {
                         Log.d(TAGG, "FATA AddProductActivity, getInformation(), listProduct = null");
                     }
+                } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    showMessageRequestLogout();
                 }
             }
 
@@ -153,7 +156,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onResponse(Call<CategoryListResult> call, Response<CategoryListResult> response) {
                 Long status = response.body().getStatusCode();
-                if (status != null && status == 200) {
+                if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrCategory.clear();
                     listCategory = (ArrayList<CategoryListResult.Category>) response.body().getResult();
                     if (listCategory != null) {
@@ -164,6 +167,8 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                     } else {
                         Log.d(TAGG, "FATA AddProductActivity, getInformation(), listCategory = null");
                     }
+                } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    showMessageRequestLogout();
                 }
             }
 
@@ -264,6 +269,8 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
                         arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, qrCode));
                         addProduct2_4(arrHeads, qrCode);
+                    } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                        showMessageRequestLogout();
                     } else {
                         mProgressDialog.dismiss();
                         CommonMethod.makeToast(AddProductActivity.this, "Add product error!");
@@ -302,8 +309,6 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             if (result.getContents() != null) {
                 showLoadingDialog();
                 final String content = result.getContents();
-                String format = result.getFormatName();
-                //sử dụng API:https://recode.atlassian.net/wiki/spaces/CNC/pages/158531628/Th+ng+tin+thi+t+b
                 arrHeads.clear();
                 arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
                 Log.d("HEAD", "ac:" + accessToken);
@@ -333,8 +338,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                                 mProgressDialog.dismiss();
                             }
                             CommonMethod.makeToast(AddProductActivity.this, "Status 500");
-                            //FIXME chưa biết status 500 làm gì
                             Log.d("ABDonResponse", status + "  500 ");
+                        } else if (status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                            showMessageRequestLogout();
                         }
                     }
 
@@ -380,6 +386,8 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                     startActivity(productDetail);
                     finish();
                     Log.d("ABDonResponse", status + "  200 ");
+                } else if (status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    showMessageRequestLogout();
                 } else {
                     Toast.makeText(AddProductActivity.this, "Add contain product error", Toast.LENGTH_SHORT).show();
                 }

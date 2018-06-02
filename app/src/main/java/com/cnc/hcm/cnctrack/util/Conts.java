@@ -26,8 +26,8 @@ public class Conts {
     public static final int DEFAULT_VALUE_INT_12 = 12;
 
 
-    public static final long RESPONSE_STATUS_OK = 200;
-    public static final long RESPONSE_STATUS_TOKEN_WRONG = 403;
+    public static final int RESPONSE_STATUS_OK = 200;
+    public static final int RESPONSE_STATUS_TOKEN_WRONG = 403;
     public static final int RESPONSE_STATUS_404 = 404;
     public static final int RESPONSE_STATUS_500 = 500;
 

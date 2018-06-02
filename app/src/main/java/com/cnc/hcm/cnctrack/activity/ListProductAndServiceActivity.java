@@ -149,7 +149,7 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
             @Override
             public void onResponse(Call<ProductListResult> call, Response<ProductListResult> response) {
                 Long status = response.body().getStatusCode();
-                if (status != null && status == 200) {
+                if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrManufactures.clear();
                     listProduct = (ArrayList<ProductListResult.Product>) response.body().getResult();
                     arrManufactures.add("Chọn nhà sản xuất");
@@ -161,6 +161,8 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
                     } else {
                         Log.d("ListProductAndServiceAc", "FATA ListProductAndServiceAc, initViews(), listProduct = null");
                     }
+                } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    showMessageRequestLogout();
                 }
             }
 
@@ -174,7 +176,7 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
             @Override
             public void onResponse(Call<CategoryListResult> call, Response<CategoryListResult> response) {
                 Long status = response.body().getStatusCode();
-                if (status != null && status == 200) {
+                if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrCategory.clear();
                     arrCategory.add("Chọn loại thiết bị");
                     listCategory = (ArrayList<CategoryListResult.Category>) response.body().getResult();
@@ -186,6 +188,8 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
                     } else {
                         Log.d("ListProductAndServiceAc", "FATA ListProductAndServiceAc, initViews(), listCategory = null");
                     }
+                } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    showMessageRequestLogout();
                 }
             }
 
@@ -349,7 +353,7 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
             @Override
             public void onResponse(Call<Services> call, Response<Services> response) {
                 Integer status = response.body().getStatusCode();
-                if (status != null && status == 200) {
+                if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrServices.clear();
                     arrServices.add("Chọn loại dịch vụ");
                     listServices = (ArrayList<Services.Result>) response.body().getResult();
@@ -361,6 +365,8 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
                     } else {
                         Log.d("ListProductAndServiceAc", "FATA ListProductAndServiceAc, initViews(), listServices = null");
                     }
+                } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    showMessageRequestLogout();
                 }
             }
 

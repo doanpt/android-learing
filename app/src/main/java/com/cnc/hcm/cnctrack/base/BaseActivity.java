@@ -12,8 +12,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.cnc.hcm.cnctrack.R;
+import com.cnc.hcm.cnctrack.activity.LoginActivity;
+import com.cnc.hcm.cnctrack.activity.MainActivity;
 import com.cnc.hcm.cnctrack.dialog.DialogNetworkSetting;
+import com.cnc.hcm.cnctrack.dialog.DialogNotification;
+import com.cnc.hcm.cnctrack.service.GPSService;
 import com.cnc.hcm.cnctrack.util.Conts;
+import com.cnc.hcm.cnctrack.util.UserInfo;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -22,6 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private DialogNetworkSetting dialogNetworkSetting;
 
     private boolean isActivityPause = true;
+    private GPSService gpsService;
 
 
     public abstract void onViewReady(@Nullable Bundle savedInstanceState);
@@ -32,6 +38,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         void onNetworkConnected();
 
         void onNetworkDisconnect();
+    }
+
+    public interface OnTokenExpired {
+        void onTokenExpired();
+    }
+
+    public void setOnTokenExpired(OnTokenExpired onTokenExpired) {
+        onTokenExpired.onTokenExpired();
     }
 
     private OnNetworkConnectedListener onNetworkConnectedListener;
@@ -69,6 +83,47 @@ public abstract class BaseActivity extends AppCompatActivity {
         dialogNetworkSetting = new DialogNetworkSetting(this);
     }
 
+
+    public void showMessageRequestLogout() {
+        final DialogNotification dialog = new DialogNotification(this);
+        dialog.setHiddenBtnExit();
+        dialog.setContentMessage(getString(R.string.account_login_other_device));
+        dialog.setCancelable(false);
+        dialog.setOnClickDialogNotificationListener(new DialogNotification.OnClickDialogNotificationListener() {
+            @Override
+            public void onClickButtonOK() {
+                actionLogout();
+            }
+
+            @Override
+            public void onClickButtonExit() {
+
+            }
+        });
+        dialog.show();
+    }
+
+    public void actionLogout() {
+        final ProgressDialog progressDialog = new ProgressDialog(BaseActivity.this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(getResources().getString(R.string.text_logout));
+        progressDialog.show();
+
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UserInfo.getInstance(BaseActivity.this).setUserInfoLogout();
+                UserInfo.getInstance(BaseActivity.this).setUploadFirstTime(true);
+                if (gpsService != null) {
+                    gpsService.disconnectService();
+                }
+                progressDialog.dismiss();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        }, 1000);
+    }
 
     public void showProgressLoadding() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
@@ -154,5 +209,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiver);
+    }
+
+
+    public void setGpsService(GPSService gpsService) {
+        this.gpsService = gpsService;
     }
 }
