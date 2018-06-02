@@ -584,10 +584,11 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             String message = "Socket disconnect, " + args.toString();
             Log.d(TAGG, message);
             CommonMethod.reportCrashToFirebase(message);
-            if (isNetworkConnected) {
-                connectSocket();
-                Log.d(TAGG, "Socket reconnect");
-            }
+//            if (isNetworkConnected) {
+//                connectSocket();
+//                Log.d(TAGG, "Socket reconnect");
+//                CommonMethod.reportCrashToFirebase(message);
+//            }
         }
     };
 
