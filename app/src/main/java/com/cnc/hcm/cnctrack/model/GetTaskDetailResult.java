@@ -4,11 +4,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class GetTaskDetailResult {
-    public long statusCode;
+    public int statusCode;
     public String message;
     public Result result;
 
-    public GetTaskDetailResult(long statusCode, String message, Result result) {
+    public GetTaskDetailResult(int statusCode, String message, Result result) {
         this.statusCode = statusCode;
         this.message = message;
         this.result = result;

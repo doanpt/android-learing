@@ -3,11 +3,8 @@ package com.cnc.hcm.cnctrack.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
@@ -16,6 +13,7 @@ import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.activity.MainActivity;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
+import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.customeview.MySelectorDecorator;
 import com.cnc.hcm.cnctrack.customeview.OneDayDecorator;
 import com.cnc.hcm.cnctrack.model.CountTaskResult;
@@ -45,7 +43,7 @@ import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.
  * Created by giapmn on 1/2/18.
  */
 
-public class MonthViewFragment extends Fragment implements OnMonthChangedListener, OnDateSelectedListener {
+public class MonthViewFragment extends BaseFragment implements OnMonthChangedListener, OnDateSelectedListener {
     private static final String TAG = MonthViewFragment.class.getSimpleName();
 
     private TextView tvT2, tvT3, tvT4, tvT5, tvT6, tvT7, tvCN;
@@ -82,12 +80,14 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_filter_month, container, false);
+    public int getLayoutID() {
+        return R.layout.fragment_filter_month;
+    }
+
+    @Override
+    public void onViewReadly(View view) {
         initViews(view);
-        return view;
     }
 
     private void initViews(View view) {
@@ -157,8 +157,8 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
     public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
         if (mainActivity != null) {
             mainActivity.updateMonthChange(date);
-            mainActivity.showProgressLoadding();
         }
+        showProgressLoading();
 
         for (TextView aListTextViewSelected : listTextViewSelected) {
             aListTextViewSelected.setVisibility(View.INVISIBLE);
@@ -194,38 +194,37 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
             ApiUtils.getAPIService(arrHeads).getCountTask().enqueue(new Callback<CountTaskResult>() {
                 @Override
                 public void onResponse(Call<CountTaskResult> call, Response<CountTaskResult> response) {
-                    int statusCode = response.code();
+                    int statusCode = response.body().getStatusCode();
                     Log.e(TAG, "tryGetCountTask.onResponse(), statusCode: " + statusCode);
                     if (response.isSuccessful()) {
-                        Log.e(TAG, "tryGetCountTask.onResponse(), --> response: " + response.toString());
+                        if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                            Log.e(TAG, "tryGetCountTask.onResponse(), --> response: " + response.toString());
+                            CountTaskResult countTaskResult = response.body();
+                            if (countTaskResult != null) {
+                                List<CountTaskResult.Result> results = countTaskResult.getResult();
 
-                        CountTaskResult countTaskResult = response.body();
-                        if (countTaskResult != null) {
-                            List<CountTaskResult.Result> results = countTaskResult.getResult();
-
-                            if (results != null && results.size() > 0) {
-                                Log.d(TAG, "CountResult -------------------");
-                                for (int i = 0; i < results.size(); i++) {
-                                    Log.d(TAG, "CountResult: " + results.get(i).getDate().getDay() + "/" + results.get(i).getDate().getMonth() + "/" + results.get(i).getDate().getYear() + " -  " + results.get(i).getCount());
-                                    listTextView[i].setText(results.get(i).getCount() + Conts.BLANK);
-                                    if (results.get(i).getCount() <= Conts.DEFAULT_VALUE_INT_0) {
-                                        listTextView[i].setVisibility(View.INVISIBLE);
-                                    } else {
-                                        listTextView[i].setVisibility(View.VISIBLE);
+                                if (results != null && results.size() > 0) {
+                                    Log.d(TAG, "CountResult -------------------");
+                                    for (int i = 0; i < results.size(); i++) {
+                                        Log.d(TAG, "CountResult: " + results.get(i).getDate().getDay() + "/" + results.get(i).getDate().getMonth() + "/" + results.get(i).getDate().getYear() + " -  " + results.get(i).getCount());
+                                        listTextView[i].setText(results.get(i).getCount() + Conts.BLANK);
+                                        if (results.get(i).getCount() <= Conts.DEFAULT_VALUE_INT_0) {
+                                            listTextView[i].setVisibility(View.INVISIBLE);
+                                        } else {
+                                            listTextView[i].setVisibility(View.VISIBLE);
+                                        }
                                     }
                                 }
+                            } else {
+                                CommonMethod.makeToast(getContext(), "Không count dc task nao");
                             }
-                        } else {
-                            CommonMethod.makeToast(getContext(), "Không count dc task nao");
+                        } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                            actionLogout();
                         }
                     } else {
                         CommonMethod.makeToast(getContext(), response.toString());
-
                     }
-
-                    if (mainActivity != null) {
-                        mainActivity.dismisProgressLoading();
-                    }
+                    dismisProgressLoading();
                 }
 
                 @Override
@@ -233,15 +232,11 @@ public class MonthViewFragment extends Fragment implements OnMonthChangedListene
                     Log.e(TAG, "tryGetCountTask.onFailure() --> " + t);
                     t.printStackTrace();
                     CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage() : "onFailure");
-                    if (mainActivity != null) {
-                        mainActivity.dismisProgressLoading();
-                    }
+                    dismisProgressLoading();
                 }
             });
         } else {
-            if (mainActivity != null) {
-                mainActivity.dismisProgressLoading();
-            }
+            dismisProgressLoading();
             CommonMethod.makeToast(getContext(), "listWeek " + listWeek);
         }
 

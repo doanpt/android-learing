@@ -16,6 +16,7 @@ import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.activity.MainActivity;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
+import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.model.CountTaskResult;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
@@ -36,7 +37,7 @@ import retrofit2.Response;
  * Created by giapmn on 1/2/18.
  */
 
-public class YearsViewFragment extends Fragment implements View.OnClickListener {
+public class YearsViewFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = YearsViewFragment.class.getSimpleName();
 
@@ -83,12 +84,14 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     }
 
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_filter_years, container, false);
+    public int getLayoutID() {
+        return R.layout.fragment_filter_years;
+    }
+
+    @Override
+    public void onViewReadly(View view) {
         initViews(view);
-        return view;
     }
 
     private void initViews(View view) {
@@ -178,9 +181,7 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
     }
 
     public void getCountTask(final int years) {
-        if (mainActivity != null) {
-            mainActivity.showProgressLoadding();
-        }
+        showProgressLoading();
         List<String> listDateInYears = getAllDateInYear(years);
         if (listDateInYears != null && listDateInYears.size() > 0) {
             String startDate = listDateInYears.get(0);
@@ -194,81 +195,83 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
             ApiUtils.getAPIService(arrHeads).getCountTask().enqueue(new Callback<CountTaskResult>() {
                 @Override
                 public void onResponse(Call<CountTaskResult> call, Response<CountTaskResult> response) {
-                    int statusCode = response.code();
+
+                    int statusCode = response.body().getStatusCode();
                     Log.e(TAG, "tryGetCountTask.onResponse(), statusCode: " + statusCode);
 
                     if (response.isSuccessful()) {
-                        clearData();
-                        Log.e(TAG, "tryGetCountTask.onResponse(), --> response: " + response.toString());
+                        if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                            clearData();
+                            Log.e(TAG, "tryGetCountTask.onResponse(), --> response: " + response.toString());
+                            CountTaskResult countTaskResult = response.body();
+                            if (countTaskResult != null) {
+                                List<CountTaskResult.Result> results = countTaskResult.getResult();
 
-                        CountTaskResult countTaskResult = response.body();
-                        if (countTaskResult != null) {
-                            List<CountTaskResult.Result> results = countTaskResult.getResult();
+                                if (results != null && results.size() > 0) {
+                                    Log.d(TAG, "CountResult -------------------");
+                                    for (int i = 0; i < results.size(); i++) {
+                                        Log.d(TAG, "CountResult: " + results.get(i).getDate().getDay() + "/" + results.get(i).getDate().getMonth() + " -  " + results.get(i).getCount());
+                                        switch (results.get(i).getDate().getMonth()) {
+                                            case Conts.DEFAULT_VALUE_INT_1:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_0, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_2:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_1, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_3:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_2, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_4:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_3, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_5:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_4, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_6:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_5, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_7:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_6, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_8:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_7, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_9:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_8, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_10:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_9, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_11:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_10, results.get(i).getCount());
+                                                break;
+                                            case Conts.DEFAULT_VALUE_INT_12:
+                                                updateCountTask(Conts.DEFAULT_VALUE_INT_11, results.get(i).getCount());
+                                                break;
+                                        }
+                                    }
 
-                            if (results != null && results.size() > 0) {
-                                Log.d(TAG, "CountResult -------------------");
-                                for (int i = 0; i < results.size(); i++) {
-                                    Log.d(TAG, "CountResult: " + results.get(i).getDate().getDay() + "/" + results.get(i).getDate().getMonth() + " -  " + results.get(i).getCount());
-                                    switch (results.get(i).getDate().getMonth()) {
-                                        case Conts.DEFAULT_VALUE_INT_1:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_0, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_2:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_1, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_3:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_2, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_4:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_3, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_5:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_4, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_6:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_5, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_7:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_6, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_8:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_7, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_9:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_8, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_10:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_9, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_11:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_10, results.get(i).getCount());
-                                            break;
-                                        case Conts.DEFAULT_VALUE_INT_12:
-                                            updateCountTask(Conts.DEFAULT_VALUE_INT_11, results.get(i).getCount());
-                                            break;
+                                    for (int j = 0; j < arrTextView.length; j++) {
+                                        arrTextView[j].setText(countTask[j] + Conts.BLANK);
+                                        if (countTask[j] <= 0) {
+                                            arrTextView[j].setVisibility(View.INVISIBLE);
+                                        } else {
+                                            arrTextView[j].setVisibility(View.VISIBLE);
+                                        }
                                     }
                                 }
-
-                                for (int j = 0; j < arrTextView.length; j++) {
-                                    arrTextView[j].setText(countTask[j] + Conts.BLANK);
-                                    if (countTask[j] <= 0) {
-                                        arrTextView[j].setVisibility(View.INVISIBLE);
-                                    } else {
-                                        arrTextView[j].setVisibility(View.VISIBLE);
-                                    }
-                                }
+                            } else {
+                                CommonMethod.makeToast(getContext(), "Không count dc task nao");
                             }
-                        } else {
-                            CommonMethod.makeToast(getContext(), "Không count dc task nao");
+
+                        } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                            actionLogout();
                         }
                     } else {
                         CommonMethod.makeToast(getContext(), response.toString());
                     }
 
-                    if (mainActivity != null) {
-                        mainActivity.dismisProgressLoading();
-                    }
-
+                    dismisProgressLoading();
                     handleActionGetTaskByFilterDate(month, years);
                 }
 
@@ -277,17 +280,13 @@ public class YearsViewFragment extends Fragment implements View.OnClickListener 
                     Log.e(TAG, "tryGetCountTask.onFailure() --> " + t);
                     t.printStackTrace();
                     CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage() : "onFailure");
-                    if (mainActivity != null) {
-                        mainActivity.dismisProgressLoading();
-                    }
+                    dismisProgressLoading();
                 }
             });
 
         } else {
             CommonMethod.makeToast(getContext(), "K count dc task trong nam: " + years);
-            if (mainActivity != null) {
-                mainActivity.dismisProgressLoading();
-            }
+            dismisProgressLoading();
         }
     }
 

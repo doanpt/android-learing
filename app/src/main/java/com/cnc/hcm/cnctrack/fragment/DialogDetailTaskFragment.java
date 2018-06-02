@@ -1,4 +1,4 @@
-package com.cnc.hcm.cnctrack.dialog;
+package com.cnc.hcm.cnctrack.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -32,8 +32,6 @@ import com.cnc.hcm.cnctrack.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctrack.adapter.WorkDetailPageAdapter;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
-import com.cnc.hcm.cnctrack.fragment.WorkDetailDeviceFragment;
-import com.cnc.hcm.cnctrack.fragment.WorkDetailServiceFragment;
 import com.cnc.hcm.cnctrack.model.AddContainProductResult;
 import com.cnc.hcm.cnctrack.model.CheckContainProductResult;
 import com.cnc.hcm.cnctrack.model.CompleteTicketResponse;
@@ -107,24 +105,6 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         return getTaskDetailResult;
     }
 
-//    private GPSService gpsService;
-//    private ServiceConnection serviceConnection = new ServiceConnection() {
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder iBinder) {
-//            Log.e(TAG, "serviceConnection at DialogDetailTaskFragment is Connected");
-//            gpsService = ((GPSService.MyBinder) iBinder).getGPSService();
-//            if (gpsService != null) {
-//                gpsService.setDialogDetailTaskFragment(DialogDetailTaskFragment.this);
-//            } else {
-//                Log.e(TAG, "serviceConnection at DialogDetailTaskFragment is null");
-//            }
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//            Log.e(TAG, "serviceConnection at DialogDetailTaskFragment is Disconnected");
-//        }
-//    };
 
     public DialogDetailTaskFragment() {
     }
@@ -285,12 +265,18 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         ApiUtils.getAPIService(arrHeads).getTaskDetails(idTask).enqueue(new Callback<GetTaskDetailResult>() {
             @Override
             public void onResponse(Call<GetTaskDetailResult> call, Response<GetTaskDetailResult> response) {
-                int statusCode = response.code();
+                dismisDialogLoading();
+                int statusCode = response.body().statusCode;
                 if (response.isSuccessful()) {
-                    getTaskDetailResult = response.body();
-                    Log.e(TAG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode + ", getTaskDetailResult: " + getTaskDetailResult);
-                    onTaskInfoLoaded(getTaskDetailResult);
-                    dismisDialogLoading();
+                    if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                        getTaskDetailResult = response.body();
+                        Log.e(TAG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode + ", getTaskDetailResult: " + getTaskDetailResult);
+                        onTaskInfoLoaded(getTaskDetailResult);
+                    } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                        if (mainActivity != null) {
+                            mainActivity.showMessageRequestLogout();
+                        }
+                    }
                 }
             }
 
@@ -533,14 +519,21 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             ApiUtils.getAPIService(arrHeads).completeTicket(idTask).enqueue(new Callback<CompleteTicketResponse>() {
                 @Override
                 public void onResponse(Call<CompleteTicketResponse> call, Response<CompleteTicketResponse> response) {
+                    int statusCode = response.body().getStatusCode();
                     if (response.isSuccessful()) {
-                        CompleteTicketResponse completeTicketResponse = response.body();
-                        if (completeTicketResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
-                            CommonMethod.makeToast(getActivity(), "Xử lý hoàn thành ticket thành công");
-                            fabMenu.setVisibility(View.GONE);
-                            tv_completed_ticket.setVisibility(View.VISIBLE);
-                        } else {
-                            CommonMethod.makeToast(getActivity(), "Bạn chưa hoàn thành dịch vụ");
+                        if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                            CompleteTicketResponse completeTicketResponse = response.body();
+                            if (completeTicketResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
+                                CommonMethod.makeToast(getActivity(), "Xử lý hoàn thành ticket thành công");
+                                fabMenu.setVisibility(View.GONE);
+                                tv_completed_ticket.setVisibility(View.VISIBLE);
+                            } else {
+                                CommonMethod.makeToast(getActivity(), "Bạn chưa hoàn thành dịch vụ");
+                            }
+                        } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                            if (mainActivity != null) {
+                                mainActivity.showMessageRequestLogout();
+                            }
                         }
                     }
                 }
@@ -582,6 +575,10 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                         Long status = response.body().getStatusCode();
                         if (status == Conts.RESPONSE_STATUS_OK) {
                             addDeviceToTask(content);
+                        } else if (status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                            if (mainActivity != null) {
+                                mainActivity.showMessageRequestLogout();
+                            }
                         } else {
                             showDialogAddDevice(content);
                         }
@@ -603,10 +600,14 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         ApiUtils.getAPIService(arrHeads).addProductContain(idTask).enqueue(new Callback<AddContainProductResult>() {
             @Override
             public void onResponse(Call<AddContainProductResult> call, Response<AddContainProductResult> response) {
-                int status = response.code();
+                int status = response.body().getStatusCode();
                 if (status == Conts.RESPONSE_STATUS_OK) {
                     CommonMethod.makeToast(getActivity(), "Đã thêm thiết bị vào đơn hàng thành công.");
                     showProductDetailActivity(deviceId);
+                } else if (status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                    if (mainActivity != null) {
+                        mainActivity.showMessageRequestLogout();
+                    }
                 } else {
                     CommonMethod.makeToast(getActivity(), "Add thiết bị vào đơn hàng không thành công");
                 }

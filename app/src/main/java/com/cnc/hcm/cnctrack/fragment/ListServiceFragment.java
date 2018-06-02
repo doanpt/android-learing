@@ -17,6 +17,7 @@ import com.cnc.hcm.cnctrack.activity.ListProductAndServiceActivity;
 import com.cnc.hcm.cnctrack.adapter.ServicesAdapter;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
+import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctrack.event.OnItemInputClickListener;
 import com.cnc.hcm.cnctrack.model.SearchServiceModel;
@@ -34,7 +35,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListServiceFragment extends Fragment implements
+public class ListServiceFragment extends BaseFragment implements
         OnItemInputClickListener, ListProductAndServiceActivity.OnTextChangeServiceListener {
 
     private static final String TAGG = ListServiceFragment.class.getSimpleName();
@@ -64,17 +65,20 @@ public class ListServiceFragment extends Fragment implements
         ApiUtils.getAPIService(headList).getServices().enqueue(new Callback<Services>() {
             @Override
             public void onResponse(Call<Services> call, Response<Services> response) {
-
-
-                Log.e(TAGG, "getListService.onResponse(), statusCode: " + response.code());
+                int statusCode = response.body().getStatusCode();
+                Log.e(TAGG, "getListService.onResponse(), statusCode: " + statusCode);
                 if (response.isSuccessful()) {
-                    Log.e(TAGG, "getListService.onResponse(), --> response: " + response.toString());
-                    Services services = response.body();
-                    if (services != null) {
-                        List<Services.Result> result = services.getResult();
-                        if (adapter != null) {
-                            adapter.notiData(result);
+                    if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                        Log.e(TAGG, "getListService.onResponse(), --> response: " + response.toString());
+                        Services services = response.body();
+                        if (services != null) {
+                            List<Services.Result> result = services.getResult();
+                            if (adapter != null) {
+                                adapter.notiData(result);
+                            }
                         }
+                    } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                        actionLogout();
                     }
                 }
             }
@@ -93,16 +97,16 @@ public class ListServiceFragment extends Fragment implements
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_list_service, container, false);
+    public int getLayoutID() {
+        return R.layout.fragment_list_service;
+    }
+
+    @Override
+    public void onViewReadly(View view) {
         rcServices = (MyRecyclerView) view.findViewById(R.id.rc_services);
         rcServices.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rcServices.setAdapter(adapter);
-        return view;
     }
-
 
     @Override
     public void onClickInput(int position) {

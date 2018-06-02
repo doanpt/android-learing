@@ -2,7 +2,6 @@ package com.cnc.hcm.cnctrack.activity;
 
 import android.Manifest;
 import android.app.ActivityManager;
-import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +42,7 @@ import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
 import com.cnc.hcm.cnctrack.base.BaseActivity;
 import com.cnc.hcm.cnctrack.customeview.MyRecyclerView;
-import com.cnc.hcm.cnctrack.dialog.DialogDetailTaskFragment;
+import com.cnc.hcm.cnctrack.fragment.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctrack.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctrack.dialog.DialogNotiTaskAppointment;
 import com.cnc.hcm.cnctrack.dialog.DialogNotification;

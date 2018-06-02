@@ -22,7 +22,7 @@ import com.cnc.hcm.cnctrack.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctrack.adapter.WorkDetailDeviceRecyclerViewAdapter;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
-import com.cnc.hcm.cnctrack.dialog.DialogDetailTaskFragment;
+import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.dialog.DialogNotification;
 import com.cnc.hcm.cnctrack.event.RecyclerViewItemClickListener;
 import com.cnc.hcm.cnctrack.event.RecyclerViewMenuItemClickListener;
@@ -40,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTaskFragment.TaskDetailLoadedListener, RecyclerViewItemClickListener, RecyclerViewMenuItemClickListener {
+public class WorkDetailDeviceFragment extends BaseFragment implements DialogDetailTaskFragment.TaskDetailLoadedListener, RecyclerViewItemClickListener, RecyclerViewMenuItemClickListener {
 
     private static final String TAG = WorkDetailDeviceFragment.class.getSimpleName();
 
@@ -50,24 +50,24 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
 
     private String saveTaskId;
 
-    private ProgressDialog mProgressDialog;
-
     private DialogNotification mDialogNotification;
 
     public WorkDetailDeviceFragment() {
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_work_detail_device, container, false);
+    public int getLayoutID() {
+        return R.layout.fragment_work_detail_device;
+    }
+
+    @Override
+    public void onViewReadly(View view) {
         rv_device = view.findViewById(R.id.rv_device);
         rv_device.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mWorkDetailDeviceRecyclerViewAdapter = new WorkDetailDeviceRecyclerViewAdapter(this, this, getActivity());
         rv_device.setAdapter(mWorkDetailDeviceRecyclerViewAdapter);
 
-        ((DialogDetailTaskFragment)getParentFragment()).setTaskDetailLoadedListener(this);
-        return view;
+        ((DialogDetailTaskFragment) getParentFragment()).setTaskDetailLoadedListener(this);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
     @Override
     public void onClick(View view, int position) {
         switch (view.getId()) {
-            case R.id.item_product :
+            case R.id.item_product:
                 processDevice(position);
                 break;
             default:
@@ -136,7 +136,7 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
     }
 
     private void tryToRemoveDevice(final int position, String deviceId) {
-        showDialogLoadding();
+        showProgressLoading();
         String accessToken = UserInfo.getInstance(getActivity()).getAccessToken();
         Log.e(TAG, "tryToRemoveDevice(), accessToken: " + accessToken + ", idTask: " + saveTaskId + ", deviceId: " + deviceId);
         List<MHead> arrHeads = new ArrayList<>();
@@ -145,18 +145,22 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
         ApiUtils.getAPIService(arrHeads).removeDeviceFromTask(saveTaskId).enqueue(new Callback<RemoveDeviceFromTaskResult>() {
             @Override
             public void onResponse(Call<RemoveDeviceFromTaskResult> call, Response<RemoveDeviceFromTaskResult> response) {
-                int statusCode = response.code();
+                int statusCode = response.body().getStatusCode();
                 if (response.isSuccessful()) {
-                    RemoveDeviceFromTaskResult result = response.body();
-                    Log.e(TAG, "tryToRemoveDevice.onResponse(), statusCode: " + statusCode + ", result: " + result);
-                    dismisDialogLoading();
-                    onDeviceRemovedFromTask(position, result);
+                    if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                        RemoveDeviceFromTaskResult result = response.body();
+                        Log.e(TAG, "tryToRemoveDevice.onResponse(), statusCode: " + statusCode + ", result: " + result);
+                        dismisProgressLoading();
+                        onDeviceRemovedFromTask(position, result);
+                    } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                        actionLogout();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<RemoveDeviceFromTaskResult> call, Throwable t) {
-                dismisDialogLoading();
+                dismisProgressLoading();
                 Log.e(TAG, "tryToRemoveDevice.onFailure() --> " + t);
                 t.printStackTrace();
                 CommonMethod.makeToast(getContext(), t.getMessage() != null ? t.getMessage() : "onFailure");
@@ -186,24 +190,10 @@ public class WorkDetailDeviceFragment extends Fragment implements DialogDetailTa
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dismisDialogLoading();
+        dismisProgressLoading();
         dismisDialogNotification();
     }
 
-    private void showDialogLoadding() {
-        dismisDialogLoading();
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage(getResources().getString(R.string.loadding));
-        mProgressDialog.show();
-    }
-
-    private void dismisDialogLoading() {
-        if (mProgressDialog!= null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
 
     private void showDialogNotification(String massage) {
         dismisDialogNotification();

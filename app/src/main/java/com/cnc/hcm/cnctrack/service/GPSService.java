@@ -34,7 +34,7 @@ import com.cnc.hcm.cnctrack.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctrack.api.APIService;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
-import com.cnc.hcm.cnctrack.dialog.DialogDetailTaskFragment;
+import com.cnc.hcm.cnctrack.fragment.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctrack.model.GetTaskListResult;
 import com.cnc.hcm.cnctrack.model.ItemCancelTask;
 import com.cnc.hcm.cnctrack.model.ItemTask;

@@ -30,7 +30,7 @@ import com.cnc.hcm.cnctrack.adapter.WorkDetailRequireRecyclerViewAdapter;
 import com.cnc.hcm.cnctrack.adapter.WorkDetailServiceRecyclerViewAdapter;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
-import com.cnc.hcm.cnctrack.dialog.DialogDetailTaskFragment;
+import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.model.ConfirmChargeResponse;
 import com.cnc.hcm.cnctrack.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctrack.model.ItemPrice;
@@ -46,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WorkDetailServiceFragment extends Fragment implements
+public class WorkDetailServiceFragment extends BaseFragment implements
         View.OnClickListener, DialogDetailTaskFragment.TaskDetailLoadedListener {
 
     private static final String TAG = WorkDetailServiceFragment.class.getSimpleName();
@@ -80,13 +80,17 @@ public class WorkDetailServiceFragment extends Fragment implements
     public WorkDetailServiceFragment() {
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_work_detail_service, container, false);
-//        ll_content_bill = (LinearLayout) view.findViewById(R.id.ll_content_bill);
-//        imv_expand_bill = (ImageView) view.findViewById(R.id.imv_expand_bill);
+    public int getLayoutID() {
+        return R.layout.fragment_work_detail_service;
+    }
 
+    @Override
+    public void onViewReadly(View view) {
+        iniViews(view);
+    }
+
+    private void iniViews(View view) {
         llExpandService = view.findViewById(R.id.ll_require_expand);
         imvExpandService = view.findViewById(R.id.imv_expand_require);
         imvExpandService.setOnClickListener(this);
@@ -121,8 +125,6 @@ public class WorkDetailServiceFragment extends Fragment implements
         rv_service.setAdapter(mWorkDetailServiceRecyclerViewAdapter);
 
         ((DialogDetailTaskFragment) getParentFragment()).setTaskDetailLoadedListener(this);
-
-        return view;
     }
 
     @Override
@@ -154,7 +156,7 @@ public class WorkDetailServiceFragment extends Fragment implements
 //                }
 //                break;
             case R.id.imv_expand_require:
-                if (llExpandService.getVisibility()==View.GONE){
+                if (llExpandService.getVisibility() == View.GONE) {
                     llExpandService.setVisibility(View.VISIBLE);
                     imvExpandService.setImageResource(R.drawable.ic_expand_task_details);
                 } else {
@@ -177,19 +179,24 @@ public class WorkDetailServiceFragment extends Fragment implements
                 ApiUtils.getAPIService(arrHeads).confirmCharge(idTask).enqueue(new Callback<ConfirmChargeResponse>() {
                     @Override
                     public void onResponse(Call<ConfirmChargeResponse> call, Response<ConfirmChargeResponse> response) {
+                        int statusCode = response.body().getStatusCode();
                         if (response.isSuccessful()) {
-                            ConfirmChargeResponse confirmChargeResponse = response.body();
-                            if (confirmChargeResponse != null && confirmChargeResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
-                                CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thành công");
-                                btn_confirm_charge.setEnabled(false);
-                                btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
-                                btn_confirm_charge.setText("Đã thanh toán");
+                            if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                                ConfirmChargeResponse confirmChargeResponse = response.body();
+                                if (confirmChargeResponse != null && confirmChargeResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
+                                    CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thành công");
+                                    btn_confirm_charge.setEnabled(false);
+                                    btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
+                                    btn_confirm_charge.setText("Đã thanh toán");
 
 //                                if (onPayCompletedListener != null) {
 //                                    onPayCompletedListener.onPayCompleted();
 //                                }
-                            } else {
-                                CommonMethod.makeToast(getActivity(), "Chưa hoàn thành dịch vụ");
+                                } else {
+                                    CommonMethod.makeToast(getActivity(), "Chưa hoàn thành dịch vụ");
+                                }
+                            } else if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                                actionLogout();
                             }
                         }
                     }

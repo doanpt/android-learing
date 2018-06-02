@@ -32,7 +32,7 @@ public class UserInfo {
 
     private UserInfo(Context context) {
         if (context != null) {
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPreferences = context.getSharedPreferences("user_infor", Context.MODE_PRIVATE);
         }
     }
 

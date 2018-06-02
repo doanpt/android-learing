@@ -12,7 +12,7 @@ import java.util.List;
 public class AddContainProductResult {
     @SerializedName("statusCode")
     @Expose
-    private Long statusCode;
+    private int statusCode;
     @SerializedName("message")
     @Expose
     private String message;
@@ -20,11 +20,11 @@ public class AddContainProductResult {
     @Expose
     private Result result;
 
-    public Long getStatusCode() {
+    public int getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(Long statusCode) {
+    public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
 
