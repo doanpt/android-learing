@@ -75,6 +75,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         isActivityPause = false;
+        if(mProgressDialog!=null && mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
+        }
         mProgressDialog = null;
     }
 
