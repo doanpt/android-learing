@@ -251,7 +251,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
     public void loadInforTask() {
         viewPager.setCurrentItem(0);
-        tryGetTaskDetail(UserInfo.getInstance(getActivity().getApplicationContext()).getAccessToken(), idTask);
+        tryGetTaskDetail(UserInfo.getInstance(mainActivity).getAccessToken(), idTask);
         if (fabMenu != null && fabMenu.isExpanded()) {
             fabMenu.collapse();
         }

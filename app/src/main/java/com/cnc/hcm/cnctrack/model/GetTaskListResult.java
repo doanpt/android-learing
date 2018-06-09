@@ -228,7 +228,7 @@ public class GetTaskListResult {
                     public String _id;
                     public String name;
                     public Process.Device.Detail.Brand brand;
-                    public String category;
+                    public Process.Device.Detail.Category category;
                     public String photo;
                     public long __v;
                     public String createdDate;
@@ -236,7 +236,7 @@ public class GetTaskListResult {
                     public double price;
                     public long quantity;
 
-                    public ProductDetail(String _id, String name, Process.Device.Detail.Brand brand, String category, String photo, long __v, String createdDate, long tax, double price, long quantity) {
+                    public ProductDetail(String _id, String name, Process.Device.Detail.Brand brand, Process.Device.Detail.Category category, String photo, long __v, String createdDate, long tax, double price, long quantity) {
                         this._id = _id;
                         this.name = name;
                         this.brand = brand;
@@ -411,10 +411,10 @@ public class GetTaskListResult {
 
             public static class ProcessDetail {
                 public Service services[];
-                public Product products[];
+                public Invoice.Product products[];
                 public String[] photos;
 
-                public ProcessDetail(Service[] services, Product[] products, String[] photos) {
+                public ProcessDetail(Service[] services, Invoice.Product[] products, String[] photos) {
                     this.services = services;
                     this.products = products;
                     this.photos = photos;
@@ -452,43 +452,7 @@ public class GetTaskListResult {
                     }
                 }
 
-                public static class Product {
-                    public ProductDetail product;
-                    public String _id;
-                    public long quantity;
 
-                    public Product(ProductDetail product, String _id, long quantity) {
-                        this.product = product;
-                        this._id = _id;
-                        this.quantity = quantity;
-                    }
-
-                    public static class ProductDetail {
-                        public String _id;
-                        public String name;
-                        public String brand;
-                        public String category;
-                        public String photo;
-                        public long __v;
-                        public String createdDate;
-                        public long tax;
-                        public double price;
-                        public long quantity;
-
-                        public ProductDetail(String _id, String name, String brand, String category, String photo, long __v, String createdDate, long tax, double price, long quantity) {
-                            this._id = _id;
-                            this.name = name;
-                            this.brand = brand;
-                            this.category = category;
-                            this.photo = photo;
-                            this.__v = __v;
-                            this.createdDate = createdDate;
-                            this.tax = tax;
-                            this.price = price;
-                            this.quantity = quantity;
-                        }
-                    }
-                }
             }
 
             public static class Before {
