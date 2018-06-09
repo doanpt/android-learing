@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctrack.R;
-import com.cnc.hcm.cnctrack.model.TraddingProduct;
+import com.cnc.hcm.cnctrack.model.detailproduct.Device_Products;
+import com.cnc.hcm.cnctrack.model.detailproduct.Product;
 import com.cnc.hcm.cnctrack.util.Conts;
 
 import java.util.ArrayList;
@@ -20,14 +21,14 @@ import java.util.ArrayList;
 
 public class ProductProcessAdapter extends RecyclerView.Adapter<ProductProcessAdapter.ProductHolder> {
     private static final String TAG = ProductProcessAdapter.class.getSimpleName();
-    private ArrayList<TraddingProduct.Result> arrProduct = new ArrayList<>();
+    private ArrayList<Device_Products> arrProduct = new ArrayList<>();
     private Context mContext;
 
     public ProductProcessAdapter(Context context) {
         mContext = context;
     }
 
-    public ProductProcessAdapter(Context context, ArrayList<TraddingProduct.Result> arrUrl) {
+    public ProductProcessAdapter(Context context, ArrayList<Device_Products> arrUrl) {
         mContext = context;
         this.arrProduct = arrUrl;
     }
@@ -40,13 +41,13 @@ public class ProductProcessAdapter extends RecyclerView.Adapter<ProductProcessAd
 
     @Override
     public void onBindViewHolder(ProductHolder holder, int position) {
-        TraddingProduct.Result item = arrProduct.get(position);
-        holder.tvName.setText(item.getName() + "");
-        holder.tvAmount.setText(item.getQuantity() +" "+ (item.getUnit() != null ? item.getUnit().getTitle() : Conts.BLANK));
-        holder.tvPrice.setText(item.getPrice() + "");
+        Device_Products item = arrProduct.get(position);
+        holder.tvName.setText(item.getProduct().getName() + "");
+        holder.tvAmount.setText(item.getQuantity() +" "+ (item.getProduct().getUnit() != null ? item.getProduct().getUnit().getTitle() : Conts.BLANK));
+        holder.tvPrice.setText(item.getProduct().getPrice() + "");
         int price = 0;
         try {
-            price = Integer.parseInt(item.getPrice().toString() + "");
+            price = Integer.parseInt(item.getProduct().getPrice().toString() + "");
         } catch (Exception e) {
             Log.e(TAG, "onBindViewHolder", e);
         }

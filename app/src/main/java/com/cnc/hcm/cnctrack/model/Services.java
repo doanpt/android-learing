@@ -1,5 +1,7 @@
 package com.cnc.hcm.cnctrack.model;
 
+import com.cnc.hcm.cnctrack.model.detailproduct.Category;
+import com.cnc.hcm.cnctrack.model.detailproduct.Unit;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -147,101 +149,5 @@ public class Services {
         public void setV(Long v) {
             this.v = v;
         }
-    }
-    public class Category implements Serializable{
-
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("title")
-        @Expose
-        private String title;
-        @SerializedName("photo")
-        @Expose
-        private String photo;
-        @SerializedName("createdDate")
-        @Expose
-        private String createdDate;
-        @SerializedName("description")
-        @Expose
-        private String description;
-        @SerializedName("__v")
-        @Expose
-        private Long v;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getPhoto() {
-            return photo;
-        }
-
-        public void setPhoto(String photo) {
-            this.photo = photo;
-        }
-
-        public String getCreatedDate() {
-            return createdDate;
-        }
-
-        public void setCreatedDate(String createdDate) {
-            this.createdDate = createdDate;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public Long getV() {
-            return v;
-        }
-
-        public void setV(Long v) {
-            this.v = v;
-        }
-
-    }
-    public class Unit implements Serializable{
-
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("title")
-        @Expose
-        private String title;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
     }
 }

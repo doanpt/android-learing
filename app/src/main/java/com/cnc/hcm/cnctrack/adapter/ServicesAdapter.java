@@ -12,6 +12,7 @@ import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.event.OnItemInputClickListener;
 import com.cnc.hcm.cnctrack.model.SearchServiceModel;
 import com.cnc.hcm.cnctrack.model.Services;
+import com.cnc.hcm.cnctrack.model.detailproduct.Service;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.squareup.picasso.Picasso;
@@ -27,8 +28,8 @@ import java.util.Locale;
 public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<Services.Result> arr = new ArrayList<>();
-    private ArrayList<Services.Result> arrTemp = new ArrayList<>();
+    private ArrayList<Service> arr = new ArrayList<>();
+    private ArrayList<Service> arrTemp = new ArrayList<>();
     private OnItemInputClickListener onItemInputClickListener;
 
     public ServicesAdapter(Context context) {
@@ -41,16 +42,20 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         return new ViewHolder(view);
     }
 
-    public Services.Result getItem(int pos) {
+    public Service getItem(int pos) {
         return arr.get(pos);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Services.Result result = arr.get(position);
+        Service result = arr.get(position);
+        String photo=result.getPhoto();
+        if(photo==null || photo.isEmpty()){
+            photo=result.getCategory().getPhoto();
+        }
         String urlPhoto = Conts.URL_BASE + result.getPhoto();
         if (!urlPhoto.equals(Conts.BLANK))
-            Picasso.with(context).load(urlPhoto).into(holder.imvIcon);
+            Picasso.with(context).load(urlPhoto).placeholder(R.drawable.ic_bg_place_error).into(holder.imvIcon);
 
         holder.tvTitle.setText(result.getName());
         holder.tvPriceUnit.setText("Giá: " + CommonMethod.formatMoney(Integer.parseInt(String.valueOf(result.getPrice()))) + " đ    Đvt: " + result.getUnit().getTitle());
@@ -62,7 +67,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         return arr.size();
     }
 
-    public void notiData(List<Services.Result> result) {
+    public void notiData(List<Service> result) {
         if (result != null) {
             if (arr != null) {
                 arr.clear();
@@ -116,7 +121,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         isCategory = category.equals(context.getResources().getString(R.string.spn_category_service_default).toLowerCase()) ? false : true;
 
         if (isText) {
-            ArrayList<Services.Result> arrTemp2 = new ArrayList<>();
+            ArrayList<Service> arrTemp2 = new ArrayList<>();
             arrTemp2.addAll(arr);
             arr.clear();
             for (int i = 0; i < arrTemp.size(); i++) {
@@ -133,7 +138,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             arr.addAll(arrTemp);
         }
         if (isCategory) {
-            ArrayList<Services.Result> arrTemp3 = new ArrayList<>();
+            ArrayList<Service> arrTemp3 = new ArrayList<>();
             arrTemp3.addAll(arr);
             arr.clear();
             for (int i = 0; i < arrTemp3.size(); i++) {

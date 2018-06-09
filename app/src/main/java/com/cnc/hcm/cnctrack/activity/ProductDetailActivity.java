@@ -42,6 +42,11 @@ import com.cnc.hcm.cnctrack.model.SubmitProcessParam;
 import com.cnc.hcm.cnctrack.model.TraddingProduct;
 import com.cnc.hcm.cnctrack.model.UpdateProcessResult;
 import com.cnc.hcm.cnctrack.model.UploadImageResult;
+import com.cnc.hcm.cnctrack.model.detailproduct.DetailDevice;
+import com.cnc.hcm.cnctrack.model.detailproduct.Device_Products;
+import com.cnc.hcm.cnctrack.model.detailproduct.Device_Services;
+import com.cnc.hcm.cnctrack.model.detailproduct.Product;
+import com.cnc.hcm.cnctrack.model.detailproduct.Service;
 import com.cnc.hcm.cnctrack.service.GPSService;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
@@ -83,8 +88,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     private DialogGPSSetting dialogGPSSetting;
     private GPSService gpsService;
     private ArrayList<String> arrInit, arrProcess, arrFinish;
-    private ArrayList<TraddingProduct.Result> arrTrading;
-    private ArrayList<Services.Result> arrService;
+    private ArrayList<Device_Products> arrTrading;
+    private ArrayList<Device_Services> arrService;
     private ProductDetailAdapter initAdapter, processAdapter, finishAdapter;
     private ProductProcessAdapter productAdapter;
     private ServiceProcessAdapter serviceAdapter;
@@ -127,11 +132,11 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
         arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceID));
-        ApiUtils.getAPIService(arrHeads).getDetailProduct(idTask).enqueue(new Callback<GetProductDetailResult>() {
+        ApiUtils.getAPIService(arrHeads).getDetailProduct(idTask).enqueue(new Callback<DetailDevice>() {
             @Override
-            public void onResponse(Call<GetProductDetailResult> call, Response<GetProductDetailResult> response) {
+            public void onResponse(Call<DetailDevice> call, Response<DetailDevice> response) {
                 dismisProgressLoading();
-                Long code = response.body().getStatusCode();
+                Integer code = response.body().getStatusCode();
                 Log.d(TAGG, "getData.onResponse, code: " + code);
                 if (code != null && code == Conts.RESPONSE_STATUS_OK) {
                     displayDetailWork(response.body());
@@ -143,7 +148,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(Call<GetProductDetailResult> call, Throwable t) {
+            public void onFailure(Call<DetailDevice> call, Throwable t) {
                 dismisProgressLoading();
                 Log.e(TAGG, "getData.onResponse", t);
                 Toast.makeText(ProductDetailActivity.this, "Get Detail failure", Toast.LENGTH_SHORT).show();
@@ -199,18 +204,18 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     }
 
-    private void displayDetailWork(GetProductDetailResult body) {
+    private void displayDetailWork(DetailDevice body) {
         tvName.setText(workName);
         tvLocation.setText(address);
         tvHour.setText(timeWork);
         tvDeviceCode.setText(body.getResult().getDevice().getId());
         tvDeviceName.setText(body.getResult().getDevice().getDetail().getName());
-        String path;
+        String path = "";
         try {
-            if (body.getResult().getDevice().getDetail().getPhoto() == null) {
+            if (body.getResult().getDevice().getDetail().getBrand().getPhoto() == null) {
                 path = body.getResult().getDevice().getDetail().getBrand().getPhoto();
             } else {
-                path = body.getResult().getDevice().getDetail().getPhoto().toString();
+                path = body.getResult().getDevice().getDetail().getCategory().toString();
             }
         } catch (Exception e) {
             path = "";
@@ -223,6 +228,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         arrTrading.clear();
         arrInit.addAll(body.getResult().getBefore().getPhotos());
         arrProcess.addAll(body.getResult().getProcess().getPhotos());
+        List<Service> listServices = getListServicesFromDevice(body.getResult().getProcess().getServices());
+        List<Product> listProducts = getListProductsFromDevice(body.getResult().getProcess().getProducts());
         arrService.addAll(body.getResult().getProcess().getServices());
         arrTrading.addAll(body.getResult().getProcess().getProducts());
         note = body.getResult().getProcess().getNote();
@@ -236,6 +243,22 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         processAdapter.notifyDataSetChanged();
         finishAdapter.notifyDataSetChanged();
         visiableRecycler();
+    }
+
+    private List<Product> getListProductsFromDevice(List<Device_Products> products) {
+        List<Product> listProducts = new ArrayList<>();
+        for (Device_Products product : products) {
+            listProducts.add(product.getProduct());
+        }
+        return listProducts;
+    }
+
+    private List<Service> getListServicesFromDevice(List<Device_Services> services) {
+        List<Service> listServices = new ArrayList<>();
+        for (Device_Services service : services) {
+            listServices.add(service.getService());
+        }
+        return listServices;
     }
 
     //11/01/2017 ADD by HoangIT START
@@ -641,34 +664,38 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 }
                 isNewProduct = true;
                 String type = data.getStringExtra(Conts.KEY_CHECK_TYPE_RESULT);
-                TraddingProduct.Result resultTradding;
-                Services.Result resultService;
+                Product resultProduct;
+                Service resultService;
                 List<MHead> arrNewHeads = new ArrayList<>();
                 arrNewHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
                 arrNewHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceID));
                 final SubmitProcessParam param = new SubmitProcessParam();
                 if (type.equals(Conts.KEY_PRODUCT)) {
-                    resultTradding = (TraddingProduct.Result) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
+                    resultProduct = (Product) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
                     getAllProcess2();
                     for (int i = 0; i < arrPushProcess2Product.size(); i++) {
-                        if (arrPushProcess2Product.get(i).getProduct().equals(resultTradding.getId())) {
+                        if (arrPushProcess2Product.get(i).getProduct().equals(resultProduct.getId())) {
                             arrPushProcess2Product.get(i).setQuantity(arrPushProcess2Product.get(i).getQuantity() + 1);
                             isNewProduct = false;
                         }
                     }
-                    SubmitProcessParam.Product product = new SubmitProcessParam.Product();
-                    product.setProduct(resultTradding.getId());
-                    product.setQuantity(Long.valueOf(resultTradding.getQuantity()));
-                    arrPushProcess2Product.add(product);
+                    //TODO check more conđition
+                    //TODO check xem thêm câu lệnh if(isNewProduct==true) có đúng k
+                    if(isNewProduct==true){
+                        SubmitProcessParam.Product product = new SubmitProcessParam.Product();
+                        product.setProduct(resultProduct.getId());
+                        product.setQuantity(Long.valueOf(resultProduct.getQuantity()));
+                        arrPushProcess2Product.add(product);
+                    }
                     param.setProcess(new SubmitProcessParam.Process());
                     param.getProcess().setServices(arrPushProcess2Service);
                     param.getProcess().setProducts(arrPushProcess2Product);
                     param.getProcess().setPhotos(arrProcess);
                     param.getProcess().setNote(note);
-                    uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_PRODUCT, resultTradding, null);
+                    uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_PRODUCT);
                 } else if (type.equals(Conts.KEY_SERVICE)) {
                     getAllProcess2();
-                    resultService = (Services.Result) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
+                    resultService = (Service) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
                     for (SubmitProcessParam.Service p : arrPushProcess2Service) {
                         if (p.getProduct().equals(resultService.getId())) {
                             CommonMethod.makeToast(ProductDetailActivity.this, "Service already added");
@@ -684,7 +711,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     param.getProcess().setProducts(arrPushProcess2Product);
                     param.getProcess().setPhotos(arrProcess);
                     param.getProcess().setNote(note);
-                    uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_SERVICE, null, resultService);
+                    uploadProcess(arrNewHeads, idTask, param, KEY_PROCESS_SERVICE);
                 }
                 break;
         }
@@ -704,7 +731,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             param.getProcess().setProducts(arrPushProcess2Product);
             param.getProcess().setPhotos(arrProcess);
             param.getProcess().setNote(note);
-            uploadProcess(arrNewHeads, idTask, param, KEY_ADD_NOTE, null, null);
+            uploadProcess(arrNewHeads, idTask, param, KEY_ADD_NOTE);
         } else if (resultCode == RESULT_CANCELED) {
             //Don't nothing
         }
@@ -713,15 +740,17 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     private void getAllProcess2() {
         arrPushProcess2Service.clear();
         arrPushProcess2Product.clear();
-        for (Services.Result result : arrService) {
+        for (Device_Services result : arrService) {
+            Service service = result.getService();
             SubmitProcessParam.Service s = new SubmitProcessParam.Service();
-            s.setProduct(result.getId());
+            s.setProduct(service.getId());
             s.setQuantity((long) 1);
             arrPushProcess2Service.add(s);
         }
-        for (TraddingProduct.Result result : arrTrading) {
+        for (Device_Products result : arrTrading) {
+            Product product = result.getProduct();
             SubmitProcessParam.Product s = new SubmitProcessParam.Product();
-            s.setProduct(result.getId());
+            s.setProduct(product.getId());
             s.setQuantity(Long.valueOf(result.getQuantity()));
             arrPushProcess2Product.add(s);
         }
@@ -783,7 +812,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                             param.getAfter().setPhotos(arrImage);
                         }
                         Log.d("ABC", idTask + " " + param.getProcess());
-                        uploadProcess(arrNewHeads, idTask, param, requestCode, null, null);
+                        uploadProcess(arrNewHeads, idTask, param, requestCode);
                     } else if (code != null && code == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
                         showMessageRequestLogout();
                     } else {
@@ -808,42 +837,64 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     }
 
 
-    private void uploadProcess(final List<MHead> arrHeads, final String idTask, final SubmitProcessParam param, final int requestCode, final TraddingProduct.Result product, final Services.Result service) {
+    private void uploadProcess(final List<MHead> arrHeads, final String idTask, final SubmitProcessParam param, final int requestCode) {
         updateMessageProgressDialog("Update process...");
 
-        ApiUtils.getAPIService(arrHeads).updateProcess(idTask, param).enqueue(new Callback<UpdateProcessResult>() {
+        ApiUtils.getAPIService(arrHeads).updateProcess(idTask, param).enqueue(new Callback<DetailDevice>() {
             @Override
-            public void onResponse(Call<UpdateProcessResult> call, Response<UpdateProcessResult> response) {
-                Long status = response.body().getStatusCode();
+            public void onResponse(Call<DetailDevice> call, Response<DetailDevice> response) {
+                Integer status = response.body().getStatusCode();
                 Log.d(TAGG, "updateProcess.onResponse, status: " + status);
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     if (requestCode == KEY_STEP_ONE) {
-                        arrInit.add(param.getBefore().getPhotos().get(param.getBefore().getPhotos().size() - 1));
+                        arrInit.clear();
+                        List<String> listResult=response.body().getResult().getBefore().getPhotos();
+                        arrInit.addAll(listResult);
+//                        arrInit.add(param.getBefore().getPhotos().get(param.getBefore().getPhotos().size() - 1));
                         initAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_STEP_TWO) {
-                        arrProcess.add(param.getProcess().getPhotos().get(param.getProcess().getPhotos().size() - 1));
+                        arrProcess.clear();
+                        List<String> listResult=response.body().getResult().getProcess().getPhotos();
+                        arrProcess.addAll(listResult);
+//                        arrProcess.add(param.getProcess().getPhotos().get(param.getProcess().getPhotos().size() - 1));
                         processAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_STEP_THREE) {
-                        arrFinish.add(param.getAfter().getPhotos().get(param.getAfter().getPhotos().size() - 1));
+                        arrFinish.clear();
+                        List<String> listResult=response.body().getResult().getAfter().getPhotos();
+                        arrFinish.addAll(listResult);
+//                        arrFinish.add(param.getAfter().getPhotos().get(param.getAfter().getPhotos().size() - 1));
                         finishAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_PROCESS_SERVICE) {
-                        arrService.add(service);
+                        List<Device_Services> listServices=response.body().getResult().getProcess().getServices();
+                        arrService.clear();
+                        arrService.addAll(listServices);
+                        //TODO sau khi add xong thì thêm service vào array service. nhưng chưa biết lấy item nào mà thêm vào.. dang đề xuất return object giống lúc get detail product để get đc toàn bộ list
+                        //FIXME enable below line
+//                        arrService.add(deviceServices);
                         serviceAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_PROCESS_PRODUCT) {
-                        if (isNewProduct) {
-                            arrTrading.add(product);
-                        } else {
-                            for (int i = 0; i < arrTrading.size(); i++) {
-                                if (arrTrading.get(i).getId().equals(product.getId())) {
-                                    arrTrading.get(i).setQuantity(arrTrading.get(i).getQuantity() + 1);
-                                    break;
-                                }
-                            }
-                        }
+                        List<Device_Products> listProducts=response.body().getResult().getProcess().getProducts();
+                        arrTrading.clear();
+                        arrTrading.addAll(listProducts);
+//                        if (isNewProduct) {
+//                            //TODO sau khi add xong thì thêm service vào array service. nhưng chưa biết lấy item nào mà thêm vào.. dang đề xuất return object giống lúc get detail product để get đc toàn bộ list
+//                            //FIXME enable below line
+//                            //arrTrading.add(deviceProducts);
+//                        } else {
+//                            //FIXME enable below line
+////                            for (int i = 0; i < arrTrading.size(); i++) {
+////                                if (arrTrading.get(i).getId().equals(deviceProducts.getProduct().getId())) {
+////                                    arrTrading.get(i).setQuantity(arrTrading.get(i).getQuantity() + 1);
+////                                    break;
+////                                }
+////                            }
+//                        }
                         productAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_ADD_NOTE) {
-                        note = param.getProcess().getNote();
+                        note=response.body().getResult().getProcess().getNote();
                         tvNoteWork.setText(note);
+//                        note = param.getProcess().getNote();
+//                        tvNoteWork.setText(note);
                     }
                     visiableRecycler();
                     CommonMethod.makeToast(ProductDetailActivity.this, "Success!");
@@ -856,13 +907,24 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(Call<UpdateProcessResult> call, Throwable t) {
+            public void onFailure(Call<DetailDevice> call, Throwable t) {
                 if (requestCode == KEY_STEP_ONE) {
-                    arrInit.remove(arrInit.size() - 1);
+                    //TODO xem lại đoạn này.. vì nếu trường hợp arrInit chỉ đc add khi submit thành công. dây là failure nên k đc add.
+                    // xem lại là có cần tạo 1 api để xóa picture đã submit trên server
+                    int size = arrInit.size();
+                    if (size > 0) {
+                        arrInit.remove(arrInit.size() - 1);
+                    }
                 } else if (requestCode == KEY_STEP_TWO) {
-                    arrProcess.remove(arrProcess.size() - 1);
+                    int size = arrInit.size();
+                    if (size > 0) {
+                        arrProcess.remove(arrProcess.size() - 1);
+                    }
                 } else if (requestCode == KEY_STEP_THREE) {
-                    arrFinish.remove(arrFinish.size() - 1);
+                    int size = arrInit.size();
+                    if (size > 0) {
+                        arrFinish.remove(arrFinish.size() - 1);
+                    }
                 }
                 t.printStackTrace();
                 dismisProgressLoading();

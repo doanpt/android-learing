@@ -21,7 +21,8 @@ import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctrack.event.OnItemInputClickListener;
 import com.cnc.hcm.cnctrack.model.SearchServiceModel;
-import com.cnc.hcm.cnctrack.model.Services;
+import com.cnc.hcm.cnctrack.model.detailproduct.Service;
+import com.cnc.hcm.cnctrack.model.detailproduct.Service_Services;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
 
@@ -62,17 +63,17 @@ public class ListServiceFragment extends BaseFragment implements
         String accessToken = UserInfo.getInstance(getContext()).getAccessToken();
         List<MHead> headList = new ArrayList<>();
         headList.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-        ApiUtils.getAPIService(headList).getServices().enqueue(new Callback<Services>() {
+        ApiUtils.getAPIService(headList).getServices().enqueue(new Callback<Service_Services>() {
             @Override
-            public void onResponse(Call<Services> call, Response<Services> response) {
+            public void onResponse(Call<Service_Services> call, Response<Service_Services> response) {
                 int statusCode = response.body().getStatusCode();
                 Log.e(TAGG, "getListService.onResponse(), statusCode: " + statusCode);
                 if (response.isSuccessful()) {
                     if (statusCode == Conts.RESPONSE_STATUS_OK) {
                         Log.e(TAGG, "getListService.onResponse(), --> response: " + response.toString());
-                        Services services = response.body();
+                        Service_Services services = response.body();
                         if (services != null) {
-                            List<Services.Result> result = services.getResult();
+                            List<Service> result = services.getListService();
                             if (adapter != null) {
                                 adapter.notiData(result);
                             }
@@ -84,7 +85,7 @@ public class ListServiceFragment extends BaseFragment implements
             }
 
             @Override
-            public void onFailure(Call<Services> call, Throwable t) {
+            public void onFailure(Call<Service_Services> call, Throwable t) {
 
             }
         });
@@ -110,7 +111,7 @@ public class ListServiceFragment extends BaseFragment implements
 
     @Override
     public void onClickInput(int position) {
-        Services.Result result = adapter.getItem(position);
+        Service result = adapter.getItem(position);
         Intent intentResult = new Intent();
         intentResult.putExtra(Conts.KEY_SERVICE_PRODUCT_RESULT, result);
         intentResult.putExtra(Conts.KEY_CHECK_TYPE_RESULT, Conts.KEY_SERVICE);

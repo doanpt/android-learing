@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.event.OnItemInputClickListener;
 import com.cnc.hcm.cnctrack.model.SearchModel;
-import com.cnc.hcm.cnctrack.model.TraddingProduct;
+import com.cnc.hcm.cnctrack.model.detailproduct.Product;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.squareup.picasso.Picasso;
@@ -27,8 +27,8 @@ import java.util.Locale;
 public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProductAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<TraddingProduct.Result> arr = new ArrayList<>();
-    private ArrayList<TraddingProduct.Result> arrTemp = new ArrayList<>();
+    private ArrayList<Product> arr = new ArrayList<>();
+    private ArrayList<Product> arrTemp = new ArrayList<>();
 
     private OnItemInputClickListener onItemInputClickListener;
 
@@ -45,7 +45,7 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        TraddingProduct.Result result = arr.get(position);
+        Product result = arr.get(position);
         String urlPhoto = Conts.URL_BASE + result.getPhoto();
         if (!urlPhoto.equals(Conts.BLANK))
             Picasso.with(context).load(urlPhoto).into(holder.imvIcon);
@@ -61,11 +61,11 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
         return arr.size();
     }
 
-    public TraddingProduct.Result getItem(int position) {
+    public Product getItem(int position) {
         return arr.get(position);
     }
 
-    public void notiData(List<TraddingProduct.Result> result) {
+    public void notiData(List<Product> result) {
         if (result != null) {
             if (arr != null) {
                 arr.clear();
@@ -122,7 +122,7 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
         isCategory = category.equals(context.getResources().getString(R.string.spn_category_default).toLowerCase()) ? false : true;
 
         if (isText) {
-            ArrayList<TraddingProduct.Result> arrTemp2 = new ArrayList<>();
+            ArrayList<Product> arrTemp2 = new ArrayList<>();
             arrTemp2.addAll(arr);
             arr.clear();
             for (int i = 0; i < arrTemp.size(); i++) {
@@ -139,7 +139,7 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
             arr.addAll(arrTemp);
         }
         if (isBranch) {
-            ArrayList<TraddingProduct.Result> arrTemp2 = new ArrayList<>();
+            ArrayList<Product> arrTemp2 = new ArrayList<>();
             arrTemp2.addAll(arr);
             arr.clear();
             for (int i = 0; i < arrTemp2.size(); i++) {
@@ -149,7 +149,7 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
             }
         }
         if (isCategory) {
-            ArrayList<TraddingProduct.Result> arrTemp3 = new ArrayList<>();
+            ArrayList<Product> arrTemp3 = new ArrayList<>();
             arrTemp3.addAll(arr);
             arr.clear();
             for (int i = 0; i < arrTemp3.size(); i++) {

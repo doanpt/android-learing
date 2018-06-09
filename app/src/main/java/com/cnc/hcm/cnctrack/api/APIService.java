@@ -27,6 +27,9 @@ import com.cnc.hcm.cnctrack.model.TraddingProduct;
 import com.cnc.hcm.cnctrack.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctrack.model.UpdateProcessResult;
 import com.cnc.hcm.cnctrack.model.UploadImageResult;
+import com.cnc.hcm.cnctrack.model.detailproduct.DetailDevice;
+import com.cnc.hcm.cnctrack.model.detailproduct.Product_Products;
+import com.cnc.hcm.cnctrack.model.detailproduct.Service_Services;
 import com.cnc.hcm.cnctrack.util.Conts;
 
 import okhttp3.MultipartBody;
@@ -64,7 +67,7 @@ public interface APIService {
     Call<CheckContainProductResult> getProductById(@Path("id") String productID);
 
     @GET(Conts.PATH_GET_PRODUCTS_DETAIL)
-    Call<GetProductDetailResult> getDetailProduct(@Path("id") String idTask);
+    Call<DetailDevice> getDetailProduct(@Path("id") String idTask);
 
     @PATCH(Conts.PATH_ADD_DEVICE_CONTAIN)
     Call<AddContainProductResult> addProductContain(@Path("id") String productID);
@@ -88,7 +91,7 @@ public interface APIService {
 
     @Headers({"Content-Type: application/json"})
     @PATCH(Conts.PATH_UPDATE_PROCESS)
-    Call<UpdateProcessResult> updateProcess(@Path("id") String productID, @Body SubmitProcessParam param);
+    Call<DetailDevice> updateProcess(@Path("id") String productID, @Body SubmitProcessParam param);
 
     @PATCH(Conts.PATH_COMPLETE_PROCESS)
     Call<UpdateProcessResult> completeProcess(@Path("id") String productID);
@@ -103,10 +106,10 @@ public interface APIService {
     Call<ResponseCNC> updateStatusIsRead(@Path("id") String idTask);
 
     @GET(Conts.PATH_GET_TRADING_PRODUCT)
-    Call<TraddingProduct> getListTraddingProduct();
+    Call<Product_Products> getListTraddingProduct();
 
     @GET(Conts.PATH_GET_SERVICES)
-    Call<Services> getServices();
+    Call<Service_Services> getServices();
 
     @GET(Conts.PATH_REASONS_CHANGE_TICKET_APPOINTMENT_DATE)
     Call<GetChangeTicketAppointmentReasonsResult> getChangeTicketAppointmentReasons();

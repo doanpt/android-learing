@@ -37,6 +37,8 @@ import com.cnc.hcm.cnctrack.model.ProductListResult;
 import com.cnc.hcm.cnctrack.model.SearchModel;
 import com.cnc.hcm.cnctrack.model.SearchServiceModel;
 import com.cnc.hcm.cnctrack.model.Services;
+import com.cnc.hcm.cnctrack.model.detailproduct.Service;
+import com.cnc.hcm.cnctrack.model.detailproduct.Service_Services;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
 
@@ -64,7 +66,7 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
     private ArrayList<String> arrServices;
     private List<MHead> arrHeads;
     private String accessToken;
-    private ArrayList<Services.Result> listServices;
+    private ArrayList<Service> listServices;
     private ArrayList<ProductListResult.Product> listProduct;
     private ArrayList<CategoryListResult.Category> listCategory;
     private Spinner spnManufacuture, spnCategory, spnServiceCategory;
@@ -349,16 +351,16 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
     }
 
     private void getListServices() {
-        ApiUtils.getAPIService(arrHeads).getServices().enqueue(new Callback<Services>() {
+        ApiUtils.getAPIService(arrHeads).getServices().enqueue(new Callback<Service_Services>() {
             @Override
-            public void onResponse(Call<Services> call, Response<Services> response) {
+            public void onResponse(Call<Service_Services> call, Response<Service_Services> response) {
                 Integer status = response.body().getStatusCode();
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrServices.clear();
                     arrServices.add("Chọn loại dịch vụ");
-                    listServices = (ArrayList<Services.Result>) response.body().getResult();
+                    listServices = (ArrayList<Service>) response.body().getListService();
                     if (listServices != null) {
-                        for (Services.Result service : listServices) {
+                        for (Service service : listServices) {
                             arrServices.add(service.getCategory().getTitle());
                             servicesAdapter.notifyDataSetChanged();
                         }
@@ -371,7 +373,7 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
             }
 
             @Override
-            public void onFailure(Call<Services> call, Throwable t) {
+            public void onFailure(Call<Service_Services> call, Throwable t) {
                 dismisProgressLoading();
                 if (dialogNotification != null) {
                     dialogNotification.setContentMessage("getServices().onFailure()\n" + t.getMessage());

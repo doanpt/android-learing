@@ -23,6 +23,8 @@ import com.cnc.hcm.cnctrack.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctrack.event.OnItemInputClickListener;
 import com.cnc.hcm.cnctrack.model.SearchModel;
 import com.cnc.hcm.cnctrack.model.TraddingProduct;
+import com.cnc.hcm.cnctrack.model.detailproduct.Product;
+import com.cnc.hcm.cnctrack.model.detailproduct.Product_Products;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
 
@@ -84,18 +86,18 @@ public class ListProductFragment extends BaseFragment implements ListProductAndS
         String accessToken = UserInfo.getInstance(getContext()).getAccessToken();
         List<MHead> arrHeader = new ArrayList<>();
         arrHeader.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-        ApiUtils.getAPIService(arrHeader).getListTraddingProduct().enqueue(new Callback<TraddingProduct>() {
+        ApiUtils.getAPIService(arrHeader).getListTraddingProduct().enqueue(new Callback<Product_Products>() {
             @Override
-            public void onResponse(Call<TraddingProduct> call, Response<TraddingProduct> response) {
+            public void onResponse(Call<Product_Products> call, Response<Product_Products> response) {
                 dismisProgressLoading();
                 Log.e(TAGG, "getListTraddingProduct.onResponse(), statusCode: " + response.code());
                 int statusCode = response.body().getStatusCode();
                 if (response.isSuccessful()) {
                     if (statusCode == Conts.RESPONSE_STATUS_OK) {
                         Log.e(TAGG, "getListTraddingProduct.onResponse(), --> response: " + response.toString());
-                        TraddingProduct tradingProduct = response.body();
+                        Product_Products tradingProduct = response.body();
                         if (tradingProduct != null) {
-                            List<TraddingProduct.Result> result = tradingProduct.getResult();
+                            List<Product> result = tradingProduct.getListProduct();
                             adapter.notiData(result);
                         }
                     } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
@@ -105,7 +107,7 @@ public class ListProductFragment extends BaseFragment implements ListProductAndS
             }
 
             @Override
-            public void onFailure(Call<TraddingProduct> call, Throwable t) {
+            public void onFailure(Call<Product_Products> call, Throwable t) {
                 Log.e(TAGG, "getListTraddingProduct.onFailure(), " + t.getMessage());
                 dismisProgressLoading();
             }
@@ -114,7 +116,7 @@ public class ListProductFragment extends BaseFragment implements ListProductAndS
 
     @Override
     public void onClickInput(int position) {
-        TraddingProduct.Result result = adapter.getItem(position);
+        Product result = adapter.getItem(position);
         result.setQuantity(1);
         Intent intentResult = new Intent();
         intentResult.putExtra(Conts.KEY_SERVICE_PRODUCT_RESULT, result);

@@ -1,31 +1,36 @@
-package com.cnc.hcm.cnctrack.model;
+package com.cnc.hcm.cnctrack.model.detailproduct;
 
 /**
- * Created by Android on 1/3/2018.
+ * Created by Android on 06/06/2018.
  */
 
-import com.cnc.hcm.cnctrack.model.detailproduct.ResultDeviceContain;
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class CheckContainProductResult {
+public class DetailDevice  implements Serializable {
 
     @SerializedName("statusCode")
+    @Nullable
     @Expose
-    private Long statusCode;
+    private Integer statusCode;
     @SerializedName("message")
+    @Nullable
     @Expose
     private String message;
     @SerializedName("result")
+    @Nullable
     @Expose
-    private ResultDeviceContain result;
+    private DetailResult result;
 
-    public Long getStatusCode() {
+    public Integer getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(Long statusCode) {
+    public void setStatusCode(Integer statusCode) {
         this.statusCode = statusCode;
     }
 
@@ -37,11 +42,11 @@ public class CheckContainProductResult {
         this.message = message;
     }
 
-    public ResultDeviceContain getResult() {
+    public DetailResult getResult() {
         return result;
     }
 
-    public void setResult(ResultDeviceContain result) {
+    public void setResult(DetailResult result) {
         this.result = result;
     }
 

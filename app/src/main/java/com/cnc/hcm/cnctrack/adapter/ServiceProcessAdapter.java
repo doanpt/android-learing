@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.model.Services;
+import com.cnc.hcm.cnctrack.model.detailproduct.Device_Services;
+import com.cnc.hcm.cnctrack.model.detailproduct.Service;
 import com.cnc.hcm.cnctrack.util.Conts;
 
 import java.util.ArrayList;
@@ -18,14 +20,14 @@ import java.util.ArrayList;
  */
 
 public class ServiceProcessAdapter extends RecyclerView.Adapter<ServiceProcessAdapter.ServiceHolder> {
-    private ArrayList<Services.Result> arrServices = new ArrayList<>();
+    private ArrayList<Device_Services> arrServices = new ArrayList<>();
     private Context mContext;
 
     public ServiceProcessAdapter(Context context) {
         mContext = context;
     }
 
-    public ServiceProcessAdapter(Context context, ArrayList<Services.Result> arrUrl) {
+    public ServiceProcessAdapter(Context context, ArrayList<Device_Services> arrUrl) {
         mContext = context;
         this.arrServices = arrUrl;
     }
@@ -38,11 +40,11 @@ public class ServiceProcessAdapter extends RecyclerView.Adapter<ServiceProcessAd
 
     @Override
     public void onBindViewHolder(ServiceHolder holder, int position) {
-        Services.Result item = arrServices.get(position);
-        holder.tvName.setText(item.getName() + "");
-        holder.tvAmount.setText("1 " + (item.getUnit() != null ? item.getUnit().getTitle() : Conts.BLANK));
-        holder.tvPrice.setText(item.getPrice() + "");
-        holder.tvTotalPrice.setText(item.getPrice() + "");
+        Device_Services item = arrServices.get(position);
+        holder.tvName.setText(item.getService().getName() + "");
+        holder.tvAmount.setText("1 " + (item.getService().getUnit() != null ? item.getService().getUnit().getTitle() : Conts.BLANK));
+        holder.tvPrice.setText(item.getService().getPrice() + "");
+        holder.tvTotalPrice.setText(item.getService().getPrice() + "");
     }
 
     @Override
