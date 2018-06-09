@@ -1,26 +1,19 @@
 package com.cnc.hcm.cnctrack.model;
 
-/**
- * Created by Android on 1/9/2018.
- */
-
-import com.cnc.hcm.cnctrack.model.common.Product;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+/**
+ * Created by Android on 1/8/2018.
+ */
 
-public class ProductListResult {
-
+public class CommonAPICallBackResult {
     @SerializedName("statusCode")
     @Expose
     private Long statusCode;
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("result")
-    @Expose
-    private List<Product> result = null;
 
     public Long getStatusCode() {
         return statusCode;
@@ -37,13 +30,4 @@ public class ProductListResult {
     public void setMessage(String message) {
         this.message = message;
     }
-
-    public List<Product> getResult() {
-        return result;
-    }
-
-    public void setResult(List<Product> result) {
-        this.result = result;
-    }
-
 }

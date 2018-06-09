@@ -1,32 +1,37 @@
 package com.cnc.hcm.cnctrack.model;
 
 /**
- * Created by Android on 1/9/2018.
+ * Created by Android on 06/06/2018.
  */
 
-import com.cnc.hcm.cnctrack.model.common.Product;
+import android.support.annotation.Nullable;
+
+import com.cnc.hcm.cnctrack.model.common.DetailDevice;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.io.Serializable;
 
-public class ProductListResult {
+public class DetailProduct implements Serializable {
 
     @SerializedName("statusCode")
+    @Nullable
     @Expose
-    private Long statusCode;
+    private Integer statusCode;
     @SerializedName("message")
+    @Nullable
     @Expose
     private String message;
     @SerializedName("result")
+    @Nullable
     @Expose
-    private List<Product> result = null;
+    private DetailDevice result;
 
-    public Long getStatusCode() {
+    public Integer getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(Long statusCode) {
+    public void setStatusCode(Integer statusCode) {
         this.statusCode = statusCode;
     }
 
@@ -38,11 +43,11 @@ public class ProductListResult {
         this.message = message;
     }
 
-    public List<Product> getResult() {
+    public DetailDevice getResult() {
         return result;
     }
 
-    public void setResult(List<Product> result) {
+    public void setResult(DetailDevice result) {
         this.result = result;
     }
 

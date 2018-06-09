@@ -23,11 +23,13 @@ import com.cnc.hcm.cnctrack.api.MHead;
 import com.cnc.hcm.cnctrack.base.BaseActivity;
 import com.cnc.hcm.cnctrack.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctrack.model.AddContainProductResult;
-import com.cnc.hcm.cnctrack.model.AddProductItem;
-import com.cnc.hcm.cnctrack.model.AddProductResult;
+import com.cnc.hcm.cnctrack.model.AddProductItemRequest;
+import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
 import com.cnc.hcm.cnctrack.model.CategoryListResult;
 import com.cnc.hcm.cnctrack.model.CheckContainProductResult;
 import com.cnc.hcm.cnctrack.model.ProductListResult;
+import com.cnc.hcm.cnctrack.model.common.Category;
+import com.cnc.hcm.cnctrack.model.common.Product;
 import com.cnc.hcm.cnctrack.service.GPSService;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
@@ -60,8 +62,8 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     private ArrayAdapter categoryAdapter;
     private ArrayList<String> arrManufactures;
     private ArrayList<String> arrCategory;
-    private ArrayList<ProductListResult.Product> listProduct;
-    private ArrayList<CategoryListResult.Category> listCategory;
+    private ArrayList<Product> listProduct;
+    private ArrayList<Category> listCategory;
     private DialogGPSSetting dialogGPSSetting;
     private GPSService gpsService;
     private String titleWork, addressWork, timeWork;
@@ -133,9 +135,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                 Long status = response.body().getStatusCode();
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrManufactures.clear();
-                    listProduct = (ArrayList<ProductListResult.Product>) response.body().getResult();
+                    listProduct = (ArrayList<Product>) response.body().getResult();
                     if (listProduct != null) {
-                        for (ProductListResult.Product p : listProduct) {
+                        for (Product p : listProduct) {
                             arrManufactures.add(p.getName());
                             manufactureAdapter.notifyDataSetChanged();
                         }
@@ -158,9 +160,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                 Long status = response.body().getStatusCode();
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrCategory.clear();
-                    listCategory = (ArrayList<CategoryListResult.Category>) response.body().getResult();
+                    listCategory = (ArrayList<Category>) response.body().getResult();
                     if (listCategory != null) {
-                        for (CategoryListResult.Category category : listCategory) {
+                        for (Category category : listCategory) {
                             arrCategory.add(category.getTitle());
                             categoryAdapter.notifyDataSetChanged();
                         }
@@ -237,13 +239,13 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgressDialog.setCancelable(false);
             mProgressDialog.show();
-            for (CategoryListResult.Category c : listCategory) {
+            for (Category c : listCategory) {
                 if (c.getTitle().equals(category)) {
                     category = c.getId();
                     break;
                 }
             }
-            for (ProductListResult.Product c : listProduct) {
+            for (Product c : listProduct) {
                 if (c.getName().equals(manufacture)) {
                     manufacture = c.getId();
                     break;
@@ -252,16 +254,16 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
             arrHeads.add(new MHead(Conts.KEY_CUSTOMER_ID, customerId));
-            AddProductItem productItem = new AddProductItem();
+            AddProductItemRequest productItem = new AddProductItemRequest();
             productItem.setBrand(manufacture);
             productItem.setCategory(category);
             productItem.setName(productName);
             productItem.setBarcode(qrCode);
             Log.d("HEAD_ITEM", productItem.toString());
             //sử dụng API: https://recode.atlassian.net/wiki/spaces/CNC/pages/158433284/Th+m+thi+t+b+c+a+kh+ch+h+ng
-            ApiUtils.getAPIService(arrHeads).addCustomerProduct(productItem).enqueue(new Callback<AddProductResult>() {
+            ApiUtils.getAPIService(arrHeads).addCustomerProduct(productItem).enqueue(new Callback<CommonAPICallBackResult>() {
                 @Override
-                public void onResponse(Call<AddProductResult> call, Response<AddProductResult> response) {
+                public void onResponse(Call<CommonAPICallBackResult> call, Response<CommonAPICallBackResult> response) {
                     //TODO :FIX ERROR ADD
                     Long status = response.body().getStatusCode();
                     if (status != null && status == Conts.RESPONSE_STATUS_OK) {
@@ -278,7 +280,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                 }
 
                 @Override
-                public void onFailure(Call<AddProductResult> call, Throwable t) {
+                public void onFailure(Call<CommonAPICallBackResult> call, Throwable t) {
                     CommonMethod.makeToast(AddProductActivity.this, "Call 5.3 error onFailure");
                     mProgressDialog.dismiss();
                 }

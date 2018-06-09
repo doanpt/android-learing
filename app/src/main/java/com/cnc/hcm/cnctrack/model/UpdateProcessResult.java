@@ -1,4 +1,8 @@
 package com.cnc.hcm.cnctrack.model;
+import com.cnc.hcm.cnctrack.model.common.After;
+import com.cnc.hcm.cnctrack.model.common.Before;
+import com.cnc.hcm.cnctrack.model.common.Executive;
+import com.cnc.hcm.cnctrack.model.common.Location;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -91,110 +95,8 @@ public class UpdateProcessResult {
         }
 
     }
-    public class After {
 
-        @SerializedName("photos")
-        @Expose
-        private List<String> photos = null;
 
-        public List<String> getPhotos() {
-            return photos;
-        }
-
-        public void setPhotos(List<String> photos) {
-            this.photos = photos;
-        }
-
-    }
-    public class Before {
-
-        @SerializedName("photos")
-        @Expose
-        private List<String> photos = null;
-
-        public List<String> getPhotos() {
-            return photos;
-        }
-
-        public void setPhotos(List<String> photos) {
-            this.photos = photos;
-        }
-
-    }
-    public class Executive {
-
-        @SerializedName("user")
-        @Expose
-        private String user;
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("joinedDate")
-        @Expose
-        private String joinedDate;
-        @SerializedName("isLeader")
-        @Expose
-        private Boolean isLeader;
-
-        public String getUser() {
-            return user;
-        }
-
-        public void setUser(String user) {
-            this.user = user;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getJoinedDate() {
-            return joinedDate;
-        }
-
-        public void setJoinedDate(String joinedDate) {
-            this.joinedDate = joinedDate;
-        }
-
-        public Boolean getIsLeader() {
-            return isLeader;
-        }
-
-        public void setIsLeader(Boolean isLeader) {
-            this.isLeader = isLeader;
-        }
-
-    }
-    public class Location {
-
-        @SerializedName("latitude")
-        @Expose
-        private Double latitude;
-        @SerializedName("longitude")
-        @Expose
-        private Double longitude;
-
-        public Double getLatitude() {
-            return latitude;
-        }
-
-        public void setLatitude(Double latitude) {
-            this.latitude = latitude;
-        }
-
-        public Double getLongitude() {
-            return longitude;
-        }
-
-        public void setLongitude(Double longitude) {
-            this.longitude = longitude;
-        }
-
-    }
     public class Process {
 
         @SerializedName("device")

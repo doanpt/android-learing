@@ -18,6 +18,7 @@ import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
 import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.model.CountTaskResult;
+import com.cnc.hcm.cnctrack.model.common.CountTask;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
@@ -205,7 +206,7 @@ public class YearsViewFragment extends BaseFragment implements View.OnClickListe
                             Log.e(TAG, "tryGetCountTask.onResponse(), --> response: " + response.toString());
                             CountTaskResult countTaskResult = response.body();
                             if (countTaskResult != null) {
-                                List<CountTaskResult.Result> results = countTaskResult.getResult();
+                                List<CountTask> results = countTaskResult.getResult();
 
                                 if (results != null && results.size() > 0) {
                                     Log.d(TAG, "CountResult -------------------");

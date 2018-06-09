@@ -1,8 +1,8 @@
 package com.cnc.hcm.cnctrack.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.cnc.hcm.cnctrack.model.common.After;
+import com.cnc.hcm.cnctrack.model.common.Before;
+import com.cnc.hcm.cnctrack.model.common.ProcessSubmitItem;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,7 +16,7 @@ public class SubmitProcessParam {
     private Before before;
     @SerializedName("process")
     @Expose
-    private Process process;
+    private ProcessSubmitItem process;
     @SerializedName("after")
     @Expose
     private After after;
@@ -29,11 +29,11 @@ public class SubmitProcessParam {
         this.before = before;
     }
 
-    public Process getProcess() {
+    public ProcessSubmitItem getProcess() {
         return process;
     }
 
-    public void setProcess(Process process) {
+    public void setProcess(ProcessSubmitItem process) {
         this.process = process;
     }
 
@@ -45,138 +45,4 @@ public class SubmitProcessParam {
         this.after = after;
     }
 
-
-    public static class Before {
-
-        @SerializedName("photos")
-        @Expose
-        private List<String> photos = new ArrayList<>();
-
-        public List<String> getPhotos() {
-            return photos;
-        }
-
-        public void setPhotos(List<String> photos) {
-            this.photos = photos;
-        }
-
-    }
-
-    public static class After {
-
-        @SerializedName("photos")
-        @Expose
-        private List<String> photos = new ArrayList<>();
-
-        public List<String> getPhotos() {
-            return photos;
-        }
-
-        public void setPhotos(List<String> photos) {
-            this.photos = photos;
-        }
-
-    }
-
-    public static class Process {
-
-        @SerializedName("photos")
-        @Expose
-        private List<String> photos = new ArrayList<>();
-        @SerializedName("products")
-        @Expose
-        private List<Product> products = new ArrayList<>();
-        @SerializedName("services")
-        @Expose
-        private List<Service> services = new ArrayList<>();
-        @SerializedName("note")
-        @Expose
-        private String note;
-
-        public List<String> getPhotos() {
-            return photos;
-        }
-
-        public void setPhotos(List<String> photos) {
-            this.photos = photos;
-        }
-
-        public List<Product> getProducts() {
-            return products;
-        }
-
-        public void setProducts(List<Product> products) {
-            this.products = products;
-        }
-
-        public List<Service> getServices() {
-            return services;
-        }
-
-        public void setServices(List<Service> services) {
-            this.services = services;
-        }
-
-        public String getNote() {
-            return note;
-        }
-
-        public void setNote(String note) {
-            this.note = note;
-        }
-    }
-
-    public static class Product {
-
-        @SerializedName("product")
-        @Expose
-        private String product;
-        @SerializedName("quantity")
-        @Expose
-        private Long quantity;
-
-        public String getProduct() {
-            return product;
-        }
-
-        public void setProduct(String product) {
-            this.product = product;
-        }
-
-        public Long getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(Long quantity) {
-            this.quantity = quantity;
-        }
-
-    }
-
-    public static class Service {
-
-        @SerializedName("product")
-        @Expose
-        private String product;
-        @SerializedName("quantity")
-        @Expose
-        private Long quantity;
-
-        public String getProduct() {
-            return product;
-        }
-
-        public void setProduct(String product) {
-            this.product = product;
-        }
-
-        public Long getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(Long quantity) {
-            this.quantity = quantity;
-        }
-
-    }
 }

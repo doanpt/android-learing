@@ -34,7 +34,7 @@ import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
 import com.cnc.hcm.cnctrack.model.AddContainProductResult;
 import com.cnc.hcm.cnctrack.model.CheckContainProductResult;
-import com.cnc.hcm.cnctrack.model.CompleteTicketResponse;
+import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
 import com.cnc.hcm.cnctrack.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
@@ -516,14 +516,14 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             String idTask = getTaskDetailResult.result._id;
             List<MHead> arrHeads = new ArrayList<>();
             arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken()));
-            ApiUtils.getAPIService(arrHeads).completeTicket(idTask).enqueue(new Callback<CompleteTicketResponse>() {
+            ApiUtils.getAPIService(arrHeads).completeTicket(idTask).enqueue(new Callback<CommonAPICallBackResult>() {
                 @Override
-                public void onResponse(Call<CompleteTicketResponse> call, Response<CompleteTicketResponse> response) {
-                    int statusCode = response.body().getStatusCode();
+                public void onResponse(Call<CommonAPICallBackResult> call, Response<CommonAPICallBackResult> response) {
+                    Long statusCode = response.body().getStatusCode();
                     if (response.isSuccessful()) {
                         if (statusCode == Conts.RESPONSE_STATUS_OK) {
-                            CompleteTicketResponse completeTicketResponse = response.body();
-                            if (completeTicketResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
+                            CommonAPICallBackResult commonAPICallBackResult = response.body();
+                            if (commonAPICallBackResult.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
                                 CommonMethod.makeToast(getActivity(), "Xử lý hoàn thành ticket thành công");
                                 fabMenu.setVisibility(View.GONE);
                                 tv_completed_ticket.setVisibility(View.VISIBLE);
@@ -539,7 +539,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 }
 
                 @Override
-                public void onFailure(Call<CompleteTicketResponse> call, Throwable t) {
+                public void onFailure(Call<CommonAPICallBackResult> call, Throwable t) {
                     CommonMethod.makeToast(getActivity(), "Xử lý hoàn thành ticket thất bại");
                 }
             });

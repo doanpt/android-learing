@@ -4,7 +4,7 @@ package com.cnc.hcm.cnctrack.model;
  * Created by Android on 1/3/2018.
  */
 
-import com.cnc.hcm.cnctrack.model.detailproduct.ResultDeviceContain;
+import com.cnc.hcm.cnctrack.model.common.ResultDeviceContain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

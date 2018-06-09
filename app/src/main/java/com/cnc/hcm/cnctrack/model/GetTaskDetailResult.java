@@ -1,10 +1,11 @@
 package com.cnc.hcm.cnctrack.model;
 
-import com.cnc.hcm.cnctrack.model.detailproduct.Brand;
-import com.cnc.hcm.cnctrack.model.detailproduct.Category;
+import com.cnc.hcm.cnctrack.model.common.Brand;
+import com.cnc.hcm.cnctrack.model.common.Category;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+//TODO
+//FIXME
 public class GetTaskDetailResult {
     public int statusCode;
     public String message;

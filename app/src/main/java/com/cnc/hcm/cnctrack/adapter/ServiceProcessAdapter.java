@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctrack.R;
-import com.cnc.hcm.cnctrack.model.Services;
-import com.cnc.hcm.cnctrack.model.detailproduct.Device_Services;
-import com.cnc.hcm.cnctrack.model.detailproduct.Service;
+import com.cnc.hcm.cnctrack.model.common.Device_Services;
 import com.cnc.hcm.cnctrack.util.Conts;
 
 import java.util.ArrayList;

@@ -31,7 +31,7 @@ import com.cnc.hcm.cnctrack.adapter.WorkDetailServiceRecyclerViewAdapter;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
 import com.cnc.hcm.cnctrack.base.BaseFragment;
-import com.cnc.hcm.cnctrack.model.ConfirmChargeResponse;
+import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
 import com.cnc.hcm.cnctrack.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctrack.model.ItemPrice;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
@@ -176,13 +176,13 @@ public class WorkDetailServiceFragment extends BaseFragment implements
                 String idTask = getTaskDetailResult.result._id;
                 List<MHead> arrHeads = new ArrayList<>();
                 arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken()));
-                ApiUtils.getAPIService(arrHeads).confirmCharge(idTask).enqueue(new Callback<ConfirmChargeResponse>() {
+                ApiUtils.getAPIService(arrHeads).confirmCharge(idTask).enqueue(new Callback<CommonAPICallBackResult>() {
                     @Override
-                    public void onResponse(Call<ConfirmChargeResponse> call, Response<ConfirmChargeResponse> response) {
-                        int statusCode = response.body().getStatusCode();
+                    public void onResponse(Call<CommonAPICallBackResult> call, Response<CommonAPICallBackResult> response) {
+                        Long statusCode = response.body().getStatusCode();
                         if (response.isSuccessful()) {
                             if (statusCode == Conts.RESPONSE_STATUS_OK) {
-                                ConfirmChargeResponse confirmChargeResponse = response.body();
+                                CommonAPICallBackResult confirmChargeResponse = response.body();
                                 if (confirmChargeResponse != null && confirmChargeResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
                                     CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thành công");
                                     btn_confirm_charge.setEnabled(false);
@@ -202,7 +202,7 @@ public class WorkDetailServiceFragment extends BaseFragment implements
                     }
 
                     @Override
-                    public void onFailure(Call<ConfirmChargeResponse> call, Throwable t) {
+                    public void onFailure(Call<CommonAPICallBackResult> call, Throwable t) {
                         CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thất bại");
                     }
                 });

@@ -4,6 +4,7 @@ package com.cnc.hcm.cnctrack.model;
  * Created by Android on 1/18/2018.
  */
 
+import com.cnc.hcm.cnctrack.model.common.ImageURL;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,7 +17,7 @@ public class UploadImageResult {
     private String message;
     @SerializedName("result")
     @Expose
-    private Result result;
+    private ImageURL result;
 
     public Long getStatusCode() {
         return statusCode;
@@ -34,27 +35,11 @@ public class UploadImageResult {
         this.message = message;
     }
 
-    public Result getResult() {
+    public ImageURL getResult() {
         return result;
     }
 
-    public void setResult(Result result) {
+    public void setResult(ImageURL result) {
         this.result = result;
-    }
-
-    public class Result {
-
-        @SerializedName("imageURL")
-        @Expose
-        private String imageURL;
-
-        public String getImageURL() {
-            return imageURL;
-        }
-
-        public void setImageURL(String imageURL) {
-            this.imageURL = imageURL;
-        }
-
     }
 }

@@ -36,14 +36,20 @@ import com.cnc.hcm.cnctrack.base.BaseActivity;
 import com.cnc.hcm.cnctrack.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctrack.dialog.DialogInfor;
 import com.cnc.hcm.cnctrack.dialog.DialogNotification;
+import com.cnc.hcm.cnctrack.model.DetailProduct;
 import com.cnc.hcm.cnctrack.model.SubmitProcessParam;
 import com.cnc.hcm.cnctrack.model.UpdateProcessResult;
 import com.cnc.hcm.cnctrack.model.UploadImageResult;
-import com.cnc.hcm.cnctrack.model.detailproduct.DetailDevice;
-import com.cnc.hcm.cnctrack.model.detailproduct.Device_Products;
-import com.cnc.hcm.cnctrack.model.detailproduct.Device_Services;
-import com.cnc.hcm.cnctrack.model.detailproduct.Product;
-import com.cnc.hcm.cnctrack.model.detailproduct.Service;
+import com.cnc.hcm.cnctrack.model.common.After;
+import com.cnc.hcm.cnctrack.model.common.Before;
+import com.cnc.hcm.cnctrack.model.common.Process;
+import com.cnc.hcm.cnctrack.model.common.Device_Products;
+import com.cnc.hcm.cnctrack.model.common.Device_Services;
+import com.cnc.hcm.cnctrack.model.common.ProcessSubmitItem;
+import com.cnc.hcm.cnctrack.model.common.Product;
+import com.cnc.hcm.cnctrack.model.common.Service;
+import com.cnc.hcm.cnctrack.model.common.SubmitProductItem;
+import com.cnc.hcm.cnctrack.model.common.SubmitServiceItem;
 import com.cnc.hcm.cnctrack.service.GPSService;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
@@ -98,8 +104,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     //    private LinearLayout llComplete;
     private TextView tvStartDate, tvEndDate, tvTotalTime;
     private ImageView imvBack, imgDevice;
-    private ArrayList<SubmitProcessParam.Service> arrPushProcess2Service;
-    private ArrayList<SubmitProcessParam.Product> arrPushProcess2Product;
+    private ArrayList<SubmitServiceItem> arrPushProcess2Service;
+    private ArrayList<SubmitProductItem> arrPushProcess2Product;
     private boolean isNewProduct = false;
     private DialogInfor dialogInfor;
     private String note = Conts.BLANK;
@@ -129,9 +135,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
         arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceID));
-        ApiUtils.getAPIService(arrHeads).getDetailProduct(idTask).enqueue(new Callback<DetailDevice>() {
+        ApiUtils.getAPIService(arrHeads).getDetailProduct(idTask).enqueue(new Callback<DetailProduct>() {
             @Override
-            public void onResponse(Call<DetailDevice> call, Response<DetailDevice> response) {
+            public void onResponse(Call<DetailProduct> call, Response<DetailProduct> response) {
                 dismisProgressLoading();
                 Integer code = response.body().getStatusCode();
                 Log.d(TAGG, "getData.onResponse, code: " + code);
@@ -145,7 +151,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(Call<DetailDevice> call, Throwable t) {
+            public void onFailure(Call<DetailProduct> call, Throwable t) {
                 dismisProgressLoading();
                 Log.e(TAGG, "getData.onResponse", t);
                 Toast.makeText(ProductDetailActivity.this, "Get Detail failure", Toast.LENGTH_SHORT).show();
@@ -201,7 +207,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     }
 
-    private void displayDetailWork(DetailDevice body) {
+    private void displayDetailWork(DetailProduct body) {
         tvName.setText(workName);
         tvLocation.setText(address);
         tvHour.setText(timeWork);
@@ -678,12 +684,12 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         }
                     }
                     if (isNewProduct == true) {
-                        SubmitProcessParam.Product product = new SubmitProcessParam.Product();
+                        SubmitProductItem product = new SubmitProductItem();
                         product.setProduct(resultProduct.getId());
                         product.setQuantity(Long.valueOf(resultProduct.getQuantity()));
                         arrPushProcess2Product.add(product);
                     }
-                    param.setProcess(new SubmitProcessParam.Process());
+                    param.setProcess(new ProcessSubmitItem());
                     param.getProcess().setServices(arrPushProcess2Service);
                     param.getProcess().setProducts(arrPushProcess2Product);
                     param.getProcess().setPhotos(arrProcess);
@@ -692,17 +698,17 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 } else if (type.equals(Conts.KEY_SERVICE)) {
                     getAllProcess2();
                     resultService = (Service) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
-                    for (SubmitProcessParam.Service p : arrPushProcess2Service) {
+                    for (SubmitServiceItem p : arrPushProcess2Service) {
                         if (p.getProduct().equals(resultService.getId())) {
                             CommonMethod.makeToast(ProductDetailActivity.this, "Service already added");
                             return;
                         }
                     }
-                    SubmitProcessParam.Service service = new SubmitProcessParam.Service();
+                    SubmitServiceItem service = new SubmitServiceItem();
                     service.setProduct(resultService.getId());
                     service.setQuantity((long) 1);
                     arrPushProcess2Service.add(service);
-                    param.setProcess(new SubmitProcessParam.Process());
+                    param.setProcess(new ProcessSubmitItem());
                     param.getProcess().setServices(arrPushProcess2Service);
                     param.getProcess().setProducts(arrPushProcess2Product);
                     param.getProcess().setPhotos(arrProcess);
@@ -722,7 +728,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             SubmitProcessParam param = new SubmitProcessParam();
             String note = data.getStringExtra(Conts.KEY_RESULT_ADD_NOTE);
             getAllProcess2();
-            param.setProcess(new SubmitProcessParam.Process());
+            param.setProcess(new ProcessSubmitItem());
             param.getProcess().setServices(arrPushProcess2Service);
             param.getProcess().setProducts(arrPushProcess2Product);
             param.getProcess().setPhotos(arrProcess);
@@ -738,14 +744,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         arrPushProcess2Product.clear();
         for (Device_Services result : arrService) {
             Service service = result.getService();
-            SubmitProcessParam.Service s = new SubmitProcessParam.Service();
+            SubmitServiceItem s = new SubmitServiceItem();
             s.setProduct(service.getId());
             s.setQuantity((long) 1);
             arrPushProcess2Service.add(s);
         }
         for (Device_Products result : arrTrading) {
             Product product = result.getProduct();
-            SubmitProcessParam.Product s = new SubmitProcessParam.Product();
+            SubmitProductItem s = new SubmitProductItem();
             s.setProduct(product.getId());
             s.setQuantity(Long.valueOf(result.getQuantity()));
             arrPushProcess2Product.add(s);
@@ -790,13 +796,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         if (requestCode == KEY_STEP_ONE) {
                             arrImage.addAll(arrInit);
                             arrImage.add(url);
-                            param.setBefore(new SubmitProcessParam.Before());
+                            param.setBefore(new Before());
                             param.getBefore().setPhotos(arrImage);
                         } else if (requestCode == KEY_STEP_TWO) {
                             getAllProcess2();
                             arrImage.addAll(arrProcess);
                             arrImage.add(url);
-                            param.setProcess(new SubmitProcessParam.Process());
+                            param.setProcess(new ProcessSubmitItem());
                             param.getProcess().setServices(arrPushProcess2Service);
                             param.getProcess().setProducts(arrPushProcess2Product);
                             param.getProcess().setNote(note);
@@ -804,7 +810,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         } else if (requestCode == KEY_STEP_THREE) {
                             arrImage.addAll(arrFinish);
                             arrImage.add(url);
-                            param.setAfter(new SubmitProcessParam.After());
+                            param.setAfter(new After());
                             param.getAfter().setPhotos(arrImage);
                         }
                         Log.d("ABC", idTask + " " + param.getProcess());
@@ -836,9 +842,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     private void uploadProcess(final List<MHead> arrHeads, final String idTask, final SubmitProcessParam param, final int requestCode) {
         updateMessageProgressDialog("Update process...");
-        ApiUtils.getAPIService(arrHeads).updateProcess(idTask, param).enqueue(new Callback<DetailDevice>() {
+        ApiUtils.getAPIService(arrHeads).updateProcess(idTask, param).enqueue(new Callback<DetailProduct>() {
             @Override
-            public void onResponse(Call<DetailDevice> call, Response<DetailDevice> response) {
+            public void onResponse(Call<DetailProduct> call, Response<DetailProduct> response) {
                 Integer status = response.body().getStatusCode();
                 Log.d(TAGG, "updateProcess.onResponse, status: " + status);
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
@@ -883,7 +889,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(Call<DetailDevice> call, Throwable t) {
+            public void onFailure(Call<DetailProduct> call, Throwable t) {
                 t.printStackTrace();
                 dismisProgressLoading();
                 CommonMethod.makeToast(ProductDetailActivity.this, "Update process Error: " + t.getMessage());

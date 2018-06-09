@@ -1,5 +1,7 @@
 package com.cnc.hcm.cnctrack.model;
 
+import com.cnc.hcm.cnctrack.model.common.CountTask;
+import com.cnc.hcm.cnctrack.model.common.Date;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,7 +20,7 @@ public class CountTaskResult {
     private String message;
     @SerializedName("result")
     @Expose
-    private List<Result> result = null;
+    private List<CountTask> result = null;
 
     public Integer getStatusCode() {
         return statusCode;
@@ -36,76 +38,13 @@ public class CountTaskResult {
         this.message = message;
     }
 
-    public List<Result> getResult() {
+    public List<CountTask> getResult() {
         return result;
     }
 
-    public void setResult(List<Result> result) {
+    public void setResult(List<CountTask> result) {
         this.result = result;
     }
 
-    public class Result {
 
-        @SerializedName("count")
-        @Expose
-        private Integer count;
-        @SerializedName("date")
-        @Expose
-        private Date date;
-
-        public Integer getCount() {
-            return count;
-        }
-
-        public void setCount(Integer count) {
-            this.count = count;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-
-        public class Date {
-
-            @SerializedName("year")
-            @Expose
-            private Integer year;
-            @SerializedName("month")
-            @Expose
-            private Integer month;
-            @SerializedName("day")
-            @Expose
-            private Integer day;
-
-            public Integer getYear() {
-                return year;
-            }
-
-            public void setYear(Integer year) {
-                this.year = year;
-            }
-
-            public Integer getMonth() {
-                return month;
-            }
-
-            public void setMonth(Integer month) {
-                this.month = month;
-            }
-
-            public Integer getDay() {
-                return day;
-            }
-
-            public void setDay(Integer day) {
-                this.day = day;
-            }
-
-        }
-    }
 }

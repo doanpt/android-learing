@@ -1,5 +1,9 @@
 package com.cnc.hcm.cnctrack.model;
 
+import android.support.annotation.Nullable;
+
+import com.cnc.hcm.cnctrack.model.common.DetailDevice;
+import com.cnc.hcm.cnctrack.model.common.Executive;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -14,6 +18,7 @@ public class AddContainProductResult {
     @Expose
     private int statusCode;
     @SerializedName("message")
+    @Nullable
     @Expose
     private String message;
     @SerializedName("result")
@@ -125,55 +130,6 @@ public class AddContainProductResult {
 
     }
 
-    public class Executive {
-
-        @SerializedName("user")
-        @Expose
-        private String user;
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("joinedDate")
-        @Expose
-        private String joinedDate;
-        @SerializedName("isLeader")
-        @Expose
-        private Boolean isLeader;
-
-        public String getUser() {
-            return user;
-        }
-
-        public void setUser(String user) {
-            this.user = user;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getJoinedDate() {
-            return joinedDate;
-        }
-
-        public void setJoinedDate(String joinedDate) {
-            this.joinedDate = joinedDate;
-        }
-
-        public Boolean getIsLeader() {
-            return isLeader;
-        }
-
-        public void setIsLeader(Boolean isLeader) {
-            this.isLeader = isLeader;
-        }
-
-    }
-
     public class Location {
 
         @SerializedName("latitude")
@@ -199,163 +155,6 @@ public class AddContainProductResult {
             this.longitude = longitude;
         }
 
-    }
-
-    public class Process {
-
-        @SerializedName("device")
-        @Expose
-        private String device;
-        @SerializedName("user")
-        @Expose
-        private String user;
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("status")
-        @Expose
-        private Long status;
-        @SerializedName("after")
-        @Expose
-        private After after;
-        @SerializedName("process")
-        @Expose
-        private Process_ process;
-        @SerializedName("before")
-        @Expose
-        private Before before;
-
-        public String getDevice() {
-            return device;
-        }
-
-        public void setDevice(String device) {
-            this.device = device;
-        }
-
-        public String getUser() {
-            return user;
-        }
-
-        public void setUser(String user) {
-            this.user = user;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Long getStatus() {
-            return status;
-        }
-
-        public void setStatus(Long status) {
-            this.status = status;
-        }
-
-        public After getAfter() {
-            return after;
-        }
-
-        public void setAfter(After after) {
-            this.after = after;
-        }
-
-        public Process_ getProcess() {
-            return process;
-        }
-
-        public void setProcess(Process_ process) {
-            this.process = process;
-        }
-
-        public Before getBefore() {
-            return before;
-        }
-
-        public void setBefore(Before before) {
-            this.before = before;
-        }
-
-    }
-
-    public class Process_ {
-
-        @SerializedName("services")
-        @Expose
-        private List<Service> services = null;
-        @SerializedName("products")
-        @Expose
-        private List<Product> products = null;
-        @SerializedName("photos")
-        @Expose
-        private List<String> photos = null;
-
-        public List<Service> getServices() {
-            return services;
-        }
-
-        public void setServices(List<Service> services) {
-            this.services = services;
-        }
-
-        public List<Product> getProducts() {
-            return products;
-        }
-
-        public void setProducts(List<Product> products) {
-            this.products = products;
-        }
-
-        public List<String> getPhotos() {
-            return photos;
-        }
-
-        public void setPhotos(List<String> photos) {
-            this.photos = photos;
-        }
-
-    }
-
-    public class Product {
-
-        @SerializedName("product")
-        @Expose
-        private String product;
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("quantity")
-        @Expose
-        private Long quantity;
-
-        public String getProduct() {
-            return product;
-        }
-
-        public void setProduct(String product) {
-            this.product = product;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Long getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(Long quantity) {
-            this.quantity = quantity;
-        }
     }
 
     public class Result {
@@ -386,7 +185,7 @@ public class AddContainProductResult {
         private Long status;
         @SerializedName("process")
         @Expose
-        private List<Process> process = null;
+        private List<DetailDevice> process = null;
         @SerializedName("executive")
         @Expose
         private List<Executive> executive = null;
@@ -461,11 +260,11 @@ public class AddContainProductResult {
             this.status = status;
         }
 
-        public List<Process> getProcess() {
+        public List<DetailDevice> getProcess() {
             return process;
         }
 
-        public void setProcess(List<Process> process) {
+        public void setProcess(List<DetailDevice> process) {
             this.process = process;
         }
 
@@ -493,42 +292,5 @@ public class AddContainProductResult {
             this.address = address;
         }
 
-    }
-
-    public class Service {
-
-        @SerializedName("product")
-        @Expose
-        private String product;
-        @SerializedName("_id")
-        @Expose
-        private String id;
-        @SerializedName("quantity")
-        @Expose
-        private Long quantity;
-
-        public String getProduct() {
-            return product;
-        }
-
-        public void setProduct(String product) {
-            this.product = product;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Long getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(Long quantity) {
-            this.quantity = quantity;
-        }
     }
 }

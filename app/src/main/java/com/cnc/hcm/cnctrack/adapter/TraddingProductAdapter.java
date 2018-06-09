@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.event.OnItemInputClickListener;
 import com.cnc.hcm.cnctrack.model.SearchModel;
-import com.cnc.hcm.cnctrack.model.detailproduct.Product;
+import com.cnc.hcm.cnctrack.model.common.Product;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.squareup.picasso.Picasso;

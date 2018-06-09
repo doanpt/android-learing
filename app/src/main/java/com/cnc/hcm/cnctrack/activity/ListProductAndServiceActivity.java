@@ -36,9 +36,10 @@ import com.cnc.hcm.cnctrack.model.CategoryListResult;
 import com.cnc.hcm.cnctrack.model.ProductListResult;
 import com.cnc.hcm.cnctrack.model.SearchModel;
 import com.cnc.hcm.cnctrack.model.SearchServiceModel;
-import com.cnc.hcm.cnctrack.model.Services;
-import com.cnc.hcm.cnctrack.model.detailproduct.Service;
-import com.cnc.hcm.cnctrack.model.detailproduct.Service_Services;
+import com.cnc.hcm.cnctrack.model.common.Category;
+import com.cnc.hcm.cnctrack.model.common.Product;
+import com.cnc.hcm.cnctrack.model.common.Service;
+import com.cnc.hcm.cnctrack.model.common.Service_Services;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
 
@@ -67,8 +68,8 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
     private List<MHead> arrHeads;
     private String accessToken;
     private ArrayList<Service> listServices;
-    private ArrayList<ProductListResult.Product> listProduct;
-    private ArrayList<CategoryListResult.Category> listCategory;
+    private ArrayList<Product> listProduct;
+    private ArrayList<Category> listCategory;
     private Spinner spnManufacuture, spnCategory, spnServiceCategory;
     private DialogNotification dialogNotification;
 
@@ -153,10 +154,10 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
                 Long status = response.body().getStatusCode();
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrManufactures.clear();
-                    listProduct = (ArrayList<ProductListResult.Product>) response.body().getResult();
+                    listProduct = (ArrayList<Product>) response.body().getResult();
                     arrManufactures.add("Chọn nhà sản xuất");
                     if (listProduct != null) {
-                        for (ProductListResult.Product p : listProduct) {
+                        for (Product p : listProduct) {
                             arrManufactures.add(p.getName());
                             manufactureAdapter.notifyDataSetChanged();
                         }
@@ -181,9 +182,9 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     arrCategory.clear();
                     arrCategory.add("Chọn loại thiết bị");
-                    listCategory = (ArrayList<CategoryListResult.Category>) response.body().getResult();
+                    listCategory = (ArrayList<Category>) response.body().getResult();
                     if (listCategory != null) {
-                        for (CategoryListResult.Category category : listCategory) {
+                        for (Category category : listCategory) {
                             arrCategory.add(category.getTitle());
                             categoryAdapter.notifyDataSetChanged();
                         }

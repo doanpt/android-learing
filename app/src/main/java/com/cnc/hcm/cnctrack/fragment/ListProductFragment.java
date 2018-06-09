@@ -2,16 +2,13 @@ package com.cnc.hcm.cnctrack.fragment;
 
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.activity.ListProductAndServiceActivity;
@@ -22,9 +19,8 @@ import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.customeview.MyRecyclerView;
 import com.cnc.hcm.cnctrack.event.OnItemInputClickListener;
 import com.cnc.hcm.cnctrack.model.SearchModel;
-import com.cnc.hcm.cnctrack.model.TraddingProduct;
-import com.cnc.hcm.cnctrack.model.detailproduct.Product;
-import com.cnc.hcm.cnctrack.model.detailproduct.Product_Products;
+import com.cnc.hcm.cnctrack.model.common.Product;
+import com.cnc.hcm.cnctrack.model.common.Product_Products;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
 

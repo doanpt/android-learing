@@ -24,7 +24,7 @@ import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
 import com.cnc.hcm.cnctrack.base.BaseActivity;
 import com.cnc.hcm.cnctrack.dialog.DialogNotification;
-import com.cnc.hcm.cnctrack.model.ChangeTicketAppointmentResult;
+import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
 import com.cnc.hcm.cnctrack.model.GetChangeTicketAppointmentReasonsResult;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
@@ -259,16 +259,16 @@ public class ChangeTimeActivity extends BaseActivity implements View.OnClickList
     }
 
     private void changeTicketAppointment(List<MHead> arrHeads) {
-        ApiUtils.getAPIService(arrHeads).changeTicketAppointment(mIdTask).enqueue(new Callback<ChangeTicketAppointmentResult>() {
+        ApiUtils.getAPIService(arrHeads).changeTicketAppointment(mIdTask).enqueue(new Callback<CommonAPICallBackResult>() {
             @Override
-            public void onResponse(Call<ChangeTicketAppointmentResult> call, Response<ChangeTicketAppointmentResult> response) {
+            public void onResponse(Call<CommonAPICallBackResult> call, Response<CommonAPICallBackResult> response) {
                 dismisProgressLoading();
                 long statusCode = response.body().getStatusCode();
                 if (response.isSuccessful()) {
                     if (statusCode == Conts.RESPONSE_STATUS_OK) {
-                        ChangeTicketAppointmentResult changeTicketAppointmentResult = response.body();
-                        Log.e(TAG, "loadListAvailableReason.onResponse(), statusCode: " + statusCode + ", changeTicketAppointmentResult: " + changeTicketAppointmentResult);
-                        onTicketAppointmentChanged(changeTicketAppointmentResult);
+                        CommonAPICallBackResult commonAPICallBackResult = response.body();
+                        Log.e(TAG, "loadListAvailableReason.onResponse(), statusCode: " + statusCode + ", changeTicketAppointmentResult: " + commonAPICallBackResult);
+                        onTicketAppointmentChanged(commonAPICallBackResult);
                     } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
                         showMessageRequestLogout();
                     }
@@ -276,7 +276,7 @@ public class ChangeTimeActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<ChangeTicketAppointmentResult> call, Throwable t) {
+            public void onFailure(Call<CommonAPICallBackResult> call, Throwable t) {
                 dismisProgressLoading();
                 Log.e(TAG, "changeTicketAppointment.onFailure() --> " + t);
                 if (dialogNotification != null) {
@@ -287,8 +287,8 @@ public class ChangeTimeActivity extends BaseActivity implements View.OnClickList
         });
     }
 
-    private void onTicketAppointmentChanged(ChangeTicketAppointmentResult changeTicketAppointmentResult) {
-        if (changeTicketAppointmentResult != null && changeTicketAppointmentResult.getStatusCode() == 200) {
+    private void onTicketAppointmentChanged(CommonAPICallBackResult commonAPICallBackResult) {
+        if (commonAPICallBackResult != null && commonAPICallBackResult.getStatusCode() == 200) {
             Toast.makeText(this, "Thay đổi lịch hẹn thành công", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK);
             finish();
