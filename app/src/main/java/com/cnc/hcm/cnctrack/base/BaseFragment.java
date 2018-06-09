@@ -11,7 +11,7 @@ public abstract class BaseFragment extends Fragment {
 
     public abstract int getLayoutID();
 
-    public abstract void onViewReadly(View view);
+    public abstract void onViewReady(View view);
 
     @Nullable
     @Override
@@ -22,24 +22,28 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        onViewReadly(view);
+        onViewReady(view);
     }
 
     public void actionLogout() {
         if (getActivity() instanceof BaseActivity) {
-            ((BaseActivity) getActivity()).showMessageRequestLogout();
+            if (!((BaseActivity) getActivity()).isFinishing()) {
+                ((BaseActivity) getActivity()).showMessageRequestLogout();
+            }
         }
     }
 
     public void dismisProgressLoading() {
-        if (getActivity() instanceof BaseActivity) {
+        if (!getActivity().isFinishing() && getActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).dismisProgressLoading();
         }
     }
 
     public void showProgressLoading() {
         if (getActivity() instanceof BaseActivity) {
-            ((BaseActivity) getActivity()).showProgressLoadding();
+            if (!((BaseActivity) getActivity()).isFinishing()) {
+                ((BaseActivity) getActivity()).showProgressLoadding();
+            }
         }
     }
 }

@@ -86,7 +86,7 @@ public class WorkDetailServiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onViewReadly(View view) {
+    public void onViewReady(View view) {
         iniViews(view);
     }
 

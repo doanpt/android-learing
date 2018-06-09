@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.model.detailproduct.Device_Products;
-import com.cnc.hcm.cnctrack.model.detailproduct.Product;
 import com.cnc.hcm.cnctrack.util.Conts;
 
 import java.util.ArrayList;
@@ -43,15 +42,16 @@ public class ProductProcessAdapter extends RecyclerView.Adapter<ProductProcessAd
     public void onBindViewHolder(ProductHolder holder, int position) {
         Device_Products item = arrProduct.get(position);
         holder.tvName.setText(item.getProduct().getName() + "");
-        holder.tvAmount.setText(item.getQuantity() +" "+ (item.getProduct().getUnit() != null ? item.getProduct().getUnit().getTitle() : Conts.BLANK));
+        holder.tvAmount.setText(item.getQuantity() + " " + (item.getProduct().getUnit() != null ? item.getProduct().getUnit().getTitle() : Conts.BLANK));
         holder.tvPrice.setText(item.getProduct().getPrice() + "");
         int price = 0;
+        int total = 0;
         try {
             price = Integer.parseInt(item.getProduct().getPrice().toString() + "");
+            total = item.getQuantity() * price;
         } catch (Exception e) {
             Log.e(TAG, "onBindViewHolder", e);
         }
-        int total = Integer.parseInt(item.getQuantity() + "") * price;
         holder.tvTotalPrice.setText(total + "");
     }
 

@@ -103,7 +103,7 @@ public class ListServiceFragment extends BaseFragment implements
     }
 
     @Override
-    public void onViewReadly(View view) {
+    public void onViewReady(View view) {
         rcServices = (MyRecyclerView) view.findViewById(R.id.rc_services);
         rcServices.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rcServices.setAdapter(adapter);

@@ -47,7 +47,6 @@ public class ListProductFragment extends BaseFragment implements ListProductAndS
 
 
     private MyRecyclerView recyclerView;
-    private ProgressDialog mProgressDialog;
 
     public ListProductFragment() {
         // Required empty public constructor
@@ -75,7 +74,7 @@ public class ListProductFragment extends BaseFragment implements ListProductAndS
     }
 
     @Override
-    public void onViewReadly(View view) {
+    public void onViewReady(View view) {
         recyclerView = (MyRecyclerView) view.findViewById(R.id.rc_tradding_product);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);

@@ -211,6 +211,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         unregisterReceiver(receiver);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(mProgressDialog!=null && mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
+        }
+    }
 
     public void setGpsService(GPSService gpsService) {
         this.gpsService = gpsService;

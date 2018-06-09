@@ -36,10 +36,7 @@ import com.cnc.hcm.cnctrack.base.BaseActivity;
 import com.cnc.hcm.cnctrack.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctrack.dialog.DialogInfor;
 import com.cnc.hcm.cnctrack.dialog.DialogNotification;
-import com.cnc.hcm.cnctrack.model.GetProductDetailResult;
-import com.cnc.hcm.cnctrack.model.Services;
 import com.cnc.hcm.cnctrack.model.SubmitProcessParam;
-import com.cnc.hcm.cnctrack.model.TraddingProduct;
 import com.cnc.hcm.cnctrack.model.UpdateProcessResult;
 import com.cnc.hcm.cnctrack.model.UploadImageResult;
 import com.cnc.hcm.cnctrack.model.detailproduct.DetailDevice;
@@ -212,7 +209,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         tvDeviceName.setText(body.getResult().getDevice().getDetail().getName());
         String path = "";
         try {
-            if (body.getResult().getDevice().getDetail().getBrand().getPhoto() == null) {
+            if (body.getResult().getDevice().getDetail().getBrand().getPhoto() != null) {
                 path = body.getResult().getDevice().getDetail().getBrand().getPhoto();
             } else {
                 path = body.getResult().getDevice().getDetail().getCategory().toString();
@@ -228,8 +225,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         arrTrading.clear();
         arrInit.addAll(body.getResult().getBefore().getPhotos());
         arrProcess.addAll(body.getResult().getProcess().getPhotos());
-        List<Service> listServices = getListServicesFromDevice(body.getResult().getProcess().getServices());
-        List<Product> listProducts = getListProductsFromDevice(body.getResult().getProcess().getProducts());
         arrService.addAll(body.getResult().getProcess().getServices());
         arrTrading.addAll(body.getResult().getProcess().getProducts());
         note = body.getResult().getProcess().getNote();
@@ -424,6 +419,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             fabMenu.collapse();
             return;
         }
+        if (dialogGPSSetting != null && dialogGPSSetting.isShowing()) {
+            dialogGPSSetting.dismiss();
+        }
+        if (dialogInfor != null && dialogInfor.isShowing()) {
+            dialogInfor.dismiss();
+        }
+        if (dialogNotification != null && dialogNotification.isShowing()) {
+            dialogNotification.dismiss();
+        }
         super.onBackPressed();
     }
 
@@ -477,8 +481,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     showInforDialog();
                     return;
                 }
-                //TODO add product
-//                CommonMethod.makeToast(this, "Tính năng đang hoàn thiện. Vui lòng thử lại sau!");
                 Intent intent = new Intent(this, ListProductAndServiceActivity.class);
                 startActivityForResult(intent, KEY_RESULT_FROM_LIST_SERVICE_ACTIVITY);
                 closeFabMenu();
@@ -524,7 +526,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 Log.d(TAGG, "completeWork.onResponse, status: " + status);
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Complete OK!!!");
-//                    llComplete.setVisibility(View.VISIBLE);
                     fabMenu.setVisibility(View.GONE);
                     tvCompleteWork.setVisibility(View.VISIBLE);
                 } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
@@ -542,10 +543,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     private void takePicture(int keyResult) {
-//        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(cameraIntent, keyResult);
-
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -662,6 +659,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 if (resultCode != RESULT_OK) {
                     return;
                 }
+                showProgressLoadding();
                 isNewProduct = true;
                 String type = data.getStringExtra(Conts.KEY_CHECK_TYPE_RESULT);
                 Product resultProduct;
@@ -679,9 +677,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                             isNewProduct = false;
                         }
                     }
-                    //TODO check more conđition
-                    //TODO check xem thêm câu lệnh if(isNewProduct==true) có đúng k
-                    if(isNewProduct==true){
+                    if (isNewProduct == true) {
                         SubmitProcessParam.Product product = new SubmitProcessParam.Product();
                         product.setProduct(resultProduct.getId());
                         product.setQuantity(Long.valueOf(resultProduct.getQuantity()));
@@ -781,7 +777,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 @Override
                 public void onResponse(Call<UploadImageResult> call, Response<UploadImageResult> response) {
                     Long code = response.body().getStatusCode();
-
+                    Toast.makeText(ProductDetailActivity.this, "Upload photo success", Toast.LENGTH_SHORT).show();
                     Log.d(TAGG, "uploadPhoto.onResponse, code: " + code);
                     if (code != null && code == Conts.RESPONSE_STATUS_OK) {
                         final String url = response.body().getResult().getImageURL();
@@ -823,6 +819,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 @Override
                 public void onFailure(Call<UploadImageResult> call, Throwable t) {
                     dismisProgressLoading();
+                    Toast.makeText(ProductDetailActivity.this, "Upload photo fail", Toast.LENGTH_SHORT).show();
                     t.printStackTrace();
                     if (dialogNotification != null) {
                         dialogNotification.setContentMessage("uploadPhoto.onFailure()\n" + t.getMessage());
@@ -839,7 +836,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     private void uploadProcess(final List<MHead> arrHeads, final String idTask, final SubmitProcessParam param, final int requestCode) {
         updateMessageProgressDialog("Update process...");
-
         ApiUtils.getAPIService(arrHeads).updateProcess(idTask, param).enqueue(new Callback<DetailDevice>() {
             @Override
             public void onResponse(Call<DetailDevice> call, Response<DetailDevice> response) {
@@ -848,53 +844,33 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     if (requestCode == KEY_STEP_ONE) {
                         arrInit.clear();
-                        List<String> listResult=response.body().getResult().getBefore().getPhotos();
+                        List<String> listResult = response.body().getResult().getBefore().getPhotos();
                         arrInit.addAll(listResult);
-//                        arrInit.add(param.getBefore().getPhotos().get(param.getBefore().getPhotos().size() - 1));
                         initAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_STEP_TWO) {
                         arrProcess.clear();
-                        List<String> listResult=response.body().getResult().getProcess().getPhotos();
+                        List<String> listResult = response.body().getResult().getProcess().getPhotos();
                         arrProcess.addAll(listResult);
-//                        arrProcess.add(param.getProcess().getPhotos().get(param.getProcess().getPhotos().size() - 1));
                         processAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_STEP_THREE) {
                         arrFinish.clear();
-                        List<String> listResult=response.body().getResult().getAfter().getPhotos();
+                        List<String> listResult = response.body().getResult().getAfter().getPhotos();
                         arrFinish.addAll(listResult);
-//                        arrFinish.add(param.getAfter().getPhotos().get(param.getAfter().getPhotos().size() - 1));
                         finishAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_PROCESS_SERVICE) {
-                        List<Device_Services> listServices=response.body().getResult().getProcess().getServices();
+                        List<Device_Services> listServices = response.body().getResult().getProcess().getServices();
                         arrService.clear();
                         arrService.addAll(listServices);
                         //TODO sau khi add xong thì thêm service vào array service. nhưng chưa biết lấy item nào mà thêm vào.. dang đề xuất return object giống lúc get detail product để get đc toàn bộ list
-                        //FIXME enable below line
-//                        arrService.add(deviceServices);
                         serviceAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_PROCESS_PRODUCT) {
-                        List<Device_Products> listProducts=response.body().getResult().getProcess().getProducts();
+                        List<Device_Products> listProducts = response.body().getResult().getProcess().getProducts();
                         arrTrading.clear();
                         arrTrading.addAll(listProducts);
-//                        if (isNewProduct) {
-//                            //TODO sau khi add xong thì thêm service vào array service. nhưng chưa biết lấy item nào mà thêm vào.. dang đề xuất return object giống lúc get detail product để get đc toàn bộ list
-//                            //FIXME enable below line
-//                            //arrTrading.add(deviceProducts);
-//                        } else {
-//                            //FIXME enable below line
-////                            for (int i = 0; i < arrTrading.size(); i++) {
-////                                if (arrTrading.get(i).getId().equals(deviceProducts.getProduct().getId())) {
-////                                    arrTrading.get(i).setQuantity(arrTrading.get(i).getQuantity() + 1);
-////                                    break;
-////                                }
-////                            }
-//                        }
                         productAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_ADD_NOTE) {
-                        note=response.body().getResult().getProcess().getNote();
+                        note = response.body().getResult().getProcess().getNote();
                         tvNoteWork.setText(note);
-//                        note = param.getProcess().getNote();
-//                        tvNoteWork.setText(note);
                     }
                     visiableRecycler();
                     CommonMethod.makeToast(ProductDetailActivity.this, "Success!");
@@ -908,24 +884,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
             @Override
             public void onFailure(Call<DetailDevice> call, Throwable t) {
-                if (requestCode == KEY_STEP_ONE) {
-                    //TODO xem lại đoạn này.. vì nếu trường hợp arrInit chỉ đc add khi submit thành công. dây là failure nên k đc add.
-                    // xem lại là có cần tạo 1 api để xóa picture đã submit trên server
-                    int size = arrInit.size();
-                    if (size > 0) {
-                        arrInit.remove(arrInit.size() - 1);
-                    }
-                } else if (requestCode == KEY_STEP_TWO) {
-                    int size = arrInit.size();
-                    if (size > 0) {
-                        arrProcess.remove(arrProcess.size() - 1);
-                    }
-                } else if (requestCode == KEY_STEP_THREE) {
-                    int size = arrInit.size();
-                    if (size > 0) {
-                        arrFinish.remove(arrFinish.size() - 1);
-                    }
-                }
                 t.printStackTrace();
                 dismisProgressLoading();
                 CommonMethod.makeToast(ProductDetailActivity.this, "Update process Error: " + t.getMessage());
@@ -967,7 +925,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    private void dismisDialogGPSSetting() {
+    private void dismissDialogGPSSetting() {
         if (dialogGPSSetting != null && dialogGPSSetting.isShowing() && !ProductDetailActivity.this.isDestroyed()) {
             dialogGPSSetting.dismiss();
         }
@@ -981,7 +939,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     public void handleGPSSetting(boolean statusGPS) {
         if (statusGPS) {
-            dismisDialogGPSSetting();
+            dismissDialogGPSSetting();
         } else {
             showDialogGPSSetting();
         }

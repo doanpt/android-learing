@@ -90,7 +90,7 @@ public class YearsViewFragment extends BaseFragment implements View.OnClickListe
     }
 
     @Override
-    public void onViewReadly(View view) {
+    public void onViewReady(View view) {
         initViews(view);
     }
 

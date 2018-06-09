@@ -86,7 +86,7 @@ public class MonthViewFragment extends BaseFragment implements OnMonthChangedLis
     }
 
     @Override
-    public void onViewReadly(View view) {
+    public void onViewReady(View view) {
         initViews(view);
     }
 

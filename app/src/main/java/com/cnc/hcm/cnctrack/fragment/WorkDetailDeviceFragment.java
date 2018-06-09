@@ -61,7 +61,7 @@ public class WorkDetailDeviceFragment extends BaseFragment implements DialogDeta
     }
 
     @Override
-    public void onViewReadly(View view) {
+    public void onViewReady(View view) {
         rv_device = view.findViewById(R.id.rv_device);
         rv_device.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mWorkDetailDeviceRecyclerViewAdapter = new WorkDetailDeviceRecyclerViewAdapter(this, this, getActivity());

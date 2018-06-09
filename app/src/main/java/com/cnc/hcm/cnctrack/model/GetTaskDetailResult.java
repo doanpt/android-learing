@@ -1,5 +1,7 @@
 package com.cnc.hcm.cnctrack.model;
 
+import com.cnc.hcm.cnctrack.model.detailproduct.Brand;
+import com.cnc.hcm.cnctrack.model.detailproduct.Category;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -431,8 +433,8 @@ public class GetTaskDetailResult {
                     public static class ProductDetail {
                         public String _id;
                         public String name;
-                        public String brand;
-                        public String category;
+                        public Brand brand;
+                        public Category category;
                         public String photo;
                         public long __v;
                         public String createdDate;
@@ -440,7 +442,7 @@ public class GetTaskDetailResult {
                         public double price;
                         public long quantity;
 
-                        public ProductDetail(String _id, String name, String brand, String category, String photo, long __v, String createdDate, long tax, double price, long quantity) {
+                        public ProductDetail(String _id, String name, Brand brand, Category category, String photo, long __v, String createdDate, long tax, double price, long quantity) {
                             this._id = _id;
                             this.name = name;
                             this.brand = brand;
