@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.model.GetTaskListResult;
 import com.cnc.hcm.cnctrack.model.ItemTask;
+import com.cnc.hcm.cnctrack.model.common.TaskDetailResult;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.SettingApp;
@@ -53,14 +54,14 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ItemTask itemTask = arrTask.get(position);
-        GetTaskListResult.Result result = itemTask.getTaskResult();
+        TaskDetailResult result = itemTask.getTaskResult();
         holder.tvTitleWork.setText(result.title);
         if (itemTask.getTaskResult().address != null) {
             holder.tvAddressWork.setText(result.address.getStreet());
         } else {
-            holder.tvAddressWork.setText(result.customer.address.street);
+            holder.tvAddressWork.setText(result.customer.address.getStreet());
         }
-        long idTypeWork = result.status._id;
+        long idTypeWork = result.status.getId();
         if (idTypeWork == Conts.TYPE_DOING_TASK) {
             holder.imvNotiTypeWork.setImageResource(R.drawable.ic_status_task_doing);
             holder.imvAlarmAppointment.setVisibility(View.INVISIBLE);
@@ -155,7 +156,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         public void onClick(View view) {
             if (onItemWorkClickListener != null) {
                 int position = getAdapterPosition();
-                if (arrTask.get(position).getTaskResult().status._id != Conts.TYPE_CANCEL_TASK) {
+                if (arrTask.get(position).getTaskResult().status.getId() != Conts.TYPE_CANCEL_TASK) {
                     onItemWorkClickListener.onClickItemWork(position);
                 } else {
                     onItemWorkClickListener.onClickItemWork(Conts.DEFAULT_VALUE_INT_INVALID);
@@ -179,7 +180,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             arrTask.addAll(arrTaskTemp);
         } else {
             for (int index = 0; index < arrTaskTemp.size(); index++) {
-                if (arrTaskTemp.get(index).getTaskResult().status._id == type) {
+                if (arrTaskTemp.get(index).getTaskResult().status.getId() == type) {
                     arrTask.add(arrTaskTemp.get(index));
                 }
             }

@@ -43,6 +43,8 @@ import com.cnc.hcm.cnctrack.model.LocationBackupFile;
 import com.cnc.hcm.cnctrack.model.LocationResponseUpload;
 import com.cnc.hcm.cnctrack.model.TrackLocation;
 import com.cnc.hcm.cnctrack.model.UpdateLocationResponseStatus;
+import com.cnc.hcm.cnctrack.model.common.RecommendedServices;
+import com.cnc.hcm.cnctrack.model.common.TaskDetailResult;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
@@ -527,7 +529,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                         }
 
 
-                        GetTaskListResult.Result.RecommendedServices recommendedServices = getRecommendedServiceDefault(item.getTaskResult().recommendedServices);
+                        RecommendedServices recommendedServices = getRecommendedServiceDefault(item.getTaskResult().recommendedServices);
                         if (recommendedServices != null && recommendedServices.getService() != null) {
                             addNotification(item.getTaskResult()._id, item.getTaskResult().title, recommendedServices.getService().name);
                         } else {
@@ -624,12 +626,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             Gson gson = new Gson();
             Log.d(TAGG, "eventNewTask: " + args[0].toString());
             Log.d(TAGG, "eventNewTask");
-            final GetTaskListResult.Result result = gson.fromJson(args[0].toString(), GetTaskListResult.Result.class);
+            final TaskDetailResult result = gson.fromJson(args[0].toString(), TaskDetailResult.class);
             if (result != null) {
                 if (CommonMethod.checkCurrentDay(result.appointmentDate) && listTaskToDay != null) {
                     listTaskToDay.add(new ItemTask(result));
                 }
-                GetTaskListResult.Result.RecommendedServices recommendedServices = getRecommendedServiceDefault(result.recommendedServices);
+                RecommendedServices recommendedServices = getRecommendedServiceDefault(result.recommendedServices);
                 if (recommendedServices != null && recommendedServices.getService() != null) {
                     addNotification(result._id, result.title, recommendedServices.getService().name);
                 } else {
@@ -650,10 +652,10 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         }
     };
 
-    private GetTaskListResult.Result.RecommendedServices getRecommendedServiceDefault(GetTaskListResult.Result.RecommendedServices[] recommendedServices) {
+    private RecommendedServices getRecommendedServiceDefault(RecommendedServices[] recommendedServices) {
         if (recommendedServices != null && recommendedServices.length > 0) {
             for (int i = 0; i < recommendedServices.length; i++) {
-                if (recommendedServices[i].getIsDefault()) {
+                if (recommendedServices[i].isDefault) {
                     return recommendedServices[i];
                 }
             }

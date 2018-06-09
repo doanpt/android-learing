@@ -3,7 +3,8 @@ package com.cnc.hcm.cnctrack.model.common;
 /**
  * Created by Android on 09/06/2018.
  */
-
+//FIXME
+//TODO add annotation
 public class RService {
     public String _id;
     public String name;

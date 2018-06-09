@@ -3,7 +3,8 @@ package com.cnc.hcm.cnctrack.model;
 /**
  * Created by Android on 11/03/2018.
  */
-
+//FIXME
+//TODO add annotation
 public class SearchModel {
     private String text, category, branch;
     public SearchModel() {

@@ -17,6 +17,7 @@ import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.event.RecyclerViewItemClickListener;
 import com.cnc.hcm.cnctrack.event.RecyclerViewMenuItemClickListener;
 import com.cnc.hcm.cnctrack.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctrack.model.common.DetailDevice;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
 import com.squareup.picasso.Picasso;
@@ -30,7 +31,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
 
     private static final String TAG = WorkDetailDeviceRecyclerViewAdapter.class.getSimpleName();
 
-    private final List<GetTaskDetailResult.Result.Process> processes;
+    private final List<DetailDevice> processes;
 
     private final RecyclerViewItemClickListener mListener;
 
@@ -45,7 +46,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         processes = new ArrayList<>();
     }
 
-    public List<GetTaskDetailResult.Result.Process> getProcesses() {
+    public List<DetailDevice> getProcesses() {
         return processes;
     }
 
@@ -57,22 +58,22 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
 
     @Override
     public void onBindViewHolder(final WorkDetailDeviceRecyclerViewAdapter.ViewHolder holder, final int position) {
-        final GetTaskDetailResult.Result.Process process = processes.get(position);
+        final DetailDevice process = processes.get(position);
         try {
-            holder.tv_title.setText(process.device.detail.name + "");
-            holder.tv_status.setText("Hoàn thành bước " + process.status._id);
-            String iconPath = process.device.detail.photo;
+            holder.tv_title.setText(process.getDevice().getDetail().getName() + "");
+            holder.tv_status.setText("Hoàn thành bước " + process.getDevice().getId());
+            String iconPath = process.getDevice().getDetail().photo;
             if (TextUtils.isEmpty(iconPath)) {
-                iconPath = process.device.detail.brand.photo;
+                iconPath = process.getDevice().getDetail().getBrand().getPhoto();
             }
             if (!TextUtils.isEmpty(iconPath)) {
                 Picasso.with(mContext).load(Conts.URL_BASE + iconPath).into(holder.iv_icon);
             }
 
-            final boolean isOwner = TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.user._id);
+            final boolean isOwner = TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.getUser().getId());
             if (isOwner) {
-                holder.iv_status.setImageResource(process.status._id == 1 ? R.drawable.ic_step_1_complete
-                        : (process.status._id == 2 ? R.drawable.ic_step_2_complete : R.drawable.ic_step_3_complete));
+                holder.iv_status.setImageResource(process.getStatus().getId() == 1 ? R.drawable.ic_step_1_complete
+                        : (process.getStatus().getId() == 2 ? R.drawable.ic_step_2_complete : R.drawable.ic_step_3_complete));
                 holder.item_product.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -84,19 +85,19 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
                 holder.item_product.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e(TAG, "You can't process this device. Owner of this device is " + process.user.fullname);
+                        Log.e(TAG, "You can't process this device. Owner of this device is " + process.getUser().getFullname());
                     }
                 });
-                Log.e(TAG, "Photo: " + process.user.photo);
-                if (!TextUtils.isEmpty(process.user.photo)) {
-                    Picasso.with(mContext).load(Conts.URL_BASE + process.user.photo).into(holder.iv_user_added_device);
+                Log.e(TAG, "Photo: " + process.getUser().getPhoto());
+                if (!TextUtils.isEmpty(process.getUser().getPhoto())) {
+                    Picasso.with(mContext).load(Conts.URL_BASE + process.getUser().getPhoto()).into(holder.iv_user_added_device);
                 }
             }
 
             holder.tv_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isOwner && (process.before == null || process.before.photos == null || process.before.photos.length == 0)) {
+                    if (isOwner && (process.getBefore() == null || process.getBefore().getPhotos() == null || process.getBefore().getPhotos().size() == 0)) {
                         PopupMenu popup = new PopupMenu(mContext, view);
                         popup.getMenuInflater().inflate(R.menu.task_device_popup_menu, popup.getMenu());
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -124,7 +125,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         return processes.size();
     }
 
-    public void updateDeviceList(List<GetTaskDetailResult.Result.Process> processes) {
+    public void updateDeviceList(List<DetailDevice> processes) {
         if (processes != null) {
             this.processes.clear();
             this.processes.addAll(processes);
@@ -136,7 +137,7 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         Log.e(TAG, "removeDeviceAtPosition(), position: " + position);
         try {
             if (position >= 0 && position < processes.size())
-            this.processes.remove(position);
+                this.processes.remove(position);
             notifyDataSetChanged();
         } catch (Exception e) {
             Log.e(TAG, "removeDeviceAtPosition() -> Exception: ", e);

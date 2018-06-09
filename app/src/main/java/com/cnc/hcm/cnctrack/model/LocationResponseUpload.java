@@ -8,7 +8,8 @@ import java.io.Serializable;
 /**
  * Created by Android on 11/17/2017.
  */
-
+//FIXME
+//TODO add annotation
 public class LocationResponseUpload implements Serializable{
     private static final long serialVersionUID = 1L;
 

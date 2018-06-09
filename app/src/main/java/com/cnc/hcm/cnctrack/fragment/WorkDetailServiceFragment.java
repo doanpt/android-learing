@@ -34,6 +34,10 @@ import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
 import com.cnc.hcm.cnctrack.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctrack.model.ItemPrice;
+import com.cnc.hcm.cnctrack.model.common.DetailDevice;
+import com.cnc.hcm.cnctrack.model.common.Device_Products;
+import com.cnc.hcm.cnctrack.model.common.Device_Services;
+import com.cnc.hcm.cnctrack.model.common.RecommendedServices;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
@@ -214,8 +218,8 @@ public class WorkDetailServiceFragment extends BaseFragment implements
     public void onTaskDetailLoaded(GetTaskDetailResult getTaskDetailResult) {
         Log.d(TAG, "onTaskDetailLoaded");
         try {
-            Log.d(TAG, "onTaskDetailLoaded, invoice.status._id: " + getTaskDetailResult.result.invoice.status._id);
-            if (getTaskDetailResult.result.invoice.status._id > 1) {
+            Log.d(TAG, "onTaskDetailLoaded, invoice.status._id: " + getTaskDetailResult.result.invoice.status.getId());
+            if (getTaskDetailResult.result.invoice.status.getId() > 1) {
                 btn_confirm_charge.setEnabled(false);
                 btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
                 btn_confirm_charge.setText("Đã thanh toán");
@@ -230,9 +234,9 @@ public class WorkDetailServiceFragment extends BaseFragment implements
 
         try {
             if (getTaskDetailResult.result.address != null && getTaskDetailResult.result.address.getLocation() != null) {
-                handleActions(getTaskDetailResult.result.address.getLocation().latitude, getTaskDetailResult.result.address.getLocation().longitude);
-            } else if (getTaskDetailResult.result.customer.address != null && getTaskDetailResult.result.customer.address.location != null) {
-                handleActions(getTaskDetailResult.result.customer.address.location.latitude, getTaskDetailResult.result.customer.address.location.longitude);
+                handleActions(getTaskDetailResult.result.address.getLocation().getLatitude(), getTaskDetailResult.result.address.getLocation().getLongitude());
+            } else if (getTaskDetailResult.result.customer.address != null && getTaskDetailResult.result.customer.address.getLocation() != null) {
+                handleActions(getTaskDetailResult.result.customer.address.getLocation().getLatitude(), getTaskDetailResult.result.customer.address.getLocation().getLatitude());
             } else {
                 Toast.makeText(getActivity(), "Not found the work address.", Toast.LENGTH_LONG).show();
             }
@@ -273,12 +277,12 @@ public class WorkDetailServiceFragment extends BaseFragment implements
         }
 
         try {
-            GetTaskDetailResult.Result.RecommendedServices[] recommendedServices = getTaskDetailResult.result.recommendedServices;
+            RecommendedServices[] recommendedServices = getTaskDetailResult.result.recommendedServices;
             mWorkDetailRequireRecyclerViewAdapter.updateRequireList(Arrays.asList(recommendedServices));
 
             int totalService = 0;
             int totalDevice = 0;
-            for (GetTaskDetailResult.Result.RecommendedServices item : recommendedServices) {
+            for (RecommendedServices item : recommendedServices) {
                 if (item != null) {
                     totalService += 1;
                     totalDevice += item.quantity;
@@ -298,22 +302,22 @@ public class WorkDetailServiceFragment extends BaseFragment implements
 //            }
             if (getTaskDetailResult.result.process != null) {
                 for (int i = 0; i < getTaskDetailResult.result.process.length; i++) {
-                    GetTaskDetailResult.Result.Process process = getTaskDetailResult.result.process[i];
-                    if (process != null && process.process != null) {
-                        GetTaskDetailResult.Result.Process.ProcessDetail.Service[] services = process.process.services;
+                    DetailDevice process = getTaskDetailResult.result.process[i];
+                    if (process != null && process.getProcess() != null) {
+                        List<Device_Services> services = process.getProcess().getServices();
                         if (services != null) {
-                            for (GetTaskDetailResult.Result.Process.ProcessDetail.Service service : services) {
+                            for (Device_Services service : services) {
                                 if (service != null) {
-                                    itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, service._id, service.product.name, service.product.tax, service.product.price, service.quantity));
+                                    itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, service.getId(), service.getService().getName(), service.getService().getTax(), service.getService().getPrice(), service.getQuantity()));
                                 }
                             }
                         }
 
-                        GetTaskDetailResult.Result.Process.ProcessDetail.Product[] products = process.process.products;
+                        List<Device_Products> products = process.getProcess().getProducts();
                         if (products != null) {
-                            for (GetTaskDetailResult.Result.Process.ProcessDetail.Product product : products) {
+                            for (Device_Products product : products) {
                                 if (product != null) {
-                                    itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, product._id, product.product.name, product.product.tax, product.product.price, product.quantity));
+                                    itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, product.getId(), product.getProduct().getName(), product.getProduct().getTax(), product.getProduct().getPrice(), product.getProduct().getQuantity()));
                                 }
                             }
                         }

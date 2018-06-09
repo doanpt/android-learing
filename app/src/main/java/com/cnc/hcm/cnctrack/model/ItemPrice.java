@@ -1,5 +1,6 @@
 package com.cnc.hcm.cnctrack.model;
-
+//FIXME
+//TODO add annotation
 public class ItemPrice {
 
     public static final int TYPE_SERVICES = 0;

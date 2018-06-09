@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Device  implements Serializable {
+public class Device implements Serializable {
 
     @SerializedName("_id")
     @Nullable
@@ -21,6 +21,18 @@ public class Device  implements Serializable {
     @Nullable
     @Expose
     private Detail detail;
+    @SerializedName("customer")
+    @Nullable
+    @Expose
+    public String customer;
+    @SerializedName("__v")
+    @Nullable
+    @Expose
+    public long __v;
+    @SerializedName("createdDate")
+    @Nullable
+    @Expose
+    public String createdDate;
 
     public String getId() {
         return id;

@@ -5,7 +5,8 @@ import com.google.android.gms.maps.model.Marker;
 /**
  * Created by giapmn on 1/5/18.
  */
-
+//FIXME
+//TODO add annotation
 public class ItemMarkedMap {
     private String id;
     private Marker marker;

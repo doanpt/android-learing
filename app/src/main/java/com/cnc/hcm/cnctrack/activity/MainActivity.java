@@ -49,11 +49,12 @@ import com.cnc.hcm.cnctrack.dialog.DialogNotification;
 import com.cnc.hcm.cnctrack.dialog.DialogOptionFilter;
 import com.cnc.hcm.cnctrack.fragment.MonthViewFragment;
 import com.cnc.hcm.cnctrack.fragment.YearsViewFragment;
+import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
 import com.cnc.hcm.cnctrack.model.GetTaskListResult;
 import com.cnc.hcm.cnctrack.model.ItemCancelTask;
 import com.cnc.hcm.cnctrack.model.ItemMarkedMap;
 import com.cnc.hcm.cnctrack.model.ItemTask;
-import com.cnc.hcm.cnctrack.model.ResponseCNC;
+import com.cnc.hcm.cnctrack.model.common.TaskDetailResult;
 import com.cnc.hcm.cnctrack.service.GPSService;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
@@ -349,12 +350,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                         Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
                         arrItemTask.clear();
                         if (getTaskListResult != null) {
-                            GetTaskListResult.Result[] result = getTaskListResult.result;
+                            TaskDetailResult[] result = getTaskListResult.result;
                             if (result != null && result.length > 0) {
-                                for (GetTaskListResult.Result itemResult : result) {
+                                for (TaskDetailResult itemResult : result) {
                                     ItemTask itemTask = new ItemTask(itemResult);
                                     arrItemTask.add(itemTask);
-                                    switch ((int) itemTask.getTaskResult().status._id) {
+                                    switch ((int) itemTask.getTaskResult().status.getId()) {
                                         case Conts.TYPE_COMPLETE_TASK:
                                             quantityCompletedTask++;
                                             break;
@@ -422,7 +423,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         tvQuantityCompleteTask.setText(quantityCompletedTask + Conts.BLANK);
     }
 
-    public void receiverNewTask(GetTaskListResult.Result result) {
+    public void receiverNewTask(TaskDetailResult result) {
 
         String currenDate = CommonMethod.formatTimeStandand(CommonMethod.getInstanceCalendar().getTime());
 
@@ -448,7 +449,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     private void initMarkerOnMap() {
         for (ItemTask task : arrItemTask) {
             BitmapDescriptor bitmapDescriptor = null;
-            switch ((int) task.getTaskResult().status._id) {
+            switch ((int) task.getTaskResult().status.getId()) {
                 case Conts.TYPE_DOING_TASK:
                     bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marked_task_doing);
                     break;
@@ -463,16 +464,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                     break;
 
             }
-            GetTaskListResult.Result result = task.getTaskResult();
+            TaskDetailResult result = task.getTaskResult();
             addMarkedTask(result, bitmapDescriptor);
         }
     }
 
-    private void addMarkedTask(GetTaskListResult.Result result, BitmapDescriptor bitmapDescriptor) {
+    private void addMarkedTask(TaskDetailResult result, BitmapDescriptor bitmapDescriptor) {
         if (result.address != null) {
             if (result.address.getLocation() != null) {
-                addMarkerMap(result._id, result.address.getLocation().latitude,
-                        result.address.getLocation().longitude, result.address.getStreet(), bitmapDescriptor);
+                addMarkerMap(result._id, result.address.getLocation().getLatitude(),
+                        result.address.getLocation().getLongitude(), result.address.getStreet(), bitmapDescriptor);
             } else {
                 String locationName = result.address.getStreet();
                 Address address = CommonMethod.getLocationFromLocationName(MainActivity.this, locationName);
@@ -483,9 +484,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 }
             }
         } else {
-            if (result.customer != null && result.customer.address != null && result.customer.address.location != null) {
-                addMarkerMap(result._id, result.customer.address.location.latitude,
-                        result.customer.address.location.longitude, result.customer.address.street, bitmapDescriptor);
+            if (result.customer != null && result.customer.address != null && result.customer.address.getLocation() != null) {
+                addMarkerMap(result._id, result.customer.address.getLocation().getLatitude(),
+                        result.customer.address.getLocation().getLongitude(), result.customer.address.getStreet(), bitmapDescriptor);
             } else {
                 Log.e(TAG, "Error in addMarkerMap and task.getTaskResult().address CUSTOMER = null");
             }
@@ -865,16 +866,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         String accessToken = UserInfo.getInstance(this).getAccessToken();
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
-        ApiUtils.getAPIService(arrHeads).updateStatusIsRead(idTask).enqueue(new Callback<ResponseCNC>() {
+        ApiUtils.getAPIService(arrHeads).updateStatusIsRead(idTask).enqueue(new Callback<CommonAPICallBackResult>() {
             @Override
-            public void onResponse(Call<ResponseCNC> call, Response<ResponseCNC> response) {
+            public void onResponse(Call<CommonAPICallBackResult> call, Response<CommonAPICallBackResult> response) {
                 Log.e(TAG, "updateStatusIsRead.onResponse(), statusCode: " + response.code());
                 Log.e(TAG, "updateStatusIsRead.onResponse(), --> response: " + response.toString());
                 if (response.isSuccessful()) {
-                    int statusCode = response.body().getStatusCode();
-                    switch (statusCode) {
+                    Long statusCode = response.body().getStatusCode();
+                    int code = (int) statusCode.longValue();
+                    switch (code) {
                         case Conts.RESPONSE_STATUS_OK:
-                            ResponseCNC responseCNC = response.body();
+                            CommonAPICallBackResult responseCNC = response.body();
                             if (responseCNC.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
                                 if (position > 0) {
                                     taskListAdapter.getItem(position).getTaskResult().isRead = true;
@@ -890,7 +892,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             }
 
             @Override
-            public void onFailure(Call<ResponseCNC> call, Throwable t) {
+            public void onFailure(Call<CommonAPICallBackResult> call, Throwable t) {
                 Log.e(TAG, "updateStatusIsRead.onFailure() --> " + t);
                 t.printStackTrace();
             }
@@ -989,7 +991,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
         for (ItemTask itemTask : arrItemTask) {
             if (TextUtils.equals(itemCancelTask.data._id, itemTask.getTaskResult()._id)) {
-                itemTask.getTaskResult().status._id = Conts.TYPE_CANCEL_TASK;
+                itemTask.getTaskResult().status.setId(Conts.TYPE_CANCEL_TASK);
                 taskListAdapter.notiDataChange(arrItemTask);
                 // TODO update các item khác nếu cần. ex: taskCount,...
                 return;

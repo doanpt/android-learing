@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class User implements Serializable{
+public class User implements Serializable {
 
     @SerializedName("_id")
     @Nullable
@@ -53,6 +53,58 @@ public class User implements Serializable{
     @Nullable
     @Expose
     private String createdDate;
+    @SerializedName("__v")
+    @Nullable
+    @Expose
+    private long __v;
+    @SerializedName("group")
+    @Nullable
+    @Expose
+    private long group;
+    @SerializedName("isDriver")
+    @Nullable
+    @Expose
+    private boolean isDriver;
+    @SerializedName("agent")
+    @Nullable
+    @Expose
+    private String agent;
+
+    @Nullable
+    public long get__v() {
+        return __v;
+    }
+
+    public void set__v(@Nullable long __v) {
+        this.__v = __v;
+    }
+
+    @Nullable
+    public long getGroup() {
+        return group;
+    }
+
+    public void setGroup(@Nullable long group) {
+        this.group = group;
+    }
+
+    @Nullable
+    public boolean isDriver() {
+        return isDriver;
+    }
+
+    public void setDriver(@Nullable boolean driver) {
+        isDriver = driver;
+    }
+
+    @Nullable
+    public String getAgent() {
+        return agent;
+    }
+
+    public void setAgent(@Nullable String agent) {
+        this.agent = agent;
+    }
 
     public String getId() {
         return id;

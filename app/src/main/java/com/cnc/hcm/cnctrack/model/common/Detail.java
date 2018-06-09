@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Detail  implements Serializable {
+public class Detail implements Serializable {
 
     @SerializedName("_id")
     @Nullable
@@ -33,6 +33,14 @@ public class Detail  implements Serializable {
     @Nullable
     @Expose
     private String createdDate;
+    @SerializedName("__v")
+    @Nullable
+    @Expose
+    public long __v;
+    @SerializedName("photo")
+    @Nullable
+    @Expose
+    public String photo;
 
     public String getId() {
         return id;

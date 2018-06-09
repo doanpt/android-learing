@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctrack.model.common.RecommendedServices;
 import com.cnc.hcm.cnctrack.util.Conts;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class WorkDetailRequireRecyclerViewAdapter extends RecyclerView.Adapter<W
 
     private static final String TAG = WorkDetailRequireRecyclerViewAdapter.class.getSimpleName();
 
-    private List<GetTaskDetailResult.Result.RecommendedServices> itemRecommendedServoces = new ArrayList<>();
+    private List<RecommendedServices> itemRecommendedServoces = new ArrayList<>();
 
     private Context context;
 
@@ -27,7 +28,7 @@ public class WorkDetailRequireRecyclerViewAdapter extends RecyclerView.Adapter<W
         this.context = context;
     }
 
-    public List<GetTaskDetailResult.Result.RecommendedServices> getItemRecommendedServoces() {
+    public List<RecommendedServices> getItemRecommendedServoces() {
         return itemRecommendedServoces;
     }
 
@@ -39,7 +40,7 @@ public class WorkDetailRequireRecyclerViewAdapter extends RecyclerView.Adapter<W
 
     @Override
     public void onBindViewHolder(WorkDetailRequireRecyclerViewAdapter.ViewHolder holder, int position) {
-        GetTaskDetailResult.Result.RecommendedServices recommendedServices = this.itemRecommendedServoces.get(position);
+       RecommendedServices recommendedServices = this.itemRecommendedServoces.get(position);
         try {
             holder.tv_service_name.setText(recommendedServices.service.name + Conts.BLANK);
             holder.tv_device_name.setText(recommendedServices.device + Conts.BLANK);
@@ -54,7 +55,7 @@ public class WorkDetailRequireRecyclerViewAdapter extends RecyclerView.Adapter<W
         return itemRecommendedServoces.size();
     }
 
-    public void updateRequireList(List<GetTaskDetailResult.Result.RecommendedServices> itemPrices) {
+    public void updateRequireList(List<RecommendedServices> itemPrices) {
         if (itemPrices != null) {
             this.itemRecommendedServoces = itemPrices;
             notifyDataSetChanged();

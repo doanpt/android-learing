@@ -1,31 +1,56 @@
 package com.cnc.hcm.cnctrack.model.common;
 
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Android on 09/06/2018.
  */
-
 public class Address {
-    public String province;
-    public String district;
-    public String street;
-    public Location location;
+    @SerializedName("street")
+    @Expose
+    private String street;
+    @SerializedName("district")
+    @Expose
+    private District district;
+    @SerializedName("province")
+    @Expose
+    private String province;
+    @SerializedName("location")
+    @Expose
+    private Location location;
 
-    public Address(String province, String district, String street, Location location) {
-        this.province = province;
-        this.district = district;
-        this.street = street;
-        this.location = location;
+    public String getStreet() {
+        return street;
     }
 
-    public static class Location {
-        public double latitude;
-        public double longitude;
+    public void setStreet(String street) {
+        this.street = street;
+    }
 
-        public Location(double latitude, double longitude) {
-            this.latitude = latitude;
-            this.longitude = longitude;
-        }
+    public District getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(District district) {
+        this.district = district;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
 

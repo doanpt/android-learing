@@ -7,7 +7,8 @@ import java.io.Serializable;
 /**
  * Created by sev_user on 10/31/2017.
  */
-
+//FIXME
+//TODO add annotation
 public class LocationBackupFile implements Serializable {
     private static final long serialVersionUID = 1L;
     private Double latitude;

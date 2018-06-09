@@ -36,6 +36,8 @@ import com.cnc.hcm.cnctrack.model.AddContainProductResult;
 import com.cnc.hcm.cnctrack.model.CheckContainProductResult;
 import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
 import com.cnc.hcm.cnctrack.model.GetTaskDetailResult;
+import com.cnc.hcm.cnctrack.model.common.DetailDevice;
+import com.cnc.hcm.cnctrack.model.common.TaskDetailResult;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
@@ -302,15 +304,15 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 if (getTaskDetailResult.result.address != null) {
                     tv_address_item_work.setText(getTaskDetailResult.result.address.getStreet() + "");
                 } else if (getTaskDetailResult.result.customer.address != null) {
-                    tv_address_item_work.setText(getTaskDetailResult.result.customer.address.street + "");
+                    tv_address_item_work.setText(getTaskDetailResult.result.customer.address.getStreet() + "");
                 }
                 if (getTaskDetailResult.result.customer != null) {
                     customerId = getTaskDetailResult.result.customer._id;
                 }
 
                 try {
-                    fabMenu.setVisibility(getTaskDetailResult.result.status._id == Conts.TYPE_COMPLETE_TASK ? View.GONE : View.VISIBLE);
-                    tv_completed_ticket.setVisibility(getTaskDetailResult.result.status._id == Conts.TYPE_COMPLETE_TASK ? View.VISIBLE : View.GONE);
+                    fabMenu.setVisibility(getTaskDetailResult.result.status.getId() == Conts.TYPE_COMPLETE_TASK ? View.GONE : View.VISIBLE);
+                    tv_completed_ticket.setVisibility(getTaskDetailResult.result.status.getId() == Conts.TYPE_COMPLETE_TASK ? View.VISIBLE : View.GONE);
                 } catch (Exception e) {
                     Log.e(TAG, "onTaskInfoLoaded() --> Exception occurs.", e);
                 }
@@ -446,12 +448,12 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     }
 
     private void handleFindWayAction() {
-        GetTaskDetailResult.Result result = getTaskDetailResult.result;
+        TaskDetailResult result = getTaskDetailResult.result;
         if (mainActivity != null && result != null) {
             if (result.address != null) {
                 if (result.address.getLocation() != null) {
                     CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
-                            mainActivity.getLongtitude(), result.address.getLocation().latitude, result.address.getLocation().longitude);
+                            mainActivity.getLongtitude(), result.address.getLocation().getLatitude(), result.address.getLocation().getLongitude());
                 } else {
                     String locationName = result.address.getStreet();
                     Address address = CommonMethod.getLocationFromLocationName(getContext(), locationName);
@@ -461,10 +463,10 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                     }
                 }
             } else {
-                if (result.customer != null && result.customer.address != null && result.customer.address.location != null) {
+                if (result.customer != null && result.customer.address != null && result.customer.address.getLocation() != null) {
 
                     CommonMethod.actionFindWayInMapApp(getContext(), mainActivity.getLatitude(),
-                            mainActivity.getLongtitude(), result.customer.address.location.latitude, result.customer.address.location.longitude);
+                            mainActivity.getLongtitude(), result.customer.address.getLocation().getLatitude(), result.customer.address.getLocation().getLongitude());
                 }
             }
         }
@@ -474,8 +476,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         boolean isComplete = true;
         String message = "Đang xử lý hoàn thành ticket";
         try {
-            Log.d(TAG, "onTaskDetailLoaded, invoice.status._id: " + getTaskDetailResult.result.invoice.status._id);
-            if (getTaskDetailResult.result.invoice.status._id <= 1) {
+            Log.d(TAG, "onTaskDetailLoaded, invoice.status._id: " + getTaskDetailResult.result.invoice.status.getId());
+            if (getTaskDetailResult.result.invoice.status.getId() <= 1) {
                 isComplete = false;
                 message = "Khách hàng phải thanh toán trước khi đóng ticket";
             }
@@ -485,13 +487,13 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         }
 
         try {
-            GetTaskDetailResult.Result.Process[] process = getTaskDetailResult.result.process;
+            DetailDevice[] process = getTaskDetailResult.result.process;
             if (process == null || process.length < 1) {
                 isComplete = false;
                 message = "Chưa có thiết bị nào được sửa chữa";
             } else {
                 for (int i = 0; i < process.length; i++) {
-                    if (process[i].status._id < 3) {
+                    if (process[i].getStatus().getId() < 3) {
                         isComplete = false;
                         message = "Thiết bị thứ " + (i + 1) + " chưa được sửa xong";
                         break;
@@ -554,9 +556,9 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             if (result.getContents() != null) {
                 final String content = result.getContents();
                 try {
-                    GetTaskDetailResult.Result.Process[] processes = getTaskDetailResult.result.process;
+                    DetailDevice[] processes = getTaskDetailResult.result.process;
                     for (int i = 0; i < processes.length; i++) {
-                        if (TextUtils.equals(content, processes[i].device._id)) {
+                        if (TextUtils.equals(content, processes[i].getDevice().getId())) {
                             showDialogDeviceExisted();
                             return;
                         }
@@ -654,7 +656,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 if (getTaskDetailResult.result.address != null) {
                     workLocation += getTaskDetailResult.result.address.getStreet();
                 } else if (getTaskDetailResult.result.customer.address != null) {
-                    workLocation += getTaskDetailResult.result.customer.address.street;
+                    workLocation += getTaskDetailResult.result.customer.address.getStreet();
                 }
             }
         } catch (Exception e) {

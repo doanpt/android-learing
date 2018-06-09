@@ -13,7 +13,7 @@ public class Executive {
     @SerializedName("user")
     @Nullable
     @Expose
-    private String user;
+    private User user;
     @SerializedName("_id")
     @Nullable
     @Expose
@@ -27,11 +27,11 @@ public class Executive {
     @Expose
     private Boolean isLeader;
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

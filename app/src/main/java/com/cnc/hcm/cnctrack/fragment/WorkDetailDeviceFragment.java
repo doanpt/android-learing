@@ -26,8 +26,9 @@ import com.cnc.hcm.cnctrack.base.BaseFragment;
 import com.cnc.hcm.cnctrack.dialog.DialogNotification;
 import com.cnc.hcm.cnctrack.event.RecyclerViewItemClickListener;
 import com.cnc.hcm.cnctrack.event.RecyclerViewMenuItemClickListener;
+import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
 import com.cnc.hcm.cnctrack.model.GetTaskDetailResult;
-import com.cnc.hcm.cnctrack.model.RemoveDeviceFromTaskResult;
+import com.cnc.hcm.cnctrack.model.common.DetailDevice;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
@@ -129,7 +130,7 @@ public class WorkDetailDeviceFragment extends BaseFragment implements DialogDeta
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                tryToRemoveDevice(position, mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id);
+                tryToRemoveDevice(position, mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).getDevice().getId());
             }
         });
         dialog.show();
@@ -142,13 +143,13 @@ public class WorkDetailDeviceFragment extends BaseFragment implements DialogDeta
         List<MHead> arrHeads = new ArrayList<>();
         arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessToken));
         arrHeads.add(new MHead(Conts.KEY_DEVICE_ID, deviceId));
-        ApiUtils.getAPIService(arrHeads).removeDeviceFromTask(saveTaskId).enqueue(new Callback<RemoveDeviceFromTaskResult>() {
+        ApiUtils.getAPIService(arrHeads).removeDeviceFromTask(saveTaskId).enqueue(new Callback<CommonAPICallBackResult>() {
             @Override
-            public void onResponse(Call<RemoveDeviceFromTaskResult> call, Response<RemoveDeviceFromTaskResult> response) {
-                int statusCode = response.body().getStatusCode();
+            public void onResponse(Call<CommonAPICallBackResult> call, Response<CommonAPICallBackResult> response) {
+                long statusCode = response.body().getStatusCode();
                 if (response.isSuccessful()) {
                     if (statusCode == Conts.RESPONSE_STATUS_OK) {
-                        RemoveDeviceFromTaskResult result = response.body();
+                        CommonAPICallBackResult result = response.body();
                         Log.e(TAG, "tryToRemoveDevice.onResponse(), statusCode: " + statusCode + ", result: " + result);
                         dismisProgressLoading();
                         onDeviceRemovedFromTask(position, result);
@@ -159,7 +160,7 @@ public class WorkDetailDeviceFragment extends BaseFragment implements DialogDeta
             }
 
             @Override
-            public void onFailure(Call<RemoveDeviceFromTaskResult> call, Throwable t) {
+            public void onFailure(Call<CommonAPICallBackResult> call, Throwable t) {
                 dismisProgressLoading();
                 Log.e(TAG, "tryToRemoveDevice.onFailure() --> " + t);
                 t.printStackTrace();
@@ -168,7 +169,7 @@ public class WorkDetailDeviceFragment extends BaseFragment implements DialogDeta
         });
     }
 
-    private void onDeviceRemovedFromTask(final int position, final RemoveDeviceFromTaskResult result) {
+    private void onDeviceRemovedFromTask(final int position, final CommonAPICallBackResult result) {
         try {
             Log.e(TAG, "onDeviceRemovedFromTask. getStatusCode: " + result.getStatusCode() + ", getMessage: " + result.getMessage());
             getActivity().runOnUiThread(new Runnable() {
@@ -213,13 +214,13 @@ public class WorkDetailDeviceFragment extends BaseFragment implements DialogDeta
 
 
     private void processDevice(int position) {
-        Log.d(TAG, "item_product.onClick(), taskId: " + saveTaskId + ", deviceId: " + mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).device._id);
-        GetTaskDetailResult.Result.Process process = mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position);
+        Log.d(TAG, "item_product.onClick(), taskId: " + saveTaskId + ", deviceId: " + mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position).getDevice().getId());
+        DetailDevice process = mWorkDetailDeviceRecyclerViewAdapter.getProcesses().get(position);
         Fragment parentFragment = getParentFragment();
         if (process != null && parentFragment instanceof DialogDetailTaskFragment) {
             try {
                 Intent productDetail = new Intent(getActivity(), ProductDetailActivity.class);
-                productDetail.putExtra(Conts.KEY_PRODUCT_ID, process.device._id);
+                productDetail.putExtra(Conts.KEY_PRODUCT_ID, process.getDevice().getId());
                 productDetail.putExtra(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken());
                 productDetail.putExtra(Conts.KEY_ID_TASK, saveTaskId);
                 DialogDetailTaskFragment dialogDetailTaskFragment = (DialogDetailTaskFragment) getParentFragment();
@@ -229,7 +230,7 @@ public class WorkDetailDeviceFragment extends BaseFragment implements DialogDeta
                     if (getTaskDetailResult.result.address != null) {
                         productDetail.putExtra(Conts.KEY_WORK_LOCATION, getTaskDetailResult.result.address.getStreet() + "");
                     } else if (getTaskDetailResult.result.customer.address != null) {
-                        productDetail.putExtra(Conts.KEY_WORK_LOCATION, getTaskDetailResult.result.customer.address.street + "");
+                        productDetail.putExtra(Conts.KEY_WORK_LOCATION, getTaskDetailResult.result.customer.address.getStreet() + "");
                     }
                     String date = getTaskDetailResult.result.createdDate;
                     if (!TextUtils.isEmpty(date)) {

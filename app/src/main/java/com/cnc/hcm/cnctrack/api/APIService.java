@@ -13,10 +13,8 @@ import com.cnc.hcm.cnctrack.model.GetTaskListResult;
 import com.cnc.hcm.cnctrack.model.GetUserProfileResponseStatus;
 import com.cnc.hcm.cnctrack.model.ItemTrackLocation;
 import com.cnc.hcm.cnctrack.model.LoginResponseStatus;
-import com.cnc.hcm.cnctrack.model.ProcessDeviceResult;
+
 import com.cnc.hcm.cnctrack.model.ProductListResult;
-import com.cnc.hcm.cnctrack.model.RemoveDeviceFromTaskResult;
-import com.cnc.hcm.cnctrack.model.ResponseCNC;
 import com.cnc.hcm.cnctrack.model.SubmitProcessParam;
 import com.cnc.hcm.cnctrack.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctrack.model.UpdateProcessResult;
@@ -54,8 +52,8 @@ public interface APIService {
     @GET(Conts.PATH_TASK_DETAIL)
     Call<GetTaskDetailResult> getTaskDetails(@Path("id") String taskId);
 
-    @PATCH(Conts.PATH_TASK_DETAIL_PROCESS_DEVICE)
-    Call<ProcessDeviceResult> processDevice(@Path("id") String taskId);
+//    @PATCH(Conts.PATH_TASK_DETAIL_PROCESS_DEVICE)
+//    Call<ProcessDeviceResult> processDevice(@Path("id") String taskId);
 
     @GET(Conts.PATH_GET_PRODUCT_BY_ID)
     Call<CheckContainProductResult> getProductById(@Path("id") String productID);
@@ -97,7 +95,7 @@ public interface APIService {
     Call<CommonAPICallBackResult> completeTicket(@Path("id") String idTask);
 
     @PATCH(Conts.PATH_UPDATE_STATUS_IS_READ)
-    Call<ResponseCNC> updateStatusIsRead(@Path("id") String idTask);
+    Call<CommonAPICallBackResult> updateStatusIsRead(@Path("id") String idTask);
 
     @GET(Conts.PATH_GET_TRADING_PRODUCT)
     Call<Product_Products> getListTraddingProduct();
@@ -112,5 +110,5 @@ public interface APIService {
     Call<CommonAPICallBackResult> changeTicketAppointment(@Path("id") String idTask);
 
     @PATCH(Conts.PATH_REMOVE_DEVICE_FROM_TASK)
-    Call<RemoveDeviceFromTaskResult> removeDeviceFromTask(@Path("id") String taskId);
+    Call<CommonAPICallBackResult> removeDeviceFromTask(@Path("id") String taskId);
 }
