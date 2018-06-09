@@ -659,6 +659,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 }).start();
                 break;
             case KEY_ADD_NOTE:
+                showProgressLoadding();
                 checkDataFromNoteActivity(resultCode, data);
                 break;
             case KEY_RESULT_FROM_LIST_SERVICE_ACTIVITY:
