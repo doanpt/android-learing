@@ -1,14 +1,16 @@
 package com.cnc.hcm.cnctrack.model;
 
-import com.cnc.hcm.cnctrack.model.common.TaskDetailResult;
+
+import com.cnc.hcm.cnctrack.model.common.TaskListResult;
+
 //FIXME
 //TODO add annotation
 public class GetTaskListResult {
     public long statusCode;
     public String message;
-    public TaskDetailResult[] result;
+    public TaskListResult[] result;
 
-    public GetTaskListResult(long statusCode, String message, TaskDetailResult[] result) {
+    public GetTaskListResult(long statusCode, String message, TaskListResult[] result) {
         this.statusCode = statusCode;
         this.message = message;
         this.result = result;

@@ -45,6 +45,7 @@ import com.cnc.hcm.cnctrack.model.TrackLocation;
 import com.cnc.hcm.cnctrack.model.UpdateLocationResponseStatus;
 import com.cnc.hcm.cnctrack.model.common.RecommendedServices;
 import com.cnc.hcm.cnctrack.model.common.TaskDetailResult;
+import com.cnc.hcm.cnctrack.model.common.TaskListResult;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.UserInfo;
@@ -626,7 +627,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             Gson gson = new Gson();
             Log.d(TAGG, "eventNewTask: " + args[0].toString());
             Log.d(TAGG, "eventNewTask");
-            final TaskDetailResult result = gson.fromJson(args[0].toString(), TaskDetailResult.class);
+            final TaskListResult result = gson.fromJson(args[0].toString(), TaskListResult.class);
             if (result != null) {
                 if (CommonMethod.checkCurrentDay(result.appointmentDate) && listTaskToDay != null) {
                     listTaskToDay.add(new ItemTask(result));

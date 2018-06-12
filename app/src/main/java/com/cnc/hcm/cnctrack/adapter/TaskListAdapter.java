@@ -13,9 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cnc.hcm.cnctrack.R;
-import com.cnc.hcm.cnctrack.model.GetTaskListResult;
 import com.cnc.hcm.cnctrack.model.ItemTask;
-import com.cnc.hcm.cnctrack.model.common.TaskDetailResult;
+import com.cnc.hcm.cnctrack.model.common.TaskListResult;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.SettingApp;
@@ -54,7 +53,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ItemTask itemTask = arrTask.get(position);
-        TaskDetailResult result = itemTask.getTaskResult();
+        TaskListResult result = itemTask.getTaskResult();
         holder.tvTitleWork.setText(result.title);
         if (itemTask.getTaskResult().address != null) {
             holder.tvAddressWork.setText(result.address.getStreet());

@@ -1,6 +1,6 @@
 package com.cnc.hcm.cnctrack.model;
 
-import com.cnc.hcm.cnctrack.model.common.TaskDetailResult;
+import com.cnc.hcm.cnctrack.model.common.TaskListResult;
 import com.cnc.hcm.cnctrack.util.Conts;
 
 /**
@@ -10,21 +10,21 @@ import com.cnc.hcm.cnctrack.util.Conts;
 //TODO add annotation
 public class ItemTask {
 
-    private TaskDetailResult taskResult;
+    private TaskListResult taskResult;
     private String distanceToMyLocation;
     private String timeGoToMyLocation;
 
-    public ItemTask(TaskDetailResult taskResult) {
+    public ItemTask(TaskListResult taskResult) {
         this.taskResult = taskResult;
         distanceToMyLocation = "0 km";
         timeGoToMyLocation = Conts.BLANK;
     }
 
-    public TaskDetailResult getTaskResult() {
+    public TaskListResult getTaskResult() {
         return taskResult;
     }
 
-    public void setTaskResult(TaskDetailResult taskResult) {
+    public void setTaskResult(TaskListResult taskResult) {
         this.taskResult = taskResult;
     }
 

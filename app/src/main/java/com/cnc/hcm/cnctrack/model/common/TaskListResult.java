@@ -1,20 +1,20 @@
 package com.cnc.hcm.cnctrack.model.common;
 
+
 /**
  * Created by Android on 09/06/2018.
  */
 
-public class TaskDetailResult {
+public class TaskListResult {
     public long __v;
     public String _id;
     public String title;
-    public Service service;
     public Customer customer;
     public String note;
     public String createdDate;
     public Recipient recipient;
     public boolean isRead;
-    public InvoiceTaskDetail invoice;
+    public InvoiceTaskList invoice;
     public Status status;
     public DetailDevice process[];
     public Executive executive[];
@@ -86,11 +86,11 @@ public class TaskDetailResult {
         isRead = read;
     }
 
-    public InvoiceTaskDetail getInvoice() {
+    public InvoiceTaskList getInvoice() {
         return invoice;
     }
 
-    public void setInvoice(InvoiceTaskDetail invoice) {
+    public void setInvoice(InvoiceTaskList invoice) {
         this.invoice = invoice;
     }
 

@@ -42,11 +42,11 @@ import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
 import com.cnc.hcm.cnctrack.base.BaseActivity;
 import com.cnc.hcm.cnctrack.customeview.MyRecyclerView;
-import com.cnc.hcm.cnctrack.fragment.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctrack.dialog.DialogGPSSetting;
 import com.cnc.hcm.cnctrack.dialog.DialogNotiTaskAppointment;
 import com.cnc.hcm.cnctrack.dialog.DialogNotification;
 import com.cnc.hcm.cnctrack.dialog.DialogOptionFilter;
+import com.cnc.hcm.cnctrack.fragment.DialogDetailTaskFragment;
 import com.cnc.hcm.cnctrack.fragment.MonthViewFragment;
 import com.cnc.hcm.cnctrack.fragment.YearsViewFragment;
 import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
@@ -54,7 +54,7 @@ import com.cnc.hcm.cnctrack.model.GetTaskListResult;
 import com.cnc.hcm.cnctrack.model.ItemCancelTask;
 import com.cnc.hcm.cnctrack.model.ItemMarkedMap;
 import com.cnc.hcm.cnctrack.model.ItemTask;
-import com.cnc.hcm.cnctrack.model.common.TaskDetailResult;
+import com.cnc.hcm.cnctrack.model.common.TaskListResult;
 import com.cnc.hcm.cnctrack.service.GPSService;
 import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
@@ -350,9 +350,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                         Log.e(TAG, "tryGetTaskList.onResponse(), --> getTaskListResult: " + getTaskListResult.toString());
                         arrItemTask.clear();
                         if (getTaskListResult != null) {
-                            TaskDetailResult[] result = getTaskListResult.result;
+                            TaskListResult[] result = getTaskListResult.result;
                             if (result != null && result.length > 0) {
-                                for (TaskDetailResult itemResult : result) {
+                                for (TaskListResult itemResult : result) {
                                     ItemTask itemTask = new ItemTask(itemResult);
                                     arrItemTask.add(itemTask);
                                     switch ((int) itemTask.getTaskResult().status.getId()) {
@@ -423,7 +423,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         tvQuantityCompleteTask.setText(quantityCompletedTask + Conts.BLANK);
     }
 
-    public void receiverNewTask(TaskDetailResult result) {
+    public void receiverNewTask(TaskListResult result) {
 
         String currenDate = CommonMethod.formatTimeStandand(CommonMethod.getInstanceCalendar().getTime());
 
@@ -464,12 +464,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                     break;
 
             }
-            TaskDetailResult result = task.getTaskResult();
+            TaskListResult result = task.getTaskResult();
             addMarkedTask(result, bitmapDescriptor);
         }
     }
 
-    private void addMarkedTask(TaskDetailResult result, BitmapDescriptor bitmapDescriptor) {
+    private void addMarkedTask(TaskListResult result, BitmapDescriptor bitmapDescriptor) {
         if (result.address != null) {
             if (result.address.getLocation() != null) {
                 addMarkerMap(result._id, result.address.getLocation().getLatitude(),
