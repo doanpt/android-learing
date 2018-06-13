@@ -14,7 +14,7 @@ public class TaskListResult {
     public String createdDate;
     public Recipient recipient;
     public boolean isRead;
-    public InvoiceTaskList invoice;
+    public InvoiceTaskDetail invoice;
     public Status status;
     public DetailDevice process[];
     public Executive executive[];
@@ -86,11 +86,11 @@ public class TaskListResult {
         isRead = read;
     }
 
-    public InvoiceTaskList getInvoice() {
+    public InvoiceTaskDetail getInvoice() {
         return invoice;
     }
 
-    public void setInvoice(InvoiceTaskList invoice) {
+    public void setInvoice(InvoiceTaskDetail invoice) {
         this.invoice = invoice;
     }
 
