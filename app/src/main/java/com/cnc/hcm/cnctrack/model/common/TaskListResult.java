@@ -1,6 +1,8 @@
 package com.cnc.hcm.cnctrack.model.common;
 
 
+import android.support.annotation.Nullable;
+
 /**
  * Created by Android on 09/06/2018.
  */
@@ -9,6 +11,7 @@ public class TaskListResult {
     public long __v;
     public String _id;
     public String title;
+    @Nullable
     public Customer customer;
     public String note;
     public String createdDate;

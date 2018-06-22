@@ -1,5 +1,6 @@
 package com.cnc.hcm.cnctrack.model.common;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
@@ -13,11 +14,11 @@ import java.io.Serializable;
 
 public class Category implements Serializable{
     @Expose
-    @Nullable
+    @NonNull
     @SerializedName("_id")
     private String id;
     @SerializedName("title")
-    @Nullable
+    @NonNull
     @Expose
     private String title;
     @SerializedName("parent")

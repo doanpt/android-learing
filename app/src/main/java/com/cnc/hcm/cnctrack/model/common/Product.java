@@ -4,6 +4,7 @@ package com.cnc.hcm.cnctrack.model.common;
  * Created by Android on 06/06/2018.
  */
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
@@ -14,11 +15,11 @@ import java.io.Serializable;
 public class Product implements Serializable{
 
     @SerializedName("_id")
-    @Nullable
+    @NonNull
     @Expose
     private String id;
     @SerializedName("name")
-    @Nullable
+    @NonNull
     @Expose
     private String name;
     @SerializedName("price")
@@ -30,7 +31,7 @@ public class Product implements Serializable{
     @Expose
     private Brand brand;
     @SerializedName("category")
-    @Nullable
+    @NonNull
     @Expose
     private Category category;
     @SerializedName("tax")

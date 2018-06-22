@@ -4,6 +4,7 @@ package com.cnc.hcm.cnctrack.model.common;
  * Created by Android on 06/06/2018.
  */
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
@@ -18,9 +19,21 @@ public class Status implements Serializable {
     @Expose
     private Integer id;
     @SerializedName("title")
-    @Nullable
+    @NonNull
     @Expose
     private String title;
+    @SerializedName("description")
+    @Nullable
+    @Expose
+    private String description;
+    @SerializedName("icon")
+    @Nullable
+    @Expose
+    private String icon;
+    @SerializedName("mobileIcon")
+    @Nullable
+    @Expose
+    private String mobileIcon;
 
     public Integer getId() {
         return id;
@@ -38,4 +51,30 @@ public class Status implements Serializable {
         this.title = title;
     }
 
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@Nullable String description) {
+        this.description = description;
+    }
+
+    @Nullable
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(@Nullable String icon) {
+        this.icon = icon;
+    }
+
+    @Nullable
+    public String getMobileIcon() {
+        return mobileIcon;
+    }
+
+    public void setMobileIcon(@Nullable String mobileIcon) {
+        this.mobileIcon = mobileIcon;
+    }
 }
