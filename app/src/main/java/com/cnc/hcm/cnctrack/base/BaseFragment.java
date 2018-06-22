@@ -27,21 +27,21 @@ public abstract class BaseFragment extends Fragment {
 
     public void actionLogout() {
         if (getActivity() instanceof BaseActivity) {
-            if (!((BaseActivity) getActivity()).isFinishing()) {
+            if (getActivity() != null && !(getActivity()).isFinishing()) {
                 ((BaseActivity) getActivity()).showMessageRequestLogout();
             }
         }
     }
 
     public void dismisProgressLoading() {
-        if (!getActivity().isFinishing() && getActivity() instanceof BaseActivity) {
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).dismisProgressLoading();
         }
     }
 
     public void showProgressLoading() {
         if (getActivity() instanceof BaseActivity) {
-            if (!((BaseActivity) getActivity()).isFinishing()) {
+            if (!(getActivity()).isFinishing()) {
                 ((BaseActivity) getActivity()).showProgressLoadding();
             }
         }

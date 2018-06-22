@@ -268,15 +268,18 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             @Override
             public void onResponse(Call<GetTaskDetailResult> call, Response<GetTaskDetailResult> response) {
                 dismisDialogLoading();
-                int statusCode = response.body().statusCode;
                 if (response.isSuccessful()) {
-                    if (statusCode == Conts.RESPONSE_STATUS_OK) {
-                        getTaskDetailResult = response.body();
-                        Log.e(TAG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode + ", getTaskDetailResult: " + getTaskDetailResult);
-                        onTaskInfoLoaded(getTaskDetailResult);
-                    } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
-                        if (mainActivity != null) {
-                            mainActivity.showMessageRequestLogout();
+                    GetTaskDetailResult result = response.body();
+                    if (result != null) {
+                        int statusCode = result.statusCode;
+                        if (statusCode == Conts.RESPONSE_STATUS_OK) {
+                            getTaskDetailResult = response.body();
+                            Log.e(TAG, "tryGetTaskDetail.onResponse(), statusCode: " + statusCode + ", getTaskDetailResult: " + getTaskDetailResult);
+                            onTaskInfoLoaded(getTaskDetailResult);
+                        } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                            if (mainActivity != null) {
+                                mainActivity.showMessageRequestLogout();
+                            }
                         }
                     }
                 }

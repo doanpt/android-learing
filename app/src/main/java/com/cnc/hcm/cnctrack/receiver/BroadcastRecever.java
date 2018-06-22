@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ public class BroadcastRecever extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         boolean isUserLogin = UserInfo.getInstance(context).getIsLogin();
         if (isUserLogin) {
-            if (!isServiceRunning(context, GPSService.class)) {
+            if (!isServiceRunning(context, GPSService.class) && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 Toast.makeText(context, "CNCTracking start", Toast.LENGTH_SHORT).show();
                 Intent intentService = new Intent(context, GPSService.class);
                 intentService.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
