@@ -153,7 +153,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             String accessToken = (String) loginResponseStatus.getResult().get(LoginResponseStatus.LOGIN_RESPONSE_STATUS_KEY_ACCESS_TOKEN);
                             onLoginSuccess(accessToken, loginResponseStatus.getMessage());
                         } else {
-                            String message = (String) loginResponseStatus.getResult().get(LoginResponseStatus.LOGIN_RESPONSE_STATUS_KEY_MESSAGE);
+                            String message = loginResponseStatus.getMessage();
                             Log.d(TAG, "login.onResponse().isSuccessful(), loginStatusCode: " + loginStatusCode + ", message: " + message);
                             onLoginFailed(isLoginAuto, message);
                         }
@@ -192,7 +192,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mProgressDialog.dismiss();
         if (!isLoginAuto) {
             btnLogin.setEnabled(true);
-            Snackbar.make(btnLogin, "Login fail: " + message, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(btnLogin, message, Snackbar.LENGTH_LONG).show();
             CommonMethod.reportCrashToFirebase("Login fail: " + message);
         }
     }
