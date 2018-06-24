@@ -60,6 +60,11 @@ import com.cnc.hcm.cnctrack.util.CommonMethod;
 import com.cnc.hcm.cnctrack.util.Conts;
 import com.cnc.hcm.cnctrack.util.SettingApp;
 import com.cnc.hcm.cnctrack.util.UserInfo;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -92,7 +97,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_UPDATE = 4234;
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 53;
     private GoogleMap mMap;
+    private Marker searchMarked;
 
     private LinearLayout llClickNetwork, llClickGPS, llClickSetting, llClickHelp, llTabs,
             llTabNewWork, llTabDoingWork, llTabCompleteWork;
@@ -125,7 +132,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     private String dateSelected = Conts.BLANK;
     private String startDate;
     private String endDate;
-
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
@@ -213,6 +219,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     private void initViews() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        findViewById(R.id.fab_search_map).setOnClickListener(this);
 
         imvMenuDrawer = (ImageView) findViewById(R.id.imv_menu);
         imvFilterActionBar = (ImageView) findViewById(R.id.imv_filter_list_on_action_bar);
@@ -493,6 +501,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
+    private Marker addMarkedOnMap(LatLng latLng, String title, String snippet) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(title);
+        markerOptions.snippet(snippet);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        return mMap.addMarker(markerOptions);
+    }
 
     private void callViewCalendar(int typeView) {
         long time = CommonMethod.getInstanceCalendar().getTime().getTime();
@@ -596,7 +612,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 actionLogout();
                 drawer.closeDrawer(GravityCompat.START);
                 break;
+            case R.id.fab_search_map:
+                actionSearchPlaceOnMap();
+                break;
+        }
+    }
 
+    private void actionSearchPlaceOnMap() {
+        try {
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
         }
     }
 
@@ -713,7 +742,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                     }
                 }
                 break;
+            case PLACE_AUTOCOMPLETE_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Place place = PlaceAutocomplete.getPlace(this, data);
+                    if (searchMarked != null) {
+                        searchMarked.remove();
+                    }
+                    searchMarked = addMarkedOnMap(place.getLatLng(), "", place.getAddress().toString());
+                    moveCameraMap(place.getLatLng());
+                } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                    Status status = PlaceAutocomplete.getStatus(this, data);
+                    Log.i(TAG, status.getStatusMessage());
+                }
+                break;
         }
+
+
         if (dialogDetailTaskFragment != null) {
             dialogDetailTaskFragment.onActivityResult(requestCode, resultCode, data);
         }
@@ -760,7 +804,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             return;
         }
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setOnMarkerClickListener(MainActivity.this);
         if (gpsService != null && gpsService.getLatitude() != 0 && gpsService.getLongitude() != 0) {
             myLocationHere(gpsService.getLatitude(), gpsService.getLongitude(),
@@ -934,12 +977,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
-
-        String idTask = getIDMarked(marker);
-        if (dialogDetailTaskFragment != null) {
-            dialogDetailTaskFragment.setIdTask(idTask);
-            dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
+        if (!marker.equals(searchMarked)) {
+            String idTask = getIDMarked(marker);
+            if (dialogDetailTaskFragment != null) {
+                dialogDetailTaskFragment.setIdTask(idTask);
+                dialogDetailTaskFragment.show(getSupportFragmentManager(), dialogDetailTaskFragment.getTag());
+            }
         }
         return false;
     }
