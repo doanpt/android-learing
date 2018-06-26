@@ -26,6 +26,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.activity.AddProductActivity;
@@ -625,30 +626,40 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
             Gson gson = new Gson();
             Log.d(TAGG, "eventNewTask: " + args[0].toString());
             Log.d(TAGG, "eventNewTask");
-            final TaskListResult result = gson.fromJson(args[0].toString(), TaskListResult.class);
-            if (result != null) {
-                if (CommonMethod.checkCurrentDay(result.appointmentDate) && listTaskToDay != null) {
-                    listTaskToDay.add(new ItemTask(result));
+            try {
+                final TaskListResult result = gson.fromJson(args[0].toString(), TaskListResult.class);
+                if (result != null) {
+                    if (CommonMethod.checkCurrentDay(result.appointmentDate) && listTaskToDay != null) {
+                        listTaskToDay.add(new ItemTask(result));
+                    }
+                    RecommendedServices recommendedServices = getRecommendedServiceDefault(result.recommendedServices);
+                    if (recommendedServices != null && recommendedServices.getService() != null) {
+                        addNotification(result._id, result.title, recommendedServices.getService().name);
+                    } else {
+                        addNotification(result._id, result.title, "Dịch vụ");
+                    }
+                    if (mainActivity != null) {
+                        mainActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainActivity.receiverNewTask(result);
+                            }
+                        });
+                    }
                 }
-                RecommendedServices recommendedServices = getRecommendedServiceDefault(result.recommendedServices);
-                if (recommendedServices != null && recommendedServices.getService() != null) {
-                    addNotification(result._id, result.title, recommendedServices.getService().name);
-                } else {
-                    addNotification(result._id, result.title, "Dịch vụ");
-                }
+            } catch (final Exception ex) {
+                ex.printStackTrace();
                 if (mainActivity != null) {
                     mainActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mainActivity.receiverNewTask(result);
+                            Toast.makeText(GPSService.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
                 }
-
-                Log.d(TAGG, "eventNewTask: " + args[0].toString());
-                Log.d(TAGG, "eventNewTask");
             }
         }
+
     };
 
     private RecommendedServices getRecommendedServiceDefault(RecommendedServices[] recommendedServices) {
