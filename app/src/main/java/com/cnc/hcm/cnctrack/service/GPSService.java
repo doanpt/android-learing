@@ -778,7 +778,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         }
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Conts.SECONDARY_CHANNEL)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Conts.PRIMARY_CHANNEL_ID)
                 .setSmallIcon(CommonMethod.getSmallIcon())
                 .setContentTitle(titleTask)
                 .setContentText(serviceName)
