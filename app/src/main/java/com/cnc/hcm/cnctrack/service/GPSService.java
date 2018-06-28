@@ -9,6 +9,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Location;
 import android.media.RingtoneManager;
@@ -32,6 +34,7 @@ import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.activity.AddProductActivity;
 import com.cnc.hcm.cnctrack.activity.MainActivity;
 import com.cnc.hcm.cnctrack.activity.ProductDetailActivity;
+import com.cnc.hcm.cnctrack.activity.SplashActivity;
 import com.cnc.hcm.cnctrack.api.APIService;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
@@ -171,17 +174,15 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 case ACTION_DETAIL_TASK:
                     if (isUserLogin) {
                         if (intent != null) {
-                            String idTask = intent.getStringExtra(KEY_ID_OPEND_DETAIL_TASK);
+                            int idTask = intent.getIntExtra(KEY_ID_OPEND_DETAIL_TASK, -1);
                             if (mainActivity != null && mainActivity.isMainActive()) {
-                                mainActivity.showTaskDetail(idTask);
+                                mainActivity.showTaskDetail(idTask + Conts.BLANK);
                             } else {
                                 Intent intentShowDetailTask = new Intent(this, MainActivity.class);
                                 intentShowDetailTask.putExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL, idTask);
                                 intentShowDetailTask.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intentShowDetailTask);
                             }
-                            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                            manager.cancel(0);
                         }
                     }
                     break;
@@ -193,7 +194,6 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        createNotificationChannel();
         initObject();
         registerBroadcast();
         startThread();
@@ -720,87 +720,77 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     private void setupNotification() {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
-        Intent intentOpen = new Intent(ACTION_SHOW_APP);
-        intentOpen.setClass(this, GPSService.class);
-        PendingIntent piOpen = PendingIntent.getService(this, 0, intentOpen, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        remoteViews = new RemoteViews(getPackageName(), R.layout.item_3button_small);
-        remoteViews.setTextViewText(R.id.notif_content, "" + latitude + ", " + longitude + ", " + accuracy);
-        remoteViews.setOnClickPendingIntent(R.id.notif_icon, piOpen);
-
-        CharSequence ticker = "Tracking location";
-        int apiVersion = Build.VERSION.SDK_INT;
-
-        if (apiVersion < Build.VERSION_CODES.HONEYCOMB) {
-
-            mNotification = new Notification(R.mipmap.ic_launcher, ticker, System.currentTimeMillis());
-            mNotification.contentView = remoteViews;
-            mNotification.contentIntent = piOpen;
-            mNotification.flags |= Notification.FLAG_NO_CLEAR;
-            mNotification.defaults |= Notification.DEFAULT_LIGHTS;
-            startForeground(NOTIFI_ID, mNotification);
-
-        } else if (apiVersion >= Build.VERSION_CODES.HONEYCOMB) {
-            mBuilder = new NotificationCompat.Builder(this, Conts.PRIMARY_CHANNEL);
-            mBuilder.setSmallIcon(R.mipmap.ic_launcher)
-                    .setAutoCancel(false)
-                    .setOngoing(true)
-                    .setContentIntent(piOpen)
-                    .setContent(remoteViews)
-                    .setTicker(ticker);
-            startForeground(NOTIFI_ID, mBuilder.build());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel(Conts.PRIMARY_CHANNEL_ID_FOREGROUND, Conts.PRIMARY_CHANNEL_NAME_FOREGROUND, NotificationManager.IMPORTANCE_HIGH);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            manager.createNotificationChannel(channel);
         }
 
+        mBuilder = new NotificationCompat.Builder(this, Conts.PRIMARY_CHANNEL_ID_FOREGROUND)
+                .setAutoCancel(false)
+                .setContentTitle("Tracking")
+                .setContentText("" + latitude + ", " + longitude + ", " + accuracy)
+                .setLargeIcon(largeIcon)
+                .setContentIntent(pendingIntent)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setWhen(System.currentTimeMillis());
+
+        startForeground(NOTIFI_ID, mBuilder.build());
     }
 
+
     private void updateNotification(String content) {
-        int api = Build.VERSION.SDK_INT;
-
-        remoteViews.setTextViewText(R.id.notif_content, content);
-
-        if (api < Build.VERSION_CODES.HONEYCOMB) {
-            notificationManager.notify(NOTIFI_ID, mNotification);
-        } else if (api >= Build.VERSION_CODES.HONEYCOMB) {
+        if (mBuilder != null && notificationManager != null) {
+            mBuilder.setContentText(content);
             notificationManager.notify(NOTIFI_ID, mBuilder.build());
         }
-
     }
 
     private void addNotification(String idTask, String titleTask, String serviceName) {
+        int idNotifi = 0;
+        try {
+            idNotifi = Integer.parseInt(idTask);
+        } catch (Exception e) {
 
+        }
         Intent intentOpen = new Intent(ACTION_DETAIL_TASK);
         intentOpen.setClass(this, GPSService.class);
-        intentOpen.putExtra(KEY_ID_OPEND_DETAIL_TASK, idTask);
-        PendingIntent piOpen = PendingIntent.getService(this, 0, intentOpen, PendingIntent.FLAG_UPDATE_CURRENT);
+        intentOpen.putExtra(KEY_ID_OPEND_DETAIL_TASK, idNotifi);
+        PendingIntent piOpen = PendingIntent.getService(this, idNotifi, intentOpen, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel(Conts.PRIMARY_CHANNEL_ID, Conts.PRIMARY_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            manager.createNotificationChannel(channel);
+        }
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Conts.SECONDARY_CHANNEL)
                 .setSmallIcon(CommonMethod.getSmallIcon())
                 .setContentTitle(titleTask)
                 .setContentText(serviceName)
+                .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(piOpen);
 
         // Add as notification
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
+        notificationManager.notify(idNotifi, builder.build());
     }
 
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "channel_name_android_O";
-            String description = "channel_description_android_O";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(Conts.SECONDARY_CHANNEL, name, importance);
-            channel.setDescription(description);
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
 
     private void setLongitude(double longitude) {
         this.longitude = longitude;

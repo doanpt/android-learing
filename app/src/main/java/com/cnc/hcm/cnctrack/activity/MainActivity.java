@@ -170,10 +170,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void checkExistIdTask() {
-        String idTask = getIntent().getStringExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL);
-        if (idTask != null && !idTask.equals(Conts.BLANK)) {
+        int idTask = getIntent().getIntExtra(Conts.KEY_ID_TASK_TO_SHOW_DETAIL, -1);
+        if (idTask != -1) {
             if (dialogDetailTaskFragment != null) {
-                showTaskDetail(idTask);
+                showTaskDetail(idTask + Conts.BLANK);
             }
         }
     }
@@ -335,6 +335,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
 
     public void tryGetTaskList(String accessToken, final String startDate, final String endDate) {
+        Log.v(TAG, "token_key:= " + accessToken);
         this.startDate = startDate;
         this.endDate = endDate;
         showProgressLoadding();

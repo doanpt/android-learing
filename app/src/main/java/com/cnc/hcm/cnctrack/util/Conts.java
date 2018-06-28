@@ -117,6 +117,11 @@ public class Conts {
     public static final String KEY_REASON_ID = "reasonId";
 
 
-    public static final String PRIMARY_CHANNEL = "default";
+    public static final String PRIMARY_CHANNEL_ID = "default";
+    public static final String PRIMARY_CHANNEL_NAME = "primary";
+
+    public static final String PRIMARY_CHANNEL_ID_FOREGROUND = "channel_id_foreground";
+    public static final String PRIMARY_CHANNEL_NAME_FOREGROUND = "channel_name_foreground";
+
     public static final String SECONDARY_CHANNEL = "second";
 }
