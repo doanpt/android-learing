@@ -124,4 +124,6 @@ public class Conts {
     public static final String PRIMARY_CHANNEL_NAME_FOREGROUND = "channel_name_foreground";
 
     public static final String SECONDARY_CHANNEL = "second";
+    public static final String GROUP_ID_NOTI_APPOINTMENT = "appointment";
+    public static final String GROUP_ID_NOTI_NEW_TASK = "new_task";
 }

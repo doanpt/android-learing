@@ -531,13 +531,12 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
                         RecommendedServices recommendedServices = getRecommendedServiceDefault(item.getTaskResult().recommendedServices);
                         if (recommendedServices != null && recommendedServices.getService() != null) {
-                            addNotification(item.getTaskResult()._id, item.getTaskResult().title, recommendedServices.getService().name);
+                            addNotification(item.getTaskResult()._id, item.getTaskResult().title, recommendedServices.getService().name, Conts.GROUP_ID_NOTI_APPOINTMENT);
                         } else {
-                            addNotification(item.getTaskResult()._id, item.getTaskResult().title, "Dịch vụ");
+                            addNotification(item.getTaskResult()._id, item.getTaskResult().title, "Dịch vụ", Conts.GROUP_ID_NOTI_APPOINTMENT);
                         }
-                        addNotification(item.getTaskResult()._id,
-                                "Ticket " + item.getTaskResult().title + " " + "còn 30 phút nữa đến lịch hẹn.",
-                                "Đã đến lịch hẹn");
+                        addNotification(item.getTaskResult()._id, "Đã đến lịch hẹn",
+                                "Ticket " + item.getTaskResult().title + " " + "còn 30 phút nữa đến lịch hẹn.", Conts.GROUP_ID_NOTI_APPOINTMENT);
                     }
                 }
                 timeMinute = 0;
@@ -634,9 +633,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     }
                     RecommendedServices recommendedServices = getRecommendedServiceDefault(result.recommendedServices);
                     if (recommendedServices != null && recommendedServices.getService() != null) {
-                        addNotification(result._id, result.title, recommendedServices.getService().name);
+                        addNotification(result._id, result.title, recommendedServices.getService().name, Conts.GROUP_ID_NOTI_NEW_TASK);
                     } else {
-                        addNotification(result._id, result.title, "Dịch vụ");
+                        addNotification(result._id, result.title, "Dịch vụ", Conts.GROUP_ID_NOTI_NEW_TASK);
                     }
                     if (mainActivity != null) {
                         mainActivity.runOnUiThread(new Runnable() {
@@ -758,7 +757,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         }
     }
 
-    private void addNotification(String idTask, String titleTask, String serviceName) {
+    private void addNotification(String idTask, String titleTask, String serviceName, String groupID) {
         int idNotifi = 0;
         try {
             idNotifi = Integer.parseInt(idTask);
@@ -785,7 +784,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(piOpen);
+                .setContentIntent(piOpen)
+//                .setGroup(groupID)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(serviceName));
 
         // Add as notification
         notificationManager.notify(idNotifi, builder.build());
