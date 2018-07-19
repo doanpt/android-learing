@@ -110,6 +110,11 @@
     <string name="error_occurred">Có lỗi xảy ra</string>
     <string name="try_again">Thử lại</string>
     <string name="confirm_removing_device">Bạn muốn xóa thiết bị này</string>
+    <string name="channel_foreground">Tracking</string>
+    <string name="channel_new_task">Công việc mới</string>
+    <string name="channel_appointment_task">Đến giờ hẹn</string>
+    <string name="description_channel_new_task">Thông báo mỗi khi nhận được công việc mới</string>
+    <string name="description_appointment_task">Thông báo sắp đến giờ hẹn của công việc</string>
 
 
 </resources>

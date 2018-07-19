@@ -117,13 +117,13 @@ public class Conts {
     public static final String KEY_REASON_ID = "reasonId";
 
 
-    public static final String PRIMARY_CHANNEL_ID = "default";
-    public static final String PRIMARY_CHANNEL_NAME = "primary";
+    public static final String FOREGROUND_CHANNEL_ID = "foreground_channel_id";
+    public static final String NEW_TASK_CHANNEL_ID = "new_task_channel_id";
+    public static final String APPOINTMENT_TASK_CHANNEL_ID = "appointment_task_channel_id";
 
-    public static final String PRIMARY_CHANNEL_ID_FOREGROUND = "channel_id_foreground";
-    public static final String PRIMARY_CHANNEL_NAME_FOREGROUND = "channel_name_foreground";
 
     public static final String SECONDARY_CHANNEL = "second";
     public static final String GROUP_ID_NOTI_APPOINTMENT = "appointment";
     public static final String GROUP_ID_NOTI_NEW_TASK = "new_task";
+
 }

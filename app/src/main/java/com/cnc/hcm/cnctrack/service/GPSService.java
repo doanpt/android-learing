@@ -531,11 +531,11 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
                         RecommendedServices recommendedServices = getRecommendedServiceDefault(item.getTaskResult().recommendedServices);
                         if (recommendedServices != null && recommendedServices.getService() != null) {
-                            addNotification(item.getTaskResult()._id, item.getTaskResult().title, recommendedServices.getService().name, Conts.GROUP_ID_NOTI_APPOINTMENT);
+                            addNotification(Conts.APPOINTMENT_TASK_CHANNEL_ID, item.getTaskResult()._id, item.getTaskResult().title, recommendedServices.getService().name, Conts.GROUP_ID_NOTI_APPOINTMENT);
                         } else {
-                            addNotification(item.getTaskResult()._id, item.getTaskResult().title, "Dịch vụ", Conts.GROUP_ID_NOTI_APPOINTMENT);
+                            addNotification(Conts.APPOINTMENT_TASK_CHANNEL_ID, item.getTaskResult()._id, item.getTaskResult().title, "Dịch vụ", Conts.GROUP_ID_NOTI_APPOINTMENT);
                         }
-                        addNotification(item.getTaskResult()._id, "Đã đến lịch hẹn",
+                        addNotification(Conts.APPOINTMENT_TASK_CHANNEL_ID, item.getTaskResult()._id, "Đã đến lịch hẹn",
                                 "Ticket " + item.getTaskResult().title + " " + "còn 30 phút nữa đến lịch hẹn.", Conts.GROUP_ID_NOTI_APPOINTMENT);
                     }
                 }
@@ -633,9 +633,9 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                     }
                     RecommendedServices recommendedServices = getRecommendedServiceDefault(result.recommendedServices);
                     if (recommendedServices != null && recommendedServices.getService() != null) {
-                        addNotification(result._id, result.title, recommendedServices.getService().name, Conts.GROUP_ID_NOTI_NEW_TASK);
+                        addNotification(Conts.NEW_TASK_CHANNEL_ID, result._id, result.title, recommendedServices.getService().name, Conts.GROUP_ID_NOTI_NEW_TASK);
                     } else {
-                        addNotification(result._id, result.title, "Dịch vụ", Conts.GROUP_ID_NOTI_NEW_TASK);
+                        addNotification(Conts.NEW_TASK_CHANNEL_ID, result._id, result.title, "Dịch vụ", Conts.GROUP_ID_NOTI_NEW_TASK);
                     }
                     if (mainActivity != null) {
                         mainActivity.runOnUiThread(new Runnable() {
@@ -717,8 +717,14 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         stopForeground(true);
     }
 
+    public NotificationManager getNotificationManager() {
+        if (notificationManager == null) {
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return notificationManager;
+    }
+
     private void setupNotification() {
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
         Intent intent = new Intent(this, SplashActivity.class);
@@ -727,13 +733,15 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationChannel channel = new NotificationChannel(Conts.PRIMARY_CHANNEL_ID_FOREGROUND, Conts.PRIMARY_CHANNEL_NAME_FOREGROUND, NotificationManager.IMPORTANCE_HIGH);
+            String channelID = Conts.FOREGROUND_CHANNEL_ID;
+            String channelName = getString(R.string.channel_foreground);
+            int importanceNoti = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(channelID, channelName, importanceNoti);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-            manager.createNotificationChannel(channel);
+            getNotificationManager().createNotificationChannel(channel);
         }
 
-        mBuilder = new NotificationCompat.Builder(this, Conts.PRIMARY_CHANNEL_ID_FOREGROUND)
+        mBuilder = new NotificationCompat.Builder(this, Conts.FOREGROUND_CHANNEL_ID)
                 .setAutoCancel(false)
                 .setContentTitle("Tracking")
                 .setContentText("" + latitude + ", " + longitude + ", " + accuracy)
@@ -751,18 +759,17 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
 
     private void updateNotification(String content) {
-        if (mBuilder != null && notificationManager != null) {
+        if (mBuilder != null) {
             mBuilder.setContentText(content);
-            notificationManager.notify(NOTIFI_ID, mBuilder.build());
+            getNotificationManager().notify(NOTIFI_ID, mBuilder.build());
         }
     }
 
-    private void addNotification(String idTask, String titleTask, String serviceName, String groupID) {
+    private void addNotification(String channelID, String idTask, String titleTask, String serviceName, String groupID) {
         int idNotifi = 0;
         try {
             idNotifi = Integer.parseInt(idTask);
         } catch (Exception e) {
-
         }
         Intent intentOpen = new Intent(ACTION_DETAIL_TASK);
         intentOpen.setClass(this, GPSService.class);
@@ -770,14 +777,27 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
         PendingIntent piOpen = PendingIntent.getService(this, idNotifi, intentOpen, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationChannel channel = new NotificationChannel(Conts.PRIMARY_CHANNEL_ID, Conts.PRIMARY_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            String channelName = Conts.BLANK;
+            String description = Conts.BLANK;
+            switch (channelID) {
+                case Conts.NEW_TASK_CHANNEL_ID:
+                    channelName = getString(R.string.channel_new_task);
+                    description = getString(R.string.description_channel_new_task);
+                    break;
+                case Conts.APPOINTMENT_TASK_CHANNEL_ID:
+                    channelName = getString(R.string.channel_appointment_task);
+                    description = getString(R.string.description_appointment_task);
+                    break;
+            }
+            int importanceNoti = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(channelID, channelName, importanceNoti);
+            channel.setDescription(description);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-            manager.createNotificationChannel(channel);
+            getNotificationManager().createNotificationChannel(channel);
         }
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Conts.PRIMARY_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelID)
                 .setSmallIcon(CommonMethod.getSmallIcon())
                 .setContentTitle(titleTask)
                 .setContentText(serviceName)
@@ -789,7 +809,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(serviceName));
 
         // Add as notification
-        notificationManager.notify(idNotifi, builder.build());
+        getNotificationManager().notify(idNotifi, builder.build());
     }
 
 
