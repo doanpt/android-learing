@@ -317,7 +317,7 @@ public class WorkDetailServiceFragment extends BaseFragment implements
                         if (products != null) {
                             for (Device_Products product : products) {
                                 if (product != null) {
-                                    itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, product.getId(), product.getProduct().getName(), product.getProduct().getTax(), product.getProduct().getPrice(), product.getProduct().getQuantity()));
+                                    itemPrices.add(new ItemPrice(ItemPrice.TYPE_SERVICES, product.getId(), product.getProduct().getName(), product.getProduct().getTax(), product.getProduct().getPrice(), product.getQuantity()));
                                 }
                             }
                         }
