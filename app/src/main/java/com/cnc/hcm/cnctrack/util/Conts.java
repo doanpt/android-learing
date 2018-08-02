@@ -31,9 +31,8 @@ public class Conts {
     public static final int RESPONSE_STATUS_404 = 404;
     public static final int RESPONSE_STATUS_500 = 500;
 
-    public static final String BASE_URL = "http://35.198.195.55:3001/";
-    public static final String URL_BASE = "http://35.198.195.55:3001";
-
+    public static final String BASE_URL = "http://35.240.151.244:3001/";
+    public static final String URL_BASE = "http://35.240.151.244:3001";
     public static final String PATH_TRACKING = "/tracking";
 
     public static final String PATH_USER = "/user";

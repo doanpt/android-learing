@@ -440,7 +440,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_complete_work_float_button:
-                if (arrPushProcess2Service.size() == 0) {
+                if (arrService.size() == 0) {
                     dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
                     dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform));
                     showInforDialog();
@@ -533,6 +533,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     CommonMethod.makeToast(ProductDetailActivity.this, "Complete OK!!!");
                     fabMenu.setVisibility(View.GONE);
                     tvCompleteWork.setVisibility(View.VISIBLE);
+                    llCompleteWork.setVisibility(View.VISIBLE);
                 } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
                     showMessageRequestLogout();
                 } else {
@@ -649,6 +650,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             case KEY_STEP_ONE:
             case KEY_STEP_TWO:
             case KEY_STEP_THREE:
+                if(resultCode!=RESULT_OK){
+                    return;
+                }
                 showProgressLoadding();
                 new Thread(new Runnable() {
                     @Override
@@ -658,6 +662,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 }).start();
                 break;
             case KEY_ADD_NOTE:
+                if(resultCode!=RESULT_OK){
+                    return;
+                }
                 showProgressLoadding();
                 checkDataFromNoteActivity(resultCode, data);
                 break;

@@ -252,14 +252,14 @@
         app:fab_labelStyle="@style/menu_labels_style">
 
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_product"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_icon="@drawable/ic_fab_add_product"
-            app:fab_size="mini"
-            app:fab_title="@string/add_new_product"/>
+        <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+            <!--android:id="@+id/fab_add_product"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:fab_colorNormal="@color/colorPrimary"-->
+            <!--app:fab_icon="@drawable/ic_fab_add_product"-->
+            <!--app:fab_size="mini"-->
+            <!--app:fab_title="@string/add_new_product"/>-->
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_scan_qr"

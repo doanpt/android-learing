@@ -217,8 +217,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         tvComplete = (TextView) view.findViewById(R.id.tv_complete_work_float_button);
         tvComplete.setOnClickListener(this);
 
-        fabAddProduct = (FloatingActionButton) view.findViewById(R.id.fab_add_product);
-        fabAddProduct.setOnClickListener(this);
+//        fabAddProduct = (FloatingActionButton) view.findViewById(R.id.fab_add_product);
+//        fabAddProduct.setOnClickListener(this);
         fabScanQR = (FloatingActionButton) view.findViewById(R.id.fab_scan_qr);
         fabScanQR.setOnClickListener(this);
 
@@ -407,16 +407,16 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             case R.id.tv_complete_work_float_button:
                 handleCompleteWordAction();
                 break;
-            case R.id.fab_add_product:
-                Intent intent = new Intent(getActivity(), AddProductActivity.class);
-                intent.putExtra(Conts.KEY_CUSTOMER_ID, customerId);
-                intent.putExtra(Conts.KEY_ID_TASK, idTask);
-                intent.putExtra(Conts.KEY_WORK_NAME, tv_title_item_work.getText().toString());
-                intent.putExtra(Conts.KEY_WORK_LOCATION, tv_address_item_work.getText().toString());
-                intent.putExtra(Conts.KEY_WORK_TIME, tv_time_item_work.getText().toString());
-                startActivity(intent);
-                fabMenu.collapse();
-                break;
+//            case R.id.fab_add_product:
+//                Intent intent = new Intent(getActivity(), AddProductActivity.class);
+//                intent.putExtra(Conts.KEY_CUSTOMER_ID, customerId);
+//                intent.putExtra(Conts.KEY_ID_TASK, idTask);
+//                intent.putExtra(Conts.KEY_WORK_NAME, tv_title_item_work.getText().toString());
+//                intent.putExtra(Conts.KEY_WORK_LOCATION, tv_address_item_work.getText().toString());
+//                intent.putExtra(Conts.KEY_WORK_TIME, tv_time_item_work.getText().toString());
+//                startActivity(intent);
+//                fabMenu.collapse();
+//                break;
             case R.id.fab_scan_qr:
                 IntentIntegrator integrator = new IntentIntegrator(getActivity());
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
