@@ -236,9 +236,16 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         arrFinish.addAll(body.getResult().getAfter().getPhotos());
         if (body.getResult().getStatus().getId() == 3) {
             llCompleteWork.setVisibility(View.VISIBLE);
+            tvCompleteWork.setVisibility(View.GONE);
+            fabMenu.setEnabled(false);
             fabMenu.setVisibility(View.GONE);
 //            llComplete.setVisibility(View.VISIBLE);
+        }else{
+            if(arrFinish.size()>0){
+                tvCompleteWork.setVisibility(View.VISIBLE);
+            }
         }
+
         initAdapter.notifyDataSetChanged();
         processAdapter.notifyDataSetChanged();
         finishAdapter.notifyDataSetChanged();
@@ -532,6 +539,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 if (status != null && status == Conts.RESPONSE_STATUS_OK) {
                     CommonMethod.makeToast(ProductDetailActivity.this, "Complete OK!!!");
                     fabMenu.setVisibility(View.GONE);
+                    fabMenu.setEnabled(false);
                     tvCompleteWork.setVisibility(View.VISIBLE);
                     llCompleteWork.setVisibility(View.VISIBLE);
                 } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
@@ -707,6 +715,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     resultService = (Service) data.getSerializableExtra(Conts.KEY_SERVICE_PRODUCT_RESULT);
                     for (SubmitServiceItem p : arrPushProcess2Service) {
                         if (p.getProduct().equals(resultService.getId())) {
+                            dismisProgressLoading();
                             CommonMethod.makeToast(ProductDetailActivity.this, "Service already added");
                             return;
                         }
@@ -869,6 +878,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         arrFinish.clear();
                         List<String> listResult = response.body().getResult().getAfter().getPhotos();
                         arrFinish.addAll(listResult);
+                        tvCompleteWork.setVisibility(View.VISIBLE);
                         finishAdapter.notifyDataSetChanged();
                     } else if (requestCode == KEY_PROCESS_SERVICE) {
                         List<Device_Services> listServices = response.body().getResult().getProcess().getServices();

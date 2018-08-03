@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -242,7 +243,21 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         viewPager.setAdapter(mWorkDetailPageAdapter);
         BottomSheetUtils.setupViewPager(viewPager);
     }
-
+    private View findScrollingChild(View view) {
+        if (view instanceof NestedScrollingChild) {
+            return view;
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0, count = group.getChildCount(); i < count; i++) {
+                View scrollingChild = findScrollingChild(group.getChildAt(i));
+                if (scrollingChild != null) {
+                    return scrollingChild;
+                }
+            }
+        }
+        return null;
+    }
     @Override
     public void onResume() {
         super.onResume();
