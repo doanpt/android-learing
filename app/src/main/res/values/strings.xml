@@ -88,6 +88,7 @@
     <string name="title_complete_work">Đã hoàn thành thiết bị</string>
     <string name="title_dialog_inform">Thông báo</string>
     <string name="content_dialog_inform">Bạn phải hoàn thành bước 1 trước</string>
+    <string name="content_dialog_inform_service">Bạn phải thêm ít nhất 1 dịch vụ</string>
     <string name="content_dialog_inform2">Bạn phải hoàn thành bước 1 và bước 2 trước</string>
     <string name="content_dialog_inform3">Bạn phải hoàn thành bước 2 trước</string>
     <string name="content_dialog_inform4">Bạn phải hoàn thành bước 3 trước</string>

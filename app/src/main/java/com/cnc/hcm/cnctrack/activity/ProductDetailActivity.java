@@ -449,7 +449,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             case R.id.tv_complete_work_float_button:
                 if (arrService.size() == 0) {
                     dialogInfor.setTextTvTitle(getString(R.string.title_dialog_inform));
-                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform));
+                    dialogInfor.setTextTVContent(getString(R.string.content_dialog_inform_service));
                     showInforDialog();
                     return;
                 }
