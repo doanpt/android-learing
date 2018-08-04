@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cnc.hcm.cnctrack.R;
 import com.cnc.hcm.cnctrack.activity.AddProductActivity;
@@ -583,6 +584,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "onActivityResult()", e);
+                    CommonMethod.makeToast(getActivity(), "onActivityResult error");
+                    return;
                 }
 
                 List<MHead> arrHeads = new ArrayList<>();
