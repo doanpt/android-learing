@@ -55,7 +55,7 @@ public class CommonMethod {
         long thirtyMinute = TimeUnit.MINUTES.toMillis(30);
         long timeAfterMinus = date.getTime() - thirtyMinute;
         date.setTime(timeAfterMinus);
-        return CommonMethod.formatHourMinuteToString(date.getTime());
+        return CommonMethod.formatTimeDateHourToString(date.getTime());
     }
 
     public static Date formatDateAppointmentDateBeforThirtyMinute(String inputTime) {
@@ -90,6 +90,11 @@ public class CommonMethod {
     public static String formatTimeToString(long time) {
         Date date = new Date(time);
         return new SimpleDateFormat("dd/MM/yy HH:mm:ss").format(date);
+    }
+
+    public static String formatTimeDateHourToString(long time) {
+        Date date = new Date(time);
+        return new SimpleDateFormat("dd/MM/yy HH:mm").format(date);
     }
 
     public static String formatFullTimeToString(Date date) {
