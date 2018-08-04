@@ -244,6 +244,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         viewPager.setAdapter(mWorkDetailPageAdapter);
         BottomSheetUtils.setupViewPager(viewPager);
     }
+
     private View findScrollingChild(View view) {
         if (view instanceof NestedScrollingChild) {
             return view;
@@ -259,6 +260,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         }
         return null;
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -575,12 +577,16 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
             if (result.getContents() != null) {
                 final String content = result.getContents();
                 try {
-                    DetailDevice[] processes = getTaskDetailResult.result.process;
-                    for (int i = 0; i < processes.length; i++) {
-                        if (TextUtils.equals(content, processes[i].getDevice().getId())) {
-                            showDialogDeviceExisted();
-                            return;
+                    if (getTaskDetailResult != null && getTaskDetailResult.result != null) {
+                        DetailDevice[] processes = getTaskDetailResult.result.process;
+                        for (int i = 0; i < processes.length; i++) {
+                            if (TextUtils.equals(content, processes[i].getDevice().getId())) {
+                                showDialogDeviceExisted();
+                                return;
+                            }
                         }
+                    }else{
+                        CommonMethod.makeToast(getActivity(), "Task Result null after scan");
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "onActivityResult()", e);
@@ -638,9 +644,9 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
             @Override
             public void onFailure(Call<AddContainProductResult> call, Throwable t) {
-                try{
+                try {
                     CommonMethod.reportCrashToFirebase(t.getMessage().toString());
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
                 CommonMethod.makeToast(getActivity(), "addProductContain() -> onFailure");
