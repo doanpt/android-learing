@@ -61,7 +61,13 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         final DetailDevice process = processes.get(position);
         try {
             holder.tv_title.setText(process.getDevice().getDetail().getName() + "");
-            holder.tv_status.setText("Hoàn thành bước " + process.getDevice().getId());
+            if (process.getStatus().getId() == 3) {
+                holder.tv_status.setText("Hoàn thành");
+                holder.tv_status.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+            } else {
+                holder.tv_status.setText("Hoàn thành bước " + process.getStatus().getId());
+                holder.tv_status.setTextColor(mContext.getResources().getColor(R.color.text_color));
+            }
             String iconPath = process.getDevice().getDetail().photo;
             if (TextUtils.isEmpty(iconPath)) {
                 iconPath = process.getDevice().getDetail().getBrand().getPhoto();
