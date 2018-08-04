@@ -201,6 +201,8 @@ public class WorkDetailServiceFragment extends BaseFragment implements
                                 }
                             } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
                                 actionLogout();
+                            }else{
+                                CommonMethod.makeToast(getActivity(), "Chưa hoàn thành dịch vụ");
                             }
                         }
                     }
