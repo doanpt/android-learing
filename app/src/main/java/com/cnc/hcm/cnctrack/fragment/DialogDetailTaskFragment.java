@@ -635,9 +635,12 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
 
             @Override
             public void onFailure(Call<AddContainProductResult> call, Throwable t) {
-                String cause = "";
-                cause = t.getCause().toString();
-                CommonMethod.makeToast(getActivity(), "addProductContain() -> onFailure:" + cause);
+                try{
+                    CommonMethod.reportCrashToFirebase(t.getMessage().toString());
+                }catch (Exception e){
+
+                }
+                CommonMethod.makeToast(getActivity(), "addProductContain() -> onFailure");
             }
         });
     }

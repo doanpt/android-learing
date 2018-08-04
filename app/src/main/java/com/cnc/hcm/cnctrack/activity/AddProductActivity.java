@@ -352,11 +352,12 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                         if (mProgressDialog != null && mProgressDialog.isShowing()) {
                             mProgressDialog.dismiss();
                         }
-                        String cause = "";
-                        if (t != null) {
-                            cause = t.getCause().toString();
+                        try{
+                            CommonMethod.reportCrashToFirebase(t.getMessage().toString());
+                        }catch (Exception e){
+
                         }
-                        CommonMethod.makeToast(AddProductActivity.this, "onFailure 5.3:" + cause);
+                        CommonMethod.makeToast(AddProductActivity.this, "onFailure 5.3:");
                     }
                 });
             }
@@ -400,11 +401,12 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                 if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
-                String cause = "";
-                if (t != null) {
-                    cause = t.getCause().toString();
+                try{
+                    CommonMethod.reportCrashToFirebase(t.getMessage().toString());
+                }catch (Exception e){
+
                 }
-                Toast.makeText(AddProductActivity.this, "onFailure 2.4:" + cause, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddProductActivity.this, "onFailure 2.4:", Toast.LENGTH_SHORT).show();
             }
         });
     }
