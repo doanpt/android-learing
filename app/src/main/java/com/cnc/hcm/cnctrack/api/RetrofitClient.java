@@ -1,6 +1,8 @@
 package com.cnc.hcm.cnctrack.api;
 
 
+import android.util.Log;
+
 import com.cnc.hcm.cnctrack.util.Conts;
 
 import java.io.IOException;
@@ -18,25 +20,26 @@ public class RetrofitClient {
     private static Retrofit retrofitLogin = null;
 
     public static Retrofit getClientToken(final List<MHead> arrHeads) {
-        OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request.Builder builder = chain.request().newBuilder();
-                for (int i = 0; i < arrHeads.size(); i++) {
-                    builder.addHeader(arrHeads.get(i).getKey(), arrHeads.get(i).getValue());
+            OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request.Builder builder = chain.request().newBuilder();
+                    for (int i = 0; i < arrHeads.size(); i++) {
+                        Log.d("doan.pt","add header:"+arrHeads.get(i).getKey()+" -- "+arrHeads.get(i).getValue());
+                        builder.addHeader(arrHeads.get(i).getKey(), arrHeads.get(i).getValue());
+                    }
+                    Request request = builder.build();
+                    return chain.proceed(request);
                 }
-                Request request = builder.build();
-                return chain.proceed(request);
-            }
-        }).build();
+            }).build();
 
-        Retrofit retrofitToken = new Retrofit.Builder()
-                .baseUrl(Conts.BASE_URL)
-                .client(httpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+            Retrofit retrofitToken = new Retrofit.Builder()
+                    .baseUrl(Conts.BASE_URL)
+                    .client(httpClient)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
         return retrofitToken;
+
     }
 
 }

@@ -3,6 +3,7 @@ package com.cnc.hcm.cnctrack.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class UserInfo {
 
@@ -32,7 +33,11 @@ public class UserInfo {
 
     private UserInfo(Context context) {
         if (context != null) {
-            sharedPreferences = context.getSharedPreferences("user_infor", Context.MODE_PRIVATE);
+            try {
+                sharedPreferences = context.getSharedPreferences("user_infor", Context.MODE_PRIVATE);
+            }catch (Exception e){
+                Log.e("doan.pt","Fatal Exception in UserInfo context.getSharedPreferencesuser_infor, Context.MODE_PRIVATE) Line 35");
+            }
         }
     }
 

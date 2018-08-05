@@ -329,6 +329,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 }
                 if (getTaskDetailResult.result.customer != null) {
                     customerId = getTaskDetailResult.result.customer._id;
+                } else {
+                    Log.d("doan.pt", "cusomter id null");
                 }
 
                 try {
@@ -366,6 +368,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("doan.pt","destroy dialog detail fragment");
         dismisDialogLoading();
         setExpaned(false);
     }
@@ -585,7 +588,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                                 return;
                             }
                         }
-                    }else{
+                    } else {
                         CommonMethod.makeToast(getActivity(), "Task Result null after scan");
                     }
                 } catch (Exception e) {
@@ -595,29 +598,37 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 }
 
                 List<MHead> arrHeads = new ArrayList<>();
-                arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, UserInfo.getInstance(getActivity()).getAccessToken()));
+                String accessTK = UserInfo.getInstance(getActivity()).getAccessToken();
+                Log.d("doan.pt", "KEY_ACCESS_TOKEN:" + accessTK);
+                Log.d("doan.pt", "KEY_CUSTOMER_ID:" + customerId);
+                arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessTK));
                 arrHeads.add(new MHead(Conts.KEY_CUSTOMER_ID, customerId));
-
-                ApiUtils.getAPIService(arrHeads).getProductById(content).enqueue(new Callback<CheckContainProductResult>() {
-                    @Override
-                    public void onResponse(Call<CheckContainProductResult> call, Response<CheckContainProductResult> response) {
-                        Long status = response.body().getStatusCode();
-                        if (status == Conts.RESPONSE_STATUS_OK) {
-                            addDeviceToTask(content);
-                        } else if (status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
-                            if (mainActivity != null) {
-                                mainActivity.showMessageRequestLogout();
+                try {
+                    ApiUtils.getAPIService(arrHeads).getProductById(content).enqueue(new Callback<CheckContainProductResult>() {
+                        @Override
+                        public void onResponse(Call<CheckContainProductResult> call, Response<CheckContainProductResult> response) {
+                            Long status = response.body().getStatusCode();
+                            if (status == Conts.RESPONSE_STATUS_OK) {
+                                addDeviceToTask(content);
+                            } else if (status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
+                                if (mainActivity != null) {
+                                    mainActivity.showMessageRequestLogout();
+                                }
+                            } else {
+                                showDialogAddDevice(content);
                             }
-                        } else {
-                            showDialogAddDevice(content);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<CheckContainProductResult> call, Throwable t) {
-                        CommonMethod.makeToast(getActivity(), "getProductById.onFailure()");
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<CheckContainProductResult> call, Throwable t) {
+                            CommonMethod.makeToast(getActivity(), "getProductById.onFailure()");
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("doan.pt",e.toString());
+                    Log.d("doan.pt","getAPIService(arrHeads).getProductById(content) error");
+                    CommonMethod.makeToast(getActivity(),"Error when get product!");
+                }
             }
         }
     }
