@@ -50,7 +50,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="Hoàn thành bước 1"
                     android:textColor="@color/text_color"
                     android:textSize="12sp" />
             </LinearLayout>

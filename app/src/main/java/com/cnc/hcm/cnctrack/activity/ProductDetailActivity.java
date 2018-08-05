@@ -545,7 +545,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 } else if (status != null && status == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
                     showMessageRequestLogout();
                 } else {
-                    CommonMethod.makeToast(ProductDetailActivity.this, "Complete Error!!!");
+                    CommonMethod.makeToast(ProductDetailActivity.this, "Complete Error!, status code = " + status + ". " + response.body().getMessage());
                 }
             }
 

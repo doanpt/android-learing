@@ -46,6 +46,11 @@ public class DetailDevice implements Serializable {
     @Expose
     private Before before;
 
+    @SerializedName("endDate")
+    @Nullable
+    @Expose
+    private String endDate;
+
     public String getStartDate() {
         return startDate;
     }
@@ -110,4 +115,12 @@ public class DetailDevice implements Serializable {
         this.before = before;
     }
 
+    @Nullable
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(@Nullable String endDate) {
+        this.endDate = endDate;
+    }
 }
