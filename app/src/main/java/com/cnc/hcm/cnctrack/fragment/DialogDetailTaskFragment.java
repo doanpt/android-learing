@@ -298,6 +298,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                             if (mainActivity != null) {
                                 mainActivity.showMessageRequestLogout();
                             }
+                        } else {
+                            CommonMethod.makeToast(getActivity(), "Load task error:" + statusCode + " -message" + result.message);
                         }
                     }
                 }
@@ -368,7 +370,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("doan.pt","destroy dialog detail fragment");
+        Log.d("doan.pt", "destroy dialog detail fragment");
         dismisDialogLoading();
         setExpaned(false);
     }
@@ -601,8 +603,13 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                 String accessTK = UserInfo.getInstance(getActivity()).getAccessToken();
                 Log.d("doan.pt", "KEY_ACCESS_TOKEN:" + accessTK);
                 Log.d("doan.pt", "KEY_CUSTOMER_ID:" + customerId);
+                if (accessTK == null || customerId == null || "".equals(accessTK) || "".equals(customerId)) {
+                    CommonMethod.makeToast(getActivity(), "Error! please close and open app again!");
+                    return;
+                }
                 arrHeads.add(new MHead(Conts.KEY_ACCESS_TOKEN, accessTK));
                 arrHeads.add(new MHead(Conts.KEY_CUSTOMER_ID, customerId));
+
                 try {
                     ApiUtils.getAPIService(arrHeads).getProductById(content).enqueue(new Callback<CheckContainProductResult>() {
                         @Override
@@ -625,9 +632,9 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                         }
                     });
                 } catch (Exception e) {
-                    Log.e("doan.pt",e.toString());
-                    Log.d("doan.pt","getAPIService(arrHeads).getProductById(content) error");
-                    CommonMethod.makeToast(getActivity(),"Error when get product!");
+                    Log.e("doan.pt", e.toString());
+                    Log.d("doan.pt", "getAPIService(arrHeads).getProductById(content) error");
+                    CommonMethod.makeToast(getActivity(), "Error when get product!");
                 }
             }
         }

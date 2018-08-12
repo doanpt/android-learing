@@ -251,11 +251,12 @@ public class MonthViewFragment extends BaseFragment implements OnMonthChangedLis
 
         String accessToken = UserInfo.getInstance(getContext()).getAccessToken();
         String dateSelected = CommonMethod.formatFullTimeToString(date.getDate());
+        String endDateSelected=dateSelected.substring(0,11)+"23:59:59.000Z";
         Log.d(TAG, "onDateSelected: " + dateSelected);
 
         if (mainActivity != null) {
             mainActivity.setDateSelected(dateSelected);
-            mainActivity.tryGetTaskList(accessToken, dateSelected, dateSelected);
+            mainActivity.tryGetTaskList(accessToken, dateSelected, endDateSelected);
         }
         currentDay = date.getDay();
         setBorderDateSelected(currentDay);
