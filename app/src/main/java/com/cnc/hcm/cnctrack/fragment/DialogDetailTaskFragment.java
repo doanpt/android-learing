@@ -34,6 +34,7 @@ import com.cnc.hcm.cnctrack.activity.ProductDetailActivity;
 import com.cnc.hcm.cnctrack.adapter.WorkDetailPageAdapter;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
+import com.cnc.hcm.cnctrack.event.OnPayCompletedListener;
 import com.cnc.hcm.cnctrack.model.AddContainProductResult;
 import com.cnc.hcm.cnctrack.model.CheckContainProductResult;
 import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
@@ -59,7 +60,7 @@ import retrofit2.Response;
 
 @SuppressLint("ValidFragment")
 public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
-        implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
+        implements View.OnClickListener, PopupMenu.OnMenuItemClickListener, OnPayCompletedListener {
 
     private static final String TAG = DialogDetailTaskFragment.class.getSimpleName();
 
@@ -231,14 +232,8 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
         viewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mWorkDetailPageAdapter = new WorkDetailPageAdapter(getChildFragmentManager());
         WorkDetailServiceFragment workDetailServiceFragment = new WorkDetailServiceFragment();
-//        workDetailServiceFragment.setOnPayCompletedListener(new WorkDetailServiceFragment.OnPayCompletedListener() {
-//            @Override
-//            public void onPayCompleted() {
-//                if (fabMenu != null) {
-//                    fabMenu.setVisibility(View.GONE);
-//                }
-//            }
-//        });
+        workDetailServiceFragment.setDialogDetailTaskFragment(this);
+        workDetailServiceFragment.setOnPayCompletedListener(this);
         mWorkDetailPageAdapter.addFragment(workDetailServiceFragment);
         mWorkDetailPageAdapter.addFragment(new WorkDetailDeviceFragment());
         viewPager.setAdapter(mWorkDetailPageAdapter);
@@ -656,7 +651,7 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
                         mainActivity.showMessageRequestLogout();
                     }
                 } else {
-                    CommonMethod.makeToast(getActivity(), "Add thiết bị vào đơn hàng không thành công");
+                    CommonMethod.makeToast(getActivity(), "Add thiết bị vào đơn hàng không thành công. " + response.body().getMessage());
                 }
             }
 
@@ -750,6 +745,11 @@ public class DialogDetailTaskFragment extends ViewPagerBottomSheetDialogFragment
     public void myLocationHere(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    @Override
+    public void onPayCompleted() {
+        loadInforTask();
     }
 
     public interface TaskDetailLoadedListener {

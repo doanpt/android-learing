@@ -31,6 +31,7 @@ import com.cnc.hcm.cnctrack.adapter.WorkDetailServiceRecyclerViewAdapter;
 import com.cnc.hcm.cnctrack.api.ApiUtils;
 import com.cnc.hcm.cnctrack.api.MHead;
 import com.cnc.hcm.cnctrack.base.BaseFragment;
+import com.cnc.hcm.cnctrack.event.OnPayCompletedListener;
 import com.cnc.hcm.cnctrack.model.CommonAPICallBackResult;
 import com.cnc.hcm.cnctrack.model.GetTaskDetailResult;
 import com.cnc.hcm.cnctrack.model.ItemPrice;
@@ -76,10 +77,12 @@ public class WorkDetailServiceFragment extends BaseFragment implements
     private RecyclerView rv_service;
     private RecyclerView rv_require;
 
-//    private OnPayCompletedListener onPayCompletedListener;
+    private OnPayCompletedListener onPayCompletedListener;
 
     private WorkDetailServiceRecyclerViewAdapter mWorkDetailServiceRecyclerViewAdapter;
     private WorkDetailRequireRecyclerViewAdapter mWorkDetailRequireRecyclerViewAdapter;
+
+    private DialogDetailTaskFragment dialogDetailTaskFragment;
 
     public WorkDetailServiceFragment() {
     }
@@ -116,6 +119,8 @@ public class WorkDetailServiceFragment extends BaseFragment implements
         tv_have_to_pay = (TextView) view.findViewById(R.id.tv_have_to_pay);
         tv_detail_work_total_payment = (TextView) view.findViewById(R.id.tv_detail_work_total_payment);
         btn_confirm_charge = view.findViewById(R.id.btn_confirm_charge);
+        btn_confirm_charge.setVisibility(View.GONE);
+
         btn_confirm_charge.setOnClickListener(this);
 
         rv_require = view.findViewById(R.id.rv_require);
@@ -188,20 +193,21 @@ public class WorkDetailServiceFragment extends BaseFragment implements
                             if (statusCode == Conts.RESPONSE_STATUS_OK) {
                                 CommonAPICallBackResult confirmChargeResponse = response.body();
                                 if (confirmChargeResponse != null && confirmChargeResponse.getStatusCode() == Conts.RESPONSE_STATUS_OK) {
+
                                     CommonMethod.makeToast(getActivity(), "Xác nhận thanh toán thành công");
                                     btn_confirm_charge.setEnabled(false);
                                     btn_confirm_charge.setBackgroundColor(Color.parseColor("#BDBDBD"));
                                     btn_confirm_charge.setText("Đã thanh toán");
 
-//                                if (onPayCompletedListener != null) {
-//                                    onPayCompletedListener.onPayCompleted();
-//                                }
+                                    if (onPayCompletedListener != null) {
+                                        onPayCompletedListener.onPayCompleted();
+                                    }
                                 } else {
                                     CommonMethod.makeToast(getActivity(), "Chưa hoàn thành dịch vụ");
                                 }
                             } else if (statusCode == Conts.RESPONSE_STATUS_TOKEN_WRONG) {
                                 actionLogout();
-                            }else{
+                            } else {
                                 CommonMethod.makeToast(getActivity(), "Chưa hoàn thành dịch vụ");
                             }
                         }
@@ -346,6 +352,31 @@ public class WorkDetailServiceFragment extends BaseFragment implements
         } catch (Exception e) {
             Log.e(TAG, "onTaskDetailLoaded(), Exception6: " + e);
         }
+
+        if (checkAllDeviceIsDone(getTaskDetailResult)) {
+            btn_confirm_charge.setVisibility(View.VISIBLE);
+        } else {
+            btn_confirm_charge.setVisibility(View.GONE);
+        }
+
+    }
+
+    private boolean checkAllDeviceIsDone(GetTaskDetailResult getTaskDetailResult) {
+        try {
+            if (getTaskDetailResult.result.process.length == 0) {
+                return false;
+            }
+            for (int i = 0; i < getTaskDetailResult.result.process.length; i++) {
+                DetailDevice detailDevice = getTaskDetailResult.result.process[i];
+                if (detailDevice.getEndDate() == null) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     private void handleActions(final double targetLatitude, final double targetLongitude) {
@@ -385,11 +416,11 @@ public class WorkDetailServiceFragment extends BaseFragment implements
         });
     }
 
-//    public interface OnPayCompletedListener {
-//        void onPayCompleted();
-//    }
-//
-//    public void setOnPayCompletedListener(OnPayCompletedListener onPayCompletedListener) {
-//        this.onPayCompletedListener = onPayCompletedListener;
-//    }
+    public void setOnPayCompletedListener(OnPayCompletedListener onPayCompletedListener) {
+        this.onPayCompletedListener = onPayCompletedListener;
+    }
+
+    public void setDialogDetailTaskFragment(DialogDetailTaskFragment dialogDetailTaskFragment) {
+        this.dialogDetailTaskFragment = dialogDetailTaskFragment;
+    }
 }
