@@ -1,4 +1,4 @@
-package com.hado.facebookemotion;
+package com.dvt.facebookemotion;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

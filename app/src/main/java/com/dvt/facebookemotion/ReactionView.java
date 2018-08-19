@@ -1,4 +1,4 @@
-package com.hado.facebookemotion;
+package com.dvt.facebookemotion;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-import static com.hado.facebookemotion.CommonDimen.DIVIDE;
+import static com.dvt.facebookemotion.CommonDimen.DIVIDE;
 
 /**
  * Created by Hado on 26-Nov-16.
@@ -70,7 +70,7 @@ public class ReactionView extends View {
     private void initElement() {
         board.currentY = CommonDimen.HEIGHT_VIEW_REACTION + 10;
         for (Emotion e : emotions) {
-            e.currentY = board.currentY + CommonDimen.DIVIDE;
+            e.currentY = board.currentY + DIVIDE;
         }
     }
 

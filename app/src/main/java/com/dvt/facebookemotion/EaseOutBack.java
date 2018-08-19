@@ -1,4 +1,4 @@
-package com.hado.facebookemotion;
+package com.dvt.facebookemotion;
 
 /**
  * Created by Hado on 27-Nov-16.

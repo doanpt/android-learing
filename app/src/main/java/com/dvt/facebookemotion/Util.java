@@ -1,4 +1,4 @@
-package com.hado.facebookemotion;
+package com.dvt.facebookemotion;
 
 import android.content.res.Resources;
 
