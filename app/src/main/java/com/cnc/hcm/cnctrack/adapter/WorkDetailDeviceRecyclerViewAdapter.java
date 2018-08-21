@@ -61,7 +61,8 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
         final DetailDevice process = processes.get(position);
         try {
             holder.tv_title.setText(process.getDevice().getDetail().getName() + "");
-            holder.tv_status.setText("Hoàn thành bước " + process.getStatus().getId());
+//            holder.tv_status.setText("Hoàn thành bước " + process.getStatus().getId());
+            holder.tv_status.setText(Conts.BLANK);
             holder.tv_status.setTextColor(mContext.getResources().getColor(R.color.text_color));
             if (process.getEndDate() != null) {
                 holder.tv_status.setText("Hoàn thành");
@@ -77,8 +78,17 @@ public class WorkDetailDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Wo
 
             final boolean isOwner = TextUtils.equals(UserInfo.getInstance(mContext).getUserId(), process.getUser().getId());
             if (isOwner) {
-                holder.iv_status.setImageResource(process.getStatus().getId() == 1 ? R.drawable.ic_step_1_complete
-                        : (process.getStatus().getId() == 2 ? R.drawable.ic_step_2_complete : R.drawable.ic_step_3_complete));
+                switch (process.getStatus().getId()){
+                    case 1:
+                        holder.iv_status.setImageResource(R.drawable.ic_step_1_complete);
+                        break;
+                    case 2:
+                        holder.iv_status.setImageResource(R.drawable.ic_step_2_complete);
+                        break;
+                    case 3:
+                        holder.iv_status.setImageResource(R.drawable.ic_step_3_complete);
+                        break;
+                }
                 holder.item_product.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
