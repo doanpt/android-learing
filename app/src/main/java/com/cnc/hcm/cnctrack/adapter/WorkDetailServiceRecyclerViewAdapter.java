@@ -44,7 +44,7 @@ public class WorkDetailServiceRecyclerViewAdapter extends RecyclerView.Adapter<W
         try {
             holder.tv_service_name.setText(itemPrice.getName() + Conts.BLANK);
             holder.tv_single_price.setText(CommonMethod.formatCurrency((long)itemPrice.getPrice()));
-            holder.tv_volume.setText(itemPrice.getQuantity() + Conts.BLANK);
+            holder.tv_volume.setText(itemPrice.getQuantity() + " Dịch vụ");
             holder.tv_service_price.setText(CommonMethod.formatCurrency((long)(itemPrice.getPrice() * itemPrice.getQuantity())));
         } catch (Exception e) {
             Log.e(TAG, "onBindViewHolder, Exception: " + e);
