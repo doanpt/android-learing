@@ -445,6 +445,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
     private BroadcastReceiver mBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d(TAGG,"Receive action:"+intent.getAction());
             switch (intent.getAction()) {
                 case Intent.ACTION_BATTERY_CHANGED:
                     batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
@@ -556,6 +557,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     private void connectSocket() {
         if (mSocket != null && !mSocket.connected()) {
+            Log.d(TAGG,"connect to socket");
             mSocket.on(Conts.SOCKET_EVENT_NEW_TASK, eventNewTask)
                     .on(Conts.SOCKET_EVENT_LOGIN_OTHER_DEVICE, eventLoginOtherDevice)
                     .on(Conts.SOCKET_EVENT_ERROR, eventError)
@@ -569,6 +571,7 @@ public class GPSService extends Service implements OnLocationUpdatedListener {
 
     private void disconnectSocket() {
         if (mSocket != null) {
+            Log.d(TAGG,"disconnectSocket");
             mSocket.disconnect();
             mSocket.off(Conts.SOCKET_EVENT_NEW_TASK, eventNewTask)
                     .off(Conts.SOCKET_EVENT_LOGIN_OTHER_DEVICE, eventLoginOtherDevice)
