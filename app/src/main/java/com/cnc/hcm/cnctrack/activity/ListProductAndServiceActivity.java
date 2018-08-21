@@ -297,7 +297,7 @@ public class ListProductAndServiceActivity extends BaseActivity implements View.
 
             }
         });
-        Fragment[] list = new Fragment[]{new ListProductFragment(), new ListServiceFragment()};
+        Fragment[] list = new Fragment[]{new ListServiceFragment(), new ListProductFragment()};
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), list);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 

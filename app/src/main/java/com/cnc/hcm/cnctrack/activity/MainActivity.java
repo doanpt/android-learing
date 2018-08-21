@@ -591,10 +591,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 switch (typeView) {
                     case Conts.TYPE_VIEW_BY_MONTH:
                         if (monthViewFragment != null) {
-                            String dateSelected = monthViewFragment.gotoCurrentDate();
-                            String endDateSelected=dateSelected.substring(0,11)+"23:59:59.000Z";
+                            StringBuffer currentDate = new StringBuffer(monthViewFragment.gotoCurrentDate().substring(0, 11));
+                            String startDateSelected = currentDate.toString() + "00:00:00.001Z";
+                            String endDateSelected = currentDate.toString() + "23:59:59.000Z";
                             String accessToken = UserInfo.getInstance(this).getAccessToken();
-                            tryGetTaskList(accessToken, dateSelected, endDateSelected);
+                            tryGetTaskList(accessToken, startDateSelected, endDateSelected);
                         }
                         break;
                     case Conts.TYPE_VIEW_BY_YEARS:

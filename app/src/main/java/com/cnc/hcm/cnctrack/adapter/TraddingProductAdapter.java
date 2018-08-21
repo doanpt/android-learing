@@ -48,12 +48,12 @@ public class TraddingProductAdapter extends RecyclerView.Adapter<TraddingProduct
         Product result = arr.get(position);
         String urlPhoto = Conts.URL_BASE + result.getPhoto();
         if (!urlPhoto.equals(Conts.BLANK))
-            Picasso.with(context).load(urlPhoto).into(holder.imvIcon);
+            Picasso.with(context).load(urlPhoto).placeholder(R.drawable.ic_bg_place_error).into(holder.imvIcon);
 
         holder.tvTitle.setText(result.getName());
-        holder.tvTypeManufacture.setText("Loại: " + result.getCategory().getTitle() + "    NSX: " + result.getBrand().getName());
+        holder.tvTypeManufacture.setText(result.getCategory().getTitle() + " - " + result.getBrand().getName());
         holder.tvTypeManufacture.setSelected(true);
-        holder.tvPriceUnit.setText("Giá: " + CommonMethod.formatMoney(result.getPrice()) + " đ    Đvt: " + result.getUnit().getTitle());
+        holder.tvPriceUnit.setText(CommonMethod.formatMoney(result.getPrice()) + "đ / " + result.getUnit().getTitle());
     }
 
     @Override

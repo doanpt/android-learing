@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.cnc.hcm.cnctrack.activity.ListProductAndServiceActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.cnc.hcm.cnctrack.activity.ListProductAndServiceActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                     android:layout_height="match_parent"
                     android:background="?android:selectableItemBackground"
                     android:padding="13dp"
-                    app:srcCompat="@drawable/ic_back_while"/>
+                    app:srcCompat="@drawable/ic_back_while" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -41,7 +41,7 @@
                     android:text="Sản phẩm và dịch vụ"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <ImageView
 
@@ -50,7 +50,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="right"
                     android:padding="13dp"
-                    app:srcCompat="@drawable/ic_search"/>
+                    app:srcCompat="@drawable/ic_search" />
             </LinearLayout>
 
             <android.support.design.widget.TabLayout
@@ -67,13 +67,13 @@
                 <android.support.design.widget.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/text_product"/>
+                    android:text="@string/text_service" />
 
                 <android.support.design.widget.TabItem
 
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/text_service"/>
+                    android:text="@string/text_product" />
             </android.support.design.widget.TabLayout>
         </LinearLayout>
 
@@ -96,7 +96,7 @@
                     android:layout_height="50dp"
                     android:background="?android:selectableItemBackground"
                     android:padding="13dp"
-                    app:srcCompat="@drawable/ic_back_while"/>
+                    app:srcCompat="@drawable/ic_back_while" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                         android:lines="1"
                         android:paddingLeft="10dp"
                         android:paddingRight="30dp"
-                        android:textAppearance="?android:attr/textAppearanceMedium"/>
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/tv_product_clear_text_search"
@@ -123,7 +123,7 @@
                         android:layout_centerVertical="true"
                         android:gravity="center"
                         android:text="X"
-                        android:textColor="@android:color/darker_gray"/>
+                        android:textColor="@android:color/darker_gray" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -141,7 +141,7 @@
                     android:paddingLeft="10dp"
                     android:text="@string/type_product"
                     android:textColor="@android:color/white"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <Spinner
                     android:id="@+id/spn_product_product_type"
@@ -164,7 +164,7 @@
                     android:paddingLeft="10dp"
                     android:text="@string/manufacture"
                     android:textColor="@android:color/white"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <Spinner
                     android:id="@+id/spn_product_manufacture"
@@ -194,7 +194,7 @@
                     android:layout_height="50dp"
                     android:background="?android:selectableItemBackground"
                     android:padding="13dp"
-                    app:srcCompat="@drawable/ic_back_while"/>
+                    app:srcCompat="@drawable/ic_back_while" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -211,7 +211,7 @@
                         android:lines="1"
                         android:paddingLeft="10dp"
                         android:paddingRight="30dp"
-                        android:textAppearance="?android:attr/textAppearanceMedium"/>
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
                         android:id="@+id/tv_service_clear_text_search"
@@ -221,7 +221,7 @@
                         android:layout_centerVertical="true"
                         android:gravity="center"
                         android:text="X"
-                        android:textColor="@android:color/darker_gray"/>
+                        android:textColor="@android:color/darker_gray" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -239,7 +239,7 @@
                     android:paddingLeft="10dp"
                     android:text="@string/type_service"
                     android:textColor="@android:color/white"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <Spinner
                     android:id="@+id/spn_service_product_type"

@@ -52,13 +52,13 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         if(photo==null || photo.isEmpty()){
             photo=result.getCategory().getPhoto();
         }
-        String urlPhoto = Conts.URL_BASE + result.getPhoto();
+        String urlPhoto = Conts.URL_BASE + photo;
         if (!urlPhoto.equals(Conts.BLANK))
             Picasso.with(context).load(urlPhoto).placeholder(R.drawable.ic_bg_place_error).into(holder.imvIcon);
 
         holder.tvTitle.setText(result.getName());
-        holder.tvPriceUnit.setText("Giá: " + CommonMethod.formatMoney(Integer.parseInt(String.valueOf(result.getPrice()))) + " đ    Đvt: " + result.getUnit().getTitle());
-        holder.tvTypeManufacture.setText("Loại: " + result.getCategory().getTitle());
+        holder.tvPriceUnit.setText(CommonMethod.formatMoney(Integer.parseInt(String.valueOf(result.getPrice()))) + "đ / " + result.getUnit().getTitle());
+        holder.tvTypeManufacture.setText(result.getCategory().getTitle());
     }
 
     @Override
