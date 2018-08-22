@@ -76,8 +76,9 @@ public class MonthViewFragment extends BaseFragment implements OnMonthChangedLis
         if (mainActivity != null) {
             mainActivity.setMonthViewFragment(MonthViewFragment.this);
             String date = CommonMethod.formatFullTimeToString(calendarView.getSelectedDate().getDate());
+            String endDate= date.substring(0,11)+"23:59:59.000Z";
             String accessToken = UserInfo.getInstance(getContext()).getAccessToken();
-            mainActivity.tryGetTaskList(accessToken, date, date);
+            mainActivity.tryGetTaskList(accessToken, date, endDate);
         }
     }
 
