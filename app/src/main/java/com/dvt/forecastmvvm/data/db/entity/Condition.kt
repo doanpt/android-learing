@@ -1,4 +1,4 @@
-package com.dvt.forecastmvvm.data.response
+package com.dvt.forecastmvvm.data.db.entity
 
 data class Condition(
     val code: Int,

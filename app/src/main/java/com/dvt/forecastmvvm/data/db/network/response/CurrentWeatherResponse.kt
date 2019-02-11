@@ -1,5 +1,7 @@
-package com.dvt.forecastmvvm.data.response
+package com.dvt.forecastmvvm.data.db.network.response
 
+import com.dvt.forecastmvvm.data.db.entity.CurrentWeatherEntry
+import com.dvt.forecastmvvm.data.db.entity.Location
 import com.google.gson.annotations.SerializedName
 
 data class CurrentWeatherResponse(
