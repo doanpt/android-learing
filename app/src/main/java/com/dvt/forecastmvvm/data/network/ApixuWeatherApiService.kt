@@ -1,6 +1,7 @@
 package com.dvt.forecastmvvm.data.network
 
 import com.dvt.forecastmvvm.data.network.response.CurrentWeatherResponse
+import com.dvt.forecastmvvm.data.network.response.FutureWeatherResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.resocoder.forecastmvvm.data.network.ConnectivityInterceptor
 import kotlinx.coroutines.Deferred
@@ -11,9 +12,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-const val API_KEY = "3212e2bf05b647229ae65710191102"
+const val API_KEY = "9b41538f65894074a66124037191202"
 
-//http://api.apixu.com/v1/current.json?key=3212e2bf05b647229ae65710191102&q=HaNoi&lang=en
+//http://api.apixu.com/v1/current.json?key=9b41538f65894074a66124037191202&q=HaNoi&lang=en
 
 
 interface ApixuWeatherApiService {
@@ -22,6 +23,14 @@ interface ApixuWeatherApiService {
         @Query("q") location: String,
         @Query("lang") languageCode: String = "en"
     ): Deferred<CurrentWeatherResponse>
+
+    // https://api.apixu.com/v1/forecast.json?key=9b41538f65894074a66124037191202&q=Los%20Angeles&days=1
+    @GET("forecast.json")
+    fun getFutureWeather(
+        @Query("q") location: String,
+        @Query("days") days: Int,
+        @Query("lang") languageCode: String = "en"
+    ): Deferred<FutureWeatherResponse>
 
     companion object {
         operator fun invoke(

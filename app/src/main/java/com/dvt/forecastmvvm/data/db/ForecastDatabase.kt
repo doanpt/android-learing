@@ -4,19 +4,24 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.dvt.forecastmvvm.data.db.CurrentWeatherDao
+import com.dvt.forecastmvvm.data.db.FutureWeatherDao
+import com.dvt.forecastmvvm.data.db.LocalDateConverter
 import com.dvt.forecastmvvm.data.db.WeatherLocationDao
 import com.dvt.forecastmvvm.data.db.entity.CurrentWeatherEntry
+import com.dvt.forecastmvvm.data.db.entity.FutureWeatherEntry
 import com.dvt.forecastmvvm.data.db.entity.WeatherLocation
 
 
 @Database(
-    entities = [CurrentWeatherEntry::class, WeatherLocation::class],
+    entities = [CurrentWeatherEntry::class, FutureWeatherEntry::class, WeatherLocation::class],
     version = 1
 )
+@TypeConverters(LocalDateConverter::class)
 abstract class ForecastDatabase : RoomDatabase() {
     abstract fun currentWeatherDao(): CurrentWeatherDao
-    //    abstract fun futureWeatherDao(): FutureWeatherDao
+    abstract fun futureWeatherDao(): FutureWeatherDao
     abstract fun weatherLocationDao(): WeatherLocationDao
 
     companion object {
@@ -31,7 +36,7 @@ abstract class ForecastDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
-                ForecastDatabase::class.java, "futureWeatherEntries.db"
+                ForecastDatabase::class.java, "forecast.db"
             ).build()
     }
 }

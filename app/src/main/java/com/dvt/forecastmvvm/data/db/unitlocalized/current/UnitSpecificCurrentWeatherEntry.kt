@@ -1,4 +1,4 @@
-package com.dvt.forecastmvvm.data.db.unitlocalized
+package com.dvt.forecastmvvm.data.db.unitlocalized.current
 
 interface UnitSpecificCurrentWeatherEntry {
     val temperature: Double

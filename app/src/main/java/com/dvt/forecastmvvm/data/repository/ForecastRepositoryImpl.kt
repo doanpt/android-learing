@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import com.dvt.forecastmvvm.data.db.CurrentWeatherDao
 import com.dvt.forecastmvvm.data.db.WeatherLocationDao
 import com.dvt.forecastmvvm.data.db.entity.WeatherLocation
-import com.dvt.forecastmvvm.data.db.unitlocalized.UnitSpecificCurrentWeatherEntry
+import com.dvt.forecastmvvm.data.db.unitlocalized.current.UnitSpecificCurrentWeatherEntry
 import com.dvt.forecastmvvm.data.network.WeatherNetworkDataSource
 import com.dvt.forecastmvvm.data.network.response.CurrentWeatherResponse
 import com.dvt.forecastmvvm.data.provider.LocationProvider
@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.threeten.bp.LocalDate
 import org.threeten.bp.ZonedDateTime
 import java.util.*
 
