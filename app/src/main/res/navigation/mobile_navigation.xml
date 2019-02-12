@@ -22,6 +22,6 @@
               tools:layout="@layout/future_detail_weather_fragment"/>
 
     <fragment android:id="@+id/settingsFragment"
-              android:name="com.dvt.forecastmvvm.ui.settings.SettingFragment"
+              android:name="com.dvt.forecastmvvm.ui.settings.SettingsFragment"
               android:label="SettingFragment"/>
 </navigation>

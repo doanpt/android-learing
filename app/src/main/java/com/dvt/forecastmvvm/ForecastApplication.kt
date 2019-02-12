@@ -1,10 +1,13 @@
 package com.dvt.forecastmvvm
 
 import android.app.Application
+import android.preference.PreferenceManager
 import com.dvt.forecastmvvm.data.network.ApixuWeatherApiService
 import com.dvt.forecastmvvm.data.network.ConnectivityInterceptorImpl
 import com.dvt.forecastmvvm.data.network.WeatherNetworkDataSource
 import com.dvt.forecastmvvm.data.network.WeatherNetworkDataSourceImpl
+import com.dvt.forecastmvvm.data.provider.UnitProvider
+import com.dvt.forecastmvvm.data.provider.UnitProviderImpl
 import com.dvt.forecastmvvm.data.repository.ForecastRepository
 import com.dvt.forecastmvvm.data.repository.ForecastRepositoryImpl
 import com.dvt.forecastmvvm.ui.weather.current.CurrentWeatherViewModelFactory
@@ -29,11 +32,13 @@ class ForecastApplication : Application(), KodeinAware {
         bind() from singleton { ApixuWeatherApiService(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance()) }
-        bind() from provider { CurrentWeatherViewModelFactory(instance()) }
+        bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
+        bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
     }
 
     override fun onCreate() {
         super.onCreate()
         AndroidThreeTen.init(this)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
     }
 }
