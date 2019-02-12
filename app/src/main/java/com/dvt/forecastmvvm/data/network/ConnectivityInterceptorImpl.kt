@@ -1,4 +1,4 @@
-package com.dvt.forecastmvvm.data.db.network
+package com.dvt.forecastmvvm.data.network
 
 import android.annotation.SuppressLint
 import android.content.Context

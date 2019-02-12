@@ -1,7 +1,7 @@
-package com.dvt.forecastmvvm.data.db.network
+package com.dvt.forecastmvvm.data.network
 
 import androidx.lifecycle.LiveData
-import com.dvt.forecastmvvm.data.db.network.response.CurrentWeatherResponse
+import com.dvt.forecastmvvm.data.network.response.CurrentWeatherResponse
 
 interface WeatherNetworkDataSource {
     val downloadedCurrentWeather: LiveData<CurrentWeatherResponse>

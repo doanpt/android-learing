@@ -1,9 +1,9 @@
-package com.dvt.forecastmvvm.data.db.network
+package com.dvt.forecastmvvm.data.network
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dvt.forecastmvvm.data.db.network.response.CurrentWeatherResponse
+import com.dvt.forecastmvvm.data.network.response.CurrentWeatherResponse
 import com.resocoder.forecastmvvm.internal.NoConnectivityException
 
 class WeatherNetworkDataSourceImpl(private val apixuWeatherApiService: ApixuWeatherApiService) :

@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 
 import com.dvt.forecastmvvm.R
-import com.dvt.forecastmvvm.data.db.network.ApixuWeatherApiService
-import com.dvt.forecastmvvm.data.db.network.ConnectivityInterceptorImpl
-import com.dvt.forecastmvvm.data.db.network.WeatherNetworkDataSourceImpl
+import com.dvt.forecastmvvm.data.network.ApixuWeatherApiService
+import com.dvt.forecastmvvm.data.network.ConnectivityInterceptorImpl
+import com.dvt.forecastmvvm.data.network.WeatherNetworkDataSourceImpl
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

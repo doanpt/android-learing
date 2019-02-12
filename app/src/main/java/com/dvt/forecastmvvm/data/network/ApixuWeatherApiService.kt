@@ -1,6 +1,6 @@
-package com.dvt.forecastmvvm.data.db.network
+package com.dvt.forecastmvvm.data.network
 
-import com.dvt.forecastmvvm.data.db.network.response.CurrentWeatherResponse
+import com.dvt.forecastmvvm.data.network.response.CurrentWeatherResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.resocoder.forecastmvvm.data.network.ConnectivityInterceptor
 import kotlinx.coroutines.Deferred

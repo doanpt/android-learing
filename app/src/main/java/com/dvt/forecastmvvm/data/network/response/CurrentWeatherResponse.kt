@@ -1,4 +1,4 @@
-package com.dvt.forecastmvvm.data.db.network.response
+package com.dvt.forecastmvvm.data.network.response
 
 import com.dvt.forecastmvvm.data.db.entity.CurrentWeatherEntry
 import com.dvt.forecastmvvm.data.db.entity.Location
