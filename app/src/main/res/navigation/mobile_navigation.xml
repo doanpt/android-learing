@@ -8,13 +8,13 @@
 
     <fragment
         android:id="@+id/currentWeatherFragment"
-        android:name="com.dvt.forecastmvvm.ui.weather.current.CurrentWeatherFragment"
+        android:name="com.dvt.forecast.ui.weather.current.CurrentWeatherFragment"
         android:label="current_weather_fragment"
         tools:layout="@layout/current_weather_fragment" />
 
     <fragment
         android:id="@+id/futureListWeatherFragment"
-        android:name="com.dvt.forecastmvvm.ui.weather.feature.list.FutureListWeatherFragment"
+        android:name="com.dvt.forecast.ui.weather.feature.list.FutureListWeatherFragment"
         android:label="future_list_weather_fragment"
         tools:layout="@layout/future_list_weather_fragment">
         <action
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/futureDetailWeatherFragment"
-        android:name="com.dvt.forecastmvvm.ui.weather.feature.detail.FutureDetailWeatherFragment"
+        android:name="com.dvt.forecast.ui.weather.feature.detail.FutureDetailWeatherFragment"
         android:label="future_detail_weather_fragment"
         tools:layout="@layout/future_detail_weather_fragment">
         <argument
@@ -34,6 +34,6 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.dvt.forecastmvvm.ui.settings.SettingsFragment"
+        android:name="com.dvt.forecast.ui.settings.SettingsFragment"
         android:label="SettingFragment" />
 </navigation>
