@@ -6,8 +6,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.dvt.forecastmvvm.data.db.entity.FutureWeatherEntry
-import com.dvt.forecastmvvm.data.db.unitlocalized.future.ImperialSimpleFutureWeatherEntry
-import com.dvt.forecastmvvm.data.db.unitlocalized.future.MetricSimpleFutureWeatherEntry
+import com.dvt.forecastmvvm.data.db.unitlocalized.future.list.ImperialSimpleFutureWeatherEntry
+import com.dvt.forecastmvvm.data.db.unitlocalized.future.list.MetricSimpleFutureWeatherEntry
+import com.dvt.forecastmvvm.data.db.unitlocalized.future.detail.ImperialDetailFutureWeatherEntry
+import com.dvt.forecastmvvm.data.db.unitlocalized.future.detail.MetricDetailFutureWeatherEntry
 import org.threeten.bp.LocalDate
 
 @Dao
@@ -26,4 +28,11 @@ interface FutureWeatherDao {
 
     @Query("delete from future_weather where date(date) < date(:firstDateToKeep)")
     fun deleteOldEntries(firstDateToKeep: LocalDate)
+
+    @Query("select * from future_weather where date(date) = date(:date)")
+    fun getDetailedWeatherByDateMetric(date: LocalDate): LiveData<MetricDetailFutureWeatherEntry>
+
+    @Query("select * from future_weather where date(date) = date(:date)")
+    fun getDetailedWeatherByDateImperial(date: LocalDate): LiveData<ImperialDetailFutureWeatherEntry>
+
 }
