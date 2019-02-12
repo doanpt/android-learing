@@ -14,6 +14,7 @@ import com.dvt.forecastmvvm.data.provider.UnitProviderImpl
 import com.dvt.forecastmvvm.data.repository.ForecastRepository
 import com.dvt.forecastmvvm.data.repository.ForecastRepositoryImpl
 import com.dvt.forecastmvvm.ui.weather.current.CurrentWeatherViewModelFactory
+import com.dvt.forecastmvvm.ui.weather.feature.list.FutureListWeatherViewModelFactory
 import com.google.android.gms.location.LocationServices
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.resocoder.forecastmvvm.data.db.ForecastDatabase
@@ -28,10 +29,12 @@ import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
 class ForecastApplication : Application(), KodeinAware {
-    override val kodein: Kodein = lazy {
+    override val kodein = Kodein.lazy {
         import(androidXModule(this@ForecastApplication))
+
         bind() from singleton { ForecastDatabase(instance()) }
         bind() from singleton { instance<ForecastDatabase>().currentWeatherDao() }
+        bind() from singleton { instance<ForecastDatabase>().futureWeatherDao() }
         bind() from singleton { instance<ForecastDatabase>().weatherLocationDao() }
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
         bind() from singleton { ApixuWeatherApiService(instance()) }
@@ -43,11 +46,13 @@ class ForecastApplication : Application(), KodeinAware {
                 instance(),
                 instance(),
                 instance(),
+                instance(),
                 instance()
             )
         }
         bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
         bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
+        bind() from provider { FutureListWeatherViewModelFactory(instance(), instance()) }
     }
 
     override fun onCreate() {
