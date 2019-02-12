@@ -48,13 +48,19 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 //    at com.dvt.forecastmvvm.ui.weather.current.CurrentWeatherFragment$bindUI$1.invokeSuspend(CurrentWeatherFragment.kt:44)
 
     private fun bindUI() = launch {
+        val weatherLocation = viewModel.weatherLocation.await()
+
+        weatherLocation.observe(this@CurrentWeatherFragment, Observer { location ->
+            if (location == null) return@Observer
+            updateLocation(location.name)
+        })
+
         val currentWeather = viewModel.weather.await()
 
         currentWeather.observe(this@CurrentWeatherFragment, Observer {
             if (it == null) return@Observer
 
             group_loading.visibility = View.GONE
-            updateLocation("Los Angeles")
             updateDateToToday()
             updateTemperatures(it.temperature, it.feelsLikeTemperature)
             updateCondition(it.conditionText)

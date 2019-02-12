@@ -5,17 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.dvt.forecastmvvm.data.db.CurrentWeatherDao
+import com.dvt.forecastmvvm.data.db.WeatherLocationDao
 import com.dvt.forecastmvvm.data.db.entity.CurrentWeatherEntry
+import com.dvt.forecastmvvm.data.db.entity.WeatherLocation
 
 
 @Database(
-    entities = [CurrentWeatherEntry::class],
+    entities = [CurrentWeatherEntry::class, WeatherLocation::class],
     version = 1
 )
 abstract class ForecastDatabase : RoomDatabase() {
     abstract fun currentWeatherDao(): CurrentWeatherDao
-//    abstract fun futureWeatherDao(): FutureWeatherDao
-//    abstract fun weatherLocationDao(): WeatherLocationDao
+    //    abstract fun futureWeatherDao(): FutureWeatherDao
+    abstract fun weatherLocationDao(): WeatherLocationDao
 
     companion object {
         @Volatile
@@ -30,7 +32,6 @@ abstract class ForecastDatabase : RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 ForecastDatabase::class.java, "futureWeatherEntries.db"
-            )
-                .build()
+            ).build()
     }
 }
