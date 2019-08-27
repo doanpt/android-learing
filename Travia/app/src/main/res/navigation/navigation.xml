@@ -48,6 +48,12 @@
         <action
             android:id="@+id/action_gameWonFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
+        <argument
+            android:name="numQuestions"
+            app:argType="integer" />
+        <argument
+            android:name="numCorrect"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
