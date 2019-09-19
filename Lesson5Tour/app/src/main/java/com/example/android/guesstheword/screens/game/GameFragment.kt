@@ -21,6 +21,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -66,6 +67,14 @@ class GameFragment : Fragment() {
         viewModel.word.observe(this, Observer { word ->
             binding.wordText.text = word
         })
+        viewModel.eventGameFinish.observe(this, Observer { hasFinished ->
+            //when we change orientation , gameFinished will be called again due to value of game finish is true.
+            //we only want call this function once time. so we need to handle event to set value of gameFinishCompleted to false
+            if (hasFinished) {
+                gameFinished()
+                viewModel.onGameFishCompleted()
+            }
+        })
         return binding.root
 
     }
@@ -77,5 +86,6 @@ class GameFragment : Fragment() {
     private fun gameFinished() {
         val action = GameFragmentDirections.actionGameToScore(viewModel.score.value ?: 0)
         findNavController(this).navigate(action)
+        Toast.makeText(context, "Finish", Toast.LENGTH_SHORT).show()
     }
 }
