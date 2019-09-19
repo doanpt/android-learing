@@ -8,8 +8,9 @@ import androidx.lifecycle.ViewModel
 class GameViewModel : ViewModel() {
 
     // The current word
-    var word = MutableLiveData<String>()
-
+    private var _word = MutableLiveData<String>()
+    val word: LiveData<String>
+        get() = _word
     // The current score
     private var _score = MutableLiveData<Int>()
     val score: LiveData<Int>
@@ -64,7 +65,7 @@ class GameViewModel : ViewModel() {
             //FIXME need to fix
             // gameFinished()
         } else {
-            word.value = wordList.removeAt(0)
+            _word.value = wordList.removeAt(0)
         }
     }
 
