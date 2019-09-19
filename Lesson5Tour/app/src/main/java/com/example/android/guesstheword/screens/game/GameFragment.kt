@@ -17,6 +17,7 @@
 package com.example.android.guesstheword.screens.game
 
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -66,6 +67,9 @@ class GameFragment : Fragment() {
         })
         viewModel.word.observe(this, Observer { word ->
             binding.wordText.text = word
+        })
+        viewModel.time.observe(this, Observer { time ->
+            binding.timerText.text = DateUtils.formatElapsedTime(time)
         })
         viewModel.eventGameFinish.observe(this, Observer { hasFinished ->
             //when we change orientation , gameFinished will be called again due to value of game finish is true.
