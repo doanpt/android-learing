@@ -52,6 +52,8 @@ class GameFragment : Fragment() {
         )
         Log.i("GameFragment", "fragment create View model")
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
         //we can't do this due to it is live data.
         //we use this for backing property to make sure that only view model can change value of live data
         //viewModel.score.value=1000
@@ -62,12 +64,7 @@ class GameFragment : Fragment() {
         binding.skipButton.setOnClickListener {
             viewModel.onSkip()
         }
-        viewModel.score.observe(this, Observer { newScore ->
-            binding.scoreText.text = newScore.toString()
-        })
-        viewModel.word.observe(this, Observer { word ->
-            binding.wordText.text = word
-        })
+
         viewModel.time.observe(this, Observer { time ->
             binding.timerText.text = DateUtils.formatElapsedTime(time)
         })
