@@ -65,9 +65,6 @@ class GameFragment : Fragment() {
             viewModel.onSkip()
         }
 
-        viewModel.time.observe(this, Observer { time ->
-            binding.timerText.text = DateUtils.formatElapsedTime(time)
-        })
         viewModel.eventGameFinish.observe(this, Observer { hasFinished ->
             //when we change orientation , gameFinished will be called again due to value of game finish is true.
             //we only want call this function once time. so we need to handle event to set value of gameFinishCompleted to false
