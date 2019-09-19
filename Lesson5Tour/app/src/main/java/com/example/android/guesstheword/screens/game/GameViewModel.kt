@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.android.guesstheword.event.Event
 
 private val CORRECT_BUZZ_PATTERN = longArrayOf(100, 100, 100, 100, 100, 100)
 private val PANIC_BUZZ_PATTERN = longArrayOf(0, 200)
@@ -58,9 +59,12 @@ class GameViewModel : ViewModel() {
     val currentTimeString = Transformations.map(time) { time ->
         DateUtils.formatElapsedTime(time)
     }
-
-    private val _eventGameFinish = MutableLiveData<Boolean>()
-    val eventGameFinish: LiveData<Boolean>
+    //https://proandroiddev.com/livedata-with-single-events-2395dea972a8
+    //https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150
+    //https://code.luasoftware.com/tutorials/android/android-singleliveevent-for-ui-event/
+    //https://viblo.asia/p/livedata-voi-singleliveevent-va-event-wrapper-jvElaG34Kkw
+    private val _eventGameFinish = MutableLiveData<Event<Boolean>>()
+    val eventGameFinish: LiveData<Event<Boolean>>
         get() = _eventGameFinish
 
     init {
@@ -68,13 +72,13 @@ class GameViewModel : ViewModel() {
         resetList()
         nextWord()
         _score.value = 0
-        _eventGameFinish.value = false
+        _eventGameFinish.value = Event(false)
         //object is class(Anonymous class)
         timer = object : CountDownTimer(COUNTDOWN_TIME, ONE_SECOND) {
             override fun onFinish() {
                 _time.value = DONE
                 _eventBuzz.value = BuzzType.GAME_OVER
-                _eventGameFinish.value = true
+                _eventGameFinish.value = Event(true)
             }
 
             override fun onTick(millisUntilFinished: Long) {
@@ -150,11 +154,8 @@ class GameViewModel : ViewModel() {
         timer.cancel()
     }
 
+    //FIXME use Event same with _eventGameFinish
     fun onBuzzComplete() {
         _eventBuzz.value = BuzzType.NO_BUZZ
-    }
-
-    fun onGameFishCompleted() {
-        _eventGameFinish.value = false
     }
 }

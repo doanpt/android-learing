@@ -77,12 +77,11 @@ class GameFragment : Fragment() {
             }
         })
 
-        viewModel.eventGameFinish.observe(this, Observer { hasFinished ->
+        viewModel.eventGameFinish.observe(this, Observer {
             //when we change orientation , gameFinished will be called again due to value of game finish is true.
             //we only want call this function once time. so we need to handle event to set value of gameFinishCompleted to false
-            if (hasFinished) {
+            if (it.getContentIfNotHandled() == true) {
                 gameFinished()
-                viewModel.onGameFishCompleted()
             }
         })
         return binding.root
