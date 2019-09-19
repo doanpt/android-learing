@@ -50,7 +50,9 @@ class GameFragment : Fragment() {
         )
         Log.i("GameFragment", "fragment create View model")
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
-
+        //we can't do this due to it is live data.
+        //we use this for backing property to make sure that only view model can change value of live data
+        //viewModel.score.value=1000
         binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
         }
