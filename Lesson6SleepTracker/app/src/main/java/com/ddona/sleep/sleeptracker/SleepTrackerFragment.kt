@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import com.ddona.sleep.R
 import com.ddona.sleep.database.SleepDatabase
 import com.ddona.sleep.databinding.FragmentSleepTrackerBinding
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * A fragment with buttons to record start and end times for sleep, which are saved in
@@ -78,6 +79,15 @@ class SleepTrackerFragment : Fragment() {
                 // Reset state to make sure we only navigate once, even if the device
                 // has a configuration change.
                 sleepTrackerViewModel.doneNavigating()
+            }
+        })
+
+        sleepTrackerViewModel.showSnackBarEvent.observe(this, Observer {
+            if (it == true) {
+                Snackbar.make(activity!!.findViewById(android.R.id.content),
+                    getString(R.string.cleared_message),
+                    Snackbar.LENGTH_SHORT).show()
+                sleepTrackerViewModel.doneShowSnackBarEvent()
             }
         })
 

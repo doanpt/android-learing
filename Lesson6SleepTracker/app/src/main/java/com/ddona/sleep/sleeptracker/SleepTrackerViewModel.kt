@@ -72,6 +72,15 @@ class SleepTrackerViewModel(
         it?.isNotEmpty()
     }
 
+    private var _showSnackBarEvent = MutableLiveData<Boolean>()
+
+    val showSnackBarEvent: LiveData<Boolean>
+        get() = _showSnackBarEvent
+
+    fun doneShowSnackBarEvent() {
+        _showSnackBarEvent.value = false
+    }
+
     /**
      * Variable that tells the Fragment to navigate to a specific [SleepQualityFragment]
      *
@@ -186,6 +195,7 @@ class SleepTrackerViewModel(
 
             // And clear tonight since it's no longer in the database
             tonight.value = null
+            _showSnackBarEvent.value = true
         }
     }
 
