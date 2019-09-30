@@ -30,7 +30,7 @@ abstract class SleepDatabase : RoomDatabase() {
         @Volatile
         private var INSTACE: SleepDatabase? = null
 
-        fun getInstace(context: Context): SleepDatabase {
+        fun getInstance(context: Context): SleepDatabase {
             synchronized(this) {
                 var instance = INSTACE
                 if (instance == null) {
