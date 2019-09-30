@@ -26,5 +26,7 @@ import com.ddona.sleep.database.SleepDatabaseDao
 class SleepTrackerViewModel(
         val database: SleepDatabaseDao,
         application: Application) : AndroidViewModel(application) {
+
+        
 }
 

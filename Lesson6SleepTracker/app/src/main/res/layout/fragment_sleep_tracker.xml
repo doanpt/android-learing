@@ -24,6 +24,9 @@
          click handlers, and state variables. -->
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.ddona.sleep.sleeptracker.SleepTrackerViewModel" />
     </data>
 
     <!-- Start of the visible fragment layout using ConstraintLayout -->
