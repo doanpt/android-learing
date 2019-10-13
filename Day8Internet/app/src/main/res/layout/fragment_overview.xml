@@ -26,6 +26,7 @@
         <variable
             name="viewModel"
             type="com.example.android.marsrealestate.overview.OverviewViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
