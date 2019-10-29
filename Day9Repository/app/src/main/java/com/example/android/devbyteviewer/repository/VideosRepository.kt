@@ -17,6 +17,9 @@
 
 package com.example.android.devbyteviewer.repository
 
+import android.content.Context
+import android.net.ConnectivityManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.android.devbyteviewer.database.VideoDatabase
@@ -24,6 +27,7 @@ import com.example.android.devbyteviewer.database.asDomainModel
 import com.example.android.devbyteviewer.domain.Video
 import com.example.android.devbyteviewer.network.Network
 import com.example.android.devbyteviewer.network.asDatabaseModel
+import com.example.android.devbyteviewer.util.isConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -46,10 +50,13 @@ class VideosRepository(private val database: VideoDatabase) {
      *
      * To actually load the videos for use, observe [videos]
      */
-    suspend fun refreshVideos() {
+    suspend fun refreshVideos(context: Context) {
         withContext(Dispatchers.IO) {
-            val playlist = Network.devbytes.getPlaylist().await()
-            database.videoDao.insertAll(*playlist.asDatabaseModel())
+            if (context.isConnected) {
+                val playlist = Network.devbytes.getPlaylist().await()
+                database.videoDao.insertAll(*playlist.asDatabaseModel())
+            }
         }
     }
+
 }

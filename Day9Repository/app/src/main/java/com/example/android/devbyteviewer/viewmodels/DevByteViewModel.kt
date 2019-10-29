@@ -62,7 +62,7 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         viewModelScope.launch {
-            videosRepository.refreshVideos()
+            videosRepository.refreshVideos(application.applicationContext)
         }
     }
 
