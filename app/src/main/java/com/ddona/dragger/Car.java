@@ -1,16 +1,17 @@
 package com.ddona.dragger;
 
+import android.util.Log;
+
 public class Car {
     Engine engine;
     Wheels wheels;
 
-    public Car() {
-        //this is problems, car don't create it's engine and wheels
-        engine = new Engine();
-        wheels = new Wheels();
+    public Car(Engine engine, Wheels wheels) {
+        this.engine = engine;
+        this.wheels = wheels;
     }
 
     void drive() {
-
+        Log.d("doanpt", "driving!");
     }
 }

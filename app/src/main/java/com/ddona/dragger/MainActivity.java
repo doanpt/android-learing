@@ -10,5 +10,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Engine engine = new Engine();
+        Wheels wheels = new Wheels();
+        Car car = new Car(engine, wheels);
+        car.drive();
     }
 }
