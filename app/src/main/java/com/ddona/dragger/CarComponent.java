@@ -2,7 +2,9 @@ package com.ddona.dragger;
 
 import dagger.Component;
 
-@Component(modules = {WheelsModule.class})
+@Component(modules = {WheelsModule.class, DieselEngineModule.class})
+//we can't add PetrolEngineModule and DieselEngineModule into Car component together due to Engine is bound multiple times error when build
+//@Component(modules = {WheelsModule.class, PetrolEngineModule.class,DieselEngineModule.class})
 public interface CarComponent {
 
     Car getCar();

@@ -2,9 +2,12 @@ package com.ddona.dragger;
 
 import javax.inject.Inject;
 
-public class Engine {
+public interface Engine {
 
-    @Inject
-    public Engine() {
-    }
+//    Interface don't have constructor for adding @inject annotation
+//    @Inject
+//    public Engine() {
+//    }
+
+    void start();
 }
