@@ -8,13 +8,14 @@ public class Car {
     //Here we have 3 option for inject, Field, constructor and method
     //Order of execution is constructor then field and method
     private static final String TAG = "doanpt";
-    //after call inject in constructor then field is inject
-    @Inject Engine engine;
+    //Back to constructor injection code
+    Engine engine;
     Wheels wheels;
 
     //Dagger call constructor first
     @Inject
-    public Car(Wheels wheels) {
+    public Car(Engine engine, Wheels wheels) {
+        this.engine = engine;
         this.wheels = wheels;
     }
 
