@@ -11,7 +11,8 @@ import dagger.Provides;
 //we will module annotation for object that we can't use @Inject in constructor for that class.
 //Due to we don't own of that classes.
 //or we have any configuration before return class for dagger
-public class WheelsModule {
+//If all method of module is static. we can add abstract key word to avoid dagger create instance of module
+public abstract class WheelsModule {
 
     //provide Rims object with @Provides annotation
     //naming convention is provide<Object name>
