@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.ddona.dragger.di.Car;
+import com.ddona.dragger.model.CarComponent;
+
 import javax.inject.Inject;
 //code from tut: https://www.youtube.com/playlist?list=PLrnPJCHvNZuA2ioi4soDZKz8euUQnJW65
 public class MainActivity extends AppCompatActivity {
     //dagger is not support private field
-    @Inject Car car;
+    @Inject
+    Car car;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

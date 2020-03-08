@@ -1,19 +1,18 @@
-package com.ddona.dragger;
+package com.ddona.dragger.di;
 
 import android.util.Log;
 
 import javax.inject.Inject;
 
-public class PetrolEngine implements Engine {
+public class DieselEngine implements Engine {
     private static final String TAG = "doanpt";
 
     @Inject
-    public PetrolEngine() {
+    public DieselEngine() {
 
     }
-
     @Override
     public void start() {
-        Log.d(TAG, "PetrolEngine starting");
+        Log.d(TAG, "DieselEngine starting");
     }
 }

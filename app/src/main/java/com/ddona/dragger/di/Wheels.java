@@ -1,4 +1,4 @@
-package com.ddona.dragger;
+package com.ddona.dragger.di;
 
 public class Wheels {
 

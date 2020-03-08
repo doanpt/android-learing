@@ -1,4 +1,8 @@
-package com.ddona.dragger;
+package com.ddona.dragger.model;
+
+import com.ddona.dragger.di.Rims;
+import com.ddona.dragger.di.Tires;
+import com.ddona.dragger.di.Wheels;
 
 import dagger.Module;
 import dagger.Provides;
@@ -25,7 +29,7 @@ public class WheelsModule {
     }
 
     @Provides
-    static  Wheels provideWheels(Rims rims, Tires tires) {
+    static Wheels provideWheels(Rims rims, Tires tires) {
         //dagger know how to to create rims and tires, so dagger will create it and pass it as param of provideWheels method
         return new Wheels(rims, tires);
     }
