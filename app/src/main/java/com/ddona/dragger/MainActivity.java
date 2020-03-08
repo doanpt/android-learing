@@ -5,14 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
-
+    private Car car;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Engine engine = new Engine();
-        Wheels wheels = new Wheels();
-        Car car = new Car(engine, wheels);
+        CarComponent carComponent = DaggerCarComponent.create();
+        car = carComponent.getCar();
         car.drive();
     }
 }
