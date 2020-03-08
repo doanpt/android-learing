@@ -6,4 +6,7 @@ import dagger.Component;
 public interface CarComponent {
 
     Car getCar();
+
+    //inject object that MainActivity needed
+    void inject(MainActivity mainActivity);
 }
