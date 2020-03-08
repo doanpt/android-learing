@@ -15,10 +15,16 @@ public class DieselEngineModule {
         this.horsePower = horsePower;
     }
 
+    //we add provideHorsePower method to use @Inject annotation on DieselEngine constructor to pass horse power to it
+    @Provides
+    int provideHorsePower() {
+        return horsePower;
+    }
+
     //We can't use binds annotation due to constructor was removed.
     //change to provides annotation to create new Diesel Engine and pass horse power to it.
     @Provides
-    Engine provideEngine() {
-        return new DieselEngine(horsePower);
+    Engine provideEngine(DieselEngine engine) {
+        return engine;
     }
 }
