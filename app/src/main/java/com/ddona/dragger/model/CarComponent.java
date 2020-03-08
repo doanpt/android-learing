@@ -19,9 +19,10 @@ public interface CarComponent {
     //we need more inject method if there are many activities or fragments
     void inject(MainActivity mainActivity);
 
-    //Component.Builder annotation to create custom component builder when build dagger component.
-    //BindInstance: Marks a method on a component builder or subcomponent builder that allows an instance to be bound to some type within the component.
-    //Named: Use to name for some attribute that have same type to let dagger know where are the values will be inject to?
+    //@Component.Builder annotation to create custom component builder when build dagger component.
+    //@BindInstance: add attribute value to instance at runtime same as pass horse value to module at runtime and providing it via provide method like last video,
+    //and it more efficient due to dagger doesn't need to create an instance of module(PetrolEngineModule)
+    //@Named: Use to name for some attribute that have same type to let dagger know where are the values will be inject to?
     @Component.Builder
     interface Builder{
 
