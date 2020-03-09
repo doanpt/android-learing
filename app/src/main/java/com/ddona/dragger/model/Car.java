@@ -9,12 +9,14 @@ public class Car {
     //Order of execution is constructor then field and method
     private static final String TAG = "doanpt";
     //Back to constructor injection code
-    Engine engine;
-    Wheels wheels;
+    private Engine engine;
+    private Wheels wheels;
+    private Driver driver;
 
     //Dagger call constructor first
     @Inject
-    public Car(Engine engine, Wheels wheels) {
+    public Car(Driver driver, Engine engine, Wheels wheels) {
+        this.driver = driver;
         this.engine = engine;
         this.wheels = wheels;
     }
@@ -28,6 +30,6 @@ public class Car {
 
     public void drive() {
         engine.start();
-        Log.d(TAG, "driving!");
+        Log.d(TAG, "driver : " + driver + " is driving!" + this);
     }
 }

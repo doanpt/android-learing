@@ -4,10 +4,14 @@ import com.ddona.dragger.MainActivity;
 import com.ddona.dragger.model.Car;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
 
+//Due to Driver is singleton so we must be add @Singleton to component.
+//If not, we will get a compile error
+@Singleton
 @Component(modules = {WheelsModule.class, PetrolEngineModule.class})
 //we can't add PetrolEngineModule and DieselEngineModule into Car component together due to Engine is bound multiple times error when build
 //@Component(modules = {WheelsModule.class, PetrolEngineModule.class,DieselEngineModule.class})

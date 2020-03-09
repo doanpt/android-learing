@@ -14,7 +14,9 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity {
     //dagger is not support private field
     @Inject
-    Car car;
+    Car car1;
+    @Inject
+    Car car2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,22 @@ public class MainActivity extends AppCompatActivity {
         carComponent.inject(this);
         //We don't need it and we use field injection to inject car to main activity
         //car = carComponent.getCar();
-        car.drive();
+        car1.drive();
+        car2.drive();
+
+
+        //If you create 2 component then cars will be drive by different driver.
+        //Singleton only work when you get car on same car component
+        //if you want to use same car component in many class. you must create car component in Application class once time.
+//        CarComponent carComponent1 = DaggerCarComponent.builder()
+//                .horsePower(130)
+//                .engineCapacity(1400)
+//                .build();
+//        CarComponent carComponent2 = DaggerCarComponent.builder()
+//                .horsePower(140)
+//                .engineCapacity(1400)
+//                .build();
+//        carComponent1.getCar().drive();
+//        carComponent2.getCar().drive();
     }
 }
