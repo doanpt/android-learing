@@ -1,13 +1,7 @@
 package com.ddona.dragger.model;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
-//Provide singleton instance driver for all car!
-@Singleton
 public class Driver {
+    //We don't own this class so we can't annotate it with @Inject
 
-    @Inject
-    public Driver() {
-    }
 }

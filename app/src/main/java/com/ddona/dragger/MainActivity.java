@@ -4,13 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.ddona.dragger.di.ActivityComponent;
+import com.ddona.dragger.di.DaggerActivityComponent;
 import com.ddona.dragger.model.Car;
-import com.ddona.dragger.di.CarComponent;
-import com.ddona.dragger.di.DaggerCarComponent;
 
 import javax.inject.Inject;
 
 //code from tut: https://www.youtube.com/playlist?list=PLrnPJCHvNZuA2ioi4soDZKz8euUQnJW65
+//read more about scope and dager
+//https://android.jlelse.eu/dagger-2-part-i-basic-principles-graph-dependencies-scopes-3dfd032ccd82
+//https://proandroiddev.com/dagger-2-part-ii-custom-scopes-component-dependencies-subcomponents-697c1fa1cfc
+//https://proandroiddev.com/dagger-2-part-three-new-possibilities-3daff12f7ebf
 public class MainActivity extends AppCompatActivity {
     //dagger is not support private field
     @Inject
@@ -26,31 +30,19 @@ public class MainActivity extends AppCompatActivity {
         //when we use  @Component.Builder then dagger don't create dieselEngineModule method for add builder
         //and we can add methods to dagger builder like horsePower.
         //Note: we need rebuild project.
-        CarComponent carComponent = DaggerCarComponent.builder()
+        ActivityComponent carComponent = DaggerActivityComponent.builder()
                 .horsePower(150)
                 .engineCapacity(1400)
+                .appComponent(((DaggerTutApplication)getApplication()).getAppComponent())
                 .build();
         //add this to let dagger know we need inject car to this project
         //if we don't do it. car object will be null although we have @inject annotation on Car object
         carComponent.inject(this);
         //We don't need it and we use field injection to inject car to main activity
         //car = carComponent.getCar();
+        //for scope annotation, there are only driver even we rotate device.. due to we use singleton for driver class and app component
+        //but when we rotate device. we get new car due to we use @PerActivity Scope.
         car1.drive();
         car2.drive();
-
-
-        //If you create 2 component then cars will be drive by different driver.
-        //Singleton only work when you get car on same car component
-        //if you want to use same car component in many class. you must create car component in Application class once time.
-//        CarComponent carComponent1 = DaggerCarComponent.builder()
-//                .horsePower(130)
-//                .engineCapacity(1400)
-//                .build();
-//        CarComponent carComponent2 = DaggerCarComponent.builder()
-//                .horsePower(140)
-//                .engineCapacity(1400)
-//                .build();
-//        carComponent1.getCar().drive();
-//        carComponent2.getCar().drive();
     }
 }

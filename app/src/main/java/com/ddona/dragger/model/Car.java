@@ -2,8 +2,11 @@ package com.ddona.dragger.model;
 
 import android.util.Log;
 
+import com.ddona.dragger.di.PerActivity;
+
 import javax.inject.Inject;
 
+@PerActivity
 public class Car {
     //Here we have 3 option for inject, Field, constructor and method
     //Order of execution is constructor then field and method
