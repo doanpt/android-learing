@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.ddona.dragger.di.Car;
-import com.ddona.dragger.model.CarComponent;
-import com.ddona.dragger.model.DaggerCarComponent;
+import com.ddona.dragger.model.Car;
+import com.ddona.dragger.di.CarComponent;
+import com.ddona.dragger.di.DaggerCarComponent;
 
 import javax.inject.Inject;
 

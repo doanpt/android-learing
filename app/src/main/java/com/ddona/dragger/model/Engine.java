@@ -1,6 +1,4 @@
-package com.ddona.dragger.di;
-
-import javax.inject.Inject;
+package com.ddona.dragger.model;
 
 public interface Engine {
 

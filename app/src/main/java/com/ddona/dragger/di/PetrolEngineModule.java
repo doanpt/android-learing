@@ -1,7 +1,7 @@
-package com.ddona.dragger.model;
+package com.ddona.dragger.di;
 
-import com.ddona.dragger.di.Engine;
-import com.ddona.dragger.di.PetrolEngine;
+import com.ddona.dragger.model.Engine;
+import com.ddona.dragger.model.PetrolEngine;
 
 import dagger.Binds;
 import dagger.Module;

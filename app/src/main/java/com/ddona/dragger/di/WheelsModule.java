@@ -1,8 +1,8 @@
-package com.ddona.dragger.model;
+package com.ddona.dragger.di;
 
-import com.ddona.dragger.di.Rims;
-import com.ddona.dragger.di.Tires;
-import com.ddona.dragger.di.Wheels;
+import com.ddona.dragger.model.Rims;
+import com.ddona.dragger.model.Tires;
+import com.ddona.dragger.model.Wheels;
 
 import dagger.Module;
 import dagger.Provides;

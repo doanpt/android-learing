@@ -1,4 +1,4 @@
-package com.ddona.dragger.di;
+package com.ddona.dragger.model;
 
 import android.util.Log;
 

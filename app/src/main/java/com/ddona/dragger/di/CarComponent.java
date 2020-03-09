@@ -1,7 +1,7 @@
-package com.ddona.dragger.model;
+package com.ddona.dragger.di;
 
 import com.ddona.dragger.MainActivity;
-import com.ddona.dragger.di.Car;
+import com.ddona.dragger.model.Car;
 
 import javax.inject.Named;
 
