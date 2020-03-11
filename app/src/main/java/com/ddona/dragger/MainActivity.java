@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.ddona.dragger.di.ActivityComponent;
-import com.ddona.dragger.di.DaggerActivityComponent;
+import com.ddona.dragger.di.DieselEngineModule;
 import com.ddona.dragger.model.Car;
 
 import javax.inject.Inject;
@@ -30,11 +30,9 @@ public class MainActivity extends AppCompatActivity {
         //when we use  @Component.Builder then dagger don't create dieselEngineModule method for add builder
         //and we can add methods to dagger builder like horsePower.
         //Note: we need rebuild project.
-        ActivityComponent carComponent = DaggerActivityComponent.builder()
-                .horsePower(150)
-                .engineCapacity(1400)
-                .appComponent(((DaggerTutApplication)getApplication()).getAppComponent())
-                .build();
+        ActivityComponent carComponent = ((DaggerTutApplication) getApplication())
+                .getAppComponent()
+                .getActivityComponent(new DieselEngineModule(120));
         //add this to let dagger know we need inject car to this project
         //if we don't do it. car object will be null although we have @inject annotation on Car object
         carComponent.inject(this);

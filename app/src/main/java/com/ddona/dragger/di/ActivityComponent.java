@@ -7,10 +7,11 @@ import javax.inject.Named;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import dagger.Subcomponent;
 
 
 @PerActivity
-@Component(dependencies = AppComponent.class, modules = {WheelsModule.class, PetrolEngineModule.class})
+@Subcomponent(modules = {WheelsModule.class, DieselEngineModule.class})
 //we can't add PetrolEngineModule and DieselEngineModule into Car component together due to Engine is bound multiple times error when build
 //@Component(modules = {WheelsModule.class, PetrolEngineModule.class,DieselEngineModule.class})
 public interface ActivityComponent {
@@ -25,18 +26,18 @@ public interface ActivityComponent {
     //@BindInstance: add attribute value to instance at runtime same as pass horse value to module at runtime and providing it via provide method like last video,
     //and it more efficient due to dagger doesn't need to create an instance of module(PetrolEngineModule)
     //@Named: Use to name for some attribute that have same type to let dagger know where are the values will be inject to?
-    @Component.Builder
-    interface Builder {
-
-        @BindsInstance
-        Builder horsePower(@Named("horse power") int horsePower);
-
-        @BindsInstance
-        Builder engineCapacity(@Named("engine capacity") int engineCapacity);
-
-        Builder appComponent(AppComponent component);
-
-        //add method for dagger create builder for ActivityComponent
-        ActivityComponent build();
-    }
+//    @Component.Builder
+//    interface Builder {
+//
+//        @BindsInstance
+//        Builder horsePower(@Named("horse power") int horsePower);
+//
+//        @BindsInstance
+//        Builder engineCapacity(@Named("engine capacity") int engineCapacity);
+//
+//        Builder appComponent(AppComponent component);
+//
+//        //add method for dagger create builder for ActivityComponent
+//        ActivityComponent build();
+//    }
 }
