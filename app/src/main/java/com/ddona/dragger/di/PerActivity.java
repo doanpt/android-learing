@@ -7,7 +7,7 @@ import javax.inject.Scope;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-//create scope for per activity
+//create scope for per ac@tivity
 @Scope
 @Documented
 @Retention(RUNTIME)

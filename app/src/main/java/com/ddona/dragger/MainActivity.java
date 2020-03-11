@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
         //Note: we need rebuild project.
         ActivityComponent carComponent = ((DaggerTutApplication) getApplication())
                 .getAppComponent()
-                .getActivityComponent(new DieselEngineModule(120));
+                .getActivityComponentBuilder().horsePower(150)
+                .engineCapacity(1400)
+                .build();
         //add this to let dagger know we need inject car to this project
         //if we don't do it. car object will be null although we have @inject annotation on Car object
         carComponent.inject(this);
