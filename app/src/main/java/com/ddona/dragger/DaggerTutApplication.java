@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.ddona.dragger.di.AppComponent;
 import com.ddona.dragger.di.DaggerAppComponent;
+import com.ddona.dragger.di.DriverModule;
 
 public class DaggerTutApplication extends Application {
     private AppComponent component;
@@ -12,7 +13,7 @@ public class DaggerTutApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        component = DaggerAppComponent.create();
+        component = DaggerAppComponent.factory().create(new DriverModule("Doan"));
     }
 
     public AppComponent getAppComponent() {

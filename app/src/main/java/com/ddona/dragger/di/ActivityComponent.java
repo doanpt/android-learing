@@ -23,21 +23,28 @@ public interface ActivityComponent {
     //we need more inject method if there are many activities or fragments
     void inject(MainActivity mainActivity);
 
-    //@Component.Builder annotation to create custom component builder when build dagger component.
-    //@BindInstance: add attribute value to instance at runtime same as pass horse value to module at runtime and providing it via provide method like last video,
-    //and it more efficient due to dagger doesn't need to create an instance of module(PetrolEngineModule)
-    //@Named: Use to name for some attribute that have same type to let dagger know where are the values will be inject to?
-    //@Subcomponent.Builder annotation to create custom sub component builder when build dagger component
-    @Subcomponent.Builder
-    interface Builder {
+//    //@Component.Builder annotation to create custom component builder when build dagger component.
+//    //@BindInstance: add attribute value to instance at runtime same as pass horse value to module at runtime and providing it via provide method like last video,
+//    //and it more efficient due to dagger doesn't need to create an instance of module(PetrolEngineModule)
+//    //@Named: Use to name for some attribute that have same type to let dagger know where are the values will be inject to?
+//    //@Subcomponent.Builder annotation to create custom sub component builder when build dagger component
+//    @Subcomponent.Builder
+//    interface Builder {
+//
+//        @BindsInstance
+//        Builder horsePower(@Named("horse power") int horsePower);
+//
+//        @BindsInstance
+//        Builder engineCapacity(@Named("engine capacity") int engineCapacity);
+//
+//        //add method for dagger create builder for ActivityComponent
+//        ActivityComponent build();
+//    }
 
-        @BindsInstance
-        Builder horsePower(@Named("horse power") int horsePower);
-
-        @BindsInstance
-        Builder engineCapacity(@Named("engine capacity") int engineCapacity);
-
-        //add method for dagger create builder for ActivityComponent
-        ActivityComponent build();
+    //@Subcomponent.Factory only use on Dagger >=2.22
+    @Subcomponent.Factory
+    interface Factory {
+        ActivityComponent create(@BindsInstance @Named("horse power") int horsePower,
+                                 @BindsInstance @Named("engine capacity") int engineCapacity);
     }
 }

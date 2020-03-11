@@ -33,6 +33,6 @@ public class Car {
 
     public void drive() {
         engine.start();
-        Log.d(TAG, "driver : " + driver + " is driving!" + this);
+        Log.d(TAG, "driver : " + driver + " name : " + driver.name + " is driving!" + this);
     }
 }

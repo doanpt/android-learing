@@ -15,6 +15,7 @@ import javax.inject.Inject;
 //https://android.jlelse.eu/dagger-2-part-i-basic-principles-graph-dependencies-scopes-3dfd032ccd82
 //https://proandroiddev.com/dagger-2-part-ii-custom-scopes-component-dependencies-subcomponents-697c1fa1cfc
 //https://proandroiddev.com/dagger-2-part-three-new-possibilities-3daff12f7ebf
+//https://www.youtube.com/watch?v=3qZh6Fyrz-k&list=PLgCYzUzKIBE8AOAspC3DHoBNZIBHbIOsC
 public class MainActivity extends AppCompatActivity {
     //dagger is not support private field
     @Inject
@@ -32,9 +33,7 @@ public class MainActivity extends AppCompatActivity {
         //Note: we need rebuild project.
         ActivityComponent carComponent = ((DaggerTutApplication) getApplication())
                 .getAppComponent()
-                .getActivityComponentBuilder().horsePower(150)
-                .engineCapacity(1400)
-                .build();
+                .getActivityComponentFactory().create(150, 1400);
         //add this to let dagger know we need inject car to this project
         //if we don't do it. car object will be null although we have @inject annotation on Car object
         carComponent.inject(this);
