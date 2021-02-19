@@ -39,13 +39,11 @@ jobs:
         with:
           name: reports
           path: app/build/test-results # path to where the xml test results are stored
-          
-      - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
-        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless  report:
-        
-  runs-on: ubuntu-latest
-    needs: test # The report job will run after test job
+
+  ##5
+  report:
+    runs-on: [ ubuntu-latest ]
+    needs: android_tests # The report job will run after test job
     if: ${{ always() }} # IMPORTANT: Execute report job regardless of status
     steps:
       - name: Download Test Reports Folder
