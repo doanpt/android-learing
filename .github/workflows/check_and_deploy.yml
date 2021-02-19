@@ -15,6 +15,7 @@ jobs:
 
       - name: Unit tests
         run: ./gradlew test
+        continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
 
       - name: Android Test Report
         uses: asadmansr/android-test-report-action@v1.2.0
@@ -30,7 +31,8 @@ jobs:
         with:
           api-level: 29
           script: ./gradlew connectedAndroidTest
-      
+        continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
+
       - name: Android Test Report
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
