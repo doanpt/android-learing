@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">Find My Launch</string>
+  <string name="hint_search_box">Search</string>
+  <string name="details_header_launch">Launch</string>
+  <string name="no_details_text">No details available</string>
+  <string name="launch_header">Launch</string>
+</resources>
