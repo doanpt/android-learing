@@ -83,6 +83,13 @@ class DetailsViewModelTest {
 
   @Test
   fun shouldFailed() = runBlocking {
+    val viewModel = DetailsViewModel(dao)
+    viewModel.fetchLaunchDetails("1")
+    delay(100)
     throw IllegalArgumentException("error")
+    with(viewModel.launch.value) {
+      assert(this != null)
+      assert(this!!.name == "1")
+    }
   }
 }
