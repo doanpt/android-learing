@@ -38,7 +38,7 @@ jobs:
         if: ${{ always() }} # IMPORTANT: Upload reports regardless of status
         with:
           name: reports
-          path: app/build/test-results # path to where the xml test results are stored
+          path: app/build/reports # path to where the xml test results are stored
 
   ##5
   report:
