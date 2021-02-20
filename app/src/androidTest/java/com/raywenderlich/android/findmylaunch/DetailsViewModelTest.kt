@@ -46,6 +46,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.IllegalArgumentException
 
 @RunWith(AndroidJUnit4::class)
 class DetailsViewModelTest {
@@ -78,5 +79,10 @@ class DetailsViewModelTest {
       assert(this != null)
       assert(this!!.name == "1")
     }
+  }
+
+  @Test
+  fun shouldFailed() = runBlocking {
+    throw IllegalArgumentException("error")
   }
 }
