@@ -38,7 +38,7 @@ jobs:
         if: ${{ always() }} # IMPORTANT: Upload reports regardless of status
         with:
           name: reports
-          path: app/build/reports/androidTests/connected/index.html # path to where the xml test results are stored
+          path: app/build/reports/androidTests/connected/ # path to where the xml test results are stored
 
   ##5
   report:
@@ -52,4 +52,5 @@ jobs:
           name: reports
 
       - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
+        uses: doanpt/AndroidTestReportAction@v1-alpha
+        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
