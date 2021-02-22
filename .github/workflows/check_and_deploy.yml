@@ -50,7 +50,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: reports
-
-      - name: Android Test Report
-        uses: doanpt/AndroidTestReportAction@v1-alpha
+      - name: Android  Report Action
+        uses: doanpt/AndroidTestReportAction@v1.1-alpha
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
