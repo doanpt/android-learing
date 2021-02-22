@@ -17,8 +17,8 @@ jobs:
         run: ./gradlew test
         continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
 
-      - name: Android Test Report
-        uses: doanpt/AndroidTestReportAction@v1.5-alpha
+      - name: Unit Test Report
+        uses: doanpt/AndroidTestReportAction@v1.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
   ## 4
   android_tests:
@@ -51,5 +51,5 @@ jobs:
         with:
           name: reports
       - name: Android  Report Action
-        uses: doanpt/AndroidTestReportAction@v1.5-alpha
+        uses: doanpt/AndroidTestReportAction@v1.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
