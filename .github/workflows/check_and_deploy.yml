@@ -18,7 +18,7 @@ jobs:
         continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
 
       - name: Unit Test Report
-        uses: doanpt/AndroidTestReportAction@v1.0
+        uses: doanpt/AndroidTestReportAction@V1.1-alpha
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
   ## 4
   android_tests:
@@ -51,5 +51,5 @@ jobs:
         with:
           name: reports
       - name: Android  Report Action
-        uses: doanpt/AndroidTestReportAction@v1.0
+        uses: doanpt/AndroidTestReportAction@V1.1-alpha
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
