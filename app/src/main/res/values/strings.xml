@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Second Activity</string>
+    <string name="notify">Thông báo</string>
+    <string name="accept">Đồng ý</string>
+    <string name="cancel">Hủy</string>
+    <string name="request_draw_overlay_dialog">Vui vòng cho phép ứng dụng sử dụng quyền vẽ trên ứng dụng khác</string>
+</resources>
