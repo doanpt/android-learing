@@ -1,0 +1,129 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MenuActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_infor"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/boder_frame_game_over"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_state_play"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:paddingTop="10dp"
+            android:text="@string/hight_score"
+            android:textColor="@android:color/white"
+            android:textSize="45dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imv_status_play"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-25dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_likee" />
+
+            <LinearLayout
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_username_game_over"
+                        android:layout_width="105dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Chappi"
+                        android:textColor="@android:color/white"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:ellipsize="marquee"
+                        android:focusableInTouchMode="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:freezesText="true"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        />
+
+                    <TextView
+                        android:layout_marginBottom="10dp"
+                        android:paddingLeft="10dp"
+                        android:id="@+id/tv_score_game_over"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:textColor="@android:color/white"
+                        android:textSize="30dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_best_score"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="105dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="Best Score:"
+                        android:textColor="@color/color_hight_score"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_marginBottom="10dp"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/color_hight_score"
+                        android:id="@+id/tv_best_score"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:textSize="30dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_play_again"
+        android:layout_width="150dp"
+        android:layout_height="80dp"
+        android:background="@drawable/state_button"
+        android:drawableTop="@drawable/icon_button_play"
+        android:paddingTop="10dp" />
+
+</LinearLayout>

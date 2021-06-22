@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00BCD4</color>
+    <color name="colorPrimaryDark">#07b1c7</color>
+    <color name="colorAccent">#FFEB3B</color>
+
+    <color name="tabTextColor">#E0E0E0</color>
+
+    <color name="colorBottom">#08a5b9</color>
+    <color name="color_image_item_song">#089aad</color>
+    <color name="bg_transparent">#00ffffff</color>
+    <color name="text_grey">#EEEEEE</color>
+    <color name="colorTranferent">#ffffff</color>
+    <color name="colorTabLayoutDark">#048393</color>
+    <color name="colorImageDark">#047583</color>
+    <color name="color_yellow">#FFEB3B</color>
+    <color name="color_hight_score">#FFEB3B</color>
+    <color name="color_gray_dark">#2D2D45</color>
+
+    //Detai Theme
+    <color name="colorPrimaryDetailTheme">#155058</color>
+    <color name="colorPrimaryDarkDetailTheme">#07b1c7</color>
+    <color name="colorAccentDetailTheme">#FFEB3B</color>
+    <color name="black_overlay">#66000000</color>
+</resources>

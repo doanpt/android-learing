@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context="musicplayer.group3.dev.musicplayer.activity.SplashActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <TextView
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="bottom|center_horizontal"
+        android:keepScreenOn="true"
+        android:text="@string/dummy_content"
+        android:textColor="@android:color/white"
+        android:textSize="45sp"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:layout_marginTop="15dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+
+
+
+</LinearLayout>

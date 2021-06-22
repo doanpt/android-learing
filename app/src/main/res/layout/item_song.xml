@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ll_item_song"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:padding="3dp">
+
+        <ImageView
+            android:padding="15dp"
+            android:src="@drawable/ic_song"
+            android:id="@+id/imv_item_image_song"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@color/color_image_item_song">
+
+        </ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_item_name_song"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:text="Co Anh O Day Roi"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_item_artist_song"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginTop="-10dp"
+                android:paddingLeft="10dp"
+                android:text="Trung Qan"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_marginRight="15dp"
+            android:id="@+id/imv_animation"
+            android:layout_width="25dp"
+            android:layout_height="30dp"></ImageView>
+    </LinearLayout>
+</LinearLayout>

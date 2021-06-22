@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">MusicPlayer</string>
+    <string name="mini_game">Mini Game</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_song">Bài hát</string>
+    <string name="title_albums">Albums</string>
+    <string name="title_artist">Artist</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_action_search">TÌM KIẾM</string>
+    <string name="title_action_setting">CÀI ĐẶT</string>
+    <string name="xao_tron_bai">Phát ngẫu nhiên</string>
+    <string name="hight_score">Hight Score</string>
+    <string name="dummy_content">MUSIC\nPLAYER</string>
+
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/colorImageDark">
+    <item android:drawable="@drawable/state_normal_image_view"></item>
+</ripple>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="musicplayer.group3.dev.musicplayer">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/app"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".activity.DetailSongActivity" />
+        <activity
+            android:name=".activity.DetailAlbumActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.DetailArtistActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".minigame.ac.activity.HightScoreActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".minigame.ac.activity.MiniGameSongAct"
+            android:theme="@style/ThemeDetail" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:theme="@style/ThemeDetail"></activity>
+
+        <service android:name=".service.MediaService" />
+    </application>
+
+</manifest>
