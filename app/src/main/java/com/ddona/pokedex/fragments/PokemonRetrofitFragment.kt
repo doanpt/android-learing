@@ -5,15 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.ddona.pokedex.adapter.PokemonAdapter
 import com.ddona.pokedex.databinding.FragmentDataBinding
-import com.ddona.pokedex.model.PokemonResponse
 import com.ddona.pokedex.network.retrofit.PokemonClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class PokemonRetrofitFragment : Fragment() {
 
@@ -24,29 +21,14 @@ class PokemonRetrofitFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDataBinding.inflate(inflater)
+
         PokemonClient.retrofitService.getAllPokemons()
-            .enqueue(object : Callback<PokemonResponse> {
-                override fun onResponse(
-                    call: Call<PokemonResponse>,
-                    response: Response<PokemonResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val pokemons = response.body()
-                        binding.rvData.adapter = PokemonAdapter(pokemons!!.results)
-                        Log.d("doanpt", "get ${pokemons.results.size}")
-                    } else {
-                        Toast.makeText(context, "There are no Pokemon", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-
-                override fun onFailure(call: Call<PokemonResponse>, t: Throwable) {
-                    Log.e("doanpt", "call error ${t.message}")
-                    t.printStackTrace()
-                }
-
-            })
-
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                Log.d("doanpt", "retrofit get ${it.results.size}")
+                binding.rvData.adapter = PokemonAdapter(it.results)
+            }
 
         return binding.root
     }

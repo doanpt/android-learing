@@ -1,6 +1,7 @@
 package com.ddona.pokedex.network.retrofit
 
 import com.ddona.pokedex.util.Const
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -27,6 +28,7 @@ object PokemonClient {
     private fun retrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .baseUrl(Const.BASE_URL)
             .build()
     }
