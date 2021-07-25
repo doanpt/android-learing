@@ -9,10 +9,12 @@ import androidx.fragment.app.Fragment
 import com.ddona.pokedex.adapter.PokemonAdapter
 import com.ddona.pokedex.databinding.FragmentDataBinding
 import com.ddona.pokedex.network.retrofit.PokemonClient
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.*
 
 class PokemonRetrofitFragment : Fragment() {
+    private val job = Job()
+
+    private val mainScope = CoroutineScope(Dispatchers.IO + job)
 
     private lateinit var binding: FragmentDataBinding
     override fun onCreateView(
@@ -21,14 +23,14 @@ class PokemonRetrofitFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDataBinding.inflate(inflater)
-
-        PokemonClient.retrofitService.getAllPokemons()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                Log.d("doanpt", "retrofit get ${it.results.size}")
-                binding.rvData.adapter = PokemonAdapter(it.results)
+        mainScope.launch {
+            val pokemons = PokemonClient.retrofitService.getAllPokemons().results
+            Log.d("doanpt", "coroutines return ${pokemons.size}")
+            withContext(Dispatchers.Main) {
+                binding.rvData.adapter = PokemonAdapter(pokemons)
             }
+        }
+        //refer more sample: https://blog.mindorks.com/using-retrofit-with-kotlin-coroutines-in-android
 
         return binding.root
     }

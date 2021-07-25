@@ -28,7 +28,6 @@ object PokemonClient {
     private fun retrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .baseUrl(Const.BASE_URL)
             .build()
     }
