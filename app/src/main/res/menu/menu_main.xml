@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/itemList"
+            android:icon="@drawable/ic_pokemon"
+            android:title="Pokemon" />
+        <item
+            android:id="@+id/itemFavorite"
+            android:icon="@drawable/ic_heart"
+            android:title="Favorite" />
+    </group>
+    <item
+        android:id="@+id/itemAbout"
+        android:icon="@drawable/ic_info"
+        android:title="Above us" />
+</menu>
