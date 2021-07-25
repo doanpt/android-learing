@@ -34,8 +34,4 @@ class PokemonJsonParserFragment : Fragment() {
         }
         return binding.root
     }
-
-    fun getData() {
-
-    }
 }
