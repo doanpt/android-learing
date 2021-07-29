@@ -2,6 +2,7 @@ package com.ddona.pokedex.network.retrofit
 
 import com.ddona.pokedex.model.Comment
 import com.ddona.pokedex.model.Post
+import retrofit2.Call
 import retrofit2.http.*
 
 
@@ -24,4 +25,23 @@ interface JsonService {
 
     @GET
     suspend fun getComments(@Url url: String): List<Comment>
+
+    //Param will be passed via body
+    @POST("posts")
+    suspend fun createPost(@Body post: Post): Post
+
+
+    //Param will be passed via url, ex: http://xxx.com/post?userId=123&title="New%20Text&body=abc
+    @FormUrlEncoded
+    @POST("posts")
+    suspend fun createPost(
+        @Field("userId") userId: Int,
+        @Field("title") title: String,
+        @Field("body") text: String
+    ): Post
+
+    //Param will be passed via url, ex: http://xxx.com/post?userId=123&title="New%20Text&body=abc
+    @FormUrlEncoded
+    @POST("posts")
+    suspend fun createPost(@FieldMap fields: Map<String, String>): Post
 }

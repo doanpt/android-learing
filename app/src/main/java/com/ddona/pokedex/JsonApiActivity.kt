@@ -3,11 +3,13 @@ package com.ddona.pokedex
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.ddona.pokedex.model.Post
 import com.ddona.pokedex.network.retrofit.JsonApiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+
 
 class JsonApiActivity : AppCompatActivity() {
     private val job = Job()
@@ -18,10 +20,11 @@ class JsonApiActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_json_api)
 //        callSampleApi()
-        getComments()
-        getCommentOfPostId()
-        getPosts()
-        getPostsUsingQuery()
+//        getComments()
+//        getCommentOfPostId()
+//        getPosts()
+//        getPostsUsingQuery()
+        createPost()
     }
 
     private fun callSampleApi() {
@@ -64,6 +67,27 @@ class JsonApiActivity : AppCompatActivity() {
             val posts = JsonApiClient.retrofitService
                 .getPosts(arrayOf(1), "id", "desc")
             Log.d("doanpt", "get posts using query annotation return: ${posts.size}")
+        }
+    }
+
+    private fun createPost() {
+        val post = Post("25", 25, "New Title", "New text")
+        val fields: MutableMap<String, String> = HashMap()
+        fields["userId"] = "25"
+        fields["body"] = "New text"
+        fields["title"] = "New Title"
+        mainScope.launch {
+            val postResult = JsonApiClient.retrofitService
+                .createPost(post)
+            Log.d("doanpt", "create post return: $postResult")
+
+            val postResult2 = JsonApiClient.retrofitService
+                .createPost(fields)
+            Log.d("doanpt", "create post return: $postResult2")
+
+            val postResult3 = JsonApiClient.retrofitService
+                .createPost( 25, "New Title", "New text")
+            Log.d("doanpt", "create post return: $postResult3")
         }
     }
 }
