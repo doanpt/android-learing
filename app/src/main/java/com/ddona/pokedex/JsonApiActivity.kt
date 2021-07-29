@@ -24,7 +24,9 @@ class JsonApiActivity : AppCompatActivity() {
 //        getCommentOfPostId()
 //        getPosts()
 //        getPostsUsingQuery()
-        createPost()
+//        createPost()
+//        updatePost()
+        deletePost()
     }
 
     private fun callSampleApi() {
@@ -86,8 +88,28 @@ class JsonApiActivity : AppCompatActivity() {
             Log.d("doanpt", "create post return: $postResult2")
 
             val postResult3 = JsonApiClient.retrofitService
-                .createPost( 25, "New Title", "New text")
+                .createPost(25, "New Title", "New text")
             Log.d("doanpt", "create post return: $postResult3")
+        }
+    }
+
+    private fun updatePost() {
+        val post = Post("12", 5, title = null, text = "Abc")
+        mainScope.launch {
+            val putResult = JsonApiClient.retrofitService
+                .putPost(5, post)
+            Log.d("doanpt", "update post with put annotation return: $putResult")
+            val pathResults = JsonApiClient.retrofitService
+                .patchPost(5, post)
+            Log.d("doanpt", "update post with patch annotation return: $pathResults")
+        }
+    }
+
+    private fun deletePost() {
+        mainScope.launch {
+            val result = JsonApiClient.retrofitService
+                .deletePost(5)
+            Log.d("doanpt", "Deleted post: ${result.isSuccessful} - ${result.code()}")
         }
     }
 }

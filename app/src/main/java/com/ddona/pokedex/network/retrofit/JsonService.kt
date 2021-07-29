@@ -3,6 +3,7 @@ package com.ddona.pokedex.network.retrofit
 import com.ddona.pokedex.model.Comment
 import com.ddona.pokedex.model.Post
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 
@@ -44,4 +45,13 @@ interface JsonService {
     @FormUrlEncoded
     @POST("posts")
     suspend fun createPost(@FieldMap fields: Map<String, String>): Post
+
+    @PUT("posts/{id}")
+    suspend fun putPost(@Path("id") id: Int, @Body post: Post): Post
+
+    @PATCH("posts/{id}")
+    suspend fun patchPost(@Path("id") id: Int, @Body post: Post): Post
+
+    @DELETE("posts/{id}")
+    suspend fun deletePost(@Path("id") id: Int): Response<Unit>
 }
