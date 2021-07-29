@@ -25,8 +25,8 @@ class JsonApiActivity : AppCompatActivity() {
 //        getPosts()
 //        getPostsUsingQuery()
 //        createPost()
-//        updatePost()
-        deletePost()
+        updatePost()
+//        deletePost()
     }
 
     private fun callSampleApi() {
@@ -97,10 +97,13 @@ class JsonApiActivity : AppCompatActivity() {
         val post = Post("12", 5, title = null, text = "Abc")
         mainScope.launch {
             val putResult = JsonApiClient.retrofitService
-                .putPost(5, post)
+                .putPost("abc",5, post)
             Log.d("doanpt", "update post with put annotation return: $putResult")
+            val headers: MutableMap<String, String> = HashMap()
+            headers["Map-Header1"] = "def"
+            headers["Map-Header2"] = "ghi"
             val pathResults = JsonApiClient.retrofitService
-                .patchPost(5, post)
+                .patchPost(headers,5, post)
             Log.d("doanpt", "update post with patch annotation return: $pathResults")
         }
     }

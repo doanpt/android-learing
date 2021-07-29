@@ -46,11 +46,20 @@ interface JsonService {
     @POST("posts")
     suspend fun createPost(@FieldMap fields: Map<String, String>): Post
 
+    @Headers("Static-Header1: 123", "Static-Header2: 456")
     @PUT("posts/{id}")
-    suspend fun putPost(@Path("id") id: Int, @Body post: Post): Post
+    suspend fun putPost(
+        @Header("Dynamic-Header") header: String,
+        @Path("id") id: Int,
+        @Body post: Post
+    ): Post
 
     @PATCH("posts/{id}")
-    suspend fun patchPost(@Path("id") id: Int, @Body post: Post): Post
+    suspend fun patchPost(
+        @HeaderMap headers: Map<String, String>,
+        @Path("id") id: Int,
+        @Body post: Post
+    ): Post
 
     @DELETE("posts/{id}")
     suspend fun deletePost(@Path("id") id: Int): Response<Unit>
