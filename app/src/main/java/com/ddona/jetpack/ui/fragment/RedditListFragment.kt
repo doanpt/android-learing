@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.ddona.jetpack.R
 import com.ddona.jetpack.viewmodel.CountingViewModel
 
 class RedditListFragment : Fragment() {
-    private val countingViewModel: CountingViewModel by viewModels()
+    private val countingViewModel: CountingViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

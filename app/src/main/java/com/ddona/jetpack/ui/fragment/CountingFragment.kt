@@ -18,7 +18,7 @@ class CountingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val countingViewModel = ViewModelProvider(this).get(CountingViewModel::class.java)
+        val countingViewModel = ViewModelProvider(requireActivity()).get(CountingViewModel::class.java)
 
         val view = inflater.inflate(R.layout.fragment_data, container, false)
         val btnCount = view.findViewById<Button>(R.id.btnCount)
