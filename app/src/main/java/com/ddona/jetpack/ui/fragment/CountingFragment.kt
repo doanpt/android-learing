@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ddona.jetpack.R
 import com.ddona.jetpack.viewmodel.CountingViewModel
+import com.ddona.jetpack.viewmodel.CountingViewModelFactory
 
 class CountingFragment : Fragment() {
 
@@ -18,7 +19,10 @@ class CountingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val countingViewModel = ViewModelProvider(requireActivity()).get(CountingViewModel::class.java)
+        val countingViewModel = ViewModelProvider(
+            requireActivity(),
+            CountingViewModelFactory(requireActivity().application)
+        ).get(CountingViewModel::class.java)
 
         val view = inflater.inflate(R.layout.fragment_data, container, false)
         val btnCount = view.findViewById<Button>(R.id.btnCount)

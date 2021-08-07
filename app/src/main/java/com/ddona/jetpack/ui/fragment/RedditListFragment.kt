@@ -11,9 +11,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.ddona.jetpack.R
 import com.ddona.jetpack.viewmodel.CountingViewModel
+import com.ddona.jetpack.viewmodel.CountingViewModelFactory
 
 class RedditListFragment : Fragment() {
-    private val countingViewModel: CountingViewModel by activityViewModels()
+    private val countingViewModel: CountingViewModel by activityViewModels() {
+        CountingViewModelFactory(application = requireActivity().application)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
