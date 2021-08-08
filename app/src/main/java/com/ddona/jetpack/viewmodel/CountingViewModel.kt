@@ -1,11 +1,13 @@
 package com.ddona.jetpack.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class CountingViewModel(application: Application) : ViewModel() {
     var count = MutableLiveData<Int>()
+    var message = MutableLiveData<String>()
 
     init {
         count.postValue(0)
@@ -14,5 +16,9 @@ class CountingViewModel(application: Application) : ViewModel() {
 
     fun increaseValue() {
         count.postValue(count.value?.plus(1))
+    }
+
+    fun makeToast() {
+        Log.d("doanpt", "your message is: ${message.value}")
     }
 }

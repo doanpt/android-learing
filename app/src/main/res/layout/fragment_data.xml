@@ -21,6 +21,23 @@
             android:text="@{String.valueOf(vm.count)}"
             android:textSize="22sp" />
 
+        <EditText
+            android:id="@+id/edtMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Enter your message"
+            android:padding="16dp"
+            android:text="@={vm.message}" />
+        <!--        One way using @{} and two way using @={}-->
+
+        <Button
+            android:id="@+id/btnToast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->vm.makeToast()}"
+            android:text="Toast Message" />
+
         <Button
             android:id="@+id/btnCount"
             android:layout_width="match_parent"
