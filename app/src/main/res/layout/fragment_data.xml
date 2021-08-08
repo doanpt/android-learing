@@ -44,5 +44,12 @@
             android:layout_height="wrap_content"
             android:onClick="@{()->vm.increaseValue()}"
             android:text="Increase" />
+
+        <Button
+            android:id="@+id/btnNextActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->vm.userClicksOnButton()}"
+            android:text="NextActivity" />
     </LinearLayout>
 </layout>
