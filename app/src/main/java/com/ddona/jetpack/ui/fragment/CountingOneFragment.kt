@@ -35,10 +35,8 @@ class CountingOneFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         countingViewModel.navigateToDetails.observe(this, {
-            if (it) {
-                val intent = Intent(activity, TestEventActivity::class.java)
-                startActivity(intent)
-            }
+            val intent = Intent(activity, TestEventActivity::class.java)
+            startActivity(intent)
         })
     }
 }

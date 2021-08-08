@@ -6,6 +6,7 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ddona.jetpack.util.SingleLiveEvent
 
 class CountingViewModel(application: Application) : ViewModel() {
     var count = MutableLiveData<Int>()
@@ -15,9 +16,9 @@ class CountingViewModel(application: Application) : ViewModel() {
         // We need application instance to create RoomDatabase
     }
 
-    private val _navigateToDetails = MutableLiveData<Boolean>()
+    private val _navigateToDetails = SingleLiveEvent<Any>()
 
-    val navigateToDetails : LiveData<Boolean>
+    val navigateToDetails : LiveData<Any>
         get() = _navigateToDetails
 
     fun userClicksOnButton() {
