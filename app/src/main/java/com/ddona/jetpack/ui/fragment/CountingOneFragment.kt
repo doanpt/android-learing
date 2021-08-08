@@ -4,16 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import com.ddona.jetpack.R
+import com.ddona.jetpack.databinding.FragmentDataBinding
 import com.ddona.jetpack.viewmodel.CountingViewModel
 import com.ddona.jetpack.viewmodel.CountingViewModelFactory
 
-class RedditListFragment : Fragment() {
+class CountingOneFragment : Fragment() {
+    private lateinit var binding: FragmentDataBinding
     private val countingViewModel: CountingViewModel by activityViewModels() {
         CountingViewModelFactory(application = requireActivity().application)
     }
@@ -22,17 +20,15 @@ class RedditListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_data, container, false)
-        val btnCount = view.findViewById<Button>(R.id.btnCount)
-        val tvCounting = view.findViewById<TextView>(R.id.tvCount)
+    ): View {
+        binding = FragmentDataBinding.inflate(inflater, container, false)
         countingViewModel.count.observe(viewLifecycleOwner, {
-            tvCounting.text = it.toString()
+            binding.tvCount.text = it.toString()
         })
 
-        btnCount.setOnClickListener {
+        binding.btnCount.setOnClickListener {
             countingViewModel.increaseValue()
         }
-        return view
+        return binding.root
     }
 }
