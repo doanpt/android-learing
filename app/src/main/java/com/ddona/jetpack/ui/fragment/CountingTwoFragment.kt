@@ -24,14 +24,8 @@ class CountingTwoFragment : Fragment() {
             CountingViewModelFactory(requireActivity().application)
         ).get(CountingViewModel::class.java)
 
-
-        countingViewModel.count.observe(viewLifecycleOwner, {
-            binding.tvCount.text = it.toString()
-        })
-
-        binding.btnCount.setOnClickListener {
-            countingViewModel.increaseValue()
-        }
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = countingViewModel
         return binding.root
     }
 }

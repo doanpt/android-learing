@@ -22,13 +22,9 @@ class CountingOneFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDataBinding.inflate(inflater, container, false)
-        countingViewModel.count.observe(viewLifecycleOwner, {
-            binding.tvCount.text = it.toString()
-        })
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = countingViewModel
 
-        binding.btnCount.setOnClickListener {
-            countingViewModel.increaseValue()
-        }
         return binding.root
     }
 }
