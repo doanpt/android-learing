@@ -9,6 +9,8 @@ import androidx.core.view.GravityCompat
 import com.ddona.jetpack.R
 import com.ddona.jetpack.adapter.TabPageAdapter
 import com.ddona.jetpack.databinding.ActivityMainBinding
+import com.ddona.jetpack.lifecycle.MyLifeCycleObserver
+import com.ddona.jetpack.util.MyLogger
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -33,6 +35,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)
+
+        val lifeCycleObserver = MyLifeCycleObserver(lifecycle, MyLogger())
+        lifecycle.addObserver(lifeCycleObserver)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
