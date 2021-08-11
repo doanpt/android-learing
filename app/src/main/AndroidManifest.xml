@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".ui.TestEventActivity" />
         <activity android:name=".ui.MainActivity">
+        </activity>
+        <activity android:name=".ui.nav.NavScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
