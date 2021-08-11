@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/welcomeFragment"
         android:name="com.ddona.jetpack.ui.nav.WelcomeFragment"
-        android:label="{username}" >
+        android:label="{username}">
         <argument
             android:name="username"
             app:argType="string" />
@@ -39,4 +39,16 @@
             android:id="@+id/action_welcomeFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.ddona.jetpack.ui.nav.SearchFragment"
+        android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.ddona.jetpack.ui.nav.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/termsFragment"
+        android:name="com.ddona.jetpack.ui.nav.TermsFragment"
+        android:label="TermsFragment" /><action android:id="@+id/action_global_termsFragment" app:destination="@id/termsFragment"/>
 </navigation>
