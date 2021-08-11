@@ -9,10 +9,7 @@ import androidx.navigation.NavGraphNavigator
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.*
 import com.ddona.jetpack.R
 import com.ddona.jetpack.databinding.ActivityNavBinding
 
@@ -31,13 +28,17 @@ class NavScreenActivity : AppCompatActivity() {
 
         //create appbar to remove back button on search fragment
         appBarConfig = AppBarConfiguration(
-            setOf(R.id.homeFragment, R.id.searchFragment)
+            setOf(R.id.homeFragment, R.id.searchFragment),
+            //add this to show home icon on action bar
+            binding.drawerLayout
         )
 
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfig)
 
         binding.bottomNav.setupWithNavController(navController)
+
+        binding.navView.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -54,6 +55,7 @@ class NavScreenActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
+        //add this to handle click on home icon on action bar
+        return navController.navigateUp(appBarConfig) || super.onSupportNavigateUp()
     }
 }
