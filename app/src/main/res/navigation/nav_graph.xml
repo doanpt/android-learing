@@ -24,6 +24,15 @@
         <action
             android:id="@+id/action_loginFragment_to_welcomeFragment"
             app:destination="@id/welcomeFragment" />
+        <argument
+            android:name="username"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <!--        This will open when any deep link request: for example: open google search on launcher and enter the deep link: doanpt.com/login/DoanPT1. then your app will display on App list result-->
+        <deepLink
+            android:id="@+id/deepLink2"
+            app:uri="doanpt.com/login/{username}" />
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment"
@@ -50,5 +59,8 @@
     <fragment
         android:id="@+id/termsFragment"
         android:name="com.ddona.jetpack.ui.nav.TermsFragment"
-        android:label="TermsFragment" /><action android:id="@+id/action_global_termsFragment" app:destination="@id/termsFragment"/>
+        android:label="TermsFragment" />
+    <action
+        android:id="@+id/action_global_termsFragment"
+        app:destination="@id/termsFragment" />
 </navigation>
