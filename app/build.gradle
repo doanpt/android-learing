@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -66,6 +67,14 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:$work_version")
     // optional - RxJava2 support
     implementation("androidx.work:work-rxjava2:$work_version")
+
+    def nav_version = "2.3.5"
+
+    // Kotlin
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    // Feature module Support
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
 
 
     def lifecycle_version = "2.3.1"
