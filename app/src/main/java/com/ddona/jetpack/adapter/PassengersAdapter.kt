@@ -1,13 +1,16 @@
 package com.ddona.jetpack.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ddona.jetpack.databinding.ItemPassengerBinding
 import com.ddona.jetpack.model.Passenger
 
-class PassengersAdapter(private val passengers: List<Passenger>) :
-    RecyclerView.Adapter<PassengersAdapter.ViewHolder>() {
+class PassengersAdapter :
+    PagingDataAdapter<Passenger, PassengersAdapter.ViewHolder>(PassengersComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -20,10 +23,11 @@ class PassengersAdapter(private val passengers: List<Passenger>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(passengers[position])
-    }
 
-    override fun getItemCount(): Int = passengers.size
+        val item = getItem(position)
+        Log.d("doanpt", "onBindViewHolder $item")
+        item?.let { holder.bind(it) }
+    }
 
     class ViewHolder(private val binding: ItemPassengerBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -32,6 +36,16 @@ class PassengersAdapter(private val passengers: List<Passenger>) :
             binding.executePendingBindings()
         }
 
+    }
+
+    object PassengersComparator : DiffUtil.ItemCallback<Passenger>() {
+        override fun areItemsTheSame(oldItem: Passenger, newItem: Passenger): Boolean {
+            return oldItem._id == newItem._id
+        }
+
+        override fun areContentsTheSame(oldItem: Passenger, newItem: Passenger): Boolean {
+            return oldItem == newItem
+        }
     }
 }
 
