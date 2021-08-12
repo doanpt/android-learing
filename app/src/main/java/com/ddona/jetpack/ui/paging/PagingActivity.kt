@@ -6,13 +6,15 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddona.jetpack.adapter.PassengersAdapter
+import com.ddona.jetpack.adapter.PassengersLoadStateAdapter
 import com.ddona.jetpack.databinding.ActivityPagingBinding
 import com.ddona.jetpack.network.PassengerClient
 import com.ddona.jetpack.viewmodel.PassengersViewModel
 import com.ddona.jetpack.viewmodel.PassengersViewModelFactory
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-
+//https://developer.android.com/topic/libraries/architecture/paging/v3-overview
+//https://www.simplifiedcoding.net/android-jetpack-paging-3/
 class PagingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPagingBinding
 
@@ -27,7 +29,10 @@ class PagingActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val adapter = PassengersAdapter()
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = PassengersLoadStateAdapter { adapter.retry() },
+            footer = PassengersLoadStateAdapter { adapter.retry() }
+        )
         binding.recyclerView.setHasFixedSize(true)
 
 
