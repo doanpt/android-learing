@@ -45,6 +45,26 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
+
+    def paging_version = "3.0.1"
+    // Android Jetpack Paging 3.0
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
+//    // alternatively - without Android dependencies for tests
+//    testImplementation("androidx.paging:paging-common:$paging_version")
+//
+//    // optional - RxJava2 support
+//    implementation("androidx.paging:paging-rxjava2:$paging_version")
+//
+//    // optional - RxJava3 support
+//    implementation("androidx.paging:paging-rxjava3:$paging_version")
+//
+//    // optional - Guava ListenableFuture support
+//    implementation("androidx.paging:paging-guava:$paging_version")
+//
+//    // optional - Jetpack Compose integration
+//    implementation("androidx.paging:paging-compose:1.0.0-alpha12")
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
