@@ -61,7 +61,7 @@ class TaskActivity : AppCompatActivity() {
 
         binding.rvTasks.adapter = taskAdapter
         viewModel.task.observe(this, {
-            taskAdapter.submit(it)
+            taskAdapter.submitList(it)
         })
     }
 
