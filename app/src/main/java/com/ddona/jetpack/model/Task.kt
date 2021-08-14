@@ -1,3 +1,18 @@
 package com.ddona.jetpack.model
 
-data class Task(val id: Int, var title: String, var description: String, var deadline: Long)
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "task")
+data class Task(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    @ColumnInfo(name = "task_name")
+    var title: String,
+    @ColumnInfo(name = "task_description")
+    var description: String,
+    @ColumnInfo(name = "task_deadline")
+    var deadline: Long
+    //You can use @Ignore to ignore kotlin field to room
+)
