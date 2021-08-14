@@ -104,4 +104,8 @@ class SampleWorkerViewModel(private val application: Application) : ViewModel() 
         chain3.enqueue()
     }
 
+    fun startRxWorker() {
+        workManager.enqueue(OneTimeWorkRequest.from(DemoRxWorker::class.java))
+    }
+
 }

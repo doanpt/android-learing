@@ -43,4 +43,12 @@
         android:text="Start Third Chain"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnChainSecond" />
+
+    <Button
+        android:id="@+id/btnRxWorker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start RxWorker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnChainThird" />
 </androidx.constraintlayout.widget.ConstraintLayout>

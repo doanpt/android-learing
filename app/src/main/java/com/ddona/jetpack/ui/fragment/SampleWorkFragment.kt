@@ -47,6 +47,10 @@ class SampleWorkFragment : Fragment() {
         binding.btnChainThird.setOnClickListener {
             viewModel.startComplexChainWork()
         }
+
+        binding.btnRxWorker.setOnClickListener {
+            viewModel.startRxWorker()
+        }
         return binding.root
     }
 }
