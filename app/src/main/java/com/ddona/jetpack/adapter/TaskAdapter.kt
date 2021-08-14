@@ -2,8 +2,10 @@ package com.ddona.jetpack.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ddona.jetpack.databinding.ItemTaskBinding
+import com.ddona.jetpack.diff.TaskDiffCallback
 import com.ddona.jetpack.model.Task
 
 class TaskAdapter() : RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
@@ -24,9 +26,11 @@ class TaskAdapter() : RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
     override fun getItemCount(): Int = tasks.size
 
     fun submit(taskList: List<Task>) {
-        tasks.clear()
-        tasks.addAll(taskList)
-        notifyDataSetChanged()
+        val diffCallback = TaskDiffCallback(tasks, taskList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        this.tasks.clear();
+        this.tasks.addAll(taskList)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
