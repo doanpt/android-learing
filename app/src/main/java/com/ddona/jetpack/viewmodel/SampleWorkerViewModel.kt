@@ -14,11 +14,8 @@ import java.util.concurrent.TimeUnit
 
 class SampleWorkerViewModel(private val application: Application) : ViewModel() {
     private val workManager = WorkManager.getInstance(application)
-    private val sampleWorkInfo: MutableList<WorkInfo> =
-        workManager.getWorkInfosByTag(Const.SAMPLE_WORK_TAG).get()
-    val wasSuccess = sampleWorkInfo[0].outputData.getString("is_success")
-//    val sampleWorkInfo = workManager.getWorkInfoById("")
-
+    val status = MutableLiveData<Boolean>()
+    var sampleWorkStatus = workManager.getWorkInfosByTagLiveData(Const.SAMPLE_WORK_TAG)
 
     //This method will be pass a link to download worker
     @SuppressLint("RestrictedApi")
@@ -36,11 +33,11 @@ class SampleWorkerViewModel(private val application: Application) : ViewModel() 
     fun downloadContent(link: String) {
         val workConstraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .setRequiresCharging(true)
-            .setRequiresDeviceIdle(true)
-            .setRequiresStorageNotLow(true)
-            .setTriggerContentMaxDelay(Duration.ofMinutes(3))
+//            .setRequiresBatteryNotLow(true)
+//            .setRequiresCharging(true)
+//            .setRequiresDeviceIdle(true)
+//            .setRequiresStorageNotLow(true)
+//            .setTriggerContentMaxDelay(Duration.ofMinutes(3))
             .build()
         val request = OneTimeWorkRequest.Builder(SampleWorker::class.java)
             .setConstraints(workConstraints)
