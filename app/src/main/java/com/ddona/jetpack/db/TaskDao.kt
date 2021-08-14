@@ -8,19 +8,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTask(task: Task)
+    suspend fun insertTask(task: Task)
 
     @Update
-    fun updateTask(task: Task)
+    suspend fun updateTask(task: Task)
 
     @Delete
-    fun deleteTask(task: Task)
+    suspend fun deleteTask(task: Task)
 
     @Query("DELETE FROM task where id = :taskId")
-    fun deleteById(taskId: Int)
+    suspend fun deleteById(taskId: Int)
 
     @Query("DELETE FROM task")
-    fun deleteAllTask()
+    suspend fun deleteAllTask()
 
     //NOTE: If you return list, the query will be ran on UI Thread. you need to create a thread to run this query
     @Query("SELECT * FROM task")
