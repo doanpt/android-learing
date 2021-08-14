@@ -51,4 +51,12 @@
         android:text="Start RxWorker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnChainThird" />
+
+    <Button
+        android:id="@+id/btnCoroutine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Coroutine Worker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnRxWorker" />
 </androidx.constraintlayout.widget.ConstraintLayout>

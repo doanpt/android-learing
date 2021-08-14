@@ -108,4 +108,8 @@ class SampleWorkerViewModel(private val application: Application) : ViewModel() 
         workManager.enqueue(OneTimeWorkRequest.from(DemoRxWorker::class.java))
     }
 
+    fun startCoroutineWorker() {
+        workManager.enqueue(OneTimeWorkRequest.from(DemoCoroutineWork::class.java))
+    }
+
 }

@@ -51,6 +51,10 @@ class SampleWorkFragment : Fragment() {
         binding.btnRxWorker.setOnClickListener {
             viewModel.startRxWorker()
         }
+
+        binding.btnCoroutine.setOnClickListener {
+            viewModel.startCoroutineWorker()
+        }
         return binding.root
     }
 }
