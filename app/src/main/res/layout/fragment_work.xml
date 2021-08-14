@@ -19,4 +19,28 @@
         android:text="Start Job"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvStatus" />
+
+    <Button
+        android:id="@+id/btnChainFirst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Frist Chain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnStart" />
+
+    <Button
+        android:id="@+id/btnChainSecond"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Second Chain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnChainFirst" />
+
+    <Button
+        android:id="@+id/btnChainThird"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Third Chain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnChainSecond" />
 </androidx.constraintlayout.widget.ConstraintLayout>

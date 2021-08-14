@@ -8,8 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.work.*
 import com.ddona.jetpack.util.Const
-import com.ddona.jetpack.worker.SampleWorker
+import com.ddona.jetpack.worker.*
 import java.time.Duration
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class SampleWorkerViewModel(private val application: Application) : ViewModel() {
@@ -60,4 +61,47 @@ class SampleWorkerViewModel(private val application: Application) : ViewModel() 
             repeatingRequest
         )
     }
+
+    fun startChainWork() {
+        val workA = OneTimeWorkRequest.from(ChainWorkA::class.java)
+        val workB = OneTimeWorkRequest.from(ChainWorkB::class.java)
+        val workC = OneTimeWorkRequest.from(ChainWorkC::class.java)
+        val workD = OneTimeWorkRequest.from(ChainWorkD::class.java)
+        workManager.beginWith(workA)
+            //Note: WorkManager beginWith() return a WorkContinuation object
+            //the following calls are to WorkContinuation methods
+            .then(workB)// then() return a new WorkContinuation instance
+            .then(workC)
+            .then(workD)
+            .enqueue()
+    }
+
+    fun startChainWorkParallel() {
+        val workA = OneTimeWorkRequest.from(ChainWorkA::class.java)
+        val workB = OneTimeWorkRequest.from(ChainWorkB::class.java)
+        val workC = OneTimeWorkRequest.from(ChainWorkC::class.java)
+        val workD = OneTimeWorkRequest.from(ChainWorkD::class.java)
+        val workE = OneTimeWorkRequest.from(ChainWorkE::class.java)
+        workManager.beginWith(listOf(workC, workD))
+            .then(workA)
+            .then(listOf(workB, workE))
+            .enqueue()
+    }
+
+    @SuppressLint("EnqueueWork")
+    fun startComplexChainWork() {
+        val workA = OneTimeWorkRequest.from(ChainWorkA::class.java)
+        val workB = OneTimeWorkRequest.from(ChainWorkB::class.java)
+        val workC = OneTimeWorkRequest.from(ChainWorkC::class.java)
+        val workD = OneTimeWorkRequest.from(ChainWorkD::class.java)
+        val workE = OneTimeWorkRequest.from(ChainWorkD::class.java)
+        val chain1 = workManager
+            .beginWith(workA)
+            .then(workD)
+        val chain2 = workManager.beginWith(listOf(workE, workB))
+        //WorkE will wail for starting until chain1 and chain2 done
+        val chain3 = WorkContinuation.combine(listOf(chain1, chain2)).then(workC)
+        chain3.enqueue()
+    }
+
 }

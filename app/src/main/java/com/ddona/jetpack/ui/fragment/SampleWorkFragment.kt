@@ -36,6 +36,17 @@ class SampleWorkFragment : Fragment() {
         binding.btnStart.setOnClickListener {
             viewModel.downloadContent("https://doanpt.com")
         }
+
+        binding.btnChainFirst.setOnClickListener {
+            viewModel.startChainWork()
+        }
+
+        binding.btnChainSecond.setOnClickListener {
+            viewModel.startChainWorkParallel()
+        }
+        binding.btnChainThird.setOnClickListener {
+            viewModel.startComplexChainWork()
+        }
         return binding.root
     }
 }
