@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".JetpackApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,7 +21,7 @@
 <!--            </intent-filter>-->
         </activity>
         <activity android:name=".ui.TestEventActivity" />
-        <activity android:name=".ui.MainActivity" >
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,6 +35,18 @@
             <!--            </intent-filter>-->
             <!--            <nav-graph android:value="@navigation/nav_graph" />-->
         </activity>
+
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            android:enabled="false"
+            android:exported="false" />
+
+        <!-- register custom provider -->
+        <!--        We can use a custom content provider for custom work manager initializer but we do it in Application class , so don't need to create content provider-->
+        <!--        <provider-->
+        <!--            android:name=".CustomWorkManagerInitializer"-->
+        <!--            android:authorities="${applicationId}.WorkManagerInit"/>-->
     </application>
 
 </manifest>
