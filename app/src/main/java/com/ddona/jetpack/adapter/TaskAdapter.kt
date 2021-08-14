@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ddona.jetpack.databinding.ItemTaskBinding
 import com.ddona.jetpack.model.Task
 
-class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
-
+class TaskAdapter() : RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
+    private val tasks = mutableListOf<Task>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -22,6 +22,12 @@ class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
     }
 
     override fun getItemCount(): Int = tasks.size
+
+    fun submit(taskList: List<Task>) {
+        tasks.clear()
+        tasks.addAll(taskList)
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
