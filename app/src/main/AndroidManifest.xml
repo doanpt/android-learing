@@ -14,6 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Jetpack">
+        <activity android:name=".ui.TaskActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.paging.PagingActivity">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
@@ -23,11 +30,6 @@
         <activity android:name=".ui.TestEventActivity" />
         <activity android:name=".ui.MainActivity"></activity>
         <activity android:name=".ui.nav.NavScreenActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <nav-graph android:value="@navigation/nav_graph" />
         </activity>
 

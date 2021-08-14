@@ -11,6 +11,8 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.ddona.jetpack.R
 import com.ddona.jetpack.model.Passenger
+import java.text.SimpleDateFormat
+import java.util.*
 
 @BindingAdapter("set_url")
 fun bindImage(img: ImageView, link: String) {
@@ -32,6 +34,13 @@ fun setText(tv: TextView, data: String) {
 @BindingAdapter("name_trip")
 fun setNameTrip(tv: TextView, passenger: Passenger) {
     tv.text = "${passenger.name}, ${passenger.trips} Trips"
+}
+
+@SuppressLint("SimpleDateFormat")
+@BindingAdapter("deadline")
+fun setDeadline(tv: TextView, time: Long) {
+    val simpleDataFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+    tv.text = simpleDataFormat.format(Date(time))
 }
 
 fun View.visible(isVisible: Boolean) {
