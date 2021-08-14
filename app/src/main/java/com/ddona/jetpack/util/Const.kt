@@ -1,6 +1,7 @@
 package com.ddona.jetpack.util
 
 object Const {
+    const val DOWNLOAD_URL = "download_url"
     const val KEY_SUBREDDIT = "subreddit"
     const val DEFAULT_SUBREDDIT = "androiddev"
     const val BASE_URL =  "https://www.reddit.com/"
