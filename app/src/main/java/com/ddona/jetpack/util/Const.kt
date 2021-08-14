@@ -1,6 +1,7 @@
 package com.ddona.jetpack.util
 
 object Const {
+    const val SAMPLE_WORK_TAG = "sample_work"
     const val DOWNLOAD_URL = "download_url"
     const val KEY_SUBREDDIT = "subreddit"
     const val DEFAULT_SUBREDDIT = "androiddev"

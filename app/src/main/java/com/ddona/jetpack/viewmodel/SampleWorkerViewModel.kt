@@ -14,6 +14,11 @@ import java.util.concurrent.TimeUnit
 
 class SampleWorkerViewModel(private val application: Application) : ViewModel() {
     private val workManager = WorkManager.getInstance(application)
+    private val sampleWorkInfo: MutableList<WorkInfo> =
+        workManager.getWorkInfosByTag(Const.SAMPLE_WORK_TAG).get()
+    val wasSuccess = sampleWorkInfo[0].outputData.getString("is_success")
+//    val sampleWorkInfo = workManager.getWorkInfoById("")
+
 
     //This method will be pass a link to download worker
     @SuppressLint("RestrictedApi")
@@ -40,6 +45,7 @@ class SampleWorkerViewModel(private val application: Application) : ViewModel() 
         val request = OneTimeWorkRequest.Builder(SampleWorker::class.java)
             .setConstraints(workConstraints)
             .setInputData(setInputForWork(link))
+            .addTag(Const.SAMPLE_WORK_TAG)
             .build()
         workManager.enqueue(request)
         //If you want to enqueue unique work, do as below:

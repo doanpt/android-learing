@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.ddona.jetpack.util.Const
 import java.lang.Exception
 
@@ -19,9 +20,11 @@ class SampleWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params)
             val param2 = inputData.getString("param2")
             Log.d(TAG, "input data is $downloadUrl and $param1 and $param2")
             downloadFileFromNetWork(downloadUrl!!)
-            Result.success()
+            val outputData = workDataOf("is_success" to true)
+            Result.success(outputData)
         } catch (e: Exception) {
-            Result.failure()
+            val outputData = workDataOf("is_success" to false)
+            Result.failure(outputData)
         }
     }
 
