@@ -11,16 +11,18 @@ import com.ddona.jetpack.databinding.ActivityPagingBinding
 import com.ddona.jetpack.network.PassengerClient
 import com.ddona.jetpack.viewmodel.PassengersViewModel
 import com.ddona.jetpack.viewmodel.PassengersViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
+
 //https://developer.android.com/topic/libraries/architecture/paging/v3-overview
 //https://www.simplifiedcoding.net/android-jetpack-paging-3/
+@AndroidEntryPoint
 class PagingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPagingBinding
 
-    private val viewModel: PassengersViewModel by viewModels() {
-        PassengersViewModelFactory(PassengerClient.invoke())
-    }
+    //We are using Hilt, so we don't need to provide ViewModelProviderFactory
+    private val viewModel: PassengersViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -7,8 +7,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.ddona.jetpack.network.PassengerApi
 import com.ddona.jetpack.network.PassengersDataSource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PassengersViewModel(
+@HiltViewModel
+class PassengersViewModel @Inject constructor(
     private val passengerApi: PassengerApi
 ) : ViewModel() {
     val passengers = Pager(PagingConfig(pageSize = 10)) {
