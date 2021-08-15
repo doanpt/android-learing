@@ -21,11 +21,14 @@
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             <!--            </intent-filter>-->
         </activity>
-        <activity android:name=".ui.paging.PagingActivity">
+        <activity android:name=".ui.HiltTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.paging.PagingActivity">
+
         </activity>
         <activity android:name=".ui.TestEventActivity" />
         <activity android:name=".ui.MainActivity"></activity>
