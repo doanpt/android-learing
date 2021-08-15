@@ -7,10 +7,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -18,6 +21,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val BASE_URL = "https://api.instantwebtools.net/v1/"
+
     @Singleton
     @Provides
     fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor()
@@ -25,6 +29,7 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
+    @LoggingInterceptorOkHttpClient
     @Singleton
     @Provides
     fun providesOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
@@ -32,6 +37,23 @@ object NetworkModule {
             .Builder()
             .addInterceptor(httpLoggingInterceptor)
             .build()
+
+
+    @HeaderInterceptorOkHttpClient
+    @Provides
+    @Singleton
+    fun provideAuthInterceptorOkHttpClient(): OkHttpClient {
+        val headerInterceptor = Interceptor {
+            val originalRequest: Request = it.request()
+            val newRequest: Request = originalRequest.newBuilder()
+                .header("Interceptor-Header", "headerInterceptor")
+                .build()
+            it.proceed(newRequest)
+        }
+        return OkHttpClient.Builder()
+            .addInterceptor(headerInterceptor)
+            .build()
+    }
 
     @Provides
     @Singleton
