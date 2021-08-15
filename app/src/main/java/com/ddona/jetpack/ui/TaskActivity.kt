@@ -13,19 +13,16 @@ import com.ddona.jetpack.adapter.TaskAdapter
 import com.ddona.jetpack.databinding.ActivityTaskBinding
 import com.ddona.jetpack.model.Task
 import com.ddona.jetpack.viewmodel.TaskViewModel
-import com.ddona.jetpack.viewmodel.TaskViewModelFactory
-import kotlinx.coroutines.GlobalScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+@AndroidEntryPoint
 class TaskActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTaskBinding
     private lateinit var date: Calendar
-    private val viewModel: TaskViewModel by viewModels() {
-        TaskViewModelFactory(application)
-    }
+    private val viewModel: TaskViewModel by viewModels()
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
