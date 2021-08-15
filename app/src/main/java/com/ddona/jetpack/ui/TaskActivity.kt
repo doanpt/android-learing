@@ -10,10 +10,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ddona.jetpack.adapter.TaskAdapter
+import com.ddona.jetpack.adapter.TaskPageAdapter
 import com.ddona.jetpack.databinding.ActivityTaskBinding
 import com.ddona.jetpack.model.Task
 import com.ddona.jetpack.viewmodel.TaskViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -54,12 +56,19 @@ class TaskActivity : AppCompatActivity() {
         binding.btnDate.setOnClickListener {
             showDateTimePicker()
         }
-        val taskAdapter = TaskAdapter()
+//        val taskAdapter = TaskAdapter()
+//        binding.rvTasks.adapter = taskAdapter
+//        viewModel.task.observe(this, {
+//            taskAdapter.submitList(it)
+//        })
 
+        val taskAdapter = TaskPageAdapter()
         binding.rvTasks.adapter = taskAdapter
-        viewModel.task.observe(this, {
-            taskAdapter.submitList(it)
-        })
+        lifecycleScope.launch {
+            viewModel.tasksPaging.collectLatest {
+                taskAdapter.submitData(it)
+            }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
