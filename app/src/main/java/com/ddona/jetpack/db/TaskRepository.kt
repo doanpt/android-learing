@@ -1,6 +1,7 @@
 package com.ddona.jetpack.db
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import com.ddona.jetpack.model.Task
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -38,5 +39,9 @@ class TaskRepository @Inject constructor(
 
     fun getAllTaskWithFlow(): Flow<List<Task>> {
         return taskDao.getAllTaskWithFlow()
+    }
+
+    fun getTasksWithPaging(): PagingSource<Int, Task> {
+        return taskDao.getTasksWithPaging()
     }
 }

@@ -1,6 +1,7 @@
 package com.ddona.jetpack.db
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.ddona.jetpack.model.Task
 import kotlinx.coroutines.flow.Flow
@@ -32,4 +33,7 @@ interface TaskDao {
 
     @Query("SELECT * FROM task")
     fun getAllTaskWithFlow(): Flow<List<Task>>
+
+    @Query("SELECT * FROM task")
+    fun getTasksWithPaging(): PagingSource<Int, Task>
 }
