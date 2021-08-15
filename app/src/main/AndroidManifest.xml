@@ -14,14 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Jetpack">
-        <activity android:name=".ui.TaskActivity">
+        <activity android:name=".ui.github.SearchRepositoriesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.HiltTestActivity">
+        <activity android:name=".ui.TaskActivity">
         </activity>
+        <activity android:name=".ui.HiltTestActivity"></activity>
         <activity android:name=".ui.paging.PagingActivity">
 
         </activity>
