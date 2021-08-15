@@ -2,6 +2,8 @@ package com.ddona.jetpack.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.*
 import com.ddona.jetpack.db.TaskRepository
 import com.ddona.jetpack.model.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +16,12 @@ class TaskViewModel @Inject constructor(
 ) : ViewModel() {
 
     val task = taskRepository.getAllTaskWithLiveData()
+
+    val tasksPaging = Pager(
+        PagingConfig(pageSize = 20)
+    ) {
+        taskRepository.getTasksWithPaging()
+    }.flow.cachedIn(viewModelScope)
 
     suspend fun insertTask(task: Task) {
         //if you use this without create worker thread, Crash will be happen
