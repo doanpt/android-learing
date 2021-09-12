@@ -1,11 +1,11 @@
-package com.ddona.architect
+package com.ddona.architect.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import com.ddona.architect.ui.theme.CryptocurrencyAppYTTheme
+import com.ddona.architect.presentation.ui.theme.CryptocurrencyAppYTTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
