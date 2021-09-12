@@ -22,8 +22,13 @@ dependencies {
     def domainDependencies = rootProject.ext.domainDependencies
     def domainTestDependencies = rootProject.ext.domainTestDependencies
 
+    compileOnly domainDependencies.javaxAnnotation
+
     implementation domainDependencies.rxJava
     implementation domainDependencies.rxAndroid
+    implementation domainDependencies.javaxInject
+    implementation domainDependencies.kotlinxCoroutinesCore
+    implementation domainDependencies.kotlinxCoroutinesAndroid
 
     testImplementation domainTestDependencies.junit
 }
