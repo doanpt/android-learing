@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -87,7 +89,23 @@ dependencies {
     implementation presentationDependencies.composeToolingPreview
     implementation presentationDependencies.lifecycleRuntimeKtx
     implementation presentationDependencies.activityCompose
+    implementation presentationDependencies.lifecycleViewmodelCompose
+    implementation presentationDependencies.navigationCompose
+    implementation presentationDependencies.accompanistFlowlayout
+    implementation presentationDependencies.kotlinxCoroutinesCore
+    implementation presentationDependencies.kotlinxCoroutinesAndroid
+    implementation presentationDependencies.lifecycleViewmodelKtx
 
+    implementation presentationDependencies.hiltAndroid
+    kapt presentationDependencies.hiltAndroidCompiler
+    implementation presentationDependencies.hiltLifecycleViewmodel
+    kapt presentationDependencies.hiltCompiler
+    implementation presentationDependencies.hiltNavigationCompose
+
+    implementation presentationDependencies.retrofit
+    implementation presentationDependencies.converterGson
+    implementation presentationDependencies.okhttp
+    implementation presentationDependencies.loggingInterceptor
 
     testImplementation presentationTestDependencies.junit
     androidTestImplementation presentationTestDependencies.extJunit
