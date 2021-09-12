@@ -8,7 +8,9 @@ import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 
-// For many use case. create base use case class: https://www.toptal.com/android/android-apps-mvvm-with-clean-architecture
+// For many use case. create base use case class:
+// https://www.toptal.com/android/android-apps-mvvm-with-clean-architecture
+// https://github.com/android10/Android-CleanArchitecture/tree/master/domain/src/main/java/com/fernandocejas/android10/sample/domain/interactor
 class GetCoinsUseCase @Inject constructor(
     private val repository: CoinRepository
 ) {

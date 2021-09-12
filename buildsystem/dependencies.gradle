@@ -86,9 +86,15 @@ ext {
     ]
 
     dataDependencies = [
-            coreKtx  : "androidx.core:core-ktx:$coreKtx",
-            appcompat: "androidx.appcompat:appcompat:$appcompat",
-            material : "com.google.android.material:material:$material",
+            coreKtx           : "androidx.core:core-ktx:$coreKtx",
+            appcompat         : "androidx.appcompat:appcompat:$appcompat",
+            material          : "com.google.android.material:material:$material",
+            retrofit          : "com.squareup.retrofit2:retrofit:$retrofit",
+            converterGson     : "com.squareup.retrofit2:converter-gson:$converterGson",
+            okhttp            : "com.squareup.okhttp3:okhttp:$okhttp",
+            loggingInterceptor: "com.squareup.okhttp3:logging-interceptor:$loggingInterceptor",
+            javaxAnnotation   : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            javaxInject       : "javax.inject:javax.inject:${javaxInjectVersion}",
     ]
 
     dataTestDependencies = [

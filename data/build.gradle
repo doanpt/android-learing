@@ -52,12 +52,17 @@ android {
 dependencies {
     def dataDependencies = rootProject.ext.dataDependencies
     def testDependencies = rootProject.ext.dataTestDependencies
+    compileOnly dataDependencies.javaxAnnotation
+    compileOnly dataDependencies.javaxInject
     implementation project(path: ':domain')
-
 
     implementation dataDependencies.coreKtx
     implementation dataDependencies.appcompat
     implementation dataDependencies.material
+    implementation dataDependencies.retrofit
+    implementation dataDependencies.converterGson
+    implementation dataDependencies.okhttp
+    implementation dataDependencies.loggingInterceptor
 
     testImplementation testDependencies.junit
     androidTestImplementation testDependencies.extJunit
