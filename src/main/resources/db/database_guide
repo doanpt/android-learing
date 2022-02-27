@@ -1,0 +1,3 @@
+Create talble user same with user.sql file
+add user with password encrypt by BCryptPasswordEncoder, do online at https://bcrypt-generator.com/
+lưu ý cần trường enabled
