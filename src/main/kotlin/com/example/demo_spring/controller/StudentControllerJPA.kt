@@ -1,5 +1,6 @@
 package com.example.demo_spring.controller
 
+import com.example.demo_spring.model.Student
 import com.example.demo_spring.model.StudentJPA
 import com.example.demo_spring.service.StudentServiceJPA
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,13 +26,28 @@ class StudentControllerJPA {
         }.orElse(ResponseEntity.notFound().build())
     }
 
+    @GetMapping("/name/{name}")
+    fun findStudentJPAByName(@PathVariable name: String): Student {
+        return studentService.findStudentJPAByName(name)
+    }
+
+    @GetMapping("/names/{name}")
+    fun findStudentJPASByName(@PathVariable name: String): List<StudentJPA> {
+        return studentService.findStudentJPASByName(name)
+    }
+
+    @GetMapping("/score/{score}")
+    fun findStudentJPASByScoreGreaterThan(@PathVariable score: Float): List<StudentJPA> {
+        return studentService.findStudentJPASByScoreGreaterThan(score)
+    }
+
     @DeleteMapping("/delete/{id}")
     fun deleteStudentById(@PathVariable("id") id: Int): ResponseEntity<Void> {
         return studentService.getStudentById(id).map { _ ->
             studentService.deleteStudentById(id)
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(
-                ResponseEntity.notFound().build()
+            ResponseEntity.notFound().build()
         )
     }
 
@@ -40,7 +56,7 @@ class StudentControllerJPA {
         return studentService.getStudentById(student.id).map {
             ResponseEntity.ok(studentService.updateStudent(student))
         }.orElse(
-                ResponseEntity.notFound().build()
+            ResponseEntity.notFound().build()
         )
     }
 

@@ -1,5 +1,6 @@
 package com.example.demo_spring.service
 
+import com.example.demo_spring.model.Student
 import com.example.demo_spring.model.StudentJPA
 import com.example.demo_spring.repository.StudentRepositoryJPA
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,6 +18,18 @@ class StudentServiceJPA {
 
     fun getStudentById(id: Int): Optional<StudentJPA> {
         return studentRepositoryJPA.findById(id)
+    }
+
+    fun findStudentJPAByName(name: String): Student {
+        return studentRepositoryJPA.findStudentJPAByName(name)
+    }
+
+    fun findStudentJPASByName(name: String): List<StudentJPA> {
+        return studentRepositoryJPA.findStudentJPASByName(name)
+    }
+
+    fun findStudentJPASByScoreGreaterThan(score: Float): List<StudentJPA> {
+        return studentRepositoryJPA.findStudentJPASByScoreGreaterThan(score)
     }
 
     fun deleteStudentById(id: Int) {
